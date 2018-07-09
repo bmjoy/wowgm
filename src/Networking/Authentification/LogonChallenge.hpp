@@ -24,7 +24,9 @@ struct LogonChallenge
         std::uint8_t Length;
     } Name;
 };
+#pragma pack(pop)
 
+#pragma pack(push, 1)
 struct AuthLogonChallenge
 {
     std::uint8_t Command;

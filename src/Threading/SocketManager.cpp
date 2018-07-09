@@ -3,10 +3,11 @@
 
 void SocketManager::Update(std::uint32_t timeInterval)
 {
-    if (_socket != nullptr)
+    _context.run_for(std::chrono::milliseconds(100));
+
+    if (_socket)
         _socket->Update();
 
-    _context.run();
 }
 
 std::shared_ptr<BaseSocket> SocketManager::GetSocket()

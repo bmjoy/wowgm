@@ -55,40 +55,6 @@ public:
         return &_data;
     }
 
-    template <typename T, size_t N = sizeof(T), typename std::enable_if<std::is_arithmetic<T>::value, int>::type = 0>
-    AuthPacket& operator += (T value)
-    {
-        if (!_socket)
-            return *this;
-
-        EnsureExtraSpace(N);
-        memcpy(_extraData.data() + _wpos, &value, sizeof(T));
-        _wpos += sizeof(T);
-        return *this;
-    }
-
-    AuthPacket& operator += (const char* value)
-    {
-        if (!_socket || strlen(value) == 0)
-            return *this;
-
-        EnsureExtraSpace(strlen(value));
-        memcpy(_extraData.data() + _wpos, value, strlen(value));
-        _wpos += strlen(value);
-        return *this;
-    }
-
-    template <size_t N>
-    AuthPacket& operator += (char(&arr)[N])
-    {
-        if (!_socket || N == 0)
-            return *this;
-
-        EnsureExtraSpace(N);
-        memcpy(_extraData.data() + _wpos, value, N);
-        _wpos += N;
-    }
-
     AuthPacket& operator += (std::string const& str)
     {
         if (str.length() == 0)

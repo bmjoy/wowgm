@@ -29,9 +29,11 @@ void Updater::ThreadWorker(std::future<void> future)
 
     while (future.wait_for(std::chrono::milliseconds(1)) == std::future_status::timeout)
     {
-        auto milliseconds = chrono::duration_cast<chrono::milliseconds>(hrc::now() - lastUpdateTick);
+        auto milliseconds = chrono::duration_cast<chrono::microseconds>(hrc::now() - lastUpdateTick);
         for (auto&& upd : _updatables)
-            upd->Update(static_cast<std::uint32_t>(milliseconds.count()));
+            upd->Update(static_cast<std::uint32_t>(milliseconds.count()) / 1000);
+
+        // std::cout << float(milliseconds.count()) / 1000.0f << " ms." << std::endl;
 
         lastUpdateTick = hrc::now();
     }

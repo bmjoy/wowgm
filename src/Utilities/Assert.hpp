@@ -8,6 +8,9 @@
 #include <boost/date_time.hpp>
 #include <boost/exception/all.hpp>
 
+#define BOOST_ENABLE_ASSERT_DEBUG_HANDLER
+#include <boost/assert.hpp>
+
 void my_signal_handler(int signum)
 {
     ::signal(signum, SIG_DFL);
@@ -31,9 +34,12 @@ void check_existing_stracktraces()
         std::cout << "Previous run crashed:\n" << st << std::endl;
 
         boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
+        auto date_now = now.date();
+        auto time_now = now.time_of_day();
+
         std::stringstream ss;
-        ss << "backtrace-" << static_cast<int>(now.date().month()) << "-" << now.date().day()
-            << "-" << now.date().year() << "_" << now.time_of_day().hours() << "-" << now.time_of_day().minutes() << "-" << now.time_of_day().seconds << ".dump";
+        ss << "backtrace-" << static_cast<int>(date_now.month()) << "-" << date_now.day() << "-" << date_now.year()
+            << "_" << time_now.hours() << "-" << time_now.minutes() << "-" << time_now.seconds() << ".dump";
 
         auto path = boost::filesystem::current_path();
         path /= ss.str();

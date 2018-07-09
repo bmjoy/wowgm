@@ -43,6 +43,7 @@ public:
 
     FourCC& operator = (const std::string& value)
     {
+        Data.Integer = 0;
         memcpy(Data.Bytes, value.c_str(), std::min(std::size_t(4), value.size()));
         Data.Integer = utils::endianness::swap(std::int32_t(Data.Integer));
         return *this;

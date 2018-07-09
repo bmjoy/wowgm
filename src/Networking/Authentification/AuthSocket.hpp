@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Socket.hpp"
+#include "BigNumber.hpp"
+#include "SHA1.hpp"
 
 #include <boost/asio/io_context.hpp>
 
@@ -54,4 +56,25 @@ class AuthSocket : public Socket<AuthSocket>
         std::unordered_map<std::uint8_t, AuthHandler> _packetHandlers;
         std::string _username;
         std::string _password;
+
+        struct
+        {
+            crypto::BigNumber B;
+            crypto::BigNumber g;
+            crypto::BigNumber N;
+            crypto::BigNumber salt;
+
+            crypto::BigNumber x;
+
+            crypto::BigNumber a, A;
+
+            crypto::BigNumber u;
+
+            crypto::BigNumber S;
+
+            crypto::BigNumber K;
+
+            crypto::BigNumber M1;
+            crypto::SHA1 M2;
+        } _;
 };

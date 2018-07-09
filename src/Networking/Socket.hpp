@@ -69,7 +69,7 @@ class Socket : public BaseSocket, public std::enable_shared_from_this<T>
 
         bool IsOpen() const override final { return _socket != nullptr && _socket->is_open() && !_closed && !_closing; }
 
-        inline void AsyncRead()
+        void AsyncRead()
         {
             AsyncReadWithCallback(&Socket<T>::ReadHandlerInternal);
         }
@@ -93,14 +93,14 @@ class Socket : public BaseSocket, public std::enable_shared_from_this<T>
 
         void Update() override
         {
+            if (!_writeQueue.empty()) {
+
+                bool success = SendMessageInternal(_writeQueue.front());
+                if (success)
+                    _writeQueue.pop();
+            }
+
             AsyncRead();
-
-            if (_writeQueue.empty())
-                return;
-
-            bool success = SendMessageInternal(_writeQueue.front());
-            if (success)
-                _writeQueue.pop();
         }
 
         tcp::endpoint GetLocalEndpoint()
@@ -144,7 +144,6 @@ class Socket : public BaseSocket, public std::enable_shared_from_this<T>
             if (errorCode != 0)
             {
                 CloseSocket();
-                throw std::exception(errorCode.message().c_str());
                 return;
             }
 
