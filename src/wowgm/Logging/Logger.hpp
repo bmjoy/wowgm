@@ -1,3 +1,5 @@
+#pragma once
+
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
@@ -33,15 +35,7 @@ enum severity_level
     max_security
 };
 
-const char* severity_level_str[] = {
-    "INFO",
-    "WARNING",
-    "ERROR",
-    "FATAL",
-    "DEBUG",
-    "TRACE",
-    "GRAPHICS"
-};
+extern const char* severity_level_str[];
 
 template <typename CharT, typename TraitsT>
 std::basic_ostream<CharT, TraitsT>& operator << (std::basic_ostream< CharT, TraitsT >& strm, severity_level lvl)
@@ -56,18 +50,10 @@ std::basic_ostream<CharT, TraitsT>& operator << (std::basic_ostream< CharT, Trai
 
 BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(severity_logger, src::severity_logger_mt<severity_level>)
 
-namespace wowgm::log {
-    void initialize()
-    {
-        logging::register_simple_formatter_factory<severity_level, char>("Severity");
+namespace wowgm::log
+{
 
-        logging::add_common_attributes();
-
-        logging::add_console_log(std::cout,
-            keywords::format = "[%TimeStamp%] %Severity% - %Message%"
-        );
-
-    }
+    void initialize();
 
 } // namespace wowgm::log
 

@@ -36,7 +36,7 @@ target_include_directories(WowGM
     ${PUBLIC_INCLUDES}
     ${Boost_INCLUDE_DIR}
     ${OPENSSL_INCLUDE_DIR}
-	${glfw_INCLUDE_DIRS}
-	Vulkan::Vulkan)
+    ${glfw_INCLUDE_DIRS}
+    ${GLM_INCLUDE_DIR})
 
 install(TARGETS WowGM DESTINATION "${CMAKE_INSTALL_PREFIX}")
