@@ -28,6 +28,7 @@ target_link_libraries(WowGM
   ${OPENSSL_LIBRARIES}
   boost
   glfw
+  Vulkan::Vulkan
 )
 
 target_include_directories(WowGM
@@ -35,6 +36,7 @@ target_include_directories(WowGM
     ${PUBLIC_INCLUDES}
     ${Boost_INCLUDE_DIR}
     ${OPENSSL_INCLUDE_DIR}
-	${glfw_INCLUDE_DIRS})
+	${glfw_INCLUDE_DIRS}
+	Vulkan::Vulkan)
 
 install(TARGETS WowGM DESTINATION "${CMAKE_INSTALL_PREFIX}")

@@ -55,6 +55,7 @@ include(AutoCollect)
 # basic packagesearching and setup (further support will be needed, this is a preliminary release!)
 find_package(OpenSSL REQUIRED)
 find_package(Boost REQUIRED)
+find_package(Vulkan REQUIRED)
 
 # add dependencies
 add_subdirectory(dep)

@@ -29,6 +29,7 @@ enum severity_level
     critical,
     debug,
     trace,
+    graphics,
     max_security
 };
 
@@ -38,7 +39,8 @@ const char* severity_level_str[] = {
     "ERROR",
     "FATAL",
     "DEBUG",
-    "TRACE"
+    "TRACE",
+    "GRAPHICS"
 };
 
 template <typename CharT, typename TraitsT>
@@ -92,4 +94,5 @@ public:
 #endif
 
 #define LOG_TRACE     BOOST_LOG_SEV(severity_logger::get(), trace)
+#define LOG_GRAPHICS  BOOST_LOG_SEV(severity_logger::get(), graphics)
 
