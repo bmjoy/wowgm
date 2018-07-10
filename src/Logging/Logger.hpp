@@ -1,9 +1,95 @@
+#include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/attributes/attribute.hpp>
+#include <boost/log/sinks/text_file_backend.hpp>
+#include <boost/log/utility/setup/file.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/utility/setup/formatter_parser.hpp>
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/sources/record_ostream.hpp>
+#include <boost/log/sources/logger.hpp>
+#include <boost/log/sources/global_logger_storage.hpp>
+#include <boost/current_function.hpp>
 
-namespace wowgm
+namespace logging = boost::log;
+namespace src = boost::log::sources;
+namespace sinks = boost::log::sinks;
+namespace keywords = boost::log::keywords;
+namespace attrs = boost::log::attributes;
+namespace expr = boost::log::expressions;
+
+// We define our own severity levels
+enum severity_level
 {
-    namespace logging
-    {
+    info,
+    warning,
+    error,
+    critical,
+    debug,
+    trace,
+    max_security
+};
 
-    } // namespace logging
-} // namespace wowgm
+const char* severity_level_str[] = {
+    "INFO",
+    "WARNING",
+    "ERROR",
+    "FATAL",
+    "DEBUG",
+    "TRACE"
+};
+
+template <typename CharT, typename TraitsT>
+std::basic_ostream<CharT, TraitsT>& operator << (std::basic_ostream< CharT, TraitsT >& strm, severity_level lvl)
+{
+    const char* str = severity_level_str[lvl];
+    if (lvl < static_cast<int>(max_security) && lvl >= 0)
+        strm << str;
+    else
+        strm << static_cast<int>(lvl);
+    return strm;
+}
+
+BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(severity_logger, src::severity_logger_mt<severity_level>)
+
+namespace wowgm::log {
+    void initialize()
+    {
+        logging::register_simple_formatter_factory<severity_level, char>("Severity");
+
+        logging::add_common_attributes();
+
+        logging::add_console_log(std::cout,
+            keywords::format = "[%TimeStamp%] %Severity% - %Message%"
+        );
+
+    }
+
+} // namespace wowgm::log
+
+#define LOG_SCOPE     BOOST_LOG_NAMED_SCOPE(BOOST_CURRENT_FUNCTION);
+
+#define LOG_INFO      BOOST_LOG_SEV(severity_logger::get(), info)
+#define LOG_WARNING   BOOST_LOG_SEV(severity_logger::get(), warning)
+#define LOG_ERROR     BOOST_LOG_SEV(severity_logger::get(), error)
+#define LOG_CRITICAL  BOOST_LOG_SEV(severity_logger::get(), critical)
+
+#if _DEBUG
+#define LOG_DEBUG     BOOST_LOG_SEV(severity_logger::get(), debug)
+#else
+
+class null_logger
+{
+public:
+    template <typename SeverityT> NullLogger(SeverityT) {};
+    template <typename Val> NullLog& operator<< (const Val&) { return *this };
+};
+
+#define LOG_DEBUG null_logger(debug)
+#pragma message("Consider #ifdef'ing LOG_DEBUG calls, as expensive operations may not be optimized out by the compiler.")
+#endif
+
+#define LOG_TRACE     BOOST_LOG_SEV(severity_logger::get(), trace)
+
