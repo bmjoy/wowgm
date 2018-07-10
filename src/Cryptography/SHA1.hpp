@@ -45,9 +45,8 @@ namespace crypto
         void Initialize();
         void Finalize();
 
-        std::uint8_t* GetDigest() { return mDigest; }
+        std::uint8_t* GetDigest() const { return (std::uint8_t*)mDigest; }
         int GetLength() const { return SHA_DIGEST_LENGTH; }
-
 
     private:
         SHA_CTX mC;

@@ -36,6 +36,7 @@ class AuthSocket : public Socket<AuthSocket>
         void SendAuthChallenge(std::string&& username, std::string&& password, std::string&& platform, std::string&& operatingSystem, std::string&& countryCode, std::string&& gameCode);
 
         bool HandleAuthChallenge();
+        bool HandleAuthProof();
 
     protected:
         void ReadHandler() override;
@@ -57,24 +58,6 @@ class AuthSocket : public Socket<AuthSocket>
         std::string _username;
         std::string _password;
 
-        struct
-        {
-            crypto::BigNumber B;
-            crypto::BigNumber g;
-            crypto::BigNumber N;
-            crypto::BigNumber salt;
-
-            crypto::BigNumber x;
-
-            crypto::BigNumber a, A;
-
-            crypto::BigNumber u;
-
-            crypto::BigNumber S;
-
-            crypto::BigNumber K;
-
-            crypto::BigNumber M1;
-            crypto::SHA1 M2;
-        } _;
+        crypto::BigNumber K;
+        crypto::BigNumber M2;
 };

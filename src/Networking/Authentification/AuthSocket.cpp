@@ -19,6 +19,7 @@ AuthSocket::AuthSocket(asio::io_context& io_context) : Socket(io_context)
 void AuthSocket::InitializeHandlers()
 {
     _packetHandlers[AUTH_LOGON_CHALLENGE] = { sizeof(AuthLogonChallenge), &AuthSocket::HandleAuthChallenge };
+    _packetHandlers[AUTH_LOGON_PROOF] = { sizeof(AuthLogonProof), &AuthSocket::HandleAuthProof };
 }
 
 void AuthSocket::ReadHandler()
@@ -80,6 +81,8 @@ void AuthSocket::SendAuthChallenge(std::string&& username, std::string&& passwor
 
 bool AuthSocket::HandleAuthChallenge()
 {
+    crypto::BigNumber N, A, B, a, u, x, S, salt, g, M1;
+
     { // Scoping the pointers so they get properly deallocated
         AuthPacket<AuthLogonChallenge> command(_readBuffer);
         AuthLogonChallenge* challenge = command.GetData();
@@ -91,10 +94,10 @@ bool AuthSocket::HandleAuthChallenge()
             return false;
         }
 
-        _.B.SetBinary(challenge->B, sizeof(AuthLogonChallenge::B));
-        _.g.SetBinary(challenge->g, challenge->g_length);
-        _.N.SetBinary(challenge->N, challenge->n_length);
-        _.salt.SetBinary(challenge->Salt, sizeof(AuthLogonChallenge::Salt));
+        B.SetBinary(challenge->B, sizeof(AuthLogonChallenge::B));
+        g.SetBinary(challenge->g, challenge->g_length);
+        N.SetBinary(challenge->N, challenge->n_length);
+        salt.SetBinary(challenge->Salt, sizeof(AuthLogonChallenge::Salt));
     }
 
     std::cout << "[S->C] AUTH_LOGON_CHALLENGE." << std::endl;
@@ -102,34 +105,33 @@ bool AuthSocket::HandleAuthChallenge()
     // Hash the password now
     crypto::BigNumber passwordHash(crypto::CalculateSHA1(_username + ":" + _password));
     crypto::SHA1 context;
-    context.UpdateBigNumbers(_.salt, passwordHash);
+    context.UpdateBigNumbers(salt, passwordHash);
     context.Finalize();
-    _.x.SetBinary(context.GetDigest(), context.GetLength());
+    x.SetBinary(context);
 
-    std::cout << "x = " << _.x.AsHexStr() << std::endl;
+    std::cout << "x = " << x.AsHexStr() << std::endl;
 
     do {
-        _.a.SetRand(19 * 8);
-        _.A = _.g.ModExp(_.a, _.N);
-    } while (_.A.ModExp(1, _.N).IsZero());
+        a.SetRand(19 * 8);
+        A = g.ModExp(a, N);
+    } while (A.ModExp(1, N).IsZero());
 
-    std::cout << "s = " << _.salt.AsHexStr() << std::endl;
-    std::cout << "N = " << _.N.AsHexStr() << std::endl;
-    std::cout << "A = " << _.A.AsHexStr() << std::endl;
+    std::cout << "s = " << salt.AsHexStr() << std::endl;
+    std::cout << "N = " << N.AsHexStr() << std::endl;
+    std::cout << "A = " << A.AsHexStr() << std::endl;
 
     // Compute the session key
     context.Initialize();
-    context.UpdateBigNumbers(_.A, _.B);
+    context.UpdateBigNumbers(A, B);
     context.Finalize();
-    _.u.SetBinary(context.GetDigest(), context.GetLength()); // OK
+    u.SetBinary(context);
 
     crypto::BigNumber k(3);
 
-    // S = ((B + k * (N - g.ModPow(x, N))) % N).ModPow(a + (u * x), N)
-    _.S = ((_.B + k * (_.N - _.g.ModExp(_.x, _.N))) % _.N).ModExp(_.a + (_.u * _.x), _.N);
+    S = ((B + k * (N - g.ModExp(x, N))) % N).ModExp(a + (u * x), N);
 
     std::uint8_t sData[32];
-    memcpy(sData, _.S.AsByteArray(32).get(), 32);
+    memcpy(sData, S.AsByteArray(32).get(), 32);
     std::uint8_t keyData[40];
     std::uint8_t temp[16];
 
@@ -153,23 +155,22 @@ bool AuthSocket::HandleAuthChallenge()
     for (int i = 0; i < 20; ++i)
         keyData[i * 2 + 1] = context.GetDigest()[i];
 
-    _.K.SetBinary(keyData, 40);
+    K.SetBinary(keyData, 40);
 
-    std::cout << "u = " << _.u.AsHexStr() << std::endl;
-    std::cout << "S = " << _.S.AsHexStr() << std::endl;
-    std::cout << "K = " << _.K.AsHexStr() << std::endl;
-
+    std::cout << "u = " << u.AsHexStr() << std::endl;
+    std::cout << "S = " << S.AsHexStr() << std::endl;
+    std::cout << "K = " << K.AsHexStr() << std::endl;
 
     std::uint8_t gNHash[20];
     context.Initialize();
-    context.UpdateBigNumbers(_.N);
+    context.UpdateBigNumbers(N);
     context.Finalize();
     memcpy(gNHash, context.GetDigest(), context.GetLength());
 
     std::cout << "T3= " << ByteArrayToHexStr(gNHash, 20) << std::endl;
 
     context.Initialize();
-    context.UpdateBigNumbers(_.g);
+    context.UpdateBigNumbers(g);
     context.Finalize();
 
     for (int i = 0; i < 20; ++i)
@@ -193,21 +194,52 @@ bool AuthSocket::HandleAuthChallenge()
     context.Initialize();
     context.UpdateBigNumbers(t3);
     context.UpdateData(userHash, 20);
-    context.UpdateBigNumbers(_.salt, _.A, _.B, _.K);
+    context.UpdateBigNumbers(salt, A, B, K);
     context.Finalize();
-    _.M1.SetBinary(context.GetDigest(), context.GetLength());
+    M1.SetBinary(context);
 
-    std::cout << "M1= " << _.M1.AsHexStr() << std::endl;
+    std::cout << "M1= " << M1.AsHexStr() << std::endl;
 
-    _.M2.Initialize();
-    _.M2.UpdateBigNumbers(_.A, _.M1,_.S);
-    _.M2.Finalize();
+    context.Initialize();
+    context.UpdateBigNumbers(A, M1,S);
+    context.Finalize();
+    M2.SetBinary(context);
 
-    AuthPacket<AuthProof> logonChallenge(this->shared_from_this(), AUTH_LOGON_PROOF);
-    memcpy(logonChallenge.GetData()->A, _.A.AsByteArray(32).get(), 32);
-    memcpy(logonChallenge.GetData()->M1, _.M1.AsByteArray(20).get(), 20);
+    std::cout << "M2= " << M2.AsHexStr() << std::endl;
+
+    AuthPacket<LogonProof> logonChallenge(this->shared_from_this(), AUTH_LOGON_PROOF);
+    memcpy(logonChallenge.GetData()->A, A.AsByteArray(32).get(), 32);
+    memcpy(logonChallenge.GetData()->M1, M1.AsByteArray(20).get(), 20);
     memset(logonChallenge.GetData()->CRC, 0, 20);
     logonChallenge.GetData()->NumberOfKeys = 0;
     logonChallenge.GetData()->SecurityFlags = 0;
+
+    return true;
+}
+
+bool AuthSocket::HandleAuthProof()
+{
+    AuthPacket<AuthLogonProof> command(_readBuffer);
+    AuthLogonProof* proof = command.GetData();
+
+    std::cout << "[S->C] AUTH_LOGON_PROOF." << std::endl;
+
+    if (proof->Error == LOGIN_UNKNOWN_ACCOUNT)
+    {
+        std::cout << "       Unknown account or invalid password!" << std::endl;
+        return false;
+    }
+
+    crypto::BigNumber serverM2;
+    serverM2.SetBinary(proof->M2, sizeof(AuthLogonProof::M2));
+
+    if (memcmp(proof->M2, M2.AsByteArray().get(), sizeof(M2)) == 0)
+    {
+        std::cout << "       Error during SRP6 handshake!" << std::endl;
+        return false;
+    }
+
+    // Request realm list
+
     return true;
 }

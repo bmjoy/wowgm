@@ -7,6 +7,7 @@ struct bignum_st;
 
 namespace crypto
 {
+    class SHA1;
 
     class BigNumber
     {
@@ -20,6 +21,7 @@ namespace crypto
         void SetDword(std::uint32_t value);
         void SetQword(std::uint64_t value);
         void SetBinary(std::uint8_t const* bytes, std::int32_t len);
+        void SetBinary(SHA1 const& sha1);
         void SetHexStr(char const* str);
 
         void SetRand(std::int32_t numbits);

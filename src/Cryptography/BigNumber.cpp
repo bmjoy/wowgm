@@ -1,4 +1,5 @@
 #include "BigNumber.hpp"
+#include "SHA1.hpp"
 
 #include <openssl/bn.h>
 #include <cstring>
@@ -43,6 +44,11 @@ namespace crypto
         BN_set_word(_bn, std::uint32_t(val >> 32));
         BN_lshift(_bn, _bn, 32);
         BN_add_word(_bn, std::uint32_t(val & 0xFFFFFFFF));
+    }
+
+    void BigNumber::SetBinary(SHA1 const& sha1)
+    {
+        SetBinary(sha1.GetDigest(), sha1.GetLength());
     }
 
     void BigNumber::SetBinary(std::uint8_t const* bytes, int32_t len)
