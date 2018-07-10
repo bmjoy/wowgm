@@ -12,6 +12,7 @@
 
 # add dependencies
 add_subdirectory(glfw)
+add_subdirectory(glm)
 
 # add core sources
 add_subdirectory(wowgm)
