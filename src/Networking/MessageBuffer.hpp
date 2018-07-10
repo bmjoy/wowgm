@@ -129,6 +129,17 @@ public:
         return boost::asio::buffer(GetReadPointer(), GetActiveSize());
     }
 
+    MessageBuffer& operator >> (std::string& other)
+    {
+        std::uint8_t* data = GetReadPointer();
+        while (*data != '\0')
+            ++data;
+
+        other.assign(GetReadPointer(), data);
+        ReadCompleted(other.size() + 1);
+        return *this;
+    }
+
 private:
     size_type _wpos;
     size_type _rpos;

@@ -19,33 +19,35 @@ class AuthPacket
 
 public:
 
-    AuthPacket(std::shared_ptr<BaseSocket> socket, AuthCommand command) : _socket(socket), _command(command), _wpos(0)
+    AuthPacket(std::shared_ptr<BaseSocket> socket, AuthCommand command) : _socket(socket), _command(command), _wpos(0), _extraData(10)
     {
 
     }
 
-    AuthPacket(MessageBuffer& buffer) : _wpos(0)
+    AuthPacket(MessageBuffer& buffer) : _wpos(0), _extraData(0)
     {
-        memcpy(&_data, buffer.GetReadPointer(), buffer.GetActiveSize());
+        auto size = std::min(sizeof(T), buffer.GetActiveSize());
+
+        memcpy(&_data, buffer.GetReadPointer(), size);
     }
 
     ~AuthPacket()
     {
-        if (!_socket || !_socket->IsOpen())
-            return;
-
-        MessageBuffer buffer(1 + sizeof(T) + _extraData.size());
-        buffer.GetWritePointer()[0] = std::uint8_t(_command);
-        buffer.WriteCompleted(1);
-        memcpy(reinterpret_cast<T*>(buffer.GetWritePointer()), &_data, sizeof(T));
-        buffer.WriteCompleted(sizeof(T));
-        if (!_extraData.empty())
+        if (_socket && _socket->IsOpen())
         {
-            memcpy(buffer.GetWritePointer(), _extraData.data(), _wpos);
-            buffer.WriteCompleted(_wpos);
-        }
+            MessageBuffer buffer(1 + sizeof(T) + _extraData.size());
+            buffer.GetWritePointer()[0] = std::uint8_t(_command);
+            buffer.WriteCompleted(1);
+            memcpy(reinterpret_cast<T*>(buffer.GetWritePointer()), &_data, sizeof(T));
+            buffer.WriteCompleted(sizeof(T));
+            if (!_extraData.empty())
+            {
+                memcpy(buffer.GetWritePointer(), _extraData.data(), _wpos);
+                buffer.WriteCompleted(_wpos);
+            }
 
-        _socket->QueuePacket(std::forward<MessageBuffer>(buffer));
+            _socket->QueuePacket(std::forward<MessageBuffer>(buffer));
+        }
 
         _extraData.resize(0);
     }

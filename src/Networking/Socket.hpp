@@ -135,6 +135,7 @@ class Socket : public BaseSocket, public std::enable_shared_from_this<T>
         }
 
     protected:
+
         virtual void OnClose() = 0;
         virtual void ReadHandler() = 0;
 

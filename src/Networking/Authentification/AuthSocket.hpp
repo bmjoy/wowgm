@@ -4,6 +4,8 @@
 #include "BigNumber.hpp"
 #include "SHA1.hpp"
 
+#include "RealmList.hpp"
+
 #include <boost/asio/io_context.hpp>
 
 #include <unordered_map>
@@ -37,14 +39,17 @@ class AuthSocket : public Socket<AuthSocket>
 
         bool HandleAuthChallenge();
         bool HandleAuthProof();
+        bool HandleRealmList();
+
+        AuthRealmInfo& GetRealm(std::uint32_t index)
+        {
+            return _realms[index];
+        }
 
     protected:
         void ReadHandler() override;
 
-        void OnClose() override
-        {
-
-        }
+        void OnClose() override;
 
     private:
         void InitializeHandlers();
@@ -60,4 +65,6 @@ class AuthSocket : public Socket<AuthSocket>
 
         crypto::BigNumber K;
         crypto::BigNumber M2;
+
+        std::vector<AuthRealmInfo> _realms;
 };

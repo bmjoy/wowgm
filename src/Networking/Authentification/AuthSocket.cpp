@@ -4,8 +4,11 @@
 #include "AuthProof.hpp"
 #include "AuthPacket.hpp"
 #include "AuthResult.hpp"
+#include "RealmList.hpp"
 #include "Utilities.hpp"
 #include "SHA1.hpp"
+
+#include "Profiler.hpp"
 
 #include <iostream>
 
@@ -20,6 +23,12 @@ void AuthSocket::InitializeHandlers()
 {
     _packetHandlers[AUTH_LOGON_CHALLENGE] = { sizeof(AuthLogonChallenge), &AuthSocket::HandleAuthChallenge };
     _packetHandlers[AUTH_LOGON_PROOF] = { sizeof(AuthLogonProof), &AuthSocket::HandleAuthProof };
+    _packetHandlers[REALM_LIST] = { sizeof(AuthRealmList), &AuthSocket::HandleRealmList };
+}
+
+void AuthSocket::OnClose()
+{
+
 }
 
 void AuthSocket::ReadHandler()
@@ -39,6 +48,7 @@ void AuthSocket::ReadHandler()
         if (_readBuffer.GetActiveSize() < itr->second.size)
             break;
 
+        std::uint8_t* readPos = _readBuffer.GetReadPointer();
         if (!(*this.*itr->second.handler)())
         {
             CloseSocket();
@@ -48,7 +58,6 @@ void AuthSocket::ReadHandler()
         _readBuffer.ReadCompleted(itr->second.size);
     }
 }
-
 
 void AuthSocket::SendAuthChallenge(std::string&& username, std::string&& password, std::string&& platform, std::string&& operatingSystem, std::string&& countryCode, std::string&& gameCode)
 {
@@ -81,6 +90,7 @@ void AuthSocket::SendAuthChallenge(std::string&& username, std::string&& passwor
 
 bool AuthSocket::HandleAuthChallenge()
 {
+    PROFILE;
     crypto::BigNumber N, A, B, a, u, x, S, salt, g, M1;
 
     { // Scoping the pointers so they get properly deallocated
@@ -109,16 +119,10 @@ bool AuthSocket::HandleAuthChallenge()
     context.Finalize();
     x.SetBinary(context);
 
-    std::cout << "x = " << x.AsHexStr() << std::endl;
-
     do {
         a.SetRand(19 * 8);
         A = g.ModExp(a, N);
     } while (A.ModExp(1, N).IsZero());
-
-    std::cout << "s = " << salt.AsHexStr() << std::endl;
-    std::cout << "N = " << N.AsHexStr() << std::endl;
-    std::cout << "A = " << A.AsHexStr() << std::endl;
 
     // Compute the session key
     context.Initialize();
@@ -157,17 +161,11 @@ bool AuthSocket::HandleAuthChallenge()
 
     K.SetBinary(keyData, 40);
 
-    std::cout << "u = " << u.AsHexStr() << std::endl;
-    std::cout << "S = " << S.AsHexStr() << std::endl;
-    std::cout << "K = " << K.AsHexStr() << std::endl;
-
     std::uint8_t gNHash[20];
     context.Initialize();
     context.UpdateBigNumbers(N);
     context.Finalize();
     memcpy(gNHash, context.GetDigest(), context.GetLength());
-
-    std::cout << "T3= " << ByteArrayToHexStr(gNHash, 20) << std::endl;
 
     context.Initialize();
     context.UpdateBigNumbers(g);
@@ -176,20 +174,14 @@ bool AuthSocket::HandleAuthChallenge()
     for (int i = 0; i < 20; ++i)
         gNHash[i] ^= context.GetDigest()[i];
 
-    std::cout << "T3= " << ByteArrayToHexStr(gNHash, 20) << std::endl;
-
     crypto::BigNumber t3;
     t3.SetBinary(gNHash, 20);
-
-    std::cout << "T3= " << t3.AsHexStr() << std::endl;
 
     std::uint8_t userHash[20];
     context.Initialize();
     context.UpdateData(_username);
     context.Finalize();
     memcpy(userHash, context.GetDigest(), SHA_DIGEST_LENGTH);
-
-    std::cout << "Us= " << ByteArrayToHexStr(userHash, 20) << std::endl;
 
     context.Initialize();
     context.UpdateBigNumbers(t3);
@@ -198,15 +190,12 @@ bool AuthSocket::HandleAuthChallenge()
     context.Finalize();
     M1.SetBinary(context);
 
-    std::cout << "M1= " << M1.AsHexStr() << std::endl;
-
     context.Initialize();
     context.UpdateBigNumbers(A, M1,S);
     context.Finalize();
     M2.SetBinary(context);
 
-    std::cout << "M2= " << M2.AsHexStr() << std::endl;
-
+    std::cout << "[C->S] AUTH_LOGON_PROOF." << std::endl;
     AuthPacket<LogonProof> logonChallenge(this->shared_from_this(), AUTH_LOGON_PROOF);
     memcpy(logonChallenge.GetData()->A, A.AsByteArray(32).get(), 32);
     memcpy(logonChallenge.GetData()->M1, M1.AsByteArray(20).get(), 20);
@@ -240,6 +229,63 @@ bool AuthSocket::HandleAuthProof()
     }
 
     // Request realm list
+    std::cout << "[C->S] REALM_LIST." << std::endl;
+    AuthPacket<RealmList> realmList(this->shared_from_this(), REALM_LIST);
+    realmList.GetData()->Data = 0;
+    return true;
+}
+
+bool AuthSocket::HandleRealmList()
+{
+    std::cout << "[S->C] REALM_LIST." << std::endl;
+
+    {
+        AuthPacket<AuthRealmList> command(_readBuffer);
+        if (command.GetData()->Count == 0 || command.GetData()->Size == 0)
+            return false;
+
+        _realms.resize(command.GetData()->Count);
+
+        _readBuffer.ReadCompleted(sizeof(AuthRealmList));
+
+        for (std::uint8_t i = 0; i < _realms.size(); ++i)
+        {
+            _realms[i].Type = _readBuffer.GetReadPointer()[0];
+            _realms[i].Locked = _readBuffer.GetReadPointer()[1];
+            _realms[i].Flags = _readBuffer.GetReadPointer()[2];
+
+            _readBuffer.ReadCompleted(3);
+
+            // These call ReadCompleted!
+            _readBuffer >> _realms[i].Name;
+            _readBuffer >> _realms[i].Address;
+
+            _realms[i].Population = *reinterpret_cast<float*>(_readBuffer.GetReadPointer());
+            _realms[i].Load = _readBuffer.GetReadPointer()[4];
+            _realms[i].Timezone = _readBuffer.GetReadPointer()[5];
+            _readBuffer.ReadCompleted(4 + 1 + 1 + 4);
+
+            if ((_realms[i].Flags & 0x04) != 0)
+            {
+                memcpy(_realms[i].Version, _readBuffer.GetReadPointer(), 3);
+                _realms[i].Build = *reinterpret_cast<std::uint16_t*>(_readBuffer.GetReadPointer() + 3);
+
+                _readBuffer.ReadCompleted(3 + 2);
+            }
+
+            _readBuffer.ReadCompleted(2); // two trailing bytes, we don't even really bother
+
+            std::cout << "Realm Name: '" << _realms[i].Name << "'" << std::endl;
+            std::cout << "  Address: " << _realms[i].GetEndpoint() << std::endl;
+            std::cout << "  Timezone: " << std::uint32_t(_realms[i].Timezone) << std::endl;
+            if ((_realms[i].Flags & 0x04) != 0)
+                std::cout << "  Version: " << std::uint32_t(_realms[i].Version[0]) << "." << std::uint32_t(_realms[i].Version[1]) << "." << std::uint32_t(_realms[i].Version[2]) << "." << _realms[i].Build << std::endl;
+
+        }
+
+        // ReadHandlerInternal does it for us.
+        _readBuffer.ReadCompleted(-sizeof(AuthRealmList));
+    }
 
     return true;
 }
