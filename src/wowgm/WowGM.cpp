@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
         glfwInit();
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         GLFWwindow* window = glfwCreateWindow(800, 600, "Vulkan window", nullptr, nullptr);
-        uint32_t extensionCount = 0;
+        std::uint32_t extensionCount = 0;
         vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
         LOG_GRAPHICS << extensionCount << " extensions found." << std::endl;
 
@@ -111,7 +111,6 @@ int main(int argc, char* argv[])
         }
 
         glfwDestroyWindow(window);
-
         glfwTerminate();
 
         updater->Stop();
