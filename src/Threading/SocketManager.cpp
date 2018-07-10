@@ -1,16 +1,27 @@
 #include "SocketManager.hpp"
 #include "BaseSocket.hpp"
 
-void SocketManager::Update(std::uint32_t timeInterval)
-{
-    _context.run_for(std::chrono::milliseconds(100));
+namespace wowgm::threading {
 
-    if (_socket)
-        _socket->Update();
+    void SocketManager::Update(std::uint32_t timeInterval)
+    {
+        _context.run();
 
-}
+        if (_socket)
+            _socket->Update();
+    }
 
-std::shared_ptr<BaseSocket> SocketManager::GetSocket()
-{
-    return _socket;
-}
+    std::shared_ptr<BaseSocket> SocketManager::GetSocket()
+    {
+        return _socket;
+    }
+
+    void SocketManager::Destroy()
+    {
+        if (_socket)
+            _socket->AsyncCloseSocket();
+
+        _context.run();
+    }
+
+} // wowgm::threading

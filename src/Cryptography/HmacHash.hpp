@@ -4,7 +4,7 @@
 #include <openssl/hmac.h>
 #include <openssl/sha.h>
 
-namespace crypto
+namespace wowgm::cryptography
 {
 
     class BigNumber;

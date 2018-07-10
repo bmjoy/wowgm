@@ -19,8 +19,12 @@ namespace boost {
 namespace asio = boost::asio;
 using tcp = asio::ip::tcp;
 
-class AuthSocket : public Socket<AuthSocket>
+namespace wowgm::networking::authentification
 {
+    using namespace wowgm::cryptography;
+
+    class AuthSocket : public Socket<AuthSocket>
+    {
         typedef Socket<AuthSocket> BaseSocket;
 
     public:
@@ -31,7 +35,7 @@ class AuthSocket : public Socket<AuthSocket>
 
         AuthSocket& operator = (AuthSocket const&) = delete;
 
-        inline void SendAuthChallenge(std::string&& username, std::string&& password) {
+        inline void SendAuthChallenge(std::string& username, std::string& password) {
             SendAuthChallenge(std::forward<std::string>(username), std::forward<std::string>(password), std::string("x86"), std::string("Win"), std::string("enUS"), std::string("WoW"));
         }
 
@@ -41,8 +45,7 @@ class AuthSocket : public Socket<AuthSocket>
         bool HandleAuthProof();
         bool HandleRealmList();
 
-        AuthRealmInfo& GetRealm(std::uint32_t index)
-        {
+        AuthRealmInfo& GetRealm(std::uint32_t index) {
             return _realms[index];
         }
 
@@ -63,8 +66,10 @@ class AuthSocket : public Socket<AuthSocket>
         std::string _username;
         std::string _password;
 
-        crypto::BigNumber K;
-        crypto::BigNumber M2;
+        BigNumber K;
+        BigNumber M2;
 
         std::vector<AuthRealmInfo> _realms;
-};
+    };
+
+} // namespace wowgm

@@ -2,8 +2,13 @@
 
 #include "Packet.hpp"
 
-class WorldPacket : public Packet
+namespace wowgm::networking
 {
-public:
 
-};
+    class WorldPacket : public Packet
+    {
+    public:
+
+    };
+
+} // wowgm::networking

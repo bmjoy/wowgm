@@ -22,10 +22,12 @@ namespace boost {
 namespace asio = boost::asio;
 using tcp = asio::ip::tcp;
 
-
-template <class T>
-class Socket : public BaseSocket, public std::enable_shared_from_this<T>
+namespace wowgm::networking
 {
+
+    template <class T>
+    class Socket : public BaseSocket, public std::enable_shared_from_this<T>
+    {
     public:
         Socket(asio::io_context& ioService) : _socket(nullptr), _closed(false), _closing(false), _ioContext(ioService)
         {
@@ -44,7 +46,7 @@ class Socket : public BaseSocket, public std::enable_shared_from_this<T>
             delete _socket;
         }
 
-        void Connect(tcp::endpoint&& endpoint) override
+        void Connect(tcp::endpoint& endpoint) override
         {
             _socket = new tcp::socket(_ioContext);
             _socket->connect(endpoint);
@@ -61,7 +63,7 @@ class Socket : public BaseSocket, public std::enable_shared_from_this<T>
             OnClose();
         }
 
-        /// The socket will be closed when the outgoing message queue becomes empty.
+        /// The socket will be closed as soon as the message queue empties
         void AsyncCloseSocket()
         {
             _closing = true;
@@ -86,7 +88,7 @@ class Socket : public BaseSocket, public std::enable_shared_from_this<T>
                 std::bind(callback, this->shared_from_this(), std::placeholders::_1, std::placeholders::_2));
         }
 
-        void QueuePacket(MessageBuffer&& buffer) override final
+        void QueuePacket(MessageBuffer& buffer) override final
         {
             _writeQueue.push(std::move(buffer));
         }
@@ -162,4 +164,6 @@ class Socket : public BaseSocket, public std::enable_shared_from_this<T>
         std::atomic<bool> _closing;
 
         boost::asio::io_context& _ioContext;
-};
+    };
+
+} // wowgm::networking

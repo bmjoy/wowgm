@@ -4,7 +4,7 @@
 
 #include <cstring>
 
-namespace crypto
+namespace wowgm::cryptography
 {
 
 #if defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER < 0x10100000L

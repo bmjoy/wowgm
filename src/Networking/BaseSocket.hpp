@@ -3,21 +3,26 @@
 #include <boost/array.hpp>
 #include <boost/asio/ip/tcp.hpp>
 
-namespace asio = boost::asio;
-using tcp = asio::ip::tcp;
+namespace wowgm::networking {
 
-class MessageBuffer;
+    namespace asio = boost::asio;
+    using tcp = asio::ip::tcp;
 
-class BaseSocket
-{
-public:
-    virtual bool IsOpen() const = 0;
-    virtual void CloseSocket() = 0;
-    virtual void Update() = 0;
+    class MessageBuffer;
 
-    virtual void QueuePacket(MessageBuffer&& buffer) = 0;
+    class BaseSocket
+    {
+        public:
+            virtual bool IsOpen() const = 0;
+            virtual void AsyncCloseSocket() = 0;
+            virtual void CloseSocket() = 0;
+            virtual void Update() = 0;
 
-    virtual void Connect(tcp::endpoint&& endpoint) = 0;
+            virtual void QueuePacket(MessageBuffer& buffer) = 0;
 
-    virtual tcp::endpoint GetLocalEndpoint() = 0;
-};
+            virtual void Connect(tcp::endpoint& endpoint) = 0;
+
+            virtual tcp::endpoint GetLocalEndpoint() = 0;
+    };
+
+} // wowgm::networking

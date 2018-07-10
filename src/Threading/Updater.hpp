@@ -6,10 +6,12 @@
 #include <future>
 #include <cstdint>
 
-class Updatable;
+namespace wowgm::threading {
 
-class Updater
-{
+    class Updatable;
+
+    class Updater
+    {
     public:
         Updater() { }
         ~Updater()
@@ -22,7 +24,7 @@ class Updater
         void Stop();
 
         template <typename T, typename... Args, typename std::enable_if<std::is_base_of<Updatable, T>::value, int>::type = 0>
-        const std::shared_ptr<T>& CreateUpdatable(Args&&... args)
+        std::shared_ptr<T> CreateUpdatable(Args&&... args)
         {
             std::shared_ptr<T> ptr = std::make_shared<T>(std::forward<Args>(args)...);
             _updatables.push_back(ptr);
@@ -44,5 +46,6 @@ class Updater
 
         std::promise<void> _promise;
         std::thread _worker;
-};
+    };
 
+} // wowgm::threading

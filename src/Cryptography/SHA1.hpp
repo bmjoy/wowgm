@@ -6,7 +6,7 @@
 
 #include "BigNumber.hpp"
 
-namespace crypto
+namespace wowgm::cryptography
 {
     template <typename...>
     struct all_bignumber;
@@ -55,4 +55,5 @@ namespace crypto
 
     /// Returns the SHA1 hash of the given content as hex string.
     BigNumber CalculateSHA1(std::string const& content);
-}
+} // wowgm::cryptography
+

@@ -4,7 +4,7 @@
 #include <cstring>
 #include <stdarg.h>
 
-namespace crypto
+namespace wowgm::cryptography
 {
     SHA1::SHA1()
     {
@@ -47,4 +47,4 @@ namespace crypto
         return bigNumber;
     }
 
-} // namespace crypto
+} // namespace wowgm::cryptography

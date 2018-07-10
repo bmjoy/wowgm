@@ -8,8 +8,12 @@
 #include "Updatable.hpp"
 #include "BaseSocket.hpp"
 
-class SocketManager : public Updatable
+namespace wowgm::threading
 {
+    using namespace wowgm::networking;
+
+    class SocketManager : public Updatable
+    {
     public:
         SocketManager() : _socket() { }
 
@@ -22,6 +26,7 @@ class SocketManager : public Updatable
         }
 
         void Update(std::uint32_t timeInterval) override final;
+        void Destroy() override final;
 
         std::shared_ptr<BaseSocket> GetSocket();
 
@@ -31,4 +36,6 @@ class SocketManager : public Updatable
         std::shared_ptr<BaseSocket> _socket;
 
         boost::asio::io_context _context;
-};
+    };
+
+} // wowgm::threading
