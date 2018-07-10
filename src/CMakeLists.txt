@@ -8,33 +8,10 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-CollectSourceFiles(
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  PRIVATE_SOURCES
-)
+# Set projectname (must be done AFTER setting configurationtypes)
 
-GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
+# add dependencies
+add_subdirectory(glfw)
 
-CollectIncludeDirectories(
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  PUBLIC_INCLUDES)
-
-add_executable(WowGM
-  ${PRIVATE_SOURCES}
-)
-
-set_target_properties(WowGM PROPERTIES LINK_FLAGS "${worldserver_LINK_FLAGS}")
-target_link_libraries(WowGM
-  ${OPENSSL_LIBRARIES}
-  boost
-)
-
-target_include_directories(WowGM
-  PUBLIC
-    ${PUBLIC_INCLUDES}
-    ${Boost_INCLUDE_DIR}
-    ${OPENSSL_INCLUDE_DIR}
-  PRIVATE
-    ${CMAKE_CURRENT_BINARY_DIR})
-
-install(TARGETS WowGM DESTINATION "${CMAKE_INSTALL_PREFIX}")
+# add core sources
+add_subdirectory(wowgm)
