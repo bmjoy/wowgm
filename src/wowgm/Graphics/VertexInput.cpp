@@ -1,9 +1,10 @@
 #include "VertexInput.hpp"
 #include "SwapChain.hpp"
+#include "LogicalDevice.hpp"
 
 namespace wowgm::graphics
 {
-    VertexInput::VertexInput(SwapChain* swapChain)
+    VertexInput::VertexInput(SwapChain* swapChain) : _swapchain(swapChain)
     {
         _inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
         _inputAssembly.pNext = nullptr;
@@ -64,12 +65,31 @@ namespace wowgm::graphics
         _multisamplingState.alphaToOneEnable = VK_FALSE; // Optional
 
         // This requires a depth/stencil test resource to be dynamically added, so, uh, wait a bit.
-        // For now, disable depth testing
+        // For now, disable depth testing.
         // _depthStencilState.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
         // _depthStencilState.pNext = nullptr;
         // _depthStencilState.flags = 0;
         // _depthStencilState.depthTestEnable = VK_TRUE;
         // _depthStencilState.stencilTestEnable = VK_FALSE;
+
+        //! TODO: Blending
+        //! TODO: Dynamic state
+
+        VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
+        pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+        pipelineLayoutInfo.setLayoutCount = 0; // Optional
+        pipelineLayoutInfo.pSetLayouts = nullptr; // Optional
+        pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
+        pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
+        //! TODO: Push constants
+
+        if (vkCreatePipelineLayout(*swapChain->GetLogicalDevice(), &pipelineLayoutInfo, nullptr, &_pipelineLayout) != VK_SUCCESS)
+            throw std::runtime_error("failed to create a pipeline layout!");
+    }
+
+    VertexInput::~VertexInput()
+    {
+        vkDestroyPipelineLayout(*_swapchain->GetLogicalDevice(), _pipelineLayout, nullptr);
     }
 
     void VertexInput::AddBinding(VkVertexInputBindingDescription binding)

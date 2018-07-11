@@ -24,6 +24,7 @@ namespace wowgm::graphics
     {
     public:
         VertexInput(SwapChain* swapChain);
+        ~VertexInput();
 
         void AddBinding(VkVertexInputBindingDescription binding);
 
@@ -97,6 +98,9 @@ namespace wowgm::graphics
         VkPipelineMultisampleStateCreateInfo _multisamplingState;
         VkPipelineDepthStencilStateCreateInfo _depthStencilState;
 
+        SwapChain* _swapchain;
+
+        VkPipelineLayout _pipelineLayout;
         VkViewport _viewport;
         VkRect2D _scissors;
     };
