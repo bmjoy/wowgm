@@ -2,16 +2,20 @@
 
 #include "SharedGraphicsDefines.hpp"
 
-#include "LogicalDevice.hpp"
-#include "PhysicalDevice.hpp"
-
 #include <vector>
 #include <cstdint>
 
 #include <vulkan/vulkan.h>
 
+class GLFWwindow;
+
 namespace wowgm::graphics
 {
+    class Surface;
+    class Queue;
+    class LogicalDevice;
+    class PhysicalDevice;
+
     class Instance
     {
     public:
@@ -20,29 +24,29 @@ namespace wowgm::graphics
         Instance(VkInstance instance);
         ~Instance();
 
-        void SetSurface(VkSurfaceKHR surface);
+        VkInstance GetInstance();
 
         void SetupDebugCallback();
 
-        LogicalDevice& GetLogicalDevice(std::uint32_t index);
         PhysicalDevice& GetPhysicalDevice(std::uint32_t index);
 
-        std::vector<LogicalDevice>::iterator IterateLogicalDevices();
         std::vector<PhysicalDevice>::iterator IteratePhysicalDevices();
-
         void SelectPhysicalDevice(std::uint32_t deviceIndex);
 
+        Surface* CreateSurface(GLFWwindow* window);
+
+        LogicalDevice* CreateLogicalDevice();
     private:
         void SelectPhysicalDevice();
 
     private:
-        std::vector<LogicalDevice> _logicalDevices;
+        LogicalDevice* _logicalDevice;
+        PhysicalDevice* _selectedPhysicalDevice;
+
         std::vector<PhysicalDevice> _physicalDevices;
 
         VkInstance _instance;
-        VkSurfaceKHR _surface;
-
-        PhysicalDevice _selectedPhysicalDevice;
+        Surface* _surface;
 
 #ifdef ENABLE_VALIDATION_LAYERS
         VkDebugReportCallbackEXT _debugReportCallback;

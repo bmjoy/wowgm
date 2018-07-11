@@ -1,4 +1,5 @@
 #include "PhysicalDevice.hpp"
+#include "Surface.hpp"
 
 #include <vector>
 
@@ -9,12 +10,22 @@ namespace wowgm::graphics
         return Graphics >= 0 && Present >= 0;
     }
 
+    std::uint32_t QueueFamilyIndices::GetQueueCount()
+    {
+        return sizeof(QueueFamilyIndices) / sizeof(std::int32_t);
+    }
+
+    std::int32_t* QueueFamilyIndices::EnumerateFamilies()
+    {
+        return reinterpret_cast<std::int32_t*>(this);
+    }
+
     PhysicalDevice::PhysicalDevice() : _device(VK_NULL_HANDLE), _deviceScore(0)
     {
 
     }
 
-    PhysicalDevice::PhysicalDevice(VkPhysicalDevice device, VkSurfaceKHR surface) : _device(device), _deviceScore(0)
+    PhysicalDevice::PhysicalDevice(VkPhysicalDevice device, Surface* surface) : _device(device), _deviceScore(0)
     {
         vkGetPhysicalDeviceProperties(device, &_deviceProperties);
         vkGetPhysicalDeviceFeatures(device, &_deviceFeatures);
@@ -41,9 +52,8 @@ namespace wowgm::graphics
             std::int32_t i = 0;
             for (const auto& queueFamily : queueFamilies)
             {
-
                 VkBool32 presentSupport = false;
-                vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &presentSupport);
+                vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface->GetSurface(), &presentSupport);
 
                 if (queueFamily.queueCount > 0 && queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
                     _queueFamilyIndices.Graphics = i;
@@ -77,5 +87,10 @@ namespace wowgm::graphics
     VkPhysicalDevice PhysicalDevice::GetDevice()
     {
         return _device;
+    }
+
+    VkPhysicalDeviceFeatures PhysicalDevice::GetFeatures()
+    {
+        return _deviceFeatures;
     }
 }

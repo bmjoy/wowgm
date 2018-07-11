@@ -5,17 +5,24 @@
 
 namespace wowgm::graphics
 {
+    class Surface;
+
     struct QueueFamilyIndices
     {
+        /// Whenever you add/edit this block, make sure to fix the queues assignments in
+        /// LogicalDevice.
         std::int32_t Graphics = -1;
         std::int32_t Present = -1;
+
+        std::uint32_t GetQueueCount();
+        std::int32_t* EnumerateFamilies();
 
         bool IsComplete();
     };
 
     class PhysicalDevice
     {
-        PhysicalDevice(VkPhysicalDevice device, VkSurfaceKHR surface);
+        PhysicalDevice(VkPhysicalDevice device, Surface* surface);
         PhysicalDevice();
     public:
 
@@ -23,6 +30,7 @@ namespace wowgm::graphics
         QueueFamilyIndices& GetQueues();
 
         VkPhysicalDevice GetDevice();
+        VkPhysicalDeviceFeatures GetFeatures();
 
     private:
         VkPhysicalDevice _device;

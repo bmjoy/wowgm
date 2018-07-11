@@ -4,7 +4,20 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
+#include <set>
+
+#include "Surface.hpp"
+#include "PhysicalDevice.hpp"
+#include "LogicalDevice.hpp"
 #include "SharedGraphicsDefines.hpp"
+
+/// Execution chain
+/// 1. Create an Instance
+/// 2. Setup the debug callbacks
+/// 3. Bind a Surface
+/// 4. Select a PhysicalDevice
+/// 5. Create a LogicalDevice
+
 
 namespace wowgm::graphics
 {
@@ -75,18 +88,6 @@ namespace wowgm::graphics
 
     Instance::Instance(VkInstance instance) : _instance(instance)
     {
-        std::uint32_t physicalDeviceCount = 0;
-        vkEnumeratePhysicalDevices(_instance, &physicalDeviceCount, nullptr);
-
-        std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
-        vkEnumeratePhysicalDevices(_instance, &physicalDeviceCount, physicalDevices.data());
-
-        _physicalDevices.resize(physicalDeviceCount);
-        for (std::uint32_t i = 0; i < physicalDeviceCount; ++i)
-            _physicalDevices.emplace(_physicalDevices.begin() + i, physicalDevices[i]);
-
-        SelectPhysicalDevice();
-
         _surface = VK_NULL_HANDLE;
     }
 
@@ -96,22 +97,89 @@ namespace wowgm::graphics
         details::DestroyDebugReportCallbackEXT(_instance, _debugReportCallback, nullptr);
 #endif
 
+        delete _surface;
+        _surface = nullptr;
         vkDestroyInstance(_instance, nullptr);
     }
 
-    void Instance::SetSurface(VkSurfaceKHR surface)
+    VkInstance Instance::GetInstance()
     {
-        _surface = surface;
+        return _instance;
+    }
 
-        GLFWwindow* window; // FIXME!!!!
+    LogicalDevice* Instance::CreateLogicalDevice()
+    {
+        QueueFamilyIndices& indices = _selectedPhysicalDevice->GetQueues();
 
+        std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
+        std::set<std::int32_t> uniqueQueueFamilies = { indices.Graphics, indices.Present };
+
+        float queuePriority = 1.0f;
+        for (int queueFamily : uniqueQueueFamilies) {
+            VkDeviceQueueCreateInfo queueCreateInfo = {};
+            queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+            queueCreateInfo.queueFamilyIndex = queueFamily;
+            queueCreateInfo.queueCount = 1;
+            queueCreateInfo.pQueuePriorities = &queuePriority;
+            queueCreateInfos.push_back(queueCreateInfo);
+        }
+
+        VkPhysicalDeviceFeatures deviceFeatures = {};
+
+        VkDeviceCreateInfo createInfo = {};
+        createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+
+        createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
+        createInfo.pQueueCreateInfos = queueCreateInfos.data();
+
+        createInfo.pEnabledFeatures = &deviceFeatures;
+
+        createInfo.enabledExtensionCount = 0;
+
+#ifdef ENABLE_VALIDATION_LAYERS
+        createInfo.enabledLayerCount = static_cast<uint32_t>(details::validationLayers.size());
+        createInfo.ppEnabledLayerNames = details::validationLayers.data();
+#else
+        createInfo.enabledLayerCount = 0;
+#endif
+
+        VkDevice device;
+
+        if (vkCreateDevice(_selectedPhysicalDevice->GetDevice(), &createInfo, nullptr, &device) != VK_SUCCESS)
+            throw std::runtime_error("failed to create logical device!");
+
+        _logicalDevice = new LogicalDevice(device, indices);
+        return _logicalDevice;
+    }
+
+    Surface* Instance::CreateSurface(GLFWwindow* window)
+    {
+        VkSurfaceKHR surface;
         if (glfwCreateWindowSurface(_instance, window, nullptr, &surface) != VK_SUCCESS)
-            throw std::runtime_error("failed to create window surface!");
+            throw std::runtime_error("Unable to create a surface");
+
+        _surface = new Surface(this, surface);
+
+        // NOTE: This was previously in the ctor but we need _surface for emplace
+        std::uint32_t physicalDeviceCount = 0;
+        vkEnumeratePhysicalDevices(_instance, &physicalDeviceCount, nullptr);
+
+        std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
+        vkEnumeratePhysicalDevices(_instance, &physicalDeviceCount, physicalDevices.data());
+
+        _physicalDevices.resize(physicalDeviceCount);
+        for (std::uint32_t i = 0; i < physicalDeviceCount; ++i)
+            _physicalDevices.emplace(_physicalDevices.begin() + i, physicalDevices[i], surface);
+
+        SelectPhysicalDevice();
+        // -----------------------------------------------------------------------
+
+        return _surface;
     }
 
     void Instance::SelectPhysicalDevice(std::uint32_t deviceIndex)
     {
-        _selectedPhysicalDevice = _physicalDevices[deviceIndex];
+        _selectedPhysicalDevice = &_physicalDevices[deviceIndex];
     }
 
     void Instance::SelectPhysicalDevice()
@@ -124,18 +192,8 @@ namespace wowgm::graphics
                 continue;
 
             bestScore = deviceScore;
-            _selectedPhysicalDevice = *itr;
+            _selectedPhysicalDevice = &*itr;
         }
-    }
-
-    LogicalDevice& Instance::GetLogicalDevice(std::uint32_t index)
-    {
-        return _logicalDevices[index];
-    }
-
-    std::vector<LogicalDevice>::iterator Instance::IterateLogicalDevices()
-    {
-        return _logicalDevices.begin();
     }
 
     PhysicalDevice& Instance::GetPhysicalDevice(std::uint32_t index)
