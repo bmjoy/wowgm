@@ -4,6 +4,8 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
+#include "SharedGraphicsDefines.hpp"
+
 namespace wowgm::graphics
 {
     namespace details
@@ -29,10 +31,6 @@ namespace wowgm::graphics
             // ::LOG_GRAPHICS << msg << std::endl;
             return VK_FALSE;
         }
-
-        const std::vector<const char*> validationLayers = {
-            "VK_LAYER_LUNARG_standard_validation"
-        };
     }
 
     Instance* Instance::Create(const char* applicationName, const char* engineName)
@@ -88,6 +86,8 @@ namespace wowgm::graphics
             _physicalDevices.emplace(_physicalDevices.begin() + i, physicalDevices[i]);
 
         SelectPhysicalDevice();
+
+        _surface = VK_NULL_HANDLE;
     }
 
     Instance::~Instance()
@@ -97,6 +97,16 @@ namespace wowgm::graphics
 #endif
 
         vkDestroyInstance(_instance, nullptr);
+    }
+
+    void Instance::SetSurface(VkSurfaceKHR surface)
+    {
+        _surface = surface;
+
+        GLFWwindow* window; // FIXME!!!!
+
+        if (glfwCreateWindowSurface(_instance, window, nullptr, &surface) != VK_SUCCESS)
+            throw std::runtime_error("failed to create window surface!");
     }
 
     void Instance::SelectPhysicalDevice(std::uint32_t deviceIndex)

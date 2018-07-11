@@ -20,6 +20,8 @@ namespace wowgm::graphics
         Instance(VkInstance instance);
         ~Instance();
 
+        void SetSurface(VkSurfaceKHR surface);
+
         void SetupDebugCallback();
 
         LogicalDevice& GetLogicalDevice(std::uint32_t index);
@@ -38,6 +40,8 @@ namespace wowgm::graphics
         std::vector<PhysicalDevice> _physicalDevices;
 
         VkInstance _instance;
+        VkSurfaceKHR _surface;
+
         PhysicalDevice _selectedPhysicalDevice;
 
 #ifdef ENABLE_VALIDATION_LAYERS

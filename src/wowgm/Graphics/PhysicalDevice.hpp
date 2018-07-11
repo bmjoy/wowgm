@@ -8,17 +8,21 @@ namespace wowgm::graphics
     struct QueueFamilyIndices
     {
         std::int32_t Graphics = -1;
+        std::int32_t Present = -1;
 
         bool IsComplete();
     };
 
     class PhysicalDevice
     {
-    public:
-        PhysicalDevice(VkPhysicalDevice device);
+        PhysicalDevice(VkPhysicalDevice device, VkSurfaceKHR surface);
         PhysicalDevice();
+    public:
 
         std::uint32_t GetScore();
+        QueueFamilyIndices& GetQueues();
+
+        VkPhysicalDevice GetDevice();
 
     private:
         VkPhysicalDevice _device;
