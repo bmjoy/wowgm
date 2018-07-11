@@ -33,6 +33,8 @@ namespace wowgm::graphics
         VkPhysicalDeviceFeatures& GetFeatures();
         VkPhysicalDeviceProperties& GetProperties();
 
+        bool CheckDeviceExtensionSupport();
+
     private:
         VkPhysicalDevice _device;
         VkPhysicalDeviceProperties _deviceProperties;

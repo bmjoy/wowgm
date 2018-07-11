@@ -2,9 +2,16 @@
 #include "Surface.hpp"
 
 #include <vector>
+#include <set>
+#include <string>
 
 namespace wowgm::graphics
 {
+    namespace details
+    {
+        const std::vector<const char*> deviceExtensions;
+    }
+
     bool QueueFamilyIndices::IsComplete()
     {
         return Graphics >= 0 && Present >= 0;
@@ -64,7 +71,7 @@ namespace wowgm::graphics
         }
 
         // Ignore devices without a graphics queue
-        if (_queueFamilyIndices.Graphics == -1)
+        if (_queueFamilyIndices.Graphics == -1 || !CheckDeviceExtensionSupport())
             _deviceScore = 0;
     }
 
@@ -91,5 +98,28 @@ namespace wowgm::graphics
     VkPhysicalDeviceProperties& PhysicalDevice::GetProperties()
     {
         return _deviceProperties;
+    }
+
+    bool PhysicalDevice::CheckDeviceExtensionSupport()
+    {
+        uint32_t extensionCount;
+        vkEnumerateDeviceExtensionProperties(_device, nullptr, &extensionCount, nullptr);
+
+        std::vector<VkExtensionProperties> availableExtensions(extensionCount);
+        vkEnumerateDeviceExtensionProperties(_device, nullptr, &extensionCount, availableExtensions.data());
+
+        std::set<std::string> requiredExtensions(details::deviceExtensions.begin(), details::deviceExtensions.end());
+
+        for (const auto& extension : availableExtensions)
+            requiredExtensions.erase(extension.extensionName);
+
+        return requiredExtensions.empty();
+    }
+
+    namespace details
+    {
+        const std::vector<const char*> deviceExtensions = {
+            VK_KHR_SWAPCHAIN_EXTENSION_NAME
+        };
     }
 }
