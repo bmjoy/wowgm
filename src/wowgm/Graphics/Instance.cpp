@@ -1,15 +1,15 @@
 #include "Instance.hpp"
 #include "Logger.hpp"
+#include "Surface.hpp"
+#include "PhysicalDevice.hpp"
+#include "LogicalDevice.hpp"
+#include "SharedGraphicsDefines.hpp"
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
 #include <set>
 
-#include "Surface.hpp"
-#include "PhysicalDevice.hpp"
-#include "LogicalDevice.hpp"
-#include "SharedGraphicsDefines.hpp"
 
 /// Execution chain
 /// 1. Create an Instance
@@ -158,13 +158,13 @@ namespace wowgm::graphics
         return _logicalDevice;
     }
 
-    Surface* Instance::CreateSurface(GLFWwindow* window)
+    Surface* Instance::CreateSurface(Window* window)
     {
         VkSurfaceKHR surface;
-        if (glfwCreateWindowSurface(_instance, window, nullptr, &surface) != VK_SUCCESS)
+        if (glfwCreateWindowSurface(_instance, window->GetHandle(), nullptr, &surface) != VK_SUCCESS)
             throw std::runtime_error("Unable to create a surface");
 
-        _surface = new Surface(this, surface);
+        _surface = new Surface(this, surface, window->GetWidth(), window->GetHeight());
 
         // NOTE: This was previously in the ctor but we need _surface for emplace
         std::uint32_t physicalDeviceCount = 0;
@@ -177,7 +177,7 @@ namespace wowgm::graphics
         for (std::uint32_t i = 0; i < physicalDeviceCount; ++i)
             _physicalDevices.emplace(_physicalDevices.begin() + i, physicalDevices[i], _surface);
 
-        SelectPhysicalDevice();
+        _SelectPhysicalDevice();
         // -----------------------------------------------------------------------
 
         return _surface;
@@ -188,7 +188,7 @@ namespace wowgm::graphics
         _selectedPhysicalDevice = &_physicalDevices[deviceIndex];
     }
 
-    void Instance::SelectPhysicalDevice()
+    void Instance::_SelectPhysicalDevice()
     {
         std::uint32_t bestScore = 0;
         for (auto itr = _physicalDevices.begin(); itr != _physicalDevices.end(); ++itr)

@@ -126,7 +126,7 @@ namespace wowgm::graphics
         else
         {
             // Match window resolution
-            VkExtent2D actualExtent = { WIDTH , HEIGHT };
+            VkExtent2D actualExtent = { _device->GetSurface()->GetWidth() , _device->GetSurface()->GetHeight() };
 
             actualExtent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, actualExtent.width));
             actualExtent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, actualExtent.height));

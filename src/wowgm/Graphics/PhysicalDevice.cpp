@@ -64,7 +64,6 @@ namespace wowgm::graphics
 
                 i++;
             }
-
         }
 
         _CreateSwapChainSupportDetails();

@@ -1,14 +1,13 @@
 #pragma once
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
-
 #include <vulkan/vulkan.h>
 
 #include <cstdint>
 #include <vector>
 
-namespace wowgm::windows
+struct GLFWwindow;
+
+namespace wowgm::graphics
 {
 #ifdef _DEBUG
 # define ENABLE_VALIDATION_LAYERS
@@ -23,6 +22,11 @@ namespace wowgm::windows
         void Run();
 
         void InitializeWindow();
+
+        GLFWwindow* GetHandle();
+
+        std::uint32_t GetWidth();
+        std::uint32_t GetHeight();
 
     private:
         GLFWwindow* _window;

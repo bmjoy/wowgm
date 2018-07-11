@@ -1,13 +1,12 @@
 #pragma once
 
 #include "SharedGraphicsDefines.hpp"
+#include "Window.hpp"
 
 #include <vector>
 #include <cstdint>
 
 #include <vulkan/vulkan.h>
-
-struct GLFWwindow;
 
 namespace wowgm::graphics
 {
@@ -33,12 +32,13 @@ namespace wowgm::graphics
         std::vector<PhysicalDevice>::iterator IteratePhysicalDevices();
         void SelectPhysicalDevice(std::uint32_t deviceIndex);
 
-        Surface* CreateSurface(GLFWwindow* window);
+        Surface* CreateSurface(Window* window);
 
         LogicalDevice* CreateLogicalDevice();
         LogicalDevice* GetLogicalDevice();
+
     private:
-        void SelectPhysicalDevice();
+        void _SelectPhysicalDevice();
 
     private:
         LogicalDevice* _logicalDevice;

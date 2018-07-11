@@ -1,11 +1,14 @@
 #include "Window.hpp"
 #include "Logger.hpp"
 
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+
 #include <stdexcept>
 #include <iostream>
 #include <cstring>
 
-namespace wowgm::windows
+namespace wowgm::graphics
 {
     Window::Window(const char* title) : Window(800u, 600u, title)
     {
@@ -42,6 +45,10 @@ namespace wowgm::windows
 
     }
 
+    GLFWwindow* Window::GetHandle()
+    {
+        return _window;
+    }
 
     void Window::Execute()
     {
@@ -54,6 +61,16 @@ namespace wowgm::windows
     {
         glfwDestroyWindow(_window);
         glfwTerminate();
+    }
+
+    std::uint32_t Window::GetWidth()
+    {
+        return _width;
+    }
+
+    std::uint32_t Window::GetHeight()
+    {
+        return _height;
     }
 }
 

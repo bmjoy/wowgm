@@ -5,7 +5,7 @@
 
 namespace wowgm::graphics
 {
-    Surface::Surface(Instance* instance, VkSurfaceKHR surface) : _instance(instance), _surface(surface)
+    Surface::Surface(Instance* instance, VkSurfaceKHR surface, std::uint32_t width, std::uint32_t height) : _instance(instance), _surface(surface), _width(width), _height(height)
     {
 
     }
@@ -23,5 +23,16 @@ namespace wowgm::graphics
     Instance* Surface::GetInstance()
     {
         return _instance;
+    }
+
+
+    std::uint32_t Surface::GetWidth()
+    {
+        return _width;
+    }
+
+    std::uint32_t Surface::GetHeight()
+    {
+        return _height;
     }
 }
