@@ -31,4 +31,10 @@ namespace wowgm::graphics
     {
         return _presentQueue;
     }
+
+
+    VkDevice LogicalDevice::GetVkDevice()
+    {
+        return _device;
+    }
 }

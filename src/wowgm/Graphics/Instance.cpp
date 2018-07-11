@@ -102,9 +102,14 @@ namespace wowgm::graphics
         vkDestroyInstance(_instance, nullptr);
     }
 
-    VkInstance Instance::GetInstance()
+    VkInstance Instance::GetVkInstance()
     {
         return _instance;
+    }
+
+    LogicalDevice* Instance::GetLogicalDevice()
+    {
+        return _logicalDevice;
     }
 
     LogicalDevice* Instance::CreateLogicalDevice()

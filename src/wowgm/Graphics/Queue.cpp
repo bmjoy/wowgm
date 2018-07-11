@@ -6,4 +6,10 @@ namespace wowgm::graphics
     {
 
     }
+
+
+    VkQueue Queue::GetVkQueue()
+    {
+        return _queue;
+    }
 }

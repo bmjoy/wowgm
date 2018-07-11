@@ -18,6 +18,8 @@ namespace wowgm::graphics
         Queue* GetGraphicsQueue();
         Queue* GetPresentQueue();
 
+        VkDevice GetVkDevice();
+
     private:
         VkDevice _device;
 

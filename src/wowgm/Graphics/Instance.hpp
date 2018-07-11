@@ -24,7 +24,7 @@ namespace wowgm::graphics
         Instance(VkInstance instance);
         ~Instance();
 
-        VkInstance GetInstance();
+        VkInstance GetVkInstance();
 
         void SetupDebugCallback();
 
@@ -36,6 +36,7 @@ namespace wowgm::graphics
         Surface* CreateSurface(GLFWwindow* window);
 
         LogicalDevice* CreateLogicalDevice();
+        LogicalDevice* GetLogicalDevice();
     private:
         void SelectPhysicalDevice();
 

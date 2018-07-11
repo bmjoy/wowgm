@@ -2,10 +2,12 @@
 
 #include <vulkan/vulkan.h>
 #include <cstdint>
+#include <vector>
 
 namespace wowgm::graphics
 {
     class Surface;
+    class Instance;
 
     struct QueueFamilyIndices
     {
@@ -20,6 +22,13 @@ namespace wowgm::graphics
         bool IsComplete();
     };
 
+    struct SwapChainSupportDetails
+    {
+        VkSurfaceCapabilitiesKHR Capabilities;
+        std::vector<VkSurfaceFormatKHR> Formats;
+        std::vector<VkPresentModeKHR> PresentModes;
+    };
+
     class PhysicalDevice
     {
     public:
@@ -29,18 +38,29 @@ namespace wowgm::graphics
         std::uint32_t GetScore();
         QueueFamilyIndices& GetQueues();
 
-        VkPhysicalDevice GetDevice();
-        VkPhysicalDeviceFeatures& GetFeatures();
-        VkPhysicalDeviceProperties& GetProperties();
+        VkPhysicalDevice GetVkDevice();
+        VkPhysicalDeviceFeatures& GetVkFeatures();
+        VkPhysicalDeviceProperties& GetVkProperties();
 
         bool CheckDeviceExtensionSupport();
 
+        SwapChainSupportDetails& GetSwapChainSupportDetails();
+
+        Surface* GetSurface();
+        Instance* GetInstance();
+
     private:
+        void _CreateSwapChainSupportDetails();
+
+    private:
+        Surface* _surface;
+
         VkPhysicalDevice _device;
         VkPhysicalDeviceProperties _deviceProperties;
         VkPhysicalDeviceFeatures _deviceFeatures;
 
         QueueFamilyIndices _queueFamilyIndices;
+        SwapChainSupportDetails _swapChainSupportDetails;
 
         std::uint32_t _deviceScore;
     };

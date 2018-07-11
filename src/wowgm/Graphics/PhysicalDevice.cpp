@@ -1,9 +1,9 @@
 #include "PhysicalDevice.hpp"
 #include "Surface.hpp"
+#include "Instance.hpp"
 
 #include "SharedGraphicsDefines.hpp"
 
-#include <vector>
 #include <set>
 #include <string>
 
@@ -29,7 +29,7 @@ namespace wowgm::graphics
 
     }
 
-    PhysicalDevice::PhysicalDevice(VkPhysicalDevice device, Surface* surface) : _device(device), _deviceScore(0)
+    PhysicalDevice::PhysicalDevice(VkPhysicalDevice device, Surface* surface) : _device(device), _deviceScore(0), _surface(surface)
     {
         vkGetPhysicalDeviceProperties(device, &_deviceProperties);
         vkGetPhysicalDeviceFeatures(device, &_deviceFeatures);
@@ -67,8 +67,15 @@ namespace wowgm::graphics
 
         }
 
-        // Ignore devices without a graphics queue
-        if (_queueFamilyIndices.Graphics == -1 || !CheckDeviceExtensionSupport())
+        _CreateSwapChainSupportDetails();
+
+        bool extensionsSupported = CheckDeviceExtensionSupport();
+        bool swapChainAdequate = false;
+        if (extensionsSupported)
+            swapChainAdequate = !_swapChainSupportDetails.Formats.empty() && !_swapChainSupportDetails.PresentModes.empty();
+
+        // Ignore devices without a graphics queue, without the required expansion support, or without swap chain support
+        if (_queueFamilyIndices.Graphics == -1 || !extensionsSupported || !swapChainAdequate)
             _deviceScore = 0;
     }
 
@@ -82,17 +89,17 @@ namespace wowgm::graphics
         return _queueFamilyIndices;
     }
 
-    VkPhysicalDevice PhysicalDevice::GetDevice()
+    VkPhysicalDevice PhysicalDevice::GetVkDevice()
     {
         return _device;
     }
 
-    VkPhysicalDeviceFeatures& PhysicalDevice::GetFeatures()
+    VkPhysicalDeviceFeatures& PhysicalDevice::GetVkFeatures()
     {
         return _deviceFeatures;
     }
 
-    VkPhysicalDeviceProperties& PhysicalDevice::GetProperties()
+    VkPhysicalDeviceProperties& PhysicalDevice::GetVkProperties()
     {
         return _deviceProperties;
     }
@@ -113,4 +120,42 @@ namespace wowgm::graphics
         return requiredExtensions.empty();
     }
 
+    SwapChainSupportDetails& PhysicalDevice::GetSwapChainSupportDetails()
+    {
+        return _swapChainSupportDetails;
+    }
+
+    void PhysicalDevice::_CreateSwapChainSupportDetails()
+    {
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(_device, _surface->GetSurface(), &_swapChainSupportDetails.Capabilities);
+
+        uint32_t formatCount;
+        vkGetPhysicalDeviceSurfaceFormatsKHR(_device, _surface->GetSurface(), &formatCount, nullptr);
+
+        if (formatCount != 0)
+        {
+            _swapChainSupportDetails.Formats.resize(formatCount);
+            vkGetPhysicalDeviceSurfaceFormatsKHR(_device, _surface->GetSurface(), &formatCount, _swapChainSupportDetails.Formats.data());
+        }
+
+        uint32_t presentModeCount;
+        vkGetPhysicalDeviceSurfacePresentModesKHR(_device, _surface->GetSurface(), &presentModeCount, nullptr);
+
+        if (presentModeCount != 0)
+        {
+            _swapChainSupportDetails.PresentModes.resize(presentModeCount);
+            vkGetPhysicalDeviceSurfacePresentModesKHR(_device, _surface->GetSurface(), &presentModeCount, _swapChainSupportDetails.PresentModes.data());
+        }
+
+    }
+
+    Surface* PhysicalDevice::GetSurface()
+    {
+        return _surface;
+    }
+
+    Instance* PhysicalDevice::GetInstance()
+    {
+        return _surface->GetInstance();
+    }
 }

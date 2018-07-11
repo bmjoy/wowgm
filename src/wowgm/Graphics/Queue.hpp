@@ -9,6 +9,8 @@ namespace wowgm::graphics
     public:
         Queue(VkQueue queue);
 
+        VkQueue GetVkQueue();
+
     private:
         VkQueue _queue;
     };
