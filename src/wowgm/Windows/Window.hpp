@@ -14,6 +14,32 @@ namespace wowgm::windows
 # define ENABLE_VALIDATION_LAYERS
 #endif
 
+    struct QueueFamilyIndices
+    {
+        std::int32_t graphicsFamily = -1;
+    };
+
+    QueueFamilyIndices GetQueueFamilies(VkPhysicalDevice device)
+    {
+        QueueFamilyIndices indices;
+
+        uint32_t queueFamilyCount = 0;
+        vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+
+        std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+        vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+
+        int i = 0;
+        for (const auto& queueFamily : queueFamilies) {
+            if (queueFamily.queueCount > 0 && queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+                indices.graphicsFamily = i;
+
+            i++;
+        }
+
+        return indices;
+    }
+
     class window
     {
     public:
@@ -36,26 +62,9 @@ namespace wowgm::windows
 
     private: /* Vulkan initializer */
 
-        // Creates an instance of Vulkan.
-        void CreateVulkanInstance();
+        void SelectPhysicalDevice();
 
-        // Sets up a debug callback. This is a no-op in release builds.
-        void SetupDebugCallback();
-    public: /* Vulkan information getters */
-
-        // Returns informations about all available extensions on the provided layer.
-        // If nullptr is passed, information about all layers is returned
-        std::vector<VkExtensionProperties> GetAvailableExtensions(const char* layerName = nullptr);
-
-        // Checks if the system supports validation layers. This is a no-op in release builds and always returns true.
-        bool CheckValidationLayerSupport();
-
-        // Returns a list of required extensions on the system.
-        std::vector<const char*> GetRequiredExtensions();
-
-    private: /* Vulkan data */
-        VkInstance _instance;
-        VkDebugReportCallbackEXT _debugReportCallback;
+        void InitializeLogicalDevice();
     };
 }
 
