@@ -32,19 +32,6 @@ namespace wowgm::graphics
         _window = glfwCreateWindow(_width, _height, _title, nullptr, nullptr);
     }
 
-    void Window::Run()
-    {
-        InitializeWindow();
-        InitializeVulkan();
-        Execute();
-        Cleanup();
-    }
-
-    void Window::InitializeVulkan()
-    {
-
-    }
-
     GLFWwindow* Window::GetHandle()
     {
         return _window;

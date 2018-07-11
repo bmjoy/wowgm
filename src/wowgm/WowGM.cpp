@@ -1,3 +1,6 @@
+#if 0
+
+
 #include <boost/program_options.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/ip/address.hpp>
@@ -98,20 +101,9 @@ int main(int argc, char* argv[])
 
         updater->Start();
 
-        glfwInit();
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        GLFWwindow* window = glfwCreateWindow(800, 600, "Vulkan window", nullptr, nullptr);
         std::uint32_t extensionCount = 0;
         vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
         LOG_GRAPHICS << extensionCount << " extensions found." << std::endl;
-
-        while (!glfwWindowShouldClose(window))
-        {
-            glfwPollEvents();
-        }
-
-        glfwDestroyWindow(window);
-        glfwTerminate();
 
         updater->Stop();
     }
@@ -125,3 +117,46 @@ int main(int argc, char* argv[])
     return 0;
 }
 
+#else
+#include "Window.hpp"
+#include "Instance.hpp"
+#include "Surface.hpp"
+#include "LogicalDevice.hpp"
+#include "SwapChain.hpp"
+#include "PhysicalDevice.hpp"
+
+#include <iostream>
+
+int main()
+{
+    using namespace wowgm::graphics;
+
+    try {
+        Window* window = new Window(800, 600, "Vulkan");
+        window->InitializeWindow();
+
+        Instance* instance = Instance::Create("Vulkan", "No Engine");
+        instance->SetupDebugCallback();
+
+        Surface* surface = instance->CreateSurface(window);
+        LogicalDevice* device = instance->CreateLogicalDevice();
+        SwapChain* swapchain = new SwapChain(instance->GetSelectedPhysicalDevice());
+
+        window->Execute();
+
+        delete swapchain;
+        delete device;
+        delete surface;
+        delete instance;
+
+        window->Cleanup();
+        delete window;
+    }
+    catch (const std::runtime_error& e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
+    return 0;
+}
+
+#endif

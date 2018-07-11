@@ -72,9 +72,8 @@ namespace wowgm::graphics
         vkGetSwapchainImagesKHR(*_physicalDevice->GetInstance()->GetLogicalDevice(), _swapChain, &imageCount, swapChainImages.data());
 
         _swapChainImages.resize(imageCount);
-        auto itr = _swapChainImages.begin();
         for (std::uint32_t i = 0; i < imageCount; ++i)
-            _swapChainImages.emplace(itr++, swapChainImages[i]);
+            new (&_swapChainImages[i]) Image(swapChainImages[i]);
     }
 
     SwapChain::~SwapChain()

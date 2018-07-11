@@ -28,6 +28,7 @@ namespace wowgm::graphics
         void SetupDebugCallback();
 
         PhysicalDevice& GetPhysicalDevice(std::uint32_t index);
+        PhysicalDevice* GetSelectedPhysicalDevice();
 
         std::vector<PhysicalDevice>::iterator IteratePhysicalDevices();
         void SelectPhysicalDevice(std::uint32_t deviceIndex);

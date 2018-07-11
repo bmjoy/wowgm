@@ -163,7 +163,8 @@ namespace wowgm::graphics
     Surface* Instance::CreateSurface(Window* window)
     {
         VkSurfaceKHR surface;
-        if (glfwCreateWindowSurface(_instance, window->GetHandle(), nullptr, &surface) != VK_SUCCESS)
+        VkResult windowCreateResult = glfwCreateWindowSurface(_instance, window->GetHandle(), nullptr, &surface);
+        if (windowCreateResult != VK_SUCCESS)
             throw std::runtime_error("Unable to create a surface");
 
         _surface = new Surface(this, surface, window->GetWidth(), window->GetHeight());
@@ -177,7 +178,7 @@ namespace wowgm::graphics
 
         _physicalDevices.resize(physicalDeviceCount);
         for (std::uint32_t i = 0; i < physicalDeviceCount; ++i)
-            _physicalDevices.emplace(_physicalDevices.begin() + i, physicalDevices[i], _surface);
+            new (&_physicalDevices[i]) PhysicalDevice(physicalDevices[i], _surface);
 
         _SelectPhysicalDevice();
         // -----------------------------------------------------------------------
@@ -225,6 +226,11 @@ namespace wowgm::graphics
         if (details::CreateDebugReportCallbackEXT(_instance, &createInfo, nullptr, &_debugReportCallback) != VK_SUCCESS)
             throw std::runtime_error("Failed to set up debug callback!");
 #endif
+    }
+
+    PhysicalDevice* Instance::GetSelectedPhysicalDevice()
+    {
+        return _selectedPhysicalDevice;
     }
 
     namespace details
