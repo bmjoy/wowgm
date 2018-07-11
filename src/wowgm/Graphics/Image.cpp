@@ -7,6 +7,11 @@ namespace wowgm::graphics
 
     }
 
+    Image::Image()
+    {
+
+    }
+
     VkImage Image::GetVkImage()
     {
         return _image;

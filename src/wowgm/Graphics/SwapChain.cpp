@@ -8,13 +8,13 @@
 
 namespace wowgm::graphics
 {
-    SwapChain::SwapChain(PhysicalDevice* device) : _device(device)
+    SwapChain::SwapChain(PhysicalDevice* device) : _physicalDevice(device)
     {
         _SelectFormat();
         _SelectPresentMode();
         _SelectExtent();
 
-        auto& swapChainSupport = _device->GetSwapChainSupportDetails();
+        auto& swapChainSupport = _physicalDevice->GetSwapChainSupportDetails();
 
         // Enable triple buffering
         uint32_t imageCount = swapChainSupport.Capabilities.minImageCount + 1;
@@ -31,9 +31,8 @@ namespace wowgm::graphics
         createInfo.imageArrayLayers = 1; // Always 1 unless stereoscopic 3D.
         createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-
         // If indice and present are two different queues families, we need concurrency
-        QueueFamilyIndices& indices = _device->GetQueues();
+        QueueFamilyIndices& indices = _physicalDevice->GetQueues();
         uint32_t queueFamilyIndices[] = { (uint32_t)indices.Graphics, (uint32_t)indices.Present };
 
         if (indices.Graphics != indices.Present)
@@ -64,18 +63,28 @@ namespace wowgm::graphics
         // This is used for swap chain invalidation (typically resize)
         createInfo.oldSwapchain = VK_NULL_HANDLE;
 
-        if (vkCreateSwapchainKHR(*_device->GetInstance()->GetLogicalDevice(), &createInfo, nullptr, &_swapChain) != VK_SUCCESS)
+        if (vkCreateSwapchainKHR(*_physicalDevice->GetInstance()->GetLogicalDevice(), &createInfo, nullptr, &_swapChain) != VK_SUCCESS)
             throw std::runtime_error("Failed to create swap chain!");
+
+        vkGetSwapchainImagesKHR(*_physicalDevice->GetInstance()->GetLogicalDevice(), _swapChain, &imageCount, nullptr);
+
+        std::vector<VkImage> swapChainImages(imageCount);
+        vkGetSwapchainImagesKHR(*_physicalDevice->GetInstance()->GetLogicalDevice(), _swapChain, &imageCount, swapChainImages.data());
+
+        _swapChainImages.resize(imageCount);
+        auto itr = _swapChainImages.begin();
+        for (std::uint32_t i = 0; i < imageCount; ++i)
+            _swapChainImages.emplace(itr++, swapChainImages[i]);
     }
 
     SwapChain::~SwapChain()
     {
-        delete _device;
+        delete _physicalDevice;
     }
 
     void SwapChain::_SelectFormat()
     {
-        auto& supportDetails = _device->GetSwapChainSupportDetails();
+        auto& supportDetails = _physicalDevice->GetSwapChainSupportDetails();
         if (supportDetails.Formats.size() == 1 && supportDetails.Formats[0].format == VK_FORMAT_UNDEFINED)
         {
             _surfaceFormat.format = VK_FORMAT_B8G8R8A8_UNORM;
@@ -102,7 +111,7 @@ namespace wowgm::graphics
 
         VkPresentModeKHR bestMode = VK_PRESENT_MODE_FIFO_KHR;
 
-        for (const auto& availablePresentMode : _device->GetSwapChainSupportDetails().PresentModes)
+        for (const auto& availablePresentMode : _physicalDevice->GetSwapChainSupportDetails().PresentModes)
         {
             if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR)
             {
@@ -118,7 +127,7 @@ namespace wowgm::graphics
 
     void SwapChain::_SelectExtent()
     {
-        auto& capabilities = _device->GetSwapChainSupportDetails().Capabilities;
+        auto& capabilities = _physicalDevice->GetSwapChainSupportDetails().Capabilities;
 
         if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
             _extent = capabilities.currentExtent;
@@ -126,12 +135,37 @@ namespace wowgm::graphics
         else
         {
             // Match window resolution
-            VkExtent2D actualExtent = { _device->GetSurface()->GetWidth() , _device->GetSurface()->GetHeight() };
+            VkExtent2D actualExtent = { _physicalDevice->GetSurface()->GetWidth() , _physicalDevice->GetSurface()->GetHeight() };
 
             actualExtent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, actualExtent.width));
             actualExtent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, actualExtent.height));
 
             _extent = actualExtent;
         }
+    }
+
+    VkSurfaceFormatKHR SwapChain::GetSurfaceFormat()
+    {
+        return _surfaceFormat;
+    }
+
+    VkPresentModeKHR SwapChain::GetPresentMode()
+    {
+        return _presentMode;
+    }
+
+    VkExtent2D SwapChain::GetExtent()
+    {
+        return _extent;
+    }
+
+    PhysicalDevice* SwapChain::GetPhysicalDevice()
+    {
+        return _physicalDevice;
+    }
+
+    LogicalDevice* SwapChain::GetLogicalDevice()
+    {
+        return _physicalDevice->GetInstance()->GetLogicalDevice();
     }
 }

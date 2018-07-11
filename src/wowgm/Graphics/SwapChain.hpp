@@ -1,10 +1,14 @@
 #pragma once
+#include "Image.hpp"
+
+#include <vector>
 
 #include <vulkan/vulkan.h>
 
 namespace wowgm::graphics
 {
     class PhysicalDevice;
+    class LogicalDevice;
     class Surface;
 
     class SwapChain
@@ -13,20 +17,30 @@ namespace wowgm::graphics
         SwapChain(PhysicalDevice* device);
         ~SwapChain();
 
+        operator VkSwapchainKHR() const { return _swapChain; }
+
+        VkSurfaceFormatKHR GetSurfaceFormat();
+        VkPresentModeKHR GetPresentMode();
+        VkExtent2D GetExtent();
+
+        PhysicalDevice* GetPhysicalDevice();
+        LogicalDevice* GetLogicalDevice();
+
     private:
         void _SelectFormat();
         void _SelectPresentMode();
         void _SelectExtent();
 
-        operator VkSwapchainKHR() const { return _swapChain; }
 
     private:
-        PhysicalDevice* _device;
+        PhysicalDevice* _physicalDevice;
 
         VkSwapchainKHR _swapChain;
 
         VkSurfaceFormatKHR _surfaceFormat;
         VkPresentModeKHR _presentMode;
         VkExtent2D _extent;
+
+        std::vector<Image> _swapChainImages;
     };
 }

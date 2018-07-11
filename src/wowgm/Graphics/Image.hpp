@@ -8,6 +8,7 @@ namespace wowgm::graphics
     {
     public:
         Image(VkImage image);
+        Image();
 
         VkImage GetVkImage();
 
