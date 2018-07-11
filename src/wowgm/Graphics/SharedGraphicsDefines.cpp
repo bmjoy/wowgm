@@ -1,5 +1,7 @@
 #include "SharedGraphicsDefines.hpp"
 
+#include <vulkan/vulkan.h>
+
 namespace wowgm::graphics::details
 {
     const std::vector<const char*> requiredValidationLayers = {
