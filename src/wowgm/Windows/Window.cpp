@@ -39,8 +39,7 @@ namespace wowgm::windows
 
     void window::InitializeVulkan()
     {
-        SelectPhysicalDevice();
-        InitializeLogicalDevice();
+
     }
 
 
@@ -56,37 +55,5 @@ namespace wowgm::windows
         glfwDestroyWindow(_window);
         glfwTerminate();
     }
-
-    void window::SelectPhysicalDevice()
-    {
-        uint32_t deviceCount = 0;
-        vkEnumeratePhysicalDevices(_instance, &deviceCount, nullptr);
-
-        if (deviceCount == 0)
-            throw std::runtime_error("Your system does not support Vulkan!");
-
-        std::vector<VkPhysicalDevice> devices(deviceCount);
-        vkEnumeratePhysicalDevices(_instance, &deviceCount, devices.data());
-
-        std::uint32_t currentBestScore = 0;
-        for (const auto& device : devices)
-        {
-            std::uint32_t deviceScore = IsDeviceSuitable(&device);
-            if (deviceScore > currentBestScore)
-            {
-                currentBestScore = deviceScore;
-                _physicalDevice = device;
-            }
-        }
-
-        if (_physicalDevice == VK_NULL_HANDLE)
-            throw std::runtime_error("Failed to find a suitable Vulkan GPU");
-    }
-
-    void window::InitializeLogicalDevice()
-    {
-
-    }
-
 }
 

@@ -16,7 +16,7 @@ namespace wowgm::graphics
         VkSurfaceKHR GetSurface();
 
     private:
-        Instance * _instance;
+        Instance* _instance;
         VkSurfaceKHR _surface;
     };
 }

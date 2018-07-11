@@ -7,7 +7,7 @@
 
 #include <vulkan/vulkan.h>
 
-class GLFWwindow;
+struct GLFWwindow;
 
 namespace wowgm::graphics
 {

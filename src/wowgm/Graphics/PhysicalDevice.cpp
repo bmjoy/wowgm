@@ -30,17 +30,11 @@ namespace wowgm::graphics
         vkGetPhysicalDeviceProperties(device, &_deviceProperties);
         vkGetPhysicalDeviceFeatures(device, &_deviceFeatures);
 
-        { // Generate device score (used for selection)
-            std::uint32_t score;
-            if (_deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) // Favor dedicated graphics card
-                _deviceScore += 1000;
+        if (_deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) // Favor dedicated graphics card
+            _deviceScore += 1000;
 
-            // Favor devices with larger texture sizes
-            _deviceScore += _deviceProperties.limits.maxImageDimension2D;
-
-            // 3. Deal with queue families
-            // https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Physical_devices_and_queue_families
-        }
+        // Favor devices with larger texture sizes
+        _deviceScore += _deviceProperties.limits.maxImageDimension2D;
 
         {
             uint32_t queueFamilyCount = 0;
@@ -89,8 +83,13 @@ namespace wowgm::graphics
         return _device;
     }
 
-    VkPhysicalDeviceFeatures PhysicalDevice::GetFeatures()
+    VkPhysicalDeviceFeatures& PhysicalDevice::GetFeatures()
     {
         return _deviceFeatures;
+    }
+
+    VkPhysicalDeviceProperties& PhysicalDevice::GetProperties()
+    {
+        return _deviceProperties;
     }
 }

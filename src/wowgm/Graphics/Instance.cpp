@@ -169,7 +169,7 @@ namespace wowgm::graphics
 
         _physicalDevices.resize(physicalDeviceCount);
         for (std::uint32_t i = 0; i < physicalDeviceCount; ++i)
-            _physicalDevices.emplace(_physicalDevices.begin() + i, physicalDevices[i], surface);
+            _physicalDevices.emplace(_physicalDevices.begin() + i, physicalDevices[i], _surface);
 
         SelectPhysicalDevice();
         // -----------------------------------------------------------------------

@@ -22,15 +22,16 @@ namespace wowgm::graphics
 
     class PhysicalDevice
     {
+    public:
         PhysicalDevice(VkPhysicalDevice device, Surface* surface);
         PhysicalDevice();
-    public:
 
         std::uint32_t GetScore();
         QueueFamilyIndices& GetQueues();
 
         VkPhysicalDevice GetDevice();
-        VkPhysicalDeviceFeatures GetFeatures();
+        VkPhysicalDeviceFeatures& GetFeatures();
+        VkPhysicalDeviceProperties& GetProperties();
 
     private:
         VkPhysicalDevice _device;
