@@ -18,6 +18,8 @@
 /// 4. Select a PhysicalDevice
 /// 5. Create a LogicalDevice
 /// 6. Create a SwapChain
+/// 7. Create ImageViews for the Swap chain (TODO: Fold to 6.)
+/// 8. Create a Pipeline
 
 namespace wowgm::graphics
 {
