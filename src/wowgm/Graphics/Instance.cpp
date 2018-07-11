@@ -151,7 +151,7 @@ namespace wowgm::graphics
 
         VkDevice device;
 
-        if (vkCreateDevice(_selectedPhysicalDevice->GetVkDevice(), &createInfo, nullptr, &device) != VK_SUCCESS)
+        if (vkCreateDevice(*_selectedPhysicalDevice, &createInfo, nullptr, &device) != VK_SUCCESS)
             throw std::runtime_error("failed to create logical device!");
 
         _logicalDevice = new LogicalDevice(device, indices);

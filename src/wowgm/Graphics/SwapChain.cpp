@@ -23,7 +23,7 @@ namespace wowgm::graphics
 
         VkSwapchainCreateInfoKHR createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-        createInfo.surface = device->GetSurface()->GetVkSurface();
+        createInfo.surface = *device->GetSurface();
         createInfo.minImageCount = imageCount;
         createInfo.imageFormat = _surfaceFormat.format;
         createInfo.imageColorSpace = _surfaceFormat.colorSpace;
@@ -64,13 +64,13 @@ namespace wowgm::graphics
         // This is used for swap chain invalidation (typically resize)
         createInfo.oldSwapchain = VK_NULL_HANDLE;
 
-        if (vkCreateSwapchainKHR(_device->GetInstance()->GetLogicalDevice()->GetVkDevice(), &createInfo, nullptr, &_swapChain) != VK_SUCCESS)
+        if (vkCreateSwapchainKHR(*_device->GetInstance()->GetLogicalDevice(), &createInfo, nullptr, &_swapChain) != VK_SUCCESS)
             throw std::runtime_error("Failed to create swap chain!");
     }
 
     SwapChain::~SwapChain()
     {
-        vkDestroySwapchainKHR(_device->GetInstance()->GetLogicalDevice()->GetVkDevice(), _swapChain, nullptr);
+        delete _device;
     }
 
     void SwapChain::_SelectFormat()

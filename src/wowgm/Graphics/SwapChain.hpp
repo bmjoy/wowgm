@@ -18,6 +18,8 @@ namespace wowgm::graphics
         void _SelectPresentMode();
         void _SelectExtent();
 
+        operator VkSwapchainKHR() const { return _swapChain; }
+
     private:
         PhysicalDevice* _device;
 

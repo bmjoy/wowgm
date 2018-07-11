@@ -20,6 +20,8 @@ namespace wowgm::graphics
 
         VkDevice GetVkDevice();
 
+        operator VkDevice() const { return _device; }
+
     private:
         VkDevice _device;
 

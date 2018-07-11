@@ -21,6 +21,7 @@ namespace wowgm::graphics
         std::uint32_t GetWidth();
         std::uint32_t GetHeight();
 
+        operator VkSurfaceKHR() const { return _surface; }
     private:
         Instance* _instance;
         VkSurfaceKHR _surface;

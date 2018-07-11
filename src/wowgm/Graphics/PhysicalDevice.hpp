@@ -49,6 +49,8 @@ namespace wowgm::graphics
         Surface* GetSurface();
         Instance* GetInstance();
 
+        operator VkPhysicalDevice() const { return _device; }
+
     private:
         void _CreateSwapChainSupportDetails();
 

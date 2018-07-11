@@ -11,6 +11,8 @@ namespace wowgm::graphics
 
         VkQueue GetVkQueue();
 
+        operator VkQueue() const { return _queue; }
+
     private:
         VkQueue _queue;
     };

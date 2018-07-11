@@ -37,6 +37,8 @@ namespace wowgm::graphics
         LogicalDevice* CreateLogicalDevice();
         LogicalDevice* GetLogicalDevice();
 
+        operator VkInstance() const { return _instance; }
+
     private:
         void _SelectPhysicalDevice();
 

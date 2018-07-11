@@ -51,7 +51,7 @@ namespace wowgm::graphics
             for (const auto& queueFamily : queueFamilies)
             {
                 VkBool32 presentSupport = false;
-                vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface->GetVkSurface(), &presentSupport);
+                vkGetPhysicalDeviceSurfaceSupportKHR(device, i, *surface, &presentSupport);
 
                 if (queueFamily.queueCount > 0 && queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
                     _queueFamilyIndices.Graphics = i;
@@ -126,24 +126,24 @@ namespace wowgm::graphics
 
     void PhysicalDevice::_CreateSwapChainSupportDetails()
     {
-        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(_device, _surface->GetVkSurface(), &_swapChainSupportDetails.Capabilities);
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(_device, *_surface, &_swapChainSupportDetails.Capabilities);
 
         uint32_t formatCount;
-        vkGetPhysicalDeviceSurfaceFormatsKHR(_device, _surface->GetVkSurface(), &formatCount, nullptr);
+        vkGetPhysicalDeviceSurfaceFormatsKHR(_device, *_surface, &formatCount, nullptr);
 
         if (formatCount != 0)
         {
             _swapChainSupportDetails.Formats.resize(formatCount);
-            vkGetPhysicalDeviceSurfaceFormatsKHR(_device, _surface->GetVkSurface(), &formatCount, _swapChainSupportDetails.Formats.data());
+            vkGetPhysicalDeviceSurfaceFormatsKHR(_device, *_surface, &formatCount, _swapChainSupportDetails.Formats.data());
         }
 
         uint32_t presentModeCount;
-        vkGetPhysicalDeviceSurfacePresentModesKHR(_device, _surface->GetVkSurface(), &presentModeCount, nullptr);
+        vkGetPhysicalDeviceSurfacePresentModesKHR(_device, *_surface, &presentModeCount, nullptr);
 
         if (presentModeCount != 0)
         {
             _swapChainSupportDetails.PresentModes.resize(presentModeCount);
-            vkGetPhysicalDeviceSurfacePresentModesKHR(_device, _surface->GetVkSurface(), &presentModeCount, _swapChainSupportDetails.PresentModes.data());
+            vkGetPhysicalDeviceSurfacePresentModesKHR(_device, *_surface, &presentModeCount, _swapChainSupportDetails.PresentModes.data());
         }
 
     }
