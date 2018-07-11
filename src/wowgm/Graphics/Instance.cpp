@@ -17,7 +17,7 @@
 /// 3. Bind a Surface
 /// 4. Select a PhysicalDevice
 /// 5. Create a LogicalDevice
-
+/// 6. Create a SwapChain
 
 namespace wowgm::graphics
 {
@@ -134,7 +134,8 @@ namespace wowgm::graphics
 
         createInfo.pEnabledFeatures = &deviceFeatures;
 
-        createInfo.enabledExtensionCount = 0;
+        createInfo.enabledExtensionCount = static_cast<uint32_t>(details::deviceExtensions.size());
+        createInfo.ppEnabledExtensionNames = details::deviceExtensions.data();
 
 #ifdef ENABLE_VALIDATION_LAYERS
         createInfo.enabledLayerCount = static_cast<uint32_t>(details::validationLayers.size());

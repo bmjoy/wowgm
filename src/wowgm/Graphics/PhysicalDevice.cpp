@@ -1,17 +1,14 @@
 #include "PhysicalDevice.hpp"
 #include "Surface.hpp"
 
+#include "SharedGraphicsDefines.hpp"
+
 #include <vector>
 #include <set>
 #include <string>
 
 namespace wowgm::graphics
 {
-    namespace details
-    {
-        const std::vector<const char*> deviceExtensions;
-    }
-
     bool QueueFamilyIndices::IsComplete()
     {
         return Graphics >= 0 && Present >= 0;
@@ -116,10 +113,4 @@ namespace wowgm::graphics
         return requiredExtensions.empty();
     }
 
-    namespace details
-    {
-        const std::vector<const char*> deviceExtensions = {
-            VK_KHR_SWAPCHAIN_EXTENSION_NAME
-        };
-    }
 }
