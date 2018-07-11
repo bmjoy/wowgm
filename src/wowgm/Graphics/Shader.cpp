@@ -1,18 +1,20 @@
 #include "Shader.hpp"
 #include "LogicalDevice.hpp"
 
-#include <fstream>
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/fstream.hpp>
+
 #include <vector>
 
 namespace wowgm::graphics
 {
     Shader::Shader(LogicalDevice* device, VkShaderStageFlagBits stage, const std::string& stageName, const std::string& fileName) : _logicalDevice(device)
     {
-        std::ifstream fs(fileName, std::ios::ate | std::ios::binary);
+        std::ifstream fs(fileName, std::ios::binary);
         if (!fs.is_open())
             throw std::runtime_error("Unable to open shader file!");
 
-        std::size_t fileSize = fs.tellg();
+        std::size_t fileSize = boost::filesystem::file_size(fileName);
         std::vector<char> byteCode(fileSize);
 
         fs.seekg(0);

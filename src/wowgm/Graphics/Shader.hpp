@@ -2,8 +2,8 @@
 
 #include <vulkan/vulkan.h>
 
-#include <iostream>
 #include <string>
+#include <boost/filesystem/fstream.hpp>
 
 namespace wowgm::graphics
 {
@@ -25,7 +25,6 @@ namespace wowgm::graphics
         operator VkShaderModule() const { return _shaderModule; }
 
         LogicalDevice* GetLogicalDevice();
-
 
     private:
         LogicalDevice* _logicalDevice;
