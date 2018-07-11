@@ -7,16 +7,16 @@
 
 namespace wowgm::windows
 {
-    window::window(const char* title) : window(800u, 600u, title)
+    Window::Window(const char* title) : Window(800u, 600u, title)
     {
 
     }
 
-    window::window(std::uint32_t width, std::uint32_t height, const char* title) : _width(width), _height(height), _title(title)
+    Window::Window(std::uint32_t width, std::uint32_t height, const char* title) : _width(width), _height(height), _title(title)
     {
     }
 
-    void window::InitializeWindow()
+    void Window::InitializeWindow()
     {
         glfwInit();
 
@@ -29,7 +29,7 @@ namespace wowgm::windows
         _window = glfwCreateWindow(_width, _height, _title, nullptr, nullptr);
     }
 
-    void window::Run()
+    void Window::Run()
     {
         InitializeWindow();
         InitializeVulkan();
@@ -37,20 +37,20 @@ namespace wowgm::windows
         Cleanup();
     }
 
-    void window::InitializeVulkan()
+    void Window::InitializeVulkan()
     {
 
     }
 
 
-    void window::Execute()
+    void Window::Execute()
     {
         // Also plug ourselves in here.
         while (!glfwWindowShouldClose(_window))
             glfwPollEvents();
     }
 
-    void window::Cleanup()
+    void Window::Cleanup()
     {
         glfwDestroyWindow(_window);
         glfwTerminate();

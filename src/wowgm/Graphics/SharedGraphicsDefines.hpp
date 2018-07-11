@@ -8,6 +8,6 @@
 
 namespace wowgm::graphics::details
 {
-    extern const std::vector<const char*> deviceExtensions;
-    extern const std::vector<const char*> validationLayers;
+    extern const std::vector<const char*> requiredDeviceExtensions;
+    extern const std::vector<const char*> requiredValidationLayers;
 }

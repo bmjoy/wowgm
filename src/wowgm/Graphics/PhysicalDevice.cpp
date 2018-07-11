@@ -112,7 +112,7 @@ namespace wowgm::graphics
         std::vector<VkExtensionProperties> availableExtensions(extensionCount);
         vkEnumerateDeviceExtensionProperties(_device, nullptr, &extensionCount, availableExtensions.data());
 
-        std::set<std::string> requiredExtensions(details::deviceExtensions.begin(), details::deviceExtensions.end());
+        std::set<std::string> requiredExtensions(details::requiredDeviceExtensions.begin(), details::requiredDeviceExtensions.end());
 
         for (const auto& extension : availableExtensions)
             requiredExtensions.erase(extension.extensionName);

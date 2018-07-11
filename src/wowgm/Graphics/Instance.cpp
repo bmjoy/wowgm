@@ -68,8 +68,8 @@ namespace wowgm::graphics
         createInfo.ppEnabledExtensionNames = requiredExtensions.data();
 
 #ifdef ENABLE_VALIDATION_LAYERS
-        createInfo.enabledLayerCount = static_cast<std::uint32_t>(details::validationLayers.size());
-        createInfo.ppEnabledLayerNames = details::validationLayers.data();
+        createInfo.enabledLayerCount = static_cast<std::uint32_t>(details::requiredValidationLayers.size());
+        createInfo.ppEnabledLayerNames = details::requiredValidationLayers.data();
 #else
         createInfo.enabledLayerCount = 0;
 #endif
@@ -139,19 +139,19 @@ namespace wowgm::graphics
 
         createInfo.pEnabledFeatures = &deviceFeatures;
 
-        createInfo.enabledExtensionCount = static_cast<uint32_t>(details::deviceExtensions.size());
-        createInfo.ppEnabledExtensionNames = details::deviceExtensions.data();
+        createInfo.enabledExtensionCount = static_cast<uint32_t>(details::requiredDeviceExtensions.size());
+        createInfo.ppEnabledExtensionNames = details::requiredDeviceExtensions.data();
 
 #ifdef ENABLE_VALIDATION_LAYERS
-        createInfo.enabledLayerCount = static_cast<uint32_t>(details::validationLayers.size());
-        createInfo.ppEnabledLayerNames = details::validationLayers.data();
+        createInfo.enabledLayerCount = static_cast<uint32_t>(details::requiredValidationLayers.size());
+        createInfo.ppEnabledLayerNames = details::requiredValidationLayers.data();
 #else
         createInfo.enabledLayerCount = 0;
 #endif
 
         VkDevice device;
 
-        if (vkCreateDevice(_selectedPhysicalDevice->GetDevice(), &createInfo, nullptr, &device) != VK_SUCCESS)
+        if (vkCreateDevice(_selectedPhysicalDevice->GetVkDevice(), &createInfo, nullptr, &device) != VK_SUCCESS)
             throw std::runtime_error("failed to create logical device!");
 
         _logicalDevice = new LogicalDevice(device, indices);
@@ -238,7 +238,7 @@ namespace wowgm::graphics
             if (vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data()) != VK_SUCCESS)
                 throw std::runtime_error("Unable to enumerate Vulkan layers!");
 
-            for (const char* layerName : validationLayers)
+            for (const char* layerName : requiredValidationLayers)
             {
                 bool layerFound = false;
                 for (const auto& layerProperties : availableLayers)
