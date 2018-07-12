@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <cstdint>
+#include <memory>
 
 #include <vulkan/vulkan.h>
 
@@ -18,7 +19,7 @@ namespace wowgm::graphics
     class Instance
     {
     public:
-        static Instance* Create(const char* applicationName, const char* engineName);
+        static std::unique_ptr<Instance> Create(const char* applicationName, const char* engineName);
 
         Instance(VkInstance instance);
         ~Instance();
@@ -31,7 +32,7 @@ namespace wowgm::graphics
         void SetupDebugCallback();
 
         PhysicalDevice* GetPhysicalDevice(std::uint32_t index);
-        PhysicalDevice* GetSelectedPhysicalDevice();
+        PhysicalDevice* GetPhysicalDevice();
 
         Surface* CreateSurface(Window* window);
 
@@ -45,9 +46,9 @@ namespace wowgm::graphics
 
     private:
         LogicalDevice* _logicalDevice;
-        PhysicalDevice* _selectedPhysicalDevice;
 
-        std::vector<PhysicalDevice*> _physicalDevices;
+        std::uint32_t _selectedPhysicalDevice;
+        std::vector<std::unique_ptr<PhysicalDevice>> _physicalDevices;
 
         VkInstance _instance;
         Surface* _surface;

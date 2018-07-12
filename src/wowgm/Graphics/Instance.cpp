@@ -10,7 +10,6 @@
 
 #include <set>
 
-
 /// Execution chain
 /// 1. Create an Instance
 /// 2. Setup the debug callbacks
@@ -48,7 +47,7 @@ namespace wowgm::graphics
         }
     }
 
-    Instance* Instance::Create(const char* applicationName, const char* engineName)
+    std::unique_ptr<Instance> Instance::Create(const char* applicationName, const char* engineName)
     {
         if (!details::CheckValidationLayerSupport())
             throw std::runtime_error("Validation layers are not supported on your system!");
@@ -84,8 +83,7 @@ namespace wowgm::graphics
         if (result != VK_SUCCESS)
             throw std::runtime_error("Unable to initialize Vulkan!");
 
-        Instance* vulkanInstance = new Instance(instance);
-        return vulkanInstance;
+        return std::make_unique<Instance>(instance);
     }
 
     Instance::Instance(VkInstance instance) : _instance(instance)
@@ -108,12 +106,6 @@ namespace wowgm::graphics
         _instance = VK_NULL_HANDLE;
 
         // Destroy physical devices
-        for (std::uint32_t i = 0; i < _physicalDevices.size(); ++i)
-        {
-            delete _physicalDevices[i];
-            _physicalDevices[i] = nullptr;
-        }
-
         _physicalDevices.clear();
     }
 
@@ -129,7 +121,7 @@ namespace wowgm::graphics
 
     LogicalDevice* Instance::CreateLogicalDevice()
     {
-        QueueFamilyIndices& indices = _selectedPhysicalDevice->GetQueues();
+        QueueFamilyIndices& indices = GetPhysicalDevice()->GetQueues();
 
         std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
         std::set<std::int32_t> uniqueQueueFamilies = { indices.Graphics, indices.Present };
@@ -166,7 +158,7 @@ namespace wowgm::graphics
 
         VkDevice device;
 
-        if (vkCreateDevice(*_selectedPhysicalDevice, &createInfo, nullptr, &device) != VK_SUCCESS)
+        if (vkCreateDevice(*GetPhysicalDevice(), &createInfo, nullptr, &device) != VK_SUCCESS)
             throw std::runtime_error("failed to create logical device!");
 
         _logicalDevice = new LogicalDevice(device, indices);
@@ -191,7 +183,7 @@ namespace wowgm::graphics
 
         _physicalDevices.resize(physicalDeviceCount);
         for (std::uint32_t i = 0; i < physicalDeviceCount; ++i)
-            _physicalDevices[i] = new PhysicalDevice(physicalDevices[i], _surface);
+            _physicalDevices[i] = std::make_unique<PhysicalDevice>(physicalDevices[i], _surface);
 
         _SelectPhysicalDevice();
         // -----------------------------------------------------------------------
@@ -202,20 +194,21 @@ namespace wowgm::graphics
     void Instance::_SelectPhysicalDevice()
     {
         std::uint32_t bestScore = 0;
-        for (auto itr = _physicalDevices.begin(); itr != _physicalDevices.end(); ++itr)
+        std::uint32_t index = 0;
+        for (auto itr = _physicalDevices.begin(); itr != _physicalDevices.end(); ++itr, ++index)
         {
             std::uint32_t deviceScore = (*itr)->GetScore();
             if (deviceScore < bestScore)
                 continue;
 
             bestScore = deviceScore;
-            _selectedPhysicalDevice = (*itr);
+            _selectedPhysicalDevice = index;
         }
     }
 
     PhysicalDevice* Instance::GetPhysicalDevice(std::uint32_t index)
     {
-        return _physicalDevices[index];
+        return _physicalDevices[index].get();
     }
 
     void Instance::SetupDebugCallback()
@@ -231,9 +224,9 @@ namespace wowgm::graphics
 #endif
     }
 
-    PhysicalDevice* Instance::GetSelectedPhysicalDevice()
+    PhysicalDevice* Instance::GetPhysicalDevice()
     {
-        return _selectedPhysicalDevice;
+        return GetPhysicalDevice(_selectedPhysicalDevice);
     }
 
     namespace details

@@ -135,17 +135,17 @@ int main()
         Window* window = new Window(800, 600, "Vulkan");
         window->InitializeWindow();
 
-        Instance* instance = Instance::Create("Vulkan", "No Engine");
+        auto instance = Instance::Create("Vulkan", "No Engine");
         instance->SetupDebugCallback();
 
         Surface* surface = instance->CreateSurface(window); // Owned by instance
         LogicalDevice* device = instance->CreateLogicalDevice(); // Owned by instance
-        SwapChain* swapchain = new SwapChain(instance->GetSelectedPhysicalDevice());
+        SwapChain* swapchain = new SwapChain(instance->GetPhysicalDevice());
 
         window->Execute();
 
         delete swapchain;
-        delete instance;
+        instance.reset();
 
         window->Cleanup();
         delete window;
