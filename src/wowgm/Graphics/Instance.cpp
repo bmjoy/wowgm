@@ -186,7 +186,6 @@ namespace wowgm::graphics
             _physicalDevices[i] = std::make_unique<PhysicalDevice>(physicalDevices[i], _surface);
 
         _SelectPhysicalDevice();
-        // -----------------------------------------------------------------------
 
         return _surface;
     }
