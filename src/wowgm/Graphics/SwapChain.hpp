@@ -17,6 +17,8 @@ namespace wowgm::graphics
         SwapChain(PhysicalDevice* device);
         ~SwapChain();
 
+        SwapChain(SwapChain&&) = delete;
+        SwapChain(SwapChain const&) = delete;
         operator VkSwapchainKHR() const { return _swapChain; }
 
         VkSurfaceFormatKHR GetSurfaceFormat();
@@ -41,6 +43,6 @@ namespace wowgm::graphics
         VkPresentModeKHR _presentMode;
         VkExtent2D _extent;
 
-        std::vector<Image> _swapChainImages;
+        std::vector<Image*> _swapChainImages;
     };
 }

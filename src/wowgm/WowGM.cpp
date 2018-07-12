@@ -138,15 +138,13 @@ int main()
         Instance* instance = Instance::Create("Vulkan", "No Engine");
         instance->SetupDebugCallback();
 
-        Surface* surface = instance->CreateSurface(window);
-        LogicalDevice* device = instance->CreateLogicalDevice();
+        Surface* surface = instance->CreateSurface(window); // Owned by instance
+        LogicalDevice* device = instance->CreateLogicalDevice(); // Owned by instance
         SwapChain* swapchain = new SwapChain(instance->GetSelectedPhysicalDevice());
 
         window->Execute();
 
         delete swapchain;
-        delete device;
-        delete surface;
         delete instance;
 
         window->Cleanup();

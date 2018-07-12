@@ -13,6 +13,9 @@ namespace wowgm::graphics
         ImageView(SwapChain* swapChain, Image* image);
         ~ImageView();
 
+        ImageView(ImageView&&) = delete;
+        ImageView(ImageView const&) = delete;
+
         VkImageView GetVkImageView();
         operator VkImageView() const { return _imageView; }
 

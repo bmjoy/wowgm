@@ -90,6 +90,7 @@ namespace wowgm::graphics
     VertexInput::~VertexInput()
     {
         vkDestroyPipelineLayout(*_swapchain->GetLogicalDevice(), _pipelineLayout, nullptr);
+        _pipelineLayout = VK_NULL_HANDLE;
     }
 
     void VertexInput::AddBinding(VkVertexInputBindingDescription binding)

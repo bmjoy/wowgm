@@ -22,18 +22,15 @@ namespace wowgm::graphics
         bool IsComplete();
     };
 
-    struct SwapChainSupportDetails
-    {
-        VkSurfaceCapabilitiesKHR Capabilities;
-        std::vector<VkSurfaceFormatKHR> Formats;
-        std::vector<VkPresentModeKHR> PresentModes;
-    };
-
     class PhysicalDevice
     {
     public:
         PhysicalDevice(VkPhysicalDevice device, Surface* surface);
-        PhysicalDevice();
+        ~PhysicalDevice();
+
+        PhysicalDevice() = delete;
+        PhysicalDevice(PhysicalDevice const&) = delete;
+        PhysicalDevice(PhysicalDevice&&) = delete;
 
         std::uint32_t GetScore();
         QueueFamilyIndices& GetQueues();
@@ -44,7 +41,9 @@ namespace wowgm::graphics
 
         bool CheckDeviceExtensionSupport();
 
-        SwapChainSupportDetails& GetSwapChainSupportDetails();
+        VkSurfaceCapabilitiesKHR& GetCapabilities();
+        std::vector<VkSurfaceFormatKHR>& GetFormats();
+        std::vector<VkPresentModeKHR> GetPresentModes();
 
         Surface* GetSurface();
         Instance* GetInstance();
@@ -62,7 +61,10 @@ namespace wowgm::graphics
         VkPhysicalDeviceFeatures _deviceFeatures;
 
         QueueFamilyIndices _queueFamilyIndices;
-        SwapChainSupportDetails _swapChainSupportDetails;
+
+        VkSurfaceCapabilitiesKHR _surfaceCapabilities;
+        std::vector<VkSurfaceFormatKHR> _surfaceFormats;
+        std::vector<VkPresentModeKHR> _surfacePresentModes;
 
         std::uint32_t _deviceScore;
     };

@@ -95,13 +95,26 @@ namespace wowgm::graphics
 
     Instance::~Instance()
     {
+        // Dstroy surface
+        delete _surface;
+        _surface = nullptr;
+
 #ifdef ENABLE_VALIDATION_LAYERS
         details::DestroyDebugReportCallbackEXT(_instance, _debugReportCallback, nullptr);
 #endif
 
-        delete _surface;
-        _surface = nullptr;
+        // Destroy instance
         vkDestroyInstance(_instance, nullptr);
+        _instance = VK_NULL_HANDLE;
+
+        // Destroy physical devices
+        for (std::uint32_t i = 0; i < _physicalDevices.size(); ++i)
+        {
+            delete _physicalDevices[i];
+            _physicalDevices[i] = nullptr;
+        }
+
+        _physicalDevices.clear();
     }
 
     VkInstance Instance::GetVkInstance()
@@ -178,7 +191,7 @@ namespace wowgm::graphics
 
         _physicalDevices.resize(physicalDeviceCount);
         for (std::uint32_t i = 0; i < physicalDeviceCount; ++i)
-            new (&_physicalDevices[i]) PhysicalDevice(physicalDevices[i], _surface);
+            _physicalDevices[i] = new PhysicalDevice(physicalDevices[i], _surface);
 
         _SelectPhysicalDevice();
         // -----------------------------------------------------------------------
@@ -186,33 +199,23 @@ namespace wowgm::graphics
         return _surface;
     }
 
-    void Instance::SelectPhysicalDevice(std::uint32_t deviceIndex)
-    {
-        _selectedPhysicalDevice = &_physicalDevices[deviceIndex];
-    }
-
     void Instance::_SelectPhysicalDevice()
     {
         std::uint32_t bestScore = 0;
         for (auto itr = _physicalDevices.begin(); itr != _physicalDevices.end(); ++itr)
         {
-            std::uint32_t deviceScore = itr->GetScore();
+            std::uint32_t deviceScore = (*itr)->GetScore();
             if (deviceScore < bestScore)
                 continue;
 
             bestScore = deviceScore;
-            _selectedPhysicalDevice = &*itr;
+            _selectedPhysicalDevice = (*itr);
         }
     }
 
-    PhysicalDevice& Instance::GetPhysicalDevice(std::uint32_t index)
+    PhysicalDevice* Instance::GetPhysicalDevice(std::uint32_t index)
     {
         return _physicalDevices[index];
-    }
-
-    std::vector<PhysicalDevice>::iterator Instance::IteratePhysicalDevices()
-    {
-        return _physicalDevices.begin();
     }
 
     void Instance::SetupDebugCallback()

@@ -13,6 +13,7 @@ namespace wowgm::graphics
     Surface::~Surface()
     {
         vkDestroySurfaceKHR(*_instance, _surface, nullptr);
+        _surface = VK_NULL_HANDLE;
     }
 
     VkSurfaceKHR Surface::GetVkSurface()

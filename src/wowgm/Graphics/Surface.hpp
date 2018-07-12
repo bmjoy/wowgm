@@ -15,6 +15,8 @@ namespace wowgm::graphics
         Surface(Instance* instance, VkSurfaceKHR surface, std::uint32_t _width, std::uint32_t height);
         ~Surface();
 
+        Surface(Surface const&) = delete;
+
         VkSurfaceKHR GetVkSurface();
         Instance* GetInstance();
 

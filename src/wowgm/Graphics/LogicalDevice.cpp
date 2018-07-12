@@ -19,7 +19,13 @@ namespace wowgm::graphics
 
     LogicalDevice::~LogicalDevice()
     {
+        delete _graphicsQueue;
+        _graphicsQueue = nullptr;
+        delete _presentQueue;
+        _presentQueue = nullptr;
+
         vkDestroyDevice(_device, nullptr);
+        _device = VK_NULL_HANDLE;
     }
 
     Queue* LogicalDevice::GetGraphicsQueue()

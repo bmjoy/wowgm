@@ -9,15 +9,14 @@ struct GLFWwindow;
 
 namespace wowgm::graphics
 {
-#ifdef _DEBUG
-# define ENABLE_VALIDATION_LAYERS
-#endif
-
     class Window
     {
     public:
         Window(std::uint32_t width, std::uint32_t height, const char* title);
         Window(const char* title);
+
+        Window(Window&&) = delete;
+        Window(Window const&) = delete;
 
         void InitializeWindow();
         void Execute();
@@ -33,12 +32,6 @@ namespace wowgm::graphics
 
         std::uint32_t _width, _height;
         const char* _title;
-
-    private: /* Vulkan initializer */
-
-        void SelectPhysicalDevice();
-
-        void InitializeLogicalDevice();
     };
 }
 

@@ -26,6 +26,9 @@ namespace wowgm::graphics
         VertexInput(SwapChain* swapChain);
         ~VertexInput();
 
+        VertexInput(VertexInput&&) = delete;
+        VertexInput(VertexInput const&) = delete;
+
         void AddBinding(VkVertexInputBindingDescription binding);
 
         template <typename T>

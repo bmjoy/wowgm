@@ -19,6 +19,8 @@ namespace wowgm::graphics
         Shader(LogicalDevice* device, VkShaderStageFlagBits stage, const std::string& stageName, const std::string& fileName);
         ~Shader();
 
+        Shader(Shader const&) = delete;
+
         VkShaderModule GetVkShaderModule() { return _shaderModule; }
         VkPipelineShaderStageCreateInfo GetVkShaderStageInfo() { return _shaderStageInfo; }
 

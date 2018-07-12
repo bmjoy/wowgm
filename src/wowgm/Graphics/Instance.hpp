@@ -23,15 +23,15 @@ namespace wowgm::graphics
         Instance(VkInstance instance);
         ~Instance();
 
+        Instance(Instance&&) = delete;
+        Instance(Instance const&) = delete;
+
         VkInstance GetVkInstance();
 
         void SetupDebugCallback();
 
-        PhysicalDevice& GetPhysicalDevice(std::uint32_t index);
+        PhysicalDevice* GetPhysicalDevice(std::uint32_t index);
         PhysicalDevice* GetSelectedPhysicalDevice();
-
-        std::vector<PhysicalDevice>::iterator IteratePhysicalDevices();
-        void SelectPhysicalDevice(std::uint32_t deviceIndex);
 
         Surface* CreateSurface(Window* window);
 
@@ -47,7 +47,7 @@ namespace wowgm::graphics
         LogicalDevice* _logicalDevice;
         PhysicalDevice* _selectedPhysicalDevice;
 
-        std::vector<PhysicalDevice> _physicalDevices;
+        std::vector<PhysicalDevice*> _physicalDevices;
 
         VkInstance _instance;
         Surface* _surface;

@@ -21,6 +21,9 @@ namespace wowgm::graphics
     {
     public:
         Queue(VkQueue queue);
+        ~Queue();
+
+        Queue(Queue const&) = delete;
 
         VkQueue GetVkQueue();
 

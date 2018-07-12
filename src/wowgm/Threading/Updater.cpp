@@ -10,6 +10,7 @@ namespace wowgm::threading {
     {
         auto future = _promise.get_future();
 
+        //! fixme.
         new (&_worker) std::thread(&Updater::ThreadWorker, this, std::move(future));
     }
 
@@ -18,6 +19,9 @@ namespace wowgm::threading {
         _promise.set_value(); // signal
         if (_worker.joinable())
             _worker.join(); // join
+
+        _worker.~thread();
+        ::operator delete(&_worker);
 
         _updatables.resize(0);
     }

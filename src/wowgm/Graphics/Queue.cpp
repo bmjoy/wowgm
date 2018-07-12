@@ -7,6 +7,10 @@ namespace wowgm::graphics
 
     }
 
+    Queue::~Queue()
+    {
+        _queue = VK_NULL_HANDLE;
+    }
 
     VkQueue Queue::GetVkQueue()
     {

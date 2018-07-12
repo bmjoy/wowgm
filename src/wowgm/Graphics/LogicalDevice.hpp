@@ -26,6 +26,10 @@ namespace wowgm::graphics
         LogicalDevice(VkDevice device, QueueFamilyIndices& indices);
         ~LogicalDevice();
 
+        LogicalDevice() = delete;
+        LogicalDevice(LogicalDevice const&) = delete;
+        LogicalDevice(LogicalDevice&&) = delete;
+
         Queue* GetGraphicsQueue();
         Queue* GetPresentQueue();
 

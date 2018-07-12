@@ -14,12 +14,12 @@ namespace wowgm::graphics
         _SelectPresentMode();
         _SelectExtent();
 
-        auto& swapChainSupport = _physicalDevice->GetSwapChainSupportDetails();
+        auto& capabilities = _physicalDevice->GetCapabilities();
 
         // Enable triple buffering
-        uint32_t imageCount = swapChainSupport.Capabilities.minImageCount + 1;
-        if (swapChainSupport.Capabilities.maxImageCount > 0 && imageCount > swapChainSupport.Capabilities.maxImageCount)
-            imageCount = swapChainSupport.Capabilities.maxImageCount;
+        uint32_t imageCount = capabilities.minImageCount + 1;
+        if (capabilities.maxImageCount > 0 && imageCount > capabilities.maxImageCount)
+            imageCount = capabilities.maxImageCount;
 
         VkSwapchainCreateInfoKHR createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
@@ -53,7 +53,7 @@ namespace wowgm::graphics
             createInfo.pQueueFamilyIndices = nullptr; // Optional
         }
 
-        createInfo.preTransform = swapChainSupport.Capabilities.currentTransform;
+        createInfo.preTransform = capabilities.currentTransform;
         // Blending with other windows; no thanks.
         createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
 
@@ -73,25 +73,33 @@ namespace wowgm::graphics
 
         _swapChainImages.resize(imageCount);
         for (std::uint32_t i = 0; i < imageCount; ++i)
-            new (&_swapChainImages[i]) Image(swapChainImages[i]);
+            _swapChainImages[i] = new Image(swapChainImages[i]);
     }
 
     SwapChain::~SwapChain()
     {
-        delete _physicalDevice;
+        vkDestroySwapchainKHR(*_physicalDevice->GetInstance()->GetLogicalDevice(), _swapChain, nullptr);
+        _swapChain = VK_NULL_HANDLE;
+
+        for (std::uint32_t i = 0; i < _swapChainImages.size(); ++i)
+        {
+            delete _swapChainImages[i];
+            _swapChainImages[i] = nullptr;
+        }
+        _swapChainImages.clear();
     }
 
     void SwapChain::_SelectFormat()
     {
-        auto& supportDetails = _physicalDevice->GetSwapChainSupportDetails();
-        if (supportDetails.Formats.size() == 1 && supportDetails.Formats[0].format == VK_FORMAT_UNDEFINED)
+        auto& supportDetails = _physicalDevice->GetFormats();
+        if (supportDetails.size() == 1 && supportDetails[0].format == VK_FORMAT_UNDEFINED)
         {
             _surfaceFormat.format = VK_FORMAT_B8G8R8A8_UNORM;
             _surfaceFormat.colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
             return;
         }
 
-        for (const auto& availableFormat : supportDetails.Formats)
+        for (const auto& availableFormat : supportDetails)
         {
             if (availableFormat.format == VK_FORMAT_B8G8R8A8_UNORM && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
             {
@@ -100,7 +108,7 @@ namespace wowgm::graphics
             }
         }
 
-        _surfaceFormat = supportDetails.Formats[0];
+        _surfaceFormat = supportDetails[0];
     }
 
     void SwapChain::_SelectPresentMode()
@@ -110,7 +118,7 @@ namespace wowgm::graphics
 
         VkPresentModeKHR bestMode = VK_PRESENT_MODE_FIFO_KHR;
 
-        for (const auto& availablePresentMode : _physicalDevice->GetSwapChainSupportDetails().PresentModes)
+        for (const auto& availablePresentMode : _physicalDevice->GetPresentModes())
         {
             if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR)
             {
@@ -126,7 +134,7 @@ namespace wowgm::graphics
 
     void SwapChain::_SelectExtent()
     {
-        auto& capabilities = _physicalDevice->GetSwapChainSupportDetails().Capabilities;
+        auto& capabilities = _physicalDevice->GetCapabilities();
 
         if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
             _extent = capabilities.currentExtent;

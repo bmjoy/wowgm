@@ -40,6 +40,7 @@ namespace wowgm::graphics
     Shader::~Shader()
     {
         vkDestroyShaderModule(*_logicalDevice, _shaderModule, nullptr);
+        _shaderModule = VK_NULL_HANDLE;
     }
 
     Shader* Shader::CreateVertexShader(LogicalDevice* device, const std::string& stageName, const std::string& fileName)

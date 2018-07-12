@@ -34,6 +34,7 @@ namespace wowgm::graphics
     ImageView::~ImageView()
     {
         vkDestroyImageView(*_swapChain->GetLogicalDevice(), _imageView, nullptr);
+        _imageView = VK_NULL_HANDLE;
     }
 
     SwapChain* ImageView::GetSwapChain()
