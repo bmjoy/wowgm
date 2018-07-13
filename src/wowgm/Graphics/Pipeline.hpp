@@ -10,6 +10,7 @@ namespace wowgm::graphics
     class Shader;
     class SwapChain;
     class RenderPass;
+    class CommandBuffer;
 
     class Pipeline
     {
@@ -24,6 +25,7 @@ namespace wowgm::graphics
         Pipeline(Pipeline const&) = delete;
 
         void EnableDynamicStates() { _useDynamicState = true; }
+        void Bind(CommandBuffer* buffer); // vkCmdBindCommandBuffer
 
     public: /* Rasterization*/
         void SetWireframe(bool wireframe);
@@ -100,6 +102,8 @@ namespace wowgm::graphics
         bool _useDynamicState;
         VkPipelineDynamicStateCreateInfo                        _dynamicState;
         std::vector<VkDynamicState> _dynamicStates;
+
+        VkGraphicsPipelineCreateInfo _graphicsPipelineCreateInfo;
 
         VkViewport _viewport;
         VkRect2D   _scissors;

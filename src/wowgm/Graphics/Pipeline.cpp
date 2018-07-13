@@ -115,9 +115,9 @@ namespace wowgm::graphics
             throw std::runtime_error("Unable to create a pipeline layout!");
 
         // Cookbook, page 801/1166
-        VkGraphicsPipelineCreateInfo pipelineInfo = { };
-        pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-        pipelineInfo.stageCount = 2;
+        _graphicsPipelineCreateInfo = { };
+        _graphicsPipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+        _graphicsPipelineCreateInfo.stageCount = 2;
 
         {
             auto shaderMutator = [](Shader* s) -> VkPipelineShaderStageCreateInfo { return s->GetVkShaderStageInfo(); };
@@ -127,30 +127,30 @@ namespace wowgm::graphics
             std::vector<VkPipelineShaderStageCreateInfo> shaderStages(_shaders.size());
             shaderStages.insert(shaderStages.begin(), itr, end);
 
-            pipelineInfo.stageCount = shaderStages.size();
-            pipelineInfo.pStages = shaderStages.data();
+            _graphicsPipelineCreateInfo.stageCount = shaderStages.size();
+            _graphicsPipelineCreateInfo.pStages = shaderStages.data();
         }
 
-        pipelineInfo.pVertexInputState = &_vertexInputState;
-        pipelineInfo.pInputAssemblyState = &_inputAssembly;
-        pipelineInfo.pTessellationState = _tessellationState.get_ptr();
-        pipelineInfo.pViewportState = &_viewportCreateInfo;
-        pipelineInfo.pRasterizationState = &_rasterizationState;
-        pipelineInfo.pMultisampleState = &_multisamplingState;
-        pipelineInfo.pDepthStencilState = &_depthStencilState;
-        pipelineInfo.pColorBlendState = _colorBlendState.get_ptr();
+        _graphicsPipelineCreateInfo.pVertexInputState = &_vertexInputState;
+        _graphicsPipelineCreateInfo.pInputAssemblyState = &_inputAssembly;
+        _graphicsPipelineCreateInfo.pTessellationState = _tessellationState.get_ptr();
+        _graphicsPipelineCreateInfo.pViewportState = &_viewportCreateInfo;
+        _graphicsPipelineCreateInfo.pRasterizationState = &_rasterizationState;
+        _graphicsPipelineCreateInfo.pMultisampleState = &_multisamplingState;
+        _graphicsPipelineCreateInfo.pDepthStencilState = &_depthStencilState;
+        _graphicsPipelineCreateInfo.pColorBlendState = _colorBlendState.get_ptr();
 
         if (_useDynamicState)
         {
-            pipelineInfo.pDynamicState = &_dynamicState;
+            _graphicsPipelineCreateInfo.pDynamicState = &_dynamicState;
 
             _dynamicState.dynamicStateCount = _dynamicStates.size();
             _dynamicState.pDynamicStates = _dynamicStates.data();
         }
 
-        pipelineInfo.layout = _pipelineLayout;
-        pipelineInfo.renderPass = *_renderPass;
-        pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+        _graphicsPipelineCreateInfo.layout = _pipelineLayout;
+        _graphicsPipelineCreateInfo.renderPass = *_renderPass;
+        _graphicsPipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
     }
 
     void Pipeline::SetWireframe(bool wireframe)
