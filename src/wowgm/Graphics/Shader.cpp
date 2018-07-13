@@ -8,7 +8,7 @@
 
 namespace wowgm::graphics
 {
-    Shader::Shader(LogicalDevice* device, VkShaderStageFlagBits stage, const std::string& stageName, const std::string& fileName) : _logicalDevice(device)
+    Shader::Shader(LogicalDevice* device, VkShaderStageFlagBits stage, const std::string& entryPointName, const std::string& fileName) : _logicalDevice(device)
     {
         std::ifstream fs(fileName, std::ios::binary);
         if (!fs.is_open())
@@ -30,11 +30,15 @@ namespace wowgm::graphics
         if (vkCreateShaderModule(*_logicalDevice, &createInfo, nullptr, &_shaderModule) != VK_SUCCESS)
             throw std::runtime_error("Unable to create shader module");
 
-        _shaderStageInfo = { };
         _shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         _shaderStageInfo.stage = stage;
         _shaderStageInfo.module = _shaderModule;
-        _shaderStageInfo.pName = stageName.c_str();
+        _shaderStageInfo.pName = entryPointName.c_str();
+        _shaderStageInfo.pSpecializationInfo = nullptr;
+
+        // Specialization constants are a mechanism whereby constants in a SPIR-V module can have their constant value
+        // specified at the time the VkPipeline is created. This allows a SPIR-V module to have constants that can be
+        // modified while executing an application that uses the Vulkan API.
     }
 
     Shader::~Shader()
@@ -43,19 +47,19 @@ namespace wowgm::graphics
         _shaderModule = VK_NULL_HANDLE;
     }
 
-    Shader* Shader::CreateVertexShader(LogicalDevice* device, const std::string& stageName, const std::string& fileName)
+    Shader* Shader::CreateVertexShader(LogicalDevice* device, const std::string& entryPointName, const std::string& fileName)
     {
-        return new Shader(device, VK_SHADER_STAGE_VERTEX_BIT, stageName, fileName);
+        return new Shader(device, VK_SHADER_STAGE_VERTEX_BIT, entryPointName, fileName);
     }
 
-    Shader* Shader::CreateFragmentShader(LogicalDevice* device, const std::string& stageName, const std::string& fileName)
+    Shader* Shader::CreateFragmentShader(LogicalDevice* device, const std::string& entryPointName, const std::string& fileName)
     {
-        return new Shader(device, VK_SHADER_STAGE_FRAGMENT_BIT, stageName, fileName);
+        return new Shader(device, VK_SHADER_STAGE_FRAGMENT_BIT, entryPointName, fileName);
     }
 
-    Shader* Shader::CreateGeometryShader(LogicalDevice* device, const std::string& stageName, const std::string& fileName)
+    Shader* Shader::CreateGeometryShader(LogicalDevice* device, const std::string& entryPointName, const std::string& fileName)
     {
-        return new Shader(device, VK_SHADER_STAGE_GEOMETRY_BIT, stageName, fileName);
+        return new Shader(device, VK_SHADER_STAGE_GEOMETRY_BIT, entryPointName, fileName);
     }
 
     LogicalDevice* Shader::GetLogicalDevice()

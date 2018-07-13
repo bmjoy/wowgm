@@ -2,8 +2,7 @@
 #include "Subpass.hpp"
 #include "SwapChain.hpp"
 #include "LogicalDevice.hpp"
-
-#include <boost/compute/iterator/transform_iterator.hpp>
+#include <boost/iterator/transform_iterator.hpp>
 
 namespace wowgm::graphics
 {
@@ -52,9 +51,9 @@ namespace wowgm::graphics
 
         renderPassInfo.subpassCount = _subpasses.size();
 
-        auto subpassTransformer = [](Subpass* pass) -> VkSubpassDescription { return *pass; };
-        auto itr = boost::make_transform_iterator(_subpasses.begin(), subpassTransformer);
-        auto end = boost::make_transform_iterator(_subpasses.end(), subpassTransformer);
+        auto subpassTransformer = [](Subpass* pass) -> VkSubpassDescription { return pass->GetVkSubpassDescription(); };
+        auto itr = boost::iterators::make_transform_iterator(_subpasses.begin(), subpassTransformer);
+        auto end = boost::iterators::make_transform_iterator(_subpasses.end(), subpassTransformer);
 
         std::vector<VkSubpassDescription> descriptions(_subpasses.size());
         descriptions.insert(descriptions.begin(), itr, end);

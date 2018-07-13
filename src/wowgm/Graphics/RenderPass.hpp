@@ -24,6 +24,8 @@ namespace wowgm::graphics
 
         void AddSubpass(Subpass* subpass);
 
+        operator VkRenderPass() const { return _renderPass; }
+
     private:
         void _CreateDefaultSubpass();
 

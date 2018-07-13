@@ -12,11 +12,11 @@ namespace wowgm::graphics
     class Shader
     {
     public:
-        static Shader* CreateVertexShader(LogicalDevice* device, const std::string& stageName, const std::string& fileName);
-        static Shader* CreateFragmentShader(LogicalDevice* device, const std::string& stageName, const std::string& fileName);
-        static Shader* CreateGeometryShader(LogicalDevice* device, const std::string& stageName, const std::string& fileName);
+        static Shader* CreateVertexShader(LogicalDevice* device, const std::string& entryPointName, const std::string& fileName);
+        static Shader* CreateFragmentShader(LogicalDevice* device, const std::string& entryPointName, const std::string& fileName);
+        static Shader* CreateGeometryShader(LogicalDevice* device, const std::string& entryPointName, const std::string& fileName);
 
-        Shader(LogicalDevice* device, VkShaderStageFlagBits stage, const std::string& stageName, const std::string& fileName);
+        Shader(LogicalDevice* device, VkShaderStageFlagBits stage, const std::string& entryPointName, const std::string& fileName);
         ~Shader();
 
         Shader(Shader const&) = delete;
