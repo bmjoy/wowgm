@@ -288,7 +288,7 @@ namespace wowgm::networking::authentification
             }
 
             // ReadHandlerInternal does it for us.
-            _readBuffer.ReadCompleted(-sizeof(AuthRealmList));
+            _readBuffer.ReadCompleted(-std::int32_t(sizeof(AuthRealmList)));
         }
 
         return true;

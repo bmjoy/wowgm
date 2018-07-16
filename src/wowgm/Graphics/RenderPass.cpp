@@ -29,14 +29,14 @@ namespace wowgm::graphics
     void RenderPass::AddAttachment(VkAttachmentDescription attachment)
     {
         if (_renderPass != VK_NULL_HANDLE)
-            throw std::runtime_error("Unable to add attachments to a finalized render pass");
+            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to add attachments to a finalized render pass"));
 
         _attachmentDescriptions.push_back(attachment);
     }
 
     void RenderPass::_CreateDefaultSubpass()
     {
-        Subpass* subpass = new Subpass();
+        Subpass* subpass = new Subpass(VK_PIPELINE_BIND_POINT_GRAPHICS);
         subpass->AddColor({ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
         _subpasses.push_back(subpass);
     }
@@ -44,7 +44,7 @@ namespace wowgm::graphics
     void RenderPass::AddSubpass(Subpass* subpass)
     {
         if (_renderPass != VK_NULL_HANDLE)
-            throw_with_trace(std::runtime_error("Unable to add a subpass to a finalized render pass"));
+            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to add a subpass to a finalized render pass"));
 
         _subpasses.push_back(subpass);
     }
@@ -52,14 +52,14 @@ namespace wowgm::graphics
     void RenderPass::AddSubpassDependency(VkSubpassDependency dependency)
     {
         if (_renderPass != VK_NULL_HANDLE)
-            throw_with_trace(std::runtime_error("Unable to set subpass dependencies on a finalized render pass"));
+            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to set subpass dependencies on a finalized render pass"));
         _subpassDependencies.push_back(dependency);
     }
 
     void RenderPass::Finalize()
     {
         if (_renderPass != VK_NULL_HANDLE)
-            throw_with_trace(std::runtime_error("RenderPass::Finalize called twice!"));
+            wowgm::exceptions::throw_with_trace(std::runtime_error("RenderPass::Finalize called twice!"));
 
         VkRenderPassCreateInfo renderPassInfo = {};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
@@ -82,6 +82,6 @@ namespace wowgm::graphics
 
         VkResult result = vkCreateRenderPass(*_device, &renderPassInfo, nullptr, &_renderPass);
         if (result != VK_SUCCESS)
-            throw_with_trace(std::runtime_error("Unable to create a render pass!"));
+            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create a render pass!"));
     }
 }

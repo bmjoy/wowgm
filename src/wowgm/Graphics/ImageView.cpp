@@ -2,6 +2,7 @@
 #include "Image.hpp"
 #include "LogicalDevice.hpp"
 #include "SwapChain.hpp"
+#include "Assert.hpp"
 
 #include <stdexcept>
 
@@ -28,7 +29,7 @@ namespace wowgm::graphics
         createInfo.subresourceRange.layerCount = 1;
 
         if (vkCreateImageView(*swapChain->GetLogicalDevice(), &createInfo, nullptr, &_imageView) != VK_SUCCESS)
-            throw std::runtime_error("Failed to create an image view!");
+            wowgm::exceptions::throw_with_trace(std::runtime_error("Failed to create an image view!"));
     }
 
     ImageView::~ImageView()

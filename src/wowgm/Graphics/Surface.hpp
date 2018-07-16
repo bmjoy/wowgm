@@ -1,9 +1,6 @@
 #pragma once
 #include "Instance.hpp"
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
-
 #include <cstdint>
 
 namespace wowgm::graphics

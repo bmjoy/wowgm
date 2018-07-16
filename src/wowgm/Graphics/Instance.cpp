@@ -4,6 +4,7 @@
 #include "PhysicalDevice.hpp"
 #include "LogicalDevice.hpp"
 #include "SharedGraphicsDefines.hpp"
+#include "Assert.hpp"
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
@@ -50,7 +51,7 @@ namespace wowgm::graphics
     std::unique_ptr<Instance> Instance::Create(const char* applicationName, const char* engineName)
     {
         if (!details::CheckValidationLayerSupport())
-            throw std::runtime_error("Validation layers are not supported on your system!");
+            wowgm::exceptions::throw_with_trace(std::runtime_error("Validation layers are not supported on your system!"));
 
         VkApplicationInfo appInfo = {};
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -81,7 +82,7 @@ namespace wowgm::graphics
         VkInstance instance;
         VkResult result = vkCreateInstance(&createInfo, nullptr, &instance);
         if (result != VK_SUCCESS)
-            throw std::runtime_error("Unable to initialize Vulkan!");
+            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to initialize Vulkan!"));
 
         return std::make_unique<Instance>(instance);
     }
@@ -154,7 +155,7 @@ namespace wowgm::graphics
         VkDevice device;
 
         if (vkCreateDevice(*GetPhysicalDevice(), &createInfo, nullptr, &device) != VK_SUCCESS)
-            throw std::runtime_error("failed to create logical device!");
+            wowgm::exceptions::throw_with_trace(std::runtime_error("failed to create logical device!"));
 
         _logicalDevice = new LogicalDevice(device, indices);
         return _logicalDevice;
@@ -165,7 +166,7 @@ namespace wowgm::graphics
         VkSurfaceKHR surface;
         VkResult windowCreateResult = glfwCreateWindowSurface(_instance, window->GetHandle(), nullptr, &surface);
         if (windowCreateResult != VK_SUCCESS)
-            throw std::runtime_error("Unable to create a surface");
+            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create a surface"));
 
         _surface = new Surface(this, surface, window->GetWidth(), window->GetHeight());
 
@@ -214,7 +215,7 @@ namespace wowgm::graphics
         createInfo.pfnCallback = details::globalDebugCallback;
 
         if (details::CreateDebugReportCallbackEXT(_instance, &createInfo, nullptr, &_debugReportCallback) != VK_SUCCESS)
-            throw std::runtime_error("Failed to set up debug callback!");
+            wowgm::exceptions::throw_with_trace(std::runtime_error("Failed to set up debug callback!"));
 #endif
     }
 
@@ -230,11 +231,11 @@ namespace wowgm::graphics
 #ifdef ENABLE_VALIDATION_LAYERS
             std::uint32_t layerCount;
             if (vkEnumerateInstanceLayerProperties(&layerCount, nullptr) != VK_SUCCESS)
-                throw std::runtime_error("Unable to enumerate Vulkan layers!");
+                wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to enumerate Vulkan layers!"));
 
             std::vector<VkLayerProperties> availableLayers(layerCount);
             if (vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data()) != VK_SUCCESS)
-                throw std::runtime_error("Unable to enumerate Vulkan layers!");
+                wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to enumerate Vulkan layers!"));
 
             for (const char* layerName : requiredValidationLayers)
             {

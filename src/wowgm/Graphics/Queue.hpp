@@ -2,8 +2,12 @@
 
 #include <vulkan/vulkan.h>
 
+#include <cstdint>
+
 namespace wowgm::graphics
 {
+    class LogicalDevice;
+
     /*
      * In Vulkan, when we want to perform operations on hardware, we submit them to queues. The operations within a
      * single queue are processed one after another, in the same order they were submitted--that's why it's called
@@ -20,14 +24,20 @@ namespace wowgm::graphics
     class Queue
     {
     public:
-        Queue(VkQueue queue);
+        Queue(LogicalDevice* device, VkQueue queue, std::uint32_t indice);
         ~Queue();
 
         Queue(Queue const&) = delete;
 
         operator VkQueue() const { return _queue; }
 
+        std::uint32_t GetFamilyIndice();
+        LogicalDevice* GetDevice();
+
     private:
+        LogicalDevice* _device;
+
         VkQueue _queue;
+        std::uint32_t _indice;
     };
 }

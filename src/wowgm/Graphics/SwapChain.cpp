@@ -5,6 +5,10 @@
 #include "LogicalDevice.hpp"
 #include "Image.hpp"
 #include "ImageView.hpp"
+#include "Assert.hpp"
+
+#undef min
+#undef max
 
 #include <algorithm>
 
@@ -66,7 +70,7 @@ namespace wowgm::graphics
         createInfo.oldSwapchain = VK_NULL_HANDLE;
 
         if (vkCreateSwapchainKHR(*_physicalDevice->GetInstance()->GetLogicalDevice(), &createInfo, nullptr, &_swapChain) != VK_SUCCESS)
-            throw std::runtime_error("Failed to create swap chain!");
+            wowgm::exceptions::throw_with_trace(std::runtime_error("Failed to create swap chain!"));
 
         vkGetSwapchainImagesKHR(*_physicalDevice->GetInstance()->GetLogicalDevice(), _swapChain, &imageCount, nullptr);
 
@@ -144,7 +148,8 @@ namespace wowgm::graphics
     {
         auto& capabilities = _physicalDevice->GetCapabilities();
 
-        if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
+        if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max())
+        {
             _extent = capabilities.currentExtent;
         }
         else
@@ -192,6 +197,6 @@ namespace wowgm::graphics
 
     ImageView* SwapChain::GetImageView(std::uint32_t index)
     {
-
+        return _imageViews[index];
     }
 }

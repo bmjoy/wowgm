@@ -1,6 +1,5 @@
 #pragma once
 
-#include "VulkanHandle.hpp"
 #include "SharedGraphicsDefines.hpp"
 #include "Window.hpp"
 
@@ -19,9 +18,8 @@ namespace wowgm::graphics
 
     class Instance
     {
-        Instance(VkInstance instance);
-
     public:
+        Instance(VkInstance instance);
         static std::unique_ptr<Instance> Create(const char* applicationName, const char* engineName);
         ~Instance();
 

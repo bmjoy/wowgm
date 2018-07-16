@@ -1,5 +1,6 @@
 #include "LogicalDevice.hpp"
 #include "PhysicalDevice.hpp"
+#include "Queue.hpp"
 
 #include <vector>
 
@@ -11,9 +12,11 @@ namespace wowgm::graphics
     {
         for (std::uint32_t i = 0; i < indices.GetQueueCount(); ++i)
         {
+            auto queueIndice = indices.EnumerateFamilies()[i];
+
             VkQueue deviceQueue;
-            vkGetDeviceQueue(device, indices.EnumerateFamilies()[i], 0, &deviceQueue);
-            reinterpret_cast<Queue**>(&_graphicsQueue)[i] = new Queue(deviceQueue);
+            vkGetDeviceQueue(device, queueIndice, 0, &deviceQueue);
+            reinterpret_cast<Queue**>(&_graphicsQueue)[i] = new Queue(this, deviceQueue, queueIndice);
         }
     }
 

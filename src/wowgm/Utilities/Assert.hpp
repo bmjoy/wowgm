@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WOWGM_ASSERT_H_
+#define WOWGM_ASSERT_H_
 
 #include <iostream>
 #include <signal.h>
@@ -18,52 +19,12 @@ struct tag_stacktrace { };
 
 typedef boost::error_info<tag_stacktrace, boost::stacktrace::stacktrace> traced;
 
-template <class E>
-void throw_with_trace(const E& e)
+namespace wowgm::exceptions
 {
-    throw boost::enable_error_info(e) << traced(boost::stacktrace::stacktrace());
-}
-
-void my_signal_handler(int signum)
-{
-    ::signal(signum, SIG_DFL);
-    boost::stacktrace::safe_dump_to("./backtrace.dump");
-    ::raise(SIGABRT);
-}
-
-void register_signal_handler()
-{
-    ::signal(SIGSEGV, &my_signal_handler);
-    ::signal(SIGABRT, &my_signal_handler);
-}
-
-void check_existing_stracktraces()
-{
-    if (boost::filesystem::exists("./backtrace.dump"))
+    template <class E>
+    void throw_with_trace(const E& e)
     {
-        std::ifstream ifs("./backtrace.dump");
-
-        boost::stacktrace::stacktrace st = boost::stacktrace::stacktrace::from_dump(ifs);
-        std::cout << "Previous run crashed:\n" << st << std::endl;
-
-        boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
-        auto date_now = now.date();
-        auto time_now = now.time_of_day();
-
-        std::stringstream ss;
-        ss << "backtrace-" << static_cast<int>(date_now.month()) << "-" << date_now.day() << "-" << date_now.year()
-            << "_" << time_now.hours() << "-" << time_now.minutes() << "-" << time_now.seconds() << ".dump";
-
-        auto path = boost::filesystem::current_path();
-        path /= ss.str();
-        std::cout << "Backtrace has been moved to " << path << ".";
-
-        ifs.close();
-        boost::filesystem::copy_file("./backtrace.dump", path);
-
-        // cleaning up
-        /*ifs.close();
-        boost::filesystem::remove("./backtrace.dump");*/
+        throw boost::enable_error_info(e) << traced(boost::stacktrace::stacktrace());
     }
 }
 
@@ -79,11 +40,4 @@ namespace boost {
     }
 } // namespace boost
 
-typedef boost::error_info<struct tag_stacktrace, boost::stacktrace::stacktrace> traced;
-
-template <class E>
-void throw_with_trace(const E& e) {
-    throw boost::enable_error_info(e)
-        << traced(boost::stacktrace::stacktrace());
-}
-
+#endif // WOWGM_ASSERT_H_

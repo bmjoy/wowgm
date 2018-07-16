@@ -2,6 +2,7 @@
 
 #include "BaseSocket.hpp"
 #include "MessageBuffer.hpp"
+#include "Assert.hpp"
 
 #include <boost/array.hpp>
 #include <boost/asio/ip/tcp.hpp>
@@ -121,7 +122,7 @@ namespace wowgm::networking
             std::size_t bytesSent = _socket->write_some(buffer.AsReadBuffer(), errorCode);
 
             if (errorCode != 0)
-                throw std::exception(errorCode.message().c_str());
+                wowgm::exceptions::throw_with_trace(std::exception(errorCode.message().c_str()));
 
             buffer.ReadCompleted(bytesSent);
 

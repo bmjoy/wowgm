@@ -4,6 +4,7 @@
 #include "LogicalDevice.hpp"
 #include "SharedGraphicsDefines.hpp"
 #include "RenderPass.hpp"
+#include "Assert.hpp"
 
 #include <boost/iterator/transform_iterator.hpp>
 
@@ -114,7 +115,7 @@ namespace wowgm::graphics
         pipelineLayoutInfo.setLayoutCount = _descriptorSets.size();
 
         if (vkCreatePipelineLayout(*_swapchain->GetLogicalDevice(), &pipelineLayoutInfo, nullptr, &_pipelineLayout) != VK_SUCCESS)
-            throw std::runtime_error("Unable to create a pipeline layout!");
+            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create a pipeline layout!"));
 
         // Cookbook, page 801/1166
         _graphicsPipelineCreateInfo = { };
