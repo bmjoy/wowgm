@@ -11,9 +11,4 @@ namespace wowgm::graphics
     {
         _queue = VK_NULL_HANDLE;
     }
-
-    VkQueue Queue::GetVkQueue()
-    {
-        return _queue;
-    }
 }

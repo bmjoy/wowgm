@@ -3,6 +3,8 @@
 #include "Surface.hpp"
 #include "Instance.hpp"
 #include "LogicalDevice.hpp"
+#include "Image.hpp"
+#include "ImageView.hpp"
 
 #include <algorithm>
 
@@ -72,8 +74,12 @@ namespace wowgm::graphics
         vkGetSwapchainImagesKHR(*_physicalDevice->GetInstance()->GetLogicalDevice(), _swapChain, &imageCount, swapChainImages.data());
 
         _swapChainImages.resize(imageCount);
+        _imageViews.resize(imageCount);
         for (std::uint32_t i = 0; i < imageCount; ++i)
+        {
             _swapChainImages[i] = new Image(swapChainImages[i]);
+            _imageViews[i] = new ImageView(this, _swapChainImages[i]);
+        }
     }
 
     SwapChain::~SwapChain()
@@ -87,6 +93,8 @@ namespace wowgm::graphics
             _swapChainImages[i] = nullptr;
         }
         _swapChainImages.clear();
+
+        _imageViews.clear();
     }
 
     void SwapChain::_SelectFormat()
@@ -174,5 +182,16 @@ namespace wowgm::graphics
     LogicalDevice* SwapChain::GetLogicalDevice()
     {
         return _physicalDevice->GetInstance()->GetLogicalDevice();
+    }
+
+
+    Image* SwapChain::GetImage(std::uint32_t index)
+    {
+        return _swapChainImages[index];
+    }
+
+    ImageView* SwapChain::GetImageView(std::uint32_t index)
+    {
+
     }
 }

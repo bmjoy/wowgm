@@ -1,8 +1,6 @@
 #pragma once
-#include "Image.hpp"
-
 #include <vector>
-
+#include <cstdint>
 #include <vulkan/vulkan.h>
 
 namespace wowgm::graphics
@@ -10,6 +8,9 @@ namespace wowgm::graphics
     class PhysicalDevice;
     class LogicalDevice;
     class Surface;
+    class ImageView;
+    class Image;
+    class FrameBuffer;
 
     class SwapChain
     {
@@ -28,11 +29,13 @@ namespace wowgm::graphics
         PhysicalDevice* GetPhysicalDevice();
         LogicalDevice* GetLogicalDevice();
 
+        Image* GetImage(std::uint32_t index);
+        ImageView* GetImageView(std::uint32_t index);
+
     private:
         void _SelectFormat();
         void _SelectPresentMode();
         void _SelectExtent();
-
 
     private:
         PhysicalDevice* _physicalDevice;
@@ -44,5 +47,7 @@ namespace wowgm::graphics
         VkExtent2D _extent;
 
         std::vector<Image*> _swapChainImages;
+        std::vector<ImageView*> _imageViews;
+        std::vector<FrameBuffer*> _frameBuffers;
     };
 }

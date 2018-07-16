@@ -41,9 +41,4 @@ namespace wowgm::graphics
     {
         return _swapChain;
     }
-
-    VkImageView ImageView::GetVkImageView()
-    {
-        return _imageView;
-    }
 }

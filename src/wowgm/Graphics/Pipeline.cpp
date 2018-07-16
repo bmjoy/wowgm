@@ -19,7 +19,7 @@ namespace wowgm::graphics
         return;
     }
 
-    Pipeline::Pipeline(SwapChain* swapChain)
+    Pipeline::Pipeline(SwapChain* swapChain) : _swapchain(swapChain)
     {
         _useDynamicState = false;
 
@@ -88,6 +88,8 @@ namespace wowgm::graphics
 
         //! TODO: Blending
         //! TODO: Dynamic state
+
+        _renderPass = new RenderPass(swapChain->GetLogicalDevice());
     }
 
     Pipeline::~Pipeline()
@@ -151,6 +153,8 @@ namespace wowgm::graphics
         _graphicsPipelineCreateInfo.layout = _pipelineLayout;
         _graphicsPipelineCreateInfo.renderPass = *_renderPass;
         _graphicsPipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
+
+        _graphicsPipelineCreateInfo.renderPass = *_renderPass;
     }
 
     void Pipeline::SetWireframe(bool wireframe)

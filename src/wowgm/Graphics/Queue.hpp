@@ -25,8 +25,6 @@ namespace wowgm::graphics
 
         Queue(Queue const&) = delete;
 
-        VkQueue GetVkQueue();
-
         operator VkQueue() const { return _queue; }
 
     private:

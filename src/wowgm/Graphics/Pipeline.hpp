@@ -25,7 +25,8 @@ namespace wowgm::graphics
         Pipeline(Pipeline const&) = delete;
 
         void EnableDynamicStates() { _useDynamicState = true; }
-        void Bind(CommandBuffer* buffer); // vkCmdBindCommandBuffer
+
+        operator VkPipelineLayout() const { return _pipelineLayout; }
 
     public: /* Rasterization*/
         void SetWireframe(bool wireframe);
@@ -76,18 +77,17 @@ namespace wowgm::graphics
         void AddAttribute(VkVertexInputAttributeDescription attrDescription);
 
     private:
+        VkPipelineLayout _pipelineLayout;
+
         SwapChain* _swapchain;
         RenderPass* _renderPass;
 
-        std::vector<VkVertexInputBindingDescription> _vertexBindingDescriptions;
-        std::vector<VkVertexInputAttributeDescription> _vertexAttributeDescriptions;
-
-        VkPipelineLayout _pipelineLayout;
-        std::vector<VkDescriptorSetLayout> _descriptorSets;
-        std::vector<VkPushConstantRange> _pushConstantRanges;
-
         std::vector<Shader*> _shaders;
 
+        std::vector<VkVertexInputBindingDescription> _vertexBindingDescriptions;
+        std::vector<VkVertexInputAttributeDescription> _vertexAttributeDescriptions;
+        std::vector<VkDescriptorSetLayout> _descriptorSets;
+        std::vector<VkPushConstantRange> _pushConstantRanges;
         VkPipelineVertexInputStateCreateInfo                    _vertexInputState;
         VkPipelineInputAssemblyStateCreateInfo                  _inputAssembly;
         boost::optional<VkPipelineTessellationStateCreateInfo>  _tessellationState;

@@ -11,6 +11,19 @@
 #define BOOST_ENABLE_ASSERT_DEBUG_HANDLER
 #include <boost/assert.hpp>
 
+#include <boost/stacktrace.hpp>
+#include <boost/exception/all.hpp>
+
+struct tag_stacktrace { };
+
+typedef boost::error_info<tag_stacktrace, boost::stacktrace::stacktrace> traced;
+
+template <class E>
+void throw_with_trace(const E& e)
+{
+    throw boost::enable_error_info(e) << traced(boost::stacktrace::stacktrace());
+}
+
 void my_signal_handler(int signum)
 {
     ::signal(signum, SIG_DFL);

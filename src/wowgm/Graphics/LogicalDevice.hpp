@@ -1,12 +1,12 @@
 #pragma once
+#include "Instance.hpp"
 
 #include <vulkan/vulkan.h>
-
-#include "Queue.hpp"
 
 namespace wowgm::graphics
 {
     class PhysicalDevice;
+    class Queue;
     struct QueueFamilyIndices;
 
     /*
@@ -22,8 +22,10 @@ namespace wowgm::graphics
      */
     class LogicalDevice
     {
-    public:
+        friend LogicalDevice* Instance::CreateLogicalDevice();
         LogicalDevice(VkDevice device, QueueFamilyIndices& indices);
+
+    public:
         ~LogicalDevice();
 
         LogicalDevice() = delete;
@@ -32,8 +34,6 @@ namespace wowgm::graphics
 
         Queue* GetGraphicsQueue();
         Queue* GetPresentQueue();
-
-        VkDevice GetVkDevice();
 
         operator VkDevice() const { return _device; }
 

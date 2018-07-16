@@ -16,16 +16,10 @@ namespace wowgm::graphics
         _surface = VK_NULL_HANDLE;
     }
 
-    VkSurfaceKHR Surface::GetVkSurface()
-    {
-        return _surface;
-    }
-
     Instance* Surface::GetInstance()
     {
         return _instance;
     }
-
 
     std::uint32_t Surface::GetWidth()
     {

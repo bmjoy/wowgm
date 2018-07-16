@@ -11,9 +11,4 @@ namespace wowgm::graphics
     {
 
     }
-
-    VkImage Image::GetVkImage()
-    {
-        return _image;
-    }
 }

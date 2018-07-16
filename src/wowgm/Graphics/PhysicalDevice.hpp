@@ -34,16 +34,15 @@ namespace wowgm::graphics
 
         std::uint32_t GetScore();
         QueueFamilyIndices& GetQueues();
-
-        VkPhysicalDevice GetVkDevice();
-        VkPhysicalDeviceFeatures& GetVkFeatures();
-        VkPhysicalDeviceProperties& GetVkProperties();
+        VkPhysicalDeviceFeatures& GetPhysicalDeviceFeatures();
+        VkPhysicalDeviceProperties& GetPhysicalDeviceProperties();
 
         bool CheckDeviceExtensionSupport();
 
         VkSurfaceCapabilitiesKHR& GetCapabilities();
         std::vector<VkSurfaceFormatKHR>& GetFormats();
         std::vector<VkPresentModeKHR> GetPresentModes();
+        VkPhysicalDeviceMemoryProperties& GetMemoryProperties();
 
         Surface* GetSurface();
         Instance* GetInstance();
@@ -65,6 +64,8 @@ namespace wowgm::graphics
         VkSurfaceCapabilitiesKHR _surfaceCapabilities;
         std::vector<VkSurfaceFormatKHR> _surfaceFormats;
         std::vector<VkPresentModeKHR> _surfacePresentModes;
+
+        VkPhysicalDeviceMemoryProperties _deviceMemoryProperties;
 
         std::uint32_t _deviceScore;
     };

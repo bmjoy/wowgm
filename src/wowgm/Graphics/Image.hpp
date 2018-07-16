@@ -15,8 +15,6 @@ namespace wowgm::graphics
 
         ~Image() = default;
 
-        VkImage GetVkImage();
-
         operator VkImage() const { return _image; }
 
     private:

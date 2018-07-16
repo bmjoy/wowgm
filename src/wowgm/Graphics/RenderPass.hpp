@@ -6,13 +6,13 @@
 
 namespace wowgm::graphics
 {
-    class SwapChain;
+    class LogicalDevice;
     class Subpass;
 
     class RenderPass
     {
     public:
-        RenderPass(SwapChain* swapChain);
+        RenderPass(LogicalDevice* device);
         ~RenderPass();
 
         RenderPass(RenderPass&&) = delete;
@@ -21,8 +21,8 @@ namespace wowgm::graphics
         void Finalize();
 
         void AddSubpassDependency(VkSubpassDependency dependency);
-
         void AddSubpass(Subpass* subpass);
+        void AddAttachment(VkAttachmentDescription attachment);
 
         operator VkRenderPass() const { return _renderPass; }
 
@@ -31,7 +31,7 @@ namespace wowgm::graphics
 
         VkRenderPass _renderPass;
 
-        SwapChain* _swapchain;
+        LogicalDevice* _device;
 
         std::vector<VkSubpassDependency> _subpassDependencies;
         std::vector<Subpass*> _subpasses;

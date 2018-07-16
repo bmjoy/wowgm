@@ -32,6 +32,12 @@ namespace wowgm::graphics
         _device = VK_NULL_HANDLE;
     }
 
+
+    VkPhysicalDeviceMemoryProperties& PhysicalDevice::GetMemoryProperties()
+    {
+        return _deviceMemoryProperties;
+    }
+
     PhysicalDevice::PhysicalDevice(VkPhysicalDevice device, Surface* surface) : _device(device), _deviceScore(0), _surface(surface)
     {
         vkGetPhysicalDeviceProperties(device, &_deviceProperties);
@@ -91,17 +97,12 @@ namespace wowgm::graphics
         return _queueFamilyIndices;
     }
 
-    VkPhysicalDevice PhysicalDevice::GetVkDevice()
-    {
-        return _device;
-    }
-
-    VkPhysicalDeviceFeatures& PhysicalDevice::GetVkFeatures()
+    VkPhysicalDeviceFeatures& PhysicalDevice::GetPhysicalDeviceFeatures()
     {
         return _deviceFeatures;
     }
 
-    VkPhysicalDeviceProperties& PhysicalDevice::GetVkProperties()
+    VkPhysicalDeviceProperties& PhysicalDevice::GetPhysicalDeviceProperties()
     {
         return _deviceProperties;
     }

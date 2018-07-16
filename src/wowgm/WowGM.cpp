@@ -124,8 +124,11 @@ int main(int argc, char* argv[])
 #include "LogicalDevice.hpp"
 #include "SwapChain.hpp"
 #include "PhysicalDevice.hpp"
+#include "Assert.hpp"
 
 #include <iostream>
+#include <boost/stacktrace.hpp>
+#include <boost/exception/all.hpp>
 
 int main()
 {
@@ -150,9 +153,13 @@ int main()
         window->Cleanup();
         delete window;
     }
-    catch (const std::runtime_error& e)
+    catch (const std::exception& e)
     {
         std::cerr << e.what() << std::endl;
+
+        const boost::stacktrace::stacktrace* st = boost::get_error_info<traced>(e);
+        if (st)
+            std::cerr << *st << std::endl;
     }
     return 0;
 }

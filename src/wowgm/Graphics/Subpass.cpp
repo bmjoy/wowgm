@@ -3,7 +3,7 @@
 namespace wowgm::graphics
 {
 
-    Subpass::Subpass()
+    Subpass::Subpass(VkPipelineBindPoint bindPoint) : _bindPoint(bindPoint)
     {
 
     }
@@ -31,7 +31,7 @@ namespace wowgm::graphics
 
     void Subpass::Finalize()
     {
-        _subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+        _subpassDescription.pipelineBindPoint = _bindPoint;
         _subpassDescription.flags = 0;
 
         _subpassDescription.inputAttachmentCount = _inputAttachments.size();

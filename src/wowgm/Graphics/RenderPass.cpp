@@ -1,12 +1,14 @@
 #include "RenderPass.hpp"
 #include "Subpass.hpp"
-#include "SwapChain.hpp"
 #include "LogicalDevice.hpp"
+#include "Assert.hpp"
+#include "LogicalDevice.hpp"
+
 #include <boost/iterator/transform_iterator.hpp>
 
 namespace wowgm::graphics
 {
-    RenderPass::RenderPass(SwapChain* swapChain) : _swapchain(swapChain)
+    RenderPass::RenderPass(LogicalDevice* device) : _device(device)
     {
         _CreateDefaultSubpass();
     }
@@ -14,14 +16,22 @@ namespace wowgm::graphics
     RenderPass::~RenderPass()
     {
         if (_renderPass != VK_NULL_HANDLE)
-            vkDestroyRenderPass(*_swapchain->GetLogicalDevice(), _renderPass, nullptr);
+            vkDestroyRenderPass(*_device, _renderPass, nullptr);
 
         for (std::uint32_t i = 0; i < _subpasses.size(); ++i)
             delete _subpasses[i];
 
         _subpasses.clear();
 
-        _swapchain = nullptr;
+        _device = nullptr;
+    }
+
+    void RenderPass::AddAttachment(VkAttachmentDescription attachment)
+    {
+        if (_renderPass != VK_NULL_HANDLE)
+            throw std::runtime_error("Unable to add attachments to a finalized render pass");
+
+        _attachmentDescriptions.push_back(attachment);
     }
 
     void RenderPass::_CreateDefaultSubpass()
@@ -33,16 +43,24 @@ namespace wowgm::graphics
 
     void RenderPass::AddSubpass(Subpass* subpass)
     {
+        if (_renderPass != VK_NULL_HANDLE)
+            throw_with_trace(std::runtime_error("Unable to add a subpass to a finalized render pass"));
+
         _subpasses.push_back(subpass);
     }
 
     void RenderPass::AddSubpassDependency(VkSubpassDependency dependency)
     {
+        if (_renderPass != VK_NULL_HANDLE)
+            throw_with_trace(std::runtime_error("Unable to set subpass dependencies on a finalized render pass"));
         _subpassDependencies.push_back(dependency);
     }
 
     void RenderPass::Finalize()
     {
+        if (_renderPass != VK_NULL_HANDLE)
+            throw_with_trace(std::runtime_error("RenderPass::Finalize called twice!"));
+
         VkRenderPassCreateInfo renderPassInfo = {};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
 
@@ -51,7 +69,7 @@ namespace wowgm::graphics
 
         renderPassInfo.subpassCount = _subpasses.size();
 
-        auto subpassTransformer = [](Subpass* pass) -> VkSubpassDescription { return pass->GetVkSubpassDescription(); };
+        auto subpassTransformer = [](Subpass* pass) -> VkSubpassDescription { return *pass; };
         auto itr = boost::iterators::make_transform_iterator(_subpasses.begin(), subpassTransformer);
         auto end = boost::iterators::make_transform_iterator(_subpasses.end(), subpassTransformer);
 
@@ -62,10 +80,8 @@ namespace wowgm::graphics
         renderPassInfo.dependencyCount = _subpassDependencies.size();
         renderPassInfo.pDependencies = _subpassDependencies.data();
 
-        LogicalDevice* logicalDevice = _swapchain->GetLogicalDevice();
-        VkResult result = vkCreateRenderPass(*logicalDevice, &renderPassInfo, nullptr, &_renderPass);
+        VkResult result = vkCreateRenderPass(*_device, &renderPassInfo, nullptr, &_renderPass);
         if (result != VK_SUCCESS)
-            throw std::runtime_error("Unable to create a render pass!");
-
+            throw_with_trace(std::runtime_error("Unable to create a render pass!"));
     }
 }

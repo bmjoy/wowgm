@@ -10,7 +10,7 @@ namespace wowgm::graphics
     class Subpass
     {
     public:
-        Subpass();
+        Subpass(VkPipelineBindPoint bindPoint);
         ~Subpass();
 
         Subpass(Subpass&&) = delete;
@@ -18,7 +18,6 @@ namespace wowgm::graphics
 
         void Finalize();
 
-        VkSubpassDescription GetVkSubpassDescription() { return _subpassDescription; }
         operator VkSubpassDescription() const { return _subpassDescription; }
 
         void AddInput(VkAttachmentReference ref);
@@ -26,10 +25,9 @@ namespace wowgm::graphics
         void AddResolve(VkAttachmentReference resolve);
 
     private:
-
         VkSubpassDescription _subpassDescription;
 
-        VkPipelineBindPoint BindPoint;
+        VkPipelineBindPoint _bindPoint;
 
         /// A collection of attachments from which we will read data during the subpass.
         std::vector<VkAttachmentReference> _inputAttachments;

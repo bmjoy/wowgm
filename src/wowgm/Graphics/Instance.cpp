@@ -109,11 +109,6 @@ namespace wowgm::graphics
         _physicalDevices.clear();
     }
 
-    VkInstance Instance::GetVkInstance()
-    {
-        return _instance;
-    }
-
     LogicalDevice* Instance::GetLogicalDevice()
     {
         return _logicalDevice;
