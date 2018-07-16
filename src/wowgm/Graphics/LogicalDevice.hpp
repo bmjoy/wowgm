@@ -1,12 +1,17 @@
 #pragma once
 #include "Instance.hpp"
 
+#include <vector>
 #include <vulkan/vulkan.h>
 
 namespace wowgm::graphics
 {
     class PhysicalDevice;
     class Queue;
+    class SwapChain;
+    class Semaphore;
+    class CommandBuffer;
+    class Fence;
     struct QueueFamilyIndices;
 
     /*
@@ -35,6 +40,8 @@ namespace wowgm::graphics
         Queue* GetGraphicsQueue();
         Queue* GetPresentQueue();
 
+        void Draw(SwapChain* swapChain);
+
         operator VkDevice() const { return _device; }
 
     private:
@@ -44,5 +51,14 @@ namespace wowgm::graphics
         // (We are more or less memcpy-ing)
         Queue* _graphicsQueue;
         Queue* _presentQueue;
+
+        static const constexpr std::uint32_t MAX_FRAMES_IN_FLIGHT = 2;
+
+        Semaphore* _imageAvailable[MAX_FRAMES_IN_FLIGHT];
+        Semaphore* _renderFinished[MAX_FRAMES_IN_FLIGHT];
+        Fence* _inflightFence[MAX_FRAMES_IN_FLIGHT];
+        std::vector<CommandBuffer*> _commandBuffers;
+
+        std::uint32_t currentFrame = 0;
     };
 }

@@ -5,11 +5,16 @@
 #include "LogicalDevice.hpp"
 #include "SharedGraphicsDefines.hpp"
 #include "Assert.hpp"
+#include "SynchronizationPrimitive.hpp"
+
+#undef min
+#undef max
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
 #include <set>
+#include <limits>
 
 /// Execution chain
 /// 1. Create an Instance
@@ -123,8 +128,9 @@ namespace wowgm::graphics
         std::set<std::int32_t> uniqueQueueFamilies = { indices.Graphics, indices.Present };
 
         float queuePriority = 1.0f;
-        for (int queueFamily : uniqueQueueFamilies) {
-            VkDeviceQueueCreateInfo queueCreateInfo = {};
+        for (int queueFamily : uniqueQueueFamilies)
+        {
+            VkDeviceQueueCreateInfo queueCreateInfo = { };
             queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
             queueCreateInfo.queueFamilyIndex = queueFamily;
             queueCreateInfo.queueCount = 1;
@@ -132,15 +138,13 @@ namespace wowgm::graphics
             queueCreateInfos.push_back(queueCreateInfo);
         }
 
-        VkPhysicalDeviceFeatures deviceFeatures = {};
-
         VkDeviceCreateInfo createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 
         createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
         createInfo.pQueueCreateInfos = queueCreateInfos.data();
 
-        createInfo.pEnabledFeatures = &deviceFeatures;
+        createInfo.pEnabledFeatures = &GetPhysicalDevice()->GetPhysicalDeviceFeatures();
 
         createInfo.enabledExtensionCount = static_cast<uint32_t>(details::requiredDeviceExtensions.size());
         createInfo.ppEnabledExtensionNames = details::requiredDeviceExtensions.data();
@@ -158,6 +162,7 @@ namespace wowgm::graphics
             wowgm::exceptions::throw_with_trace(std::runtime_error("failed to create logical device!"));
 
         _logicalDevice = new LogicalDevice(device, indices);
+
         return _logicalDevice;
     }
 

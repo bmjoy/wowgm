@@ -15,6 +15,8 @@ namespace wowgm::graphics
     class Queue;
     class LogicalDevice;
     class PhysicalDevice;
+    class Semaphore;
+    class CommandBuffer;
 
     class Instance
     {
@@ -53,5 +55,6 @@ namespace wowgm::graphics
 #ifdef ENABLE_VALIDATION_LAYERS
         VkDebugReportCallbackEXT _debugReportCallback;
 #endif
+
     };
 }
