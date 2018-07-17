@@ -24,13 +24,11 @@ namespace wowgm::graphics
     {
         _useDynamicState = false;
 
+        _inputAssembly = { };
         _inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-        _inputAssembly.pNext = nullptr;
-        _inputAssembly.flags = 0;
 
+        _viewportCreateInfo = { };
         _viewportCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-        _viewportCreateInfo.pNext = nullptr;
-        _viewportCreateInfo.flags = 0;
         _viewportCreateInfo.viewportCount = 1;
         _viewportCreateInfo.scissorCount = 1;
         _viewportCreateInfo.pViewports = &_viewport;
@@ -43,12 +41,12 @@ namespace wowgm::graphics
         _viewport.width = static_cast<float>(swapChain->GetExtent().width);
         _viewport.height = static_cast<float>(swapChain->GetExtent().height);
 
-        _scissors.offset = { 0 , 0 };
+        _scissors = { };
+        _scissors.offset = { 0, 0 };
         _scissors.extent = swapChain->GetExtent();
 
+        _rasterizationState = { };
         _rasterizationState.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-        _rasterizationState.pNext = nullptr;
-        _rasterizationState.flags = 0;
         _rasterizationState.depthClampEnable = VK_FALSE;
         // If rasterizerDiscardEnable is set to VK_TRUE, then geometry never passes through
         // the rasterizer stage. This basically disables any output to the framebuffer.
@@ -64,9 +62,8 @@ namespace wowgm::graphics
         _rasterizationState.depthBiasClamp = 0.0f; // Optional
         _rasterizationState.depthBiasSlopeFactor = 0.0f; // Optional
 
+        _multisamplingState = { };
         _multisamplingState.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-        _multisamplingState.pNext = nullptr;
-        _multisamplingState.flags = 0;
         //! TOOD: https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSampleCountFlagBits.html
         // The number of samples generated per pixel.
         _multisamplingState.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
@@ -77,9 +74,8 @@ namespace wowgm::graphics
 
         // This requires a depth/stencil test resource to be dynamically added, so, uh, wait a bit.
         // For now, disable depth testing.
+        _depthStencilState = { };
         _depthStencilState.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-        _depthStencilState.pNext = nullptr;
-        _depthStencilState.flags = 0;
         _depthStencilState.depthTestEnable = VK_TRUE;
         _depthStencilState.stencilTestEnable = VK_FALSE;
 
@@ -105,8 +101,6 @@ namespace wowgm::graphics
 
     void Pipeline::Finalize()
     {
-        _renderPass->Finalize();
-
         _vertexInputState = {};
         _vertexInputState.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
         _vertexInputState.vertexBindingDescriptionCount = _vertexBindingDescriptions.size();
@@ -170,7 +164,7 @@ namespace wowgm::graphics
 
         _graphicsPipelineCreateInfo.layout = _pipelineLayout;
         _graphicsPipelineCreateInfo.renderPass = *_renderPass;
-        _graphicsPipelineCreateInfo.subpass = 0;
+        _graphicsPipelineCreateInfo.subpass = 0; // Index of the subpass where this pipeline will be used
         _graphicsPipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
 
         result = vkCreateGraphicsPipelines(*_swapchain->GetLogicalDevice(), VK_NULL_HANDLE, 1, &_graphicsPipelineCreateInfo, nullptr, &_pipeline);

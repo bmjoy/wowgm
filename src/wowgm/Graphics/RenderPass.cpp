@@ -19,7 +19,7 @@ namespace wowgm::graphics
         dependency.srcAccessMask = 0;
         dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
         dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-        AddSubpassDependency(dependency);
+        SetDependency(dependency);
 
         _CreateDefaultSubpass();
     }
@@ -52,15 +52,17 @@ namespace wowgm::graphics
         _subpasses.push_back(subpass);
     }
 
-    void RenderPass::AddSubpass(Subpass* subpass)
+    std::uint32_t RenderPass::Insert(Subpass* subpass)
     {
         if (_renderPass != VK_NULL_HANDLE)
             wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to add a subpass to a finalized render pass"));
 
+        std::uint32_t attachmentIndex = _subpasses.size();
         _subpasses.push_back(subpass);
+        return attachmentIndex;
     }
 
-    void RenderPass::AddSubpassDependency(VkSubpassDependency dependency)
+    void RenderPass::SetDependency(VkSubpassDependency dependency)
     {
         if (_renderPass != VK_NULL_HANDLE)
             wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to set subpass dependencies on a finalized render pass"));

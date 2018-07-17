@@ -31,22 +31,15 @@ namespace wowgm::graphics
     void Subpass::Finalize()
     {
         _subpassDescription = { };
-        _subpassDescription.pipelineBindPoint = _bindPoint;
-        _subpassDescription.flags = 0;
 
+        _subpassDescription.flags = 0;
+        _subpassDescription.pipelineBindPoint = _bindPoint;
         _subpassDescription.inputAttachmentCount = _inputAttachments.size();
         _subpassDescription.pInputAttachments = _inputAttachments.data();
-
         _subpassDescription.colorAttachmentCount = _colorAttachments.size();
         _subpassDescription.pColorAttachments = _colorAttachments.data();
-
-        _subpassDescription.colorAttachmentCount = _colorAttachments.size();
-        _subpassDescription.pColorAttachments = _colorAttachments.data();
-
         _subpassDescription.pResolveAttachments = _resolveAttachments.data();
-
         _subpassDescription.pDepthStencilAttachment = _depthStencilAttachment;
-
         _subpassDescription.preserveAttachmentCount = _preserveAttachments.size();
         _subpassDescription.pPreserveAttachments = _preserveAttachments.data();
     }

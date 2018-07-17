@@ -64,18 +64,8 @@ namespace wowgm::log
 #define LOG_ERROR     BOOST_LOG_SEV(severity_logger::get(), error)
 #define LOG_CRITICAL  BOOST_LOG_SEV(severity_logger::get(), critical)
 
-#if _DEBUG
 #define LOG_DEBUG     BOOST_LOG_SEV(severity_logger::get(), debug)
-#else
-
-class null_logger
-{
-public:
-    template <typename SeverityT> NullLogger(SeverityT) {};
-    template <typename Val> NullLog& operator<< (const Val&) { return *this };
-};
-
-#define LOG_DEBUG null_logger(debug)
+#if !_DEBUG
 #pragma message("Consider #ifdef'ing LOG_DEBUG calls, as expensive operations may not be optimized out by the compiler.")
 #endif
 

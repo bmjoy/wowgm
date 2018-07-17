@@ -9,6 +9,13 @@ namespace wowgm::graphics
     class LogicalDevice;
     class Subpass;
 
+    /*
+     * A render pass contains subpasses and attachments. It describes the structure
+     * of the drawing work to the driver, how data will flow between the various
+     * attachments or what the ordering requirements are; and runtime behavior, such
+     * as how these attachments will be treated at each load or wether it needs to be
+     * clear or preserve information.
+     */
     class RenderPass
     {
         RenderPass(RenderPass&&) = delete;
@@ -21,9 +28,9 @@ namespace wowgm::graphics
 
         void Finalize();
 
-        void AddSubpassDependency(VkSubpassDependency dependency);
+        void SetDependency(VkSubpassDependency dependency);
 
-        void AddSubpass(Subpass* subpass);
+        std::uint32_t Insert(Subpass* subpass);
 
         void AddAttachment(VkAttachmentDescription attachment);
 

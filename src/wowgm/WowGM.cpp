@@ -153,14 +153,8 @@ int main()
         Surface* surface = instance->CreateSurface(window); // Owned by instance
         LogicalDevice* device = instance->CreateLogicalDevice(); // Owned by instance
         SwapChain* swapChain = new SwapChain(instance->GetPhysicalDevice());
+
         RenderPass* renderPass = new RenderPass(device);
-        Pipeline* pipeline = new Pipeline(swapChain, renderPass);
-        FrameBuffer* frameBuffer = new FrameBuffer(renderPass, swapChain);
-        frameBuffer->AttachImageView(swapChain->GetImageView(0));
-
-        Shader* vertexShader = Shader::CreateVertexShader(device, "main", "C:\\Users\\Vincent Piquet\\source\\repos\\WowGM\\src\\wowgm\\Shaders\\vert.spv");
-        Shader* fragmentShader = Shader::CreateFragmentShader(device, "main", "C:\\Users\\Vincent Piquet\\source\\repos\\WowGM\\src\\wowgm\\Shaders\\frag.spv");
-
         VkAttachmentDescription colorAttachment = {};
         colorAttachment.format = swapChain->GetSurfaceFormat().format;
         colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -171,6 +165,12 @@ int main()
         colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
         renderPass->AddAttachment(colorAttachment);
+        renderPass->Finalize();
+
+        Pipeline* pipeline = new Pipeline(swapChain, renderPass);
+
+        Shader* vertexShader = Shader::CreateVertexShader(device, "main", "C:\\Users\\Vincent Piquet\\source\\repos\\WowGM\\src\\wowgm\\Shaders\\vert.spv");
+        Shader* fragmentShader = Shader::CreateFragmentShader(device, "main", "C:\\Users\\Vincent Piquet\\source\\repos\\WowGM\\src\\wowgm\\Shaders\\frag.spv");
 
         pipeline->SetDepthTest(false);
         pipeline->SetStencilTest(false);
@@ -180,6 +180,8 @@ int main()
         pipeline->AddShader(fragmentShader);
         pipeline->Finalize();
 
+        FrameBuffer* frameBuffer = new FrameBuffer(renderPass, swapChain);
+        frameBuffer->AttachImageView(swapChain->GetImageView(0));
         frameBuffer->Finalize();
 
         CommandBuffer* drawBuffer = device->GetGraphicsQueue()->GetCommandPool()->AllocatePrimaryBuffer();
@@ -201,7 +203,7 @@ int main()
         window->Cleanup();
         delete window;
     }
-    catch (const std::exception& e)
+    catch (const std::runtime_error& e)
     {
         std::cerr << e.what() << std::endl;
 
