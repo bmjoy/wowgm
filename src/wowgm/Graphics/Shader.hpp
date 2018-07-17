@@ -11,6 +11,9 @@ namespace wowgm::graphics
 
     class Shader
     {
+        Shader(Shader&&) = delete;
+        Shader(Shader const&) = delete;
+
     public:
         static Shader* CreateVertexShader(LogicalDevice* device, const std::string& entryPointName, const std::string& fileName);
         static Shader* CreateFragmentShader(LogicalDevice* device, const std::string& entryPointName, const std::string& fileName);
@@ -19,10 +22,8 @@ namespace wowgm::graphics
         Shader(LogicalDevice* device, VkShaderStageFlagBits stage, const std::string& entryPointName, const std::string& fileName);
         ~Shader();
 
-        Shader(Shader const&) = delete;
-
         VkShaderModule GetVkShaderModule() { return _shaderModule; }
-        VkPipelineShaderStageCreateInfo GetVkShaderStageInfo() { return _shaderStageInfo; }
+        VkPipelineShaderStageCreateInfo& GetVkShaderStageInfo() { return _shaderStageInfo; }
 
         operator VkShaderModule() const { return _shaderModule; }
 
@@ -30,6 +31,8 @@ namespace wowgm::graphics
 
     private:
         LogicalDevice* _logicalDevice;
+
+        std::string _name;
 
         VkShaderModule _shaderModule;
         VkPipelineShaderStageCreateInfo _shaderStageInfo;

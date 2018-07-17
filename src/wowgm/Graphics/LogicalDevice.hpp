@@ -12,6 +12,7 @@ namespace wowgm::graphics
     class Semaphore;
     class CommandBuffer;
     class Fence;
+    class CommandPool;
     struct QueueFamilyIndices;
 
     /*
@@ -30,17 +31,21 @@ namespace wowgm::graphics
         friend LogicalDevice* Instance::CreateLogicalDevice();
         LogicalDevice(VkDevice device, QueueFamilyIndices& indices);
 
+        LogicalDevice(LogicalDevice&&) = delete;
+        LogicalDevice(const LogicalDevice&) = delete;
+
     public:
         ~LogicalDevice();
 
         LogicalDevice() = delete;
-        LogicalDevice(LogicalDevice const&) = delete;
-        LogicalDevice(LogicalDevice&&) = delete;
 
         Queue* GetGraphicsQueue();
+
         Queue* GetPresentQueue();
 
         void Draw(SwapChain* swapChain);
+
+        void AddCommandBuffer(CommandBuffer* buffer);
 
         operator VkDevice() const { return _device; }
 

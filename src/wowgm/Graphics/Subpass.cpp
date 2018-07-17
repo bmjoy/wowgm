@@ -5,7 +5,7 @@ namespace wowgm::graphics
 
     Subpass::Subpass(VkPipelineBindPoint bindPoint) : _bindPoint(bindPoint)
     {
-
+        _depthStencilAttachment = nullptr;
     }
 
     Subpass::~Subpass()
@@ -23,7 +23,6 @@ namespace wowgm::graphics
         _colorAttachments.push_back(color);
     }
 
-
     void Subpass::AddResolve(VkAttachmentReference resolve)
     {
         _resolveAttachments.push_back(resolve);
@@ -31,6 +30,7 @@ namespace wowgm::graphics
 
     void Subpass::Finalize()
     {
+        _subpassDescription = { };
         _subpassDescription.pipelineBindPoint = _bindPoint;
         _subpassDescription.flags = 0;
 

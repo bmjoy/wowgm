@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vulkan/vulkan.h>
 #include <type_traits>
+#include <vulkan/vulkan.h>
 
 namespace wowgm::graphics
 {
@@ -15,6 +15,8 @@ namespace wowgm::graphics
         friend class CommandPool;
 
         CommandBuffer(VkCommandBuffer buffer);
+        CommandBuffer(CommandBuffer&&) = delete;
+        CommandBuffer(const CommandBuffer&) = delete;
 
     public:
         ~CommandBuffer();
@@ -22,13 +24,14 @@ namespace wowgm::graphics
         operator VkCommandBuffer() const { return _commandBuffer; }
 
     public: /* Recording */
-        void EnqueueCommand(Command* command);
-        void BeginRenderPass(RenderPass* renderPass, FrameBuffer* buffer);
+        void BeginRecording(VkCommandBufferUsageFlagBits usageFlags);
+        void FinishRecording();
 
         template <typename T, typename... Args, typename std::enable_if<std::is_base_of<Command, T>::value, int>::type = 0>
-        void Enqueue(Args&&... args)
+        void Record(Args&&... args)
         {
-            EnqueueCommand(new T(std::forward<Args>(args)...));
+            T command(std::forward<Args>(args)...);
+            command.Enqueue(this);
         }
 
     private:

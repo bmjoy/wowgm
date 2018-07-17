@@ -6,6 +6,8 @@
 #include "Image.hpp"
 #include "ImageView.hpp"
 #include "Assert.hpp"
+#include "FrameBuffer.hpp"
+#include "Pipeline.hpp"
 
 #undef min
 #undef max
@@ -188,7 +190,6 @@ namespace wowgm::graphics
     {
         return _physicalDevice->GetInstance()->GetLogicalDevice();
     }
-
 
     Image* SwapChain::GetImage(std::uint32_t index)
     {

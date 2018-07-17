@@ -10,6 +10,8 @@ namespace wowgm::graphics
 {
     RenderPass::RenderPass(LogicalDevice* device) : _device(device)
     {
+        _renderPass = VK_NULL_HANDLE;
+
         VkSubpassDependency dependency = {};
         dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
         dependency.dstSubpass = 0;
@@ -78,12 +80,11 @@ namespace wowgm::graphics
 
         renderPassInfo.subpassCount = _subpasses.size();
 
-        auto subpassTransformer = [](Subpass* pass) -> VkSubpassDescription { return *pass; };
+        auto subpassTransformer = [](Subpass* pass) -> VkSubpassDescription { pass->Finalize(); return *pass; };
         auto itr = boost::iterators::make_transform_iterator(_subpasses.begin(), subpassTransformer);
         auto end = boost::iterators::make_transform_iterator(_subpasses.end(), subpassTransformer);
 
-        std::vector<VkSubpassDescription> descriptions(_subpasses.size());
-        descriptions.insert(descriptions.begin(), itr, end);
+        std::vector<VkSubpassDescription> descriptions(itr, end);
         renderPassInfo.pSubpasses = descriptions.data();
 
         renderPassInfo.dependencyCount = _subpassDependencies.size();

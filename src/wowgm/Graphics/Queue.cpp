@@ -1,5 +1,6 @@
 #include "Queue.hpp"
 #include "LogicalDevice.hpp"
+#include "CommandPool.hpp"
 
 namespace wowgm::graphics
 {
@@ -21,5 +22,16 @@ namespace wowgm::graphics
     LogicalDevice* Queue::GetDevice()
     {
         return _device;
+    }
+
+    CommandPool* Queue::GetCommandPool(VkCommandPoolCreateFlags createFlags)
+    {
+        auto itr = _commandPool.at(createFlags);
+        if (itr != nullptr)
+            return itr;
+
+        auto newPool = new CommandPool(this, createFlags);
+        _commandPool[createFlags] = newPool;
+        return newPool;
     }
 }

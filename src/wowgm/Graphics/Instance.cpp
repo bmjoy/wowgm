@@ -89,10 +89,10 @@ namespace wowgm::graphics
         if (result != VK_SUCCESS)
             wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to initialize Vulkan!"));
 
-        return std::make_unique<Instance>(instance);
+        return std::make_unique<Instance>(ctor_tag(), instance);
     }
 
-    Instance::Instance(VkInstance instance) : _instance(instance)
+    Instance::Instance(Instance::ctor_tag, VkInstance instance) : _instance(instance)
     {
         _surface = VK_NULL_HANDLE;
     }
@@ -206,11 +206,6 @@ namespace wowgm::graphics
         }
     }
 
-    PhysicalDevice* Instance::GetPhysicalDevice(std::uint32_t index)
-    {
-        return _physicalDevices[index].get();
-    }
-
     void Instance::SetupDebugCallback()
     {
 #ifdef ENABLE_VALIDATION_LAYERS
@@ -226,7 +221,7 @@ namespace wowgm::graphics
 
     PhysicalDevice* Instance::GetPhysicalDevice()
     {
-        return GetPhysicalDevice(_selectedPhysicalDevice);
+        return _physicalDevices[_selectedPhysicalDevice].get();
     }
 
     namespace details

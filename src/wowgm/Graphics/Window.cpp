@@ -39,9 +39,12 @@ namespace wowgm::graphics
 
     void Window::Execute()
     {
-        // Also plug ourselves in here.
-        while (!glfwWindowShouldClose(_window))
-            glfwPollEvents();
+        glfwPollEvents();
+    }
+
+    bool Window::ShouldClose()
+    {
+        return glfwWindowShouldClose(_window);
     }
 
     void Window::Cleanup()

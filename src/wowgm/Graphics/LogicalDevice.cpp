@@ -23,10 +23,25 @@ namespace wowgm::graphics
             vkGetDeviceQueue(device, queueIndice, 0, &deviceQueue);
             reinterpret_cast<Queue**>(&_graphicsQueue)[i] = new Queue(this, deviceQueue, queueIndice);
         }
+
+        for (std::uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+        {
+            _imageAvailable[i] = new Semaphore(this);
+            _renderFinished[i] = new Semaphore(this);
+            _inflightFence[i] = new Fence(this);
+        }
     }
 
     LogicalDevice::~LogicalDevice()
     {
+        vkDeviceWaitIdle(_device);
+        for (std::uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+        {
+            delete _imageAvailable[i];
+            delete _renderFinished[i];
+            delete _inflightFence[i];
+        }
+
         delete _graphicsQueue;
         _graphicsQueue = nullptr;
         delete _presentQueue;
@@ -48,9 +63,13 @@ namespace wowgm::graphics
 
     void LogicalDevice::Draw(SwapChain* swapChain)
     {
+        VkFence currentFence = *_inflightFence[currentFrame];
+
+        VkResult result = vkWaitForFences(_device, 1, &currentFence, VK_TRUE, std::numeric_limits<std::uint64_t>::max());
+        result = vkResetFences(_device, 1, &currentFence);
+
         std::uint32_t imageIndex;
-        // TODO: Fix the swapchain here
-        vkAcquireNextImageKHR(_device, *swapChain, std::numeric_limits<std::uint64_t>::max(), *_imageAvailable[currentFrame], VK_NULL_HANDLE, &imageIndex);
+        result = vkAcquireNextImageKHR(_device, *swapChain, std::numeric_limits<std::uint64_t>::max(), *_imageAvailable[currentFrame], currentFence, &imageIndex);
 
         VkSubmitInfo submitInfo = {};
         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -61,15 +80,14 @@ namespace wowgm::graphics
         submitInfo.pWaitSemaphores = waitSemaphores;
         submitInfo.pWaitDstStageMask = waitStages;
 
-        submitInfo.commandBufferCount = 1;
+        submitInfo.commandBufferCount = _commandBuffers.size();
 
         {
             // TODO: Cache this.
             auto mutator = [](CommandBuffer* buffer) -> VkCommandBuffer { return *buffer; };
             auto itr = boost::iterators::make_transform_iterator(_commandBuffers.begin(), mutator);
             auto end = boost::iterators::make_transform_iterator(_commandBuffers.end(), mutator);
-            std::vector<VkCommandBuffer> buffers(_commandBuffers.size());
-            buffers.insert(buffers.begin(), itr, end);
+            std::vector<VkCommandBuffer> buffers(itr, end);
             submitInfo.pCommandBuffers = buffers.data();
         }
 
@@ -77,7 +95,8 @@ namespace wowgm::graphics
         submitInfo.signalSemaphoreCount = 1;
         submitInfo.pSignalSemaphores = signalSemaphores;
 
-        if (vkQueueSubmit(*_graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS)
+        result = vkQueueSubmit(*_graphicsQueue, 1, &submitInfo, currentFence);
+        if (result != VK_SUCCESS)
             wowgm::exceptions::throw_with_trace(std::runtime_error("Failed to submit a draw command buffer!"));
 
         VkPresentInfoKHR presentInfo = {};
@@ -91,9 +110,14 @@ namespace wowgm::graphics
         presentInfo.pSwapchains = swapChains;
         presentInfo.pImageIndices = &imageIndex;
 
-        vkQueuePresentKHR(*_presentQueue, &presentInfo);
-        vkQueueWaitIdle(*_presentQueue); // Fix me with flight frames
+        result = vkQueuePresentKHR(*_presentQueue, &presentInfo);
+        result = vkQueueWaitIdle(*_presentQueue); // Fix me with flight frames
 
         currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+    }
+
+    void LogicalDevice::AddCommandBuffer(CommandBuffer* buffer)
+    {
+        _commandBuffers.push_back(buffer);
     }
 }

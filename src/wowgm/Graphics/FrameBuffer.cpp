@@ -11,11 +11,24 @@
 
 namespace wowgm::graphics
 {
+    FrameBuffer::FrameBuffer(RenderPass* renderPass, SwapChain* swapChain) : _renderPass(renderPass), _swapChain(swapChain)
+    {
+        _frameBuffer = VK_NULL_HANDLE;
+    }
 
     FrameBuffer::~FrameBuffer()
     {
-        vkDestroyFramebuffer(*_swapChain->GetLogicalDevice(), _frameBuffer, nullptr);
+        if (_frameBuffer != VK_NULL_HANDLE)
+            vkDestroyFramebuffer(*_swapChain->GetLogicalDevice(), _frameBuffer, nullptr);
         _frameBuffer = VK_NULL_HANDLE;
+
+        _renderPass = nullptr;
+        _swapChain = nullptr;
+    }
+
+    void FrameBuffer::AttachImageView(ImageView* imageView)
+    {
+        _attachments.push_back(imageView);
     }
 
     void FrameBuffer::Finalize()
@@ -30,8 +43,7 @@ namespace wowgm::graphics
         auto transform = [](ImageView* view) -> VkImageView { return *view; };
         auto itr = boost::iterators::make_transform_iterator(_attachments.begin(), transform);
         auto end = boost::iterators::make_transform_iterator(_attachments.end(), transform);
-        std::vector<VkImageView> attachments(_attachments.size());
-        attachments.insert(attachments.begin(), itr, end);
+        std::vector<VkImageView> attachments(itr, end);
 
         framebufferInfo.attachmentCount = attachments.size();
         framebufferInfo.pAttachments = attachments.data();
@@ -44,5 +56,10 @@ namespace wowgm::graphics
 
         if (vkCreateFramebuffer(*_swapChain->GetLogicalDevice(), &framebufferInfo, nullptr, &_frameBuffer) != VK_SUCCESS)
             wowgm::exceptions::throw_with_trace(std::runtime_error("failed to create framebuffer!"));
+    }
+
+    RenderPass* FrameBuffer::GetRenderPass()
+    {
+        return _renderPass;
     }
 }

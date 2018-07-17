@@ -1,8 +1,8 @@
 #pragma once
 
-#include <vulkan/vulkan.h>
 #include <cstdint>
 #include <vector>
+#include <vulkan/vulkan.h>
 
 namespace wowgm::graphics
 {
@@ -58,6 +58,7 @@ namespace wowgm::graphics
         VkPhysicalDevice _device;
         VkPhysicalDeviceProperties _deviceProperties;
         VkPhysicalDeviceFeatures _deviceFeatures;
+        VkPhysicalDeviceMemoryProperties _deviceMemoryProperties;
 
         QueueFamilyIndices _queueFamilyIndices;
 
@@ -65,7 +66,6 @@ namespace wowgm::graphics
         std::vector<VkSurfaceFormatKHR> _surfaceFormats;
         std::vector<VkPresentModeKHR> _surfacePresentModes;
 
-        VkPhysicalDeviceMemoryProperties _deviceMemoryProperties;
 
         std::uint32_t _deviceScore;
     };

@@ -9,12 +9,12 @@ namespace wowgm::graphics
 
     class ImageView
     {
+        ImageView(ImageView&&) = delete;
+        ImageView(const ImageView&) = delete;
+
     public:
         ImageView(SwapChain* swapChain, Image* image);
         ~ImageView();
-
-        ImageView(ImageView&&) = delete;
-        ImageView(ImageView const&) = delete;
 
         operator VkImageView() const { return _imageView; }
 

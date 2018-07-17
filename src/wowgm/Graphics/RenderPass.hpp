@@ -11,17 +11,20 @@ namespace wowgm::graphics
 
     class RenderPass
     {
-    public:
-        RenderPass(LogicalDevice* device);
-        ~RenderPass();
-
         RenderPass(RenderPass&&) = delete;
         RenderPass(RenderPass const&) = delete;
+
+    public:
+
+        RenderPass(LogicalDevice* device);
+        ~RenderPass();
 
         void Finalize();
 
         void AddSubpassDependency(VkSubpassDependency dependency);
+
         void AddSubpass(Subpass* subpass);
+
         void AddAttachment(VkAttachmentDescription attachment);
 
         operator VkRenderPass() const { return _renderPass; }

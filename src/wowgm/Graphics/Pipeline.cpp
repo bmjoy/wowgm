@@ -20,17 +20,13 @@ namespace wowgm::graphics
         return;
     }
 
-    Pipeline::Pipeline(SwapChain* swapChain) : _swapchain(swapChain)
+    Pipeline::Pipeline(SwapChain* swapChain, RenderPass* renderPass) : _swapchain(swapChain), _renderPass(renderPass)
     {
         _useDynamicState = false;
 
         _inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
         _inputAssembly.pNext = nullptr;
         _inputAssembly.flags = 0;
-
-        _tessellationState.get_ptr()->sType = VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO;
-        _tessellationState.get_ptr()->pNext = nullptr;
-        _tessellationState.get_ptr()->flags = 0;
 
         _viewportCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
         _viewportCreateInfo.pNext = nullptr;
@@ -81,16 +77,14 @@ namespace wowgm::graphics
 
         // This requires a depth/stencil test resource to be dynamically added, so, uh, wait a bit.
         // For now, disable depth testing.
-        // _depthStencilState.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-        // _depthStencilState.pNext = nullptr;
-        // _depthStencilState.flags = 0;
-        // _depthStencilState.depthTestEnable = VK_TRUE;
-        // _depthStencilState.stencilTestEnable = VK_FALSE;
+        _depthStencilState.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+        _depthStencilState.pNext = nullptr;
+        _depthStencilState.flags = 0;
+        _depthStencilState.depthTestEnable = VK_TRUE;
+        _depthStencilState.stencilTestEnable = VK_FALSE;
 
         //! TODO: Blending
         //! TODO: Dynamic state
-
-        _renderPass = new RenderPass(swapChain->GetLogicalDevice());
     }
 
     Pipeline::~Pipeline()
@@ -98,8 +92,30 @@ namespace wowgm::graphics
 
     }
 
+
+    RenderPass* Pipeline::GetRenderPass()
+    {
+        return _renderPass;
+    }
+
+    void Pipeline::AddShader(Shader* shader)
+    {
+        _shaders.push_back(shader);
+    }
+
     void Pipeline::Finalize()
     {
+        _renderPass->Finalize();
+
+        _vertexInputState = {};
+        _vertexInputState.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+        _vertexInputState.vertexBindingDescriptionCount = _vertexBindingDescriptions.size();
+        _vertexInputState.pVertexBindingDescriptions = _vertexBindingDescriptions.data();
+        _vertexInputState.vertexAttributeDescriptionCount = _vertexAttributeDescriptions.size();
+        _vertexInputState.pVertexAttributeDescriptions = _vertexAttributeDescriptions.data();
+
+        // Preparation done, create the pipeline
+
         if (_useDynamicState)
         {
             // Cookbook, page 791/1166
@@ -114,21 +130,22 @@ namespace wowgm::graphics
         pipelineLayoutInfo.pSetLayouts = _descriptorSets.data();
         pipelineLayoutInfo.setLayoutCount = _descriptorSets.size();
 
-        if (vkCreatePipelineLayout(*_swapchain->GetLogicalDevice(), &pipelineLayoutInfo, nullptr, &_pipelineLayout) != VK_SUCCESS)
+        VkResult result = vkCreatePipelineLayout(*_swapchain->GetLogicalDevice(), &pipelineLayoutInfo, nullptr, &_pipelineLayout);
+        if (result != VK_SUCCESS)
             wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create a pipeline layout!"));
 
         // Cookbook, page 801/1166
         _graphicsPipelineCreateInfo = { };
         _graphicsPipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-        _graphicsPipelineCreateInfo.stageCount = 2;
 
         {
-            auto shaderMutator = [](Shader* s) -> VkPipelineShaderStageCreateInfo { return s->GetVkShaderStageInfo(); };
+            auto shaderMutator = [](Shader* s) {
+                return s->GetVkShaderStageInfo();
+            };
             auto itr = boost::iterators::make_transform_iterator(_shaders.begin(), shaderMutator);
-            auto end = boost::iterators::make_transform_iterator(_shaders.begin(), shaderMutator);
+            auto end = boost::iterators::make_transform_iterator(_shaders.end(), shaderMutator);
 
-            std::vector<VkPipelineShaderStageCreateInfo> shaderStages(_shaders.size());
-            shaderStages.insert(shaderStages.begin(), itr, end);
+            std::vector<VkPipelineShaderStageCreateInfo> shaderStages(itr, end);
 
             _graphicsPipelineCreateInfo.stageCount = shaderStages.size();
             _graphicsPipelineCreateInfo.pStages = shaderStages.data();
@@ -153,9 +170,12 @@ namespace wowgm::graphics
 
         _graphicsPipelineCreateInfo.layout = _pipelineLayout;
         _graphicsPipelineCreateInfo.renderPass = *_renderPass;
+        _graphicsPipelineCreateInfo.subpass = 0;
         _graphicsPipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-        _graphicsPipelineCreateInfo.renderPass = *_renderPass;
+        result = vkCreateGraphicsPipelines(*_swapchain->GetLogicalDevice(), VK_NULL_HANDLE, 1, &_graphicsPipelineCreateInfo, nullptr, &_pipeline);
+        if (result != VK_SUCCESS)
+            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create pipeline"));
     }
 
     void Pipeline::SetWireframe(bool wireframe)
@@ -202,6 +222,12 @@ namespace wowgm::graphics
 
     void Pipeline::SetTessellationControlPoints(std::uint32_t controlPoints)
     {
+        if (!_tessellationState.is_initialized())
+        {
+            _tessellationState = VkPipelineTessellationStateCreateInfo { };
+            _tessellationState->sType = VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO;
+        }
+
         _tessellationState.get_ptr()->patchControlPoints = controlPoints;
     }
 

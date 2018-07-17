@@ -6,10 +6,12 @@
 #include <boost/filesystem/fstream.hpp>
 
 #include <vector>
+#include <fstream>
+#include <stdexcept>
 
 namespace wowgm::graphics
 {
-    Shader::Shader(LogicalDevice* device, VkShaderStageFlagBits stage, const std::string& entryPointName, const std::string& fileName) : _logicalDevice(device)
+    Shader::Shader(LogicalDevice* device, VkShaderStageFlagBits stage, const std::string& entryPointName, const std::string& fileName) : _logicalDevice(device), _name(entryPointName)
     {
         std::ifstream fs(fileName, std::ios::binary);
         if (!fs.is_open())
@@ -32,9 +34,11 @@ namespace wowgm::graphics
             wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create shader module"));
 
         _shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+        _shaderStageInfo.pNext = nullptr;
+        _shaderStageInfo.flags = 0;
         _shaderStageInfo.stage = stage;
         _shaderStageInfo.module = _shaderModule;
-        _shaderStageInfo.pName = entryPointName.c_str();
+        _shaderStageInfo.pName = _name.c_str();
         _shaderStageInfo.pSpecializationInfo = nullptr;
 
         // Specialization constants are a mechanism whereby constants in a SPIR-V module can have their constant value

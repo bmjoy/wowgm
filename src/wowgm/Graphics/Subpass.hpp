@@ -9,20 +9,22 @@ namespace wowgm::graphics
 {
     class Subpass
     {
+        Subpass(Subpass&&) = delete;
+        Subpass(const Subpass&) = delete;
+
     public:
         Subpass(VkPipelineBindPoint bindPoint);
         ~Subpass();
 
-        Subpass(Subpass&&) = delete;
-        Subpass(Subpass const&) = delete;
-
         void Finalize();
 
-        operator VkSubpassDescription() const { return _subpassDescription; }
-
         void AddInput(VkAttachmentReference ref);
+
         void AddColor(VkAttachmentReference color);
+
         void AddResolve(VkAttachmentReference resolve);
+
+        operator VkSubpassDescription() const { return _subpassDescription; }
 
     private:
         VkSubpassDescription _subpassDescription;

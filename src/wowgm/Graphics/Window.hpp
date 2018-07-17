@@ -22,6 +22,8 @@ namespace wowgm::graphics
         void Execute();
         void Cleanup();
 
+        bool ShouldClose();
+
         GLFWwindow* GetHandle();
 
         std::uint32_t GetWidth();

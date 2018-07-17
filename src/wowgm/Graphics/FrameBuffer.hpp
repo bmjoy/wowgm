@@ -1,8 +1,7 @@
 #pragma once
 
-#include <vulkan/vulkan.h>
-
 #include <vector>
+#include <vulkan/vulkan.h>
 
 namespace wowgm::graphics
 {
@@ -12,13 +11,20 @@ namespace wowgm::graphics
 
     class FrameBuffer
     {
-    public:
+        FrameBuffer(FrameBuffer&&) = delete;
+        FrameBuffer(const FrameBuffer&) = delete;
 
+    public:
+        FrameBuffer(RenderPass* renderPass, SwapChain* swapChain);
         ~FrameBuffer();
 
         void Finalize();
 
         operator VkFramebuffer() const { return _frameBuffer; }
+
+        void AttachImageView(ImageView* imageView);
+
+        RenderPass* GetRenderPass();
 
     private:
         VkFramebuffer _frameBuffer;

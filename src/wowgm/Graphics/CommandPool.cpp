@@ -8,7 +8,7 @@
 
 namespace wowgm::graphics
 {
-    CommandPool::CommandPool(Queue* assignedQueue, VkCommandPoolCreateFlags createFlags) : _assignedQueue(assignedQueue)
+    CommandPool::CommandPool(Queue* assignedQueue, VkCommandPoolCreateFlags createFlags) : _assignedQueue(assignedQueue), _createFlags(createFlags)
     {
         VkCommandPoolCreateInfo poolInfo = {};
         poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -23,6 +23,11 @@ namespace wowgm::graphics
     {
         vkDestroyCommandPool(*_assignedQueue->GetDevice(), _commandPool, nullptr);
         _assignedQueue = nullptr;
+    }
+
+    VkCommandPoolCreateFlags CommandPool::GetCreateFlags()
+    {
+        return _createFlags;
     }
 
     ///! TODO: performance probably scales with the amount of buffers allocated at once

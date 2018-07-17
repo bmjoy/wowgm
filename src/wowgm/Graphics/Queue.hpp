@@ -1,12 +1,13 @@
 #pragma once
 
-#include <vulkan/vulkan.h>
-
 #include <cstdint>
+#include <unordered_map>
+#include <vulkan/vulkan.h>
 
 namespace wowgm::graphics
 {
     class LogicalDevice;
+    class CommandPool;
 
     /*
      * In Vulkan, when we want to perform operations on hardware, we submit them to queues. The operations within a
@@ -23,19 +24,26 @@ namespace wowgm::graphics
      */
     class Queue
     {
+        Queue(Queue&&) = delete;
+        Queue(const Queue&) = delete;
+
     public:
+
         Queue(LogicalDevice* device, VkQueue queue, std::uint32_t indice);
+
         ~Queue();
 
-        Queue(Queue const&) = delete;
+        std::uint32_t GetFamilyIndice();
+
+        LogicalDevice* GetDevice();
+
+        CommandPool* GetCommandPool(VkCommandPoolCreateFlags createFlags = 0);
 
         operator VkQueue() const { return _queue; }
 
-        std::uint32_t GetFamilyIndice();
-        LogicalDevice* GetDevice();
-
     private:
         LogicalDevice* _device;
+        std::unordered_map<VkCommandPoolCreateFlags, CommandPool*> _commandPool;
 
         VkQueue _queue;
         std::uint32_t _indice;

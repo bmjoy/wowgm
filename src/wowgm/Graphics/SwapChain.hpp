@@ -11,16 +11,16 @@ namespace wowgm::graphics
     class ImageView;
     class Image;
     class FrameBuffer;
+    class Pipeline;
 
     class SwapChain
     {
+        SwapChain(SwapChain&&) = delete;
+        SwapChain(SwapChain const&) = delete;
+
     public:
         SwapChain(PhysicalDevice* device);
         ~SwapChain();
-
-        SwapChain(SwapChain&&) = delete;
-        SwapChain(SwapChain const&) = delete;
-        operator VkSwapchainKHR() const { return _swapChain; }
 
         VkSurfaceFormatKHR GetSurfaceFormat();
         VkPresentModeKHR GetPresentMode();
@@ -31,6 +31,8 @@ namespace wowgm::graphics
 
         Image* GetImage(std::uint32_t index);
         ImageView* GetImageView(std::uint32_t index);
+
+        operator VkSwapchainKHR() const { return _swapChain; }
 
     private:
         void _SelectFormat();
@@ -48,6 +50,5 @@ namespace wowgm::graphics
 
         std::vector<Image*> _swapChainImages;
         std::vector<ImageView*> _imageViews;
-        std::vector<FrameBuffer*> _frameBuffers;
     };
 }

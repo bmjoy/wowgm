@@ -124,10 +124,20 @@ int main(int argc, char* argv[])
 #include "SwapChain.hpp"
 #include "PhysicalDevice.hpp"
 #include "Assert.hpp"
+#include "Shader.hpp"
+#include "Pipeline.hpp"
+#include "FrameBuffer.hpp"
+#include "Queue.hpp"
+#include "CommandPool.hpp"
+#include "CommandBuffer.hpp"
+#include "Command.hpp"
+#include "RenderPass.hpp"
+#include "FrameBuffer.hpp"
 
 #include <iostream>
 #include <boost/stacktrace.hpp>
 #include <boost/exception/all.hpp>
+#include <vulkan/vulkan.h>
 
 int main()
 {
@@ -142,11 +152,50 @@ int main()
 
         Surface* surface = instance->CreateSurface(window); // Owned by instance
         LogicalDevice* device = instance->CreateLogicalDevice(); // Owned by instance
-        SwapChain* swapchain = new SwapChain(instance->GetPhysicalDevice());
+        SwapChain* swapChain = new SwapChain(instance->GetPhysicalDevice());
+        RenderPass* renderPass = new RenderPass(device);
+        Pipeline* pipeline = new Pipeline(swapChain, renderPass);
+        FrameBuffer* frameBuffer = new FrameBuffer(renderPass, swapChain);
+        frameBuffer->AttachImageView(swapChain->GetImageView(0));
 
-        window->Execute();
+        Shader* vertexShader = Shader::CreateVertexShader(device, "main", "C:\\Users\\Vincent Piquet\\source\\repos\\WowGM\\src\\wowgm\\Shaders\\vert.spv");
+        Shader* fragmentShader = Shader::CreateFragmentShader(device, "main", "C:\\Users\\Vincent Piquet\\source\\repos\\WowGM\\src\\wowgm\\Shaders\\frag.spv");
 
-        delete swapchain;
+        VkAttachmentDescription colorAttachment = {};
+        colorAttachment.format = swapChain->GetSurfaceFormat().format;
+        colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+        colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+        colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+        renderPass->AddAttachment(colorAttachment);
+
+        pipeline->SetDepthTest(false);
+        pipeline->SetStencilTest(false);
+        pipeline->SetWireframe(false);
+        pipeline->SetPrimitiveType(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+        pipeline->AddShader(vertexShader);
+        pipeline->AddShader(fragmentShader);
+        pipeline->Finalize();
+
+        frameBuffer->Finalize();
+
+        CommandBuffer* drawBuffer = device->GetGraphicsQueue()->GetCommandPool()->AllocatePrimaryBuffer();
+        drawBuffer->BeginRecording(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
+        drawBuffer->Record<BeginRenderPassCommand>(frameBuffer->GetRenderPass(), frameBuffer, swapChain->GetExtent());
+        drawBuffer->Record<BindPipelineCommand>(VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+        drawBuffer->Record<EndRenderPassCommand>();
+        drawBuffer->FinishRecording();
+
+        while (!window->ShouldClose())
+        {
+            window->Execute();
+            device->Draw(swapChain);
+        }
+
+        delete swapChain;
         instance.reset();
 
         window->Cleanup();

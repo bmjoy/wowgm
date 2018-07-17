@@ -6,12 +6,12 @@ namespace wowgm::graphics
 {
     class Image
     {
+        Image(Image&&) = default;
+        Image(const Image&) = delete;
+
     public:
         Image(VkImage image);
         Image();
-
-        Image(Image&&) = default;
-        Image(Image const&) = delete;
 
         ~Image() = default;
 

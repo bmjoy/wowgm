@@ -6,7 +6,6 @@
 #include <vector>
 #include <cstdint>
 #include <memory>
-
 #include <vulkan/vulkan.h>
 
 namespace wowgm::graphics
@@ -20,22 +19,26 @@ namespace wowgm::graphics
 
     class Instance
     {
-    public:
-        Instance(VkInstance instance);
-        static std::unique_ptr<Instance> Create(const char* applicationName, const char* engineName);
-        ~Instance();
-
         Instance(Instance&&) = delete;
-        Instance(Instance const&) = delete;
+        Instance(const Instance&) = delete;
+
+        struct ctor_tag { };
+
+    public:
+        static std::unique_ptr<Instance> Create(const char* applicationName, const char* engineName);
+
+        explicit Instance(ctor_tag, VkInstance instance);
+
+        ~Instance();
 
         void SetupDebugCallback();
 
-        PhysicalDevice* GetPhysicalDevice(std::uint32_t index);
         PhysicalDevice* GetPhysicalDevice();
 
         Surface* CreateSurface(Window* window);
 
         LogicalDevice* CreateLogicalDevice();
+
         LogicalDevice* GetLogicalDevice();
 
         operator VkInstance() const { return _instance; }
@@ -44,17 +47,16 @@ namespace wowgm::graphics
         void _SelectPhysicalDevice();
 
     private:
-        LogicalDevice* _logicalDevice;
-
-        std::uint32_t _selectedPhysicalDevice;
-        std::vector<std::unique_ptr<PhysicalDevice>> _physicalDevices;
-
         VkInstance _instance;
+
+        LogicalDevice* _logicalDevice;
         Surface* _surface;
 
 #ifdef ENABLE_VALIDATION_LAYERS
         VkDebugReportCallbackEXT _debugReportCallback;
 #endif
 
+        std::uint32_t _selectedPhysicalDevice;
+        std::vector<std::unique_ptr<PhysicalDevice>> _physicalDevices;
     };
 }
