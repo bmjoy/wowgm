@@ -82,14 +82,12 @@ namespace wowgm::graphics
 
         submitInfo.commandBufferCount = _commandBuffers.size();
 
-        {
-            // TODO: Cache this.
-            auto mutator = [](CommandBuffer* buffer) -> VkCommandBuffer { return *buffer; };
-            auto itr = boost::iterators::make_transform_iterator(_commandBuffers.begin(), mutator);
-            auto end = boost::iterators::make_transform_iterator(_commandBuffers.end(), mutator);
-            std::vector<VkCommandBuffer> buffers(itr, end);
-            submitInfo.pCommandBuffers = buffers.data();
-        }
+        // TODO: Cache this.
+        auto mutator = [](CommandBuffer* buffer) -> VkCommandBuffer { return *buffer; };
+        auto itr = boost::iterators::make_transform_iterator(_commandBuffers.begin(), mutator);
+        auto end = boost::iterators::make_transform_iterator(_commandBuffers.end(), mutator);
+        std::vector<VkCommandBuffer> buffers(itr, end);
+        submitInfo.pCommandBuffers = buffers.data();
 
         VkSemaphore signalSemaphores[] = { *_renderFinished[currentFrame] };
         submitInfo.signalSemaphoreCount = 1;

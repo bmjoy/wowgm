@@ -179,10 +179,52 @@ namespace wowgm::graphics
         return ss.str();
     }
 
+    namespace details
+    {
+        template <typename T>
+        std::ostream& stream(std::ostream& ss, T const& t)
+        {
+            ss << t;
+            return ss;
+        }
+
+        template <typename T, size_t N>
+        std::ostream& stream(std::ostream& ss, T const (&n)[N])
+        {
+            ss << "{\n        [0] = ";
+            stream(ss, n[0]);
+            ss << ",\n        ";
+            for (int i = 1; i < N; ++i)
+            {
+                ss << "[" << i << "] = ";
+                stream(ss, n[i]);
+                ss << ",\n";
+            }
+            ss << "    }";
+            ss.flush();
+            return ss;
+        }
+
+        template <>
+        std::ostream& stream<VkDeviceSize>(std::ostream& ss, VkDeviceSize const& deviceSize)
+        {
+            static const int unit = 1024;
+            if (deviceSize < unit)
+                ss << static_cast<int>(deviceSize) << " B";
+            else
+            {
+                auto exp = static_cast<std::int32_t>(std::log(deviceSize) / std::log(unit));
+                char pre = "KMGTPE"[exp - 1];
+                ss << static_cast<float>(deviceSize / std::pow(unit, exp)) << ' ' << pre << "iB";
+            }
+            return ss;
+        }
+    }
+
     void PhysicalDevice::ToString(std::stringstream& ss)
     {
         ss << _deviceProperties.deviceName << std::endl;
-#define PRINT_LIMIT(name) { ss << "    " << #name << " : " << _deviceProperties.limits.name << std::endl; }
+#define PRINT_LIMIT(name) { ss << "    " << #name << " : "; details::stream(ss, _deviceProperties.limits.name); ss << std::endl; }
 
         PRINT_LIMIT(maxImageDimension1D);
         PRINT_LIMIT(maxImageDimension2D);
@@ -236,9 +278,9 @@ namespace wowgm::graphics
         PRINT_LIMIT(maxFragmentDualSrcAttachments);
         PRINT_LIMIT(maxFragmentCombinedOutputResources);
         PRINT_LIMIT(maxComputeSharedMemorySize);
-        // PRINT_LIMIT(maxComputeWorkGroupCount[3]);
+        PRINT_LIMIT(maxComputeWorkGroupCount);
         PRINT_LIMIT(maxComputeWorkGroupInvocations);
-        // PRINT_LIMIT(maxComputeWorkGroupSize[3]);
+        PRINT_LIMIT(maxComputeWorkGroupSize);
         PRINT_LIMIT(subPixelPrecisionBits);
         PRINT_LIMIT(subTexelPrecisionBits);
         PRINT_LIMIT(mipmapPrecisionBits);
@@ -247,8 +289,8 @@ namespace wowgm::graphics
         PRINT_LIMIT(maxSamplerLodBias);
         PRINT_LIMIT(maxSamplerAnisotropy);
         PRINT_LIMIT(maxViewports);
-        // PRINT_LIMIT(maxViewportDimensions[2]);
-        // PRINT_LIMIT(viewportBoundsRange[2]);
+        PRINT_LIMIT(maxViewportDimensions);
+        PRINT_LIMIT(viewportBoundsRange);
         PRINT_LIMIT(viewportSubPixelBits);
         PRINT_LIMIT(minMemoryMapAlignment);
         PRINT_LIMIT(minTexelBufferOffsetAlignment);
@@ -281,8 +323,8 @@ namespace wowgm::graphics
         PRINT_LIMIT(maxCullDistances);
         PRINT_LIMIT(maxCombinedClipAndCullDistances);
         PRINT_LIMIT(discreteQueuePriorities);
-        // PRINT_LIMIT(pointSizeRange[2]);
-        // PRINT_LIMIT(lineWidthRange[2]);
+        PRINT_LIMIT(pointSizeRange);
+        PRINT_LIMIT(lineWidthRange);
         PRINT_LIMIT(pointSizeGranularity);
         PRINT_LIMIT(lineWidthGranularity);
         PRINT_LIMIT(strictLines);
