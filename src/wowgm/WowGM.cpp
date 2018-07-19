@@ -154,6 +154,8 @@ int main()
         LogicalDevice* device = instance->CreateLogicalDevice(); // Owned by instance
         SwapChain* swapChain = new SwapChain(instance->GetPhysicalDevice());
 
+        std::cout << instance->ToString();
+
         RenderPass* renderPass = new RenderPass(device);
         VkAttachmentDescription colorAttachment = {};
         colorAttachment.format = swapChain->GetSurfaceFormat().format;

@@ -26,9 +26,9 @@ namespace wowgm::graphics
 
     CommandPool* Queue::GetCommandPool(VkCommandPoolCreateFlags createFlags)
     {
-        auto itr = _commandPool.at(createFlags);
-        if (itr != nullptr)
-            return itr;
+        auto itr = _commandPool.find(createFlags);
+        if (itr != _commandPool.end())
+            return itr->second;
 
         auto newPool = new CommandPool(this, createFlags);
         _commandPool[createFlags] = newPool;

@@ -6,6 +6,8 @@
 #include <vector>
 #include <cstdint>
 #include <memory>
+#include <string>
+#include <sstream>
 #include <vulkan/vulkan.h>
 
 namespace wowgm::graphics
@@ -42,6 +44,9 @@ namespace wowgm::graphics
         LogicalDevice* GetLogicalDevice();
 
         operator VkInstance() const { return _instance; }
+
+        std::string ToString();
+        void ToString(std::stringstream& ss);
 
     private:
         void _SelectPhysicalDevice();

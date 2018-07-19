@@ -33,9 +33,8 @@ namespace wowgm::graphics
         if (vkCreateShaderModule(*_logicalDevice, &createInfo, nullptr, &_shaderModule) != VK_SUCCESS)
             wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create shader module"));
 
+        _shaderStageInfo = { };
         _shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-        _shaderStageInfo.pNext = nullptr;
-        _shaderStageInfo.flags = 0;
         _shaderStageInfo.stage = stage;
         _shaderStageInfo.module = _shaderModule;
         _shaderStageInfo.pName = _name.c_str();

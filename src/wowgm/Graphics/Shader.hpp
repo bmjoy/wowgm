@@ -22,10 +22,7 @@ namespace wowgm::graphics
         Shader(LogicalDevice* device, VkShaderStageFlagBits stage, const std::string& entryPointName, const std::string& fileName);
         ~Shader();
 
-        VkShaderModule GetVkShaderModule() { return _shaderModule; }
-        VkPipelineShaderStageCreateInfo& GetVkShaderStageInfo() { return _shaderStageInfo; }
-
-        operator VkShaderModule() const { return _shaderModule; }
+        operator VkPipelineShaderStageCreateInfo() const { return _shaderStageInfo; }
 
         LogicalDevice* GetLogicalDevice();
 

@@ -4,14 +4,14 @@
 # define ENABLE_VALIDATION_LAYERS
 #endif
 
-#include <vector>
+#include <array>
 #include <vulkan/vulkan.h>
 #include <type_traits>
 
 namespace wowgm::graphics::details
 {
-    extern const std::vector<const char*> requiredDeviceExtensions;
-    extern const std::vector<const char*> requiredValidationLayers;
+    extern const std::array<const char*, 1> DeviceExtensions;
+    extern const std::array<const char*, 1> ValidationLayers;
 
     template <typename T>
     struct optional_bit : std::false_type {

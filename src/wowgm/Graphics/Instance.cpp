@@ -47,8 +47,7 @@ namespace wowgm::graphics
             const char* layerPrefix, const char* msg,
             void* userData)
         {
-            // TOOD: LOG_GRAPHICS expands to a macro that collides with the namespace
-            // ::LOG_GRAPHICS << msg << std::endl;
+            std::cerr << msg << std::endl;
             return VK_FALSE;
         }
     }
@@ -75,8 +74,8 @@ namespace wowgm::graphics
         createInfo.ppEnabledExtensionNames = requiredExtensions.data();
 
 #ifdef ENABLE_VALIDATION_LAYERS
-        createInfo.enabledLayerCount = static_cast<std::uint32_t>(details::requiredValidationLayers.size());
-        createInfo.ppEnabledLayerNames = details::requiredValidationLayers.data();
+        createInfo.enabledLayerCount = static_cast<std::uint32_t>(details::ValidationLayers.size());
+        createInfo.ppEnabledLayerNames = details::ValidationLayers.data();
 #else
         createInfo.enabledLayerCount = 0;
 #endif
@@ -146,12 +145,12 @@ namespace wowgm::graphics
 
         createInfo.pEnabledFeatures = &GetPhysicalDevice()->GetPhysicalDeviceFeatures();
 
-        createInfo.enabledExtensionCount = static_cast<uint32_t>(details::requiredDeviceExtensions.size());
-        createInfo.ppEnabledExtensionNames = details::requiredDeviceExtensions.data();
+        createInfo.enabledExtensionCount = static_cast<uint32_t>(details::DeviceExtensions.size());
+        createInfo.ppEnabledExtensionNames = details::DeviceExtensions.data();
 
 #ifdef ENABLE_VALIDATION_LAYERS
-        createInfo.enabledLayerCount = static_cast<uint32_t>(details::requiredValidationLayers.size());
-        createInfo.ppEnabledLayerNames = details::requiredValidationLayers.data();
+        createInfo.enabledLayerCount = static_cast<uint32_t>(details::ValidationLayers.size());
+        createInfo.ppEnabledLayerNames = details::ValidationLayers.data();
 #else
         createInfo.enabledLayerCount = 0;
 #endif
@@ -224,6 +223,23 @@ namespace wowgm::graphics
         return _physicalDevices[_selectedPhysicalDevice].get();
     }
 
+    std::string Instance::ToString()
+    {
+        std::stringstream ss;
+        ToString(ss);
+        return ss.str();
+    }
+
+    void Instance::ToString(std::stringstream& ss)
+    {
+        ss << "Vulkan instance" << std::endl;
+        for (std::uint8_t i = 0; i < _physicalDevices.size(); ++i)
+        {
+            ss << "[" << std::uint32_t(i) << "] ";
+            _physicalDevices[i]->ToString(ss);
+        }
+    }
+
     namespace details
     {
         bool CheckValidationLayerSupport()
@@ -237,7 +253,7 @@ namespace wowgm::graphics
             if (vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data()) != VK_SUCCESS)
                 wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to enumerate Vulkan layers!"));
 
-            for (const char* layerName : requiredValidationLayers)
+            for (const char* layerName : ValidationLayers)
             {
                 bool layerFound = false;
                 for (const auto& layerProperties : availableLayers)

@@ -113,7 +113,8 @@ namespace wowgm::graphics
         if (_useDynamicState)
         {
             // Cookbook, page 791/1166
-            TryAddDynamicStateBit(_dynamicStates, _colorBlendState);
+            //! COLOR BLENDING IS NEEDED IF THERE IS NO RASTERIZER DISCARD
+            // TryAddDynamicStateBit(_dynamicStates, _colorBlendState);
             // TryAddDynamicStateBit(_dynamicStates, _viewportCreateInfo); // For now, force a viewport
         }
 
@@ -132,18 +133,16 @@ namespace wowgm::graphics
         _graphicsPipelineCreateInfo = { };
         _graphicsPipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 
-        {
-            auto shaderMutator = [](Shader* s) {
-                return s->GetVkShaderStageInfo();
-            };
-            auto itr = boost::iterators::make_transform_iterator(_shaders.begin(), shaderMutator);
-            auto end = boost::iterators::make_transform_iterator(_shaders.end(), shaderMutator);
+        auto shaderMutator = [](Shader* s)-> VkPipelineShaderStageCreateInfo {
+            return *s;
+        };
+        auto itr = boost::iterators::make_transform_iterator(_shaders.begin(), shaderMutator);
+        auto end = boost::iterators::make_transform_iterator(_shaders.end(), shaderMutator);
 
-            std::vector<VkPipelineShaderStageCreateInfo> shaderStages(itr, end);
+        std::vector<VkPipelineShaderStageCreateInfo> shaderStages(itr, end);
 
-            _graphicsPipelineCreateInfo.stageCount = shaderStages.size();
-            _graphicsPipelineCreateInfo.pStages = shaderStages.data();
-        }
+        _graphicsPipelineCreateInfo.stageCount = shaderStages.size();
+        _graphicsPipelineCreateInfo.pStages = shaderStages.data();
 
         _graphicsPipelineCreateInfo.pVertexInputState = &_vertexInputState;
         _graphicsPipelineCreateInfo.pInputAssemblyState = &_inputAssembly;
@@ -152,7 +151,7 @@ namespace wowgm::graphics
         _graphicsPipelineCreateInfo.pRasterizationState = &_rasterizationState;
         _graphicsPipelineCreateInfo.pMultisampleState = &_multisamplingState;
         _graphicsPipelineCreateInfo.pDepthStencilState = &_depthStencilState;
-        _graphicsPipelineCreateInfo.pColorBlendState = _colorBlendState.get_ptr();
+        _graphicsPipelineCreateInfo.pColorBlendState = &_colorBlendState;
 
         if (_useDynamicState)
         {
@@ -166,6 +165,21 @@ namespace wowgm::graphics
         _graphicsPipelineCreateInfo.renderPass = *_renderPass;
         _graphicsPipelineCreateInfo.subpass = 0; // Index of the subpass where this pipeline will be used
         _graphicsPipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
+
+        VkPipelineColorBlendAttachmentState colorBlendAttachment = { };
+        colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+        colorBlendAttachment.blendEnable = VK_FALSE;
+
+        _colorBlendState = { };
+        _colorBlendState.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+        _colorBlendState.logicOpEnable = VK_FALSE;
+        _colorBlendState.logicOp = VK_LOGIC_OP_COPY;
+        _colorBlendState.attachmentCount = 1;
+        _colorBlendState.pAttachments = &colorBlendAttachment;
+        _colorBlendState.blendConstants[0] = 0.0f;
+        _colorBlendState.blendConstants[1] = 0.0f;
+        _colorBlendState.blendConstants[2] = 0.0f;
+        _colorBlendState.blendConstants[3] = 0.0f;
 
         result = vkCreateGraphicsPipelines(*_swapchain->GetLogicalDevice(), VK_NULL_HANDLE, 1, &_graphicsPipelineCreateInfo, nullptr, &_pipeline);
         if (result != VK_SUCCESS)

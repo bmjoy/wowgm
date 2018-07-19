@@ -115,7 +115,7 @@ namespace wowgm::graphics
         std::vector<VkExtensionProperties> availableExtensions(extensionCount);
         vkEnumerateDeviceExtensionProperties(_device, nullptr, &extensionCount, availableExtensions.data());
 
-        std::set<std::string> requiredExtensions(details::requiredDeviceExtensions.begin(), details::requiredDeviceExtensions.end());
+        std::set<std::string> requiredExtensions(details::DeviceExtensions.begin(), details::DeviceExtensions.end());
 
         for (const auto& extension : availableExtensions)
             requiredExtensions.erase(extension.extensionName);
@@ -169,5 +169,128 @@ namespace wowgm::graphics
     Instance* PhysicalDevice::GetInstance()
     {
         return _surface->GetInstance();
+    }
+
+
+    std::string PhysicalDevice::ToString()
+    {
+        std::stringstream ss;
+        ToString(ss);
+        return ss.str();
+    }
+
+    void PhysicalDevice::ToString(std::stringstream& ss)
+    {
+        ss << _deviceProperties.deviceName << std::endl;
+#define PRINT_LIMIT(name) { ss << "    " << #name << " : " << _deviceProperties.limits.name << std::endl; }
+
+        PRINT_LIMIT(maxImageDimension1D);
+        PRINT_LIMIT(maxImageDimension2D);
+        PRINT_LIMIT(maxImageDimension3D);
+        PRINT_LIMIT(maxImageDimensionCube);
+        PRINT_LIMIT(maxImageArrayLayers);
+        PRINT_LIMIT(maxTexelBufferElements);
+        PRINT_LIMIT(maxUniformBufferRange);
+        PRINT_LIMIT(maxStorageBufferRange);
+        PRINT_LIMIT(maxPushConstantsSize);
+        PRINT_LIMIT(maxMemoryAllocationCount);
+        PRINT_LIMIT(maxSamplerAllocationCount);
+        PRINT_LIMIT(bufferImageGranularity);
+        PRINT_LIMIT(sparseAddressSpaceSize);
+        PRINT_LIMIT(maxBoundDescriptorSets);
+        PRINT_LIMIT(maxPerStageDescriptorSamplers);
+        PRINT_LIMIT(maxPerStageDescriptorUniformBuffers);
+        PRINT_LIMIT(maxPerStageDescriptorStorageBuffers);
+        PRINT_LIMIT(maxPerStageDescriptorSampledImages);
+        PRINT_LIMIT(maxPerStageDescriptorStorageImages);
+        PRINT_LIMIT(maxPerStageDescriptorInputAttachments);
+        PRINT_LIMIT(maxPerStageResources);
+        PRINT_LIMIT(maxDescriptorSetSamplers);
+        PRINT_LIMIT(maxDescriptorSetUniformBuffers);
+        PRINT_LIMIT(maxDescriptorSetUniformBuffersDynamic);
+        PRINT_LIMIT(maxDescriptorSetStorageBuffers);
+        PRINT_LIMIT(maxDescriptorSetStorageBuffersDynamic);
+        PRINT_LIMIT(maxDescriptorSetSampledImages);
+        PRINT_LIMIT(maxDescriptorSetStorageImages);
+        PRINT_LIMIT(maxDescriptorSetInputAttachments);
+        PRINT_LIMIT(maxVertexInputAttributes);
+        PRINT_LIMIT(maxVertexInputBindings);
+        PRINT_LIMIT(maxVertexInputAttributeOffset);
+        PRINT_LIMIT(maxVertexInputBindingStride);
+        PRINT_LIMIT(maxVertexOutputComponents);
+        PRINT_LIMIT(maxTessellationGenerationLevel);
+        PRINT_LIMIT(maxTessellationPatchSize);
+        PRINT_LIMIT(maxTessellationControlPerVertexInputComponents);
+        PRINT_LIMIT(maxTessellationControlPerVertexOutputComponents);
+        PRINT_LIMIT(maxTessellationControlPerPatchOutputComponents);
+        PRINT_LIMIT(maxTessellationControlTotalOutputComponents);
+        PRINT_LIMIT(maxTessellationEvaluationInputComponents);
+        PRINT_LIMIT(maxTessellationEvaluationOutputComponents);
+        PRINT_LIMIT(maxGeometryShaderInvocations);
+        PRINT_LIMIT(maxGeometryInputComponents);
+        PRINT_LIMIT(maxGeometryOutputComponents);
+        PRINT_LIMIT(maxGeometryOutputVertices);
+        PRINT_LIMIT(maxGeometryTotalOutputComponents);
+        PRINT_LIMIT(maxFragmentInputComponents);
+        PRINT_LIMIT(maxFragmentOutputAttachments);
+        PRINT_LIMIT(maxFragmentDualSrcAttachments);
+        PRINT_LIMIT(maxFragmentCombinedOutputResources);
+        PRINT_LIMIT(maxComputeSharedMemorySize);
+        // PRINT_LIMIT(maxComputeWorkGroupCount[3]);
+        PRINT_LIMIT(maxComputeWorkGroupInvocations);
+        // PRINT_LIMIT(maxComputeWorkGroupSize[3]);
+        PRINT_LIMIT(subPixelPrecisionBits);
+        PRINT_LIMIT(subTexelPrecisionBits);
+        PRINT_LIMIT(mipmapPrecisionBits);
+        PRINT_LIMIT(maxDrawIndexedIndexValue);
+        PRINT_LIMIT(maxDrawIndirectCount);
+        PRINT_LIMIT(maxSamplerLodBias);
+        PRINT_LIMIT(maxSamplerAnisotropy);
+        PRINT_LIMIT(maxViewports);
+        // PRINT_LIMIT(maxViewportDimensions[2]);
+        // PRINT_LIMIT(viewportBoundsRange[2]);
+        PRINT_LIMIT(viewportSubPixelBits);
+        PRINT_LIMIT(minMemoryMapAlignment);
+        PRINT_LIMIT(minTexelBufferOffsetAlignment);
+        PRINT_LIMIT(minUniformBufferOffsetAlignment);
+        PRINT_LIMIT(minStorageBufferOffsetAlignment);
+        PRINT_LIMIT(minTexelOffset);
+        PRINT_LIMIT(maxTexelOffset);
+        PRINT_LIMIT(minTexelGatherOffset);
+        PRINT_LIMIT(maxTexelGatherOffset);
+        PRINT_LIMIT(minInterpolationOffset);
+        PRINT_LIMIT(maxInterpolationOffset);
+        PRINT_LIMIT(subPixelInterpolationOffsetBits);
+        PRINT_LIMIT(maxFramebufferWidth);
+        PRINT_LIMIT(maxFramebufferHeight);
+        PRINT_LIMIT(maxFramebufferLayers);
+        PRINT_LIMIT(framebufferColorSampleCounts);
+        PRINT_LIMIT(framebufferDepthSampleCounts);
+        PRINT_LIMIT(framebufferStencilSampleCounts);
+        PRINT_LIMIT(framebufferNoAttachmentsSampleCounts);
+        PRINT_LIMIT(maxColorAttachments);
+        PRINT_LIMIT(sampledImageColorSampleCounts);
+        PRINT_LIMIT(sampledImageIntegerSampleCounts);
+        PRINT_LIMIT(sampledImageDepthSampleCounts);
+        PRINT_LIMIT(sampledImageStencilSampleCounts);
+        PRINT_LIMIT(storageImageSampleCounts);
+        PRINT_LIMIT(maxSampleMaskWords);
+        PRINT_LIMIT(timestampComputeAndGraphics);
+        PRINT_LIMIT(timestampPeriod);
+        PRINT_LIMIT(maxClipDistances);
+        PRINT_LIMIT(maxCullDistances);
+        PRINT_LIMIT(maxCombinedClipAndCullDistances);
+        PRINT_LIMIT(discreteQueuePriorities);
+        // PRINT_LIMIT(pointSizeRange[2]);
+        // PRINT_LIMIT(lineWidthRange[2]);
+        PRINT_LIMIT(pointSizeGranularity);
+        PRINT_LIMIT(lineWidthGranularity);
+        PRINT_LIMIT(strictLines);
+        PRINT_LIMIT(standardSampleLocations);
+        PRINT_LIMIT(optimalBufferCopyOffsetAlignment);
+        PRINT_LIMIT(optimalBufferCopyRowPitchAlignment);
+        PRINT_LIMIT(nonCoherentAtomSize);
+
+#undef PRINT_LIMIT
     }
 }

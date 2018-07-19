@@ -105,7 +105,7 @@ namespace wowgm::graphics
         VkPipelineRasterizationStateCreateInfo                  _rasterizationState;
         VkPipelineMultisampleStateCreateInfo                    _multisamplingState; // Multisampling is optional IFF rasterization is off.
         VkPipelineDepthStencilStateCreateInfo                   _depthStencilState;
-        boost::optional<VkPipelineColorBlendStateCreateInfo>    _colorBlendState;
+        VkPipelineColorBlendStateCreateInfo                     _colorBlendState;
 
         bool                                                    _useDynamicState;
         VkPipelineDynamicStateCreateInfo                        _dynamicState;

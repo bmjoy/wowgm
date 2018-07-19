@@ -2,6 +2,8 @@
 
 #include <cstdint>
 #include <vector>
+#include <string>
+#include <sstream>
 #include <vulkan/vulkan.h>
 
 namespace wowgm::graphics
@@ -48,6 +50,9 @@ namespace wowgm::graphics
         Instance* GetInstance();
 
         operator VkPhysicalDevice() const { return _device; }
+
+        std::string ToString();
+        void ToString(std::stringstream& ss);
 
     private:
         void _CreateSwapChainSupportDetails();
