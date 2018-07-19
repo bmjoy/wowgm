@@ -182,16 +182,20 @@ int main()
         pipeline->AddShader(fragmentShader);
         pipeline->Finalize();
 
-        FrameBuffer* frameBuffer = new FrameBuffer(renderPass, swapChain);
-        frameBuffer->AttachImageView(swapChain->GetImageView(0));
-        frameBuffer->Finalize();
+        for (int i = 0; i < 3; ++i)
+        {
+            FrameBuffer* frameBuffers = new FrameBuffer(renderPass, swapChain);
+            frameBuffers->AttachImageView(swapChain->GetImageView(i));
+            frameBuffers->Finalize();
 
-        CommandBuffer* drawBuffer = device->GetGraphicsQueue()->GetCommandPool()->AllocatePrimaryBuffer();
-        drawBuffer->BeginRecording(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
-        drawBuffer->Record<BeginRenderPassCommand>(frameBuffer->GetRenderPass(), frameBuffer, swapChain->GetExtent());
-        drawBuffer->Record<BindPipelineCommand>(VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-        drawBuffer->Record<EndRenderPassCommand>();
-        drawBuffer->FinishRecording();
+            CommandBuffer* drawBuffer = device->GetGraphicsQueue()->GetCommandPool()->AllocatePrimaryBuffer();
+            drawBuffer->BeginRecording(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
+            drawBuffer->Record<BeginRenderPassCommand>(renderPass, frameBuffers, swapChain->GetExtent());
+            drawBuffer->Record<BindPipelineCommand>(VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+            drawBuffer->Record<EndRenderPassCommand>();
+            drawBuffer->FinishRecording();
+            device->AddCommandBuffer(drawBuffer);
+        }
 
         while (!window->ShouldClose())
         {

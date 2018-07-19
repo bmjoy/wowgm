@@ -64,6 +64,6 @@ namespace wowgm::graphics
         Fence* _inflightFence[MAX_FRAMES_IN_FLIGHT];
         std::vector<CommandBuffer*> _commandBuffers;
 
-        std::uint32_t currentFrame = 0;
+        std::uint32_t _currentFrame = 0;
     };
 }

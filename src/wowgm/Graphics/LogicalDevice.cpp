@@ -63,33 +63,30 @@ namespace wowgm::graphics
 
     void LogicalDevice::Draw(SwapChain* swapChain)
     {
-        VkFence currentFence = *_inflightFence[currentFrame];
+        constexpr static const std::uint64_t MAX_TIMEOUT = std::numeric_limits<std::uint64_t>::max();
 
-        VkResult result = vkWaitForFences(_device, 1, &currentFence, VK_TRUE, std::numeric_limits<std::uint64_t>::max());
-        result = vkResetFences(_device, 1, &currentFence);
+        VkFence currentFence = *_inflightFence[_currentFrame];
+
+        VkResult result = vkWaitForFences(_device, 1, &currentFence, VK_TRUE, MAX_TIMEOUT);
 
         std::uint32_t imageIndex;
-        result = vkAcquireNextImageKHR(_device, *swapChain, std::numeric_limits<std::uint64_t>::max(), *_imageAvailable[currentFrame], currentFence, &imageIndex);
+        result = vkAcquireNextImageKHR(_device, *swapChain, MAX_TIMEOUT, *_imageAvailable[_currentFrame], VK_NULL_HANDLE, &imageIndex);
+
+        result = vkResetFences(_device, 1, &currentFence);
 
         VkSubmitInfo submitInfo = {};
         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-        VkSemaphore waitSemaphores[] = { *_imageAvailable[currentFrame] };
+        VkSemaphore waitSemaphores[] = { *_imageAvailable[_currentFrame] };
         VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
         submitInfo.waitSemaphoreCount = 1;
         submitInfo.pWaitSemaphores = waitSemaphores;
         submitInfo.pWaitDstStageMask = waitStages;
 
-        submitInfo.commandBufferCount = _commandBuffers.size();
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &_commandBuffers[imageIndex]->AsCommandBuffer();
 
-        // TODO: Cache this.
-        auto mutator = [](CommandBuffer* buffer) -> VkCommandBuffer { return *buffer; };
-        auto itr = boost::iterators::make_transform_iterator(_commandBuffers.begin(), mutator);
-        auto end = boost::iterators::make_transform_iterator(_commandBuffers.end(), mutator);
-        std::vector<VkCommandBuffer> buffers(itr, end);
-        submitInfo.pCommandBuffers = buffers.data();
-
-        VkSemaphore signalSemaphores[] = { *_renderFinished[currentFrame] };
+        VkSemaphore signalSemaphores[] = { *_renderFinished[_currentFrame] };
         submitInfo.signalSemaphoreCount = 1;
         submitInfo.pSignalSemaphores = signalSemaphores;
 
@@ -110,7 +107,7 @@ namespace wowgm::graphics
 
         result = vkQueuePresentKHR(*_presentQueue, &presentInfo);
 
-        currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+        _currentFrame = (_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     }
 
     void LogicalDevice::AddCommandBuffer(CommandBuffer* buffer)

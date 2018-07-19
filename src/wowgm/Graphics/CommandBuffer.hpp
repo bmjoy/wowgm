@@ -22,6 +22,7 @@ namespace wowgm::graphics
         ~CommandBuffer();
 
         operator VkCommandBuffer() const { return _commandBuffer; }
+        VkCommandBuffer& AsCommandBuffer() { return _commandBuffer; }
 
     public: /* Recording */
         void BeginRecording(VkCommandBufferUsageFlagBits usageFlags);
