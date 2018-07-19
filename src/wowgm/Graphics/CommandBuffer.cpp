@@ -18,6 +18,17 @@ namespace wowgm::graphics
 
     }
 
+
+    void CommandBuffer::Draw(std::uint32_t vertexCount)
+    {
+        vkCmdDraw(_commandBuffer, vertexCount, 1, 0, 0);
+    }
+
+    void CommandBuffer::Draw(std::uint32_t vertexCount, std::uint32_t instanceCount)
+    {
+        vkCmdDraw(_commandBuffer, vertexCount, instanceCount, 0, 0);
+    }
+
     void CommandBuffer::BeginRecording(VkCommandBufferUsageFlagBits usageFlags)
     {
         VkCommandBufferBeginInfo beginInfo = {};

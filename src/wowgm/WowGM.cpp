@@ -192,6 +192,7 @@ int main()
             drawBuffer->BeginRecording(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
             drawBuffer->Record<BeginRenderPassCommand>(renderPass, frameBuffers, swapChain->GetExtent());
             drawBuffer->Record<BindPipelineCommand>(VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+            drawBuffer->Draw(3);
             drawBuffer->Record<EndRenderPassCommand>();
             drawBuffer->FinishRecording();
             device->AddCommandBuffer(drawBuffer);

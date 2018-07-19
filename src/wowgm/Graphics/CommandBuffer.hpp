@@ -2,6 +2,7 @@
 
 #include <type_traits>
 #include <vulkan/vulkan.h>
+#include <cstdint>
 
 namespace wowgm::graphics
 {
@@ -34,6 +35,9 @@ namespace wowgm::graphics
             T command(std::forward<Args>(args)...);
             command.Enqueue(this);
         }
+
+        void Draw(std::uint32_t vertexCount);
+        void Draw(std::uint32_t vertexCount, std::uint32_t instanceCount);
 
     private:
         VkCommandBuffer _commandBuffer;
