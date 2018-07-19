@@ -180,14 +180,14 @@ namespace wowgm::graphics
     namespace details
     {
         template <typename T>
-        std::ostream& stream(std::ostream& ss, T const& t)
+        inline std::ostream& stream(std::ostream& ss, T const& t)
         {
             ss << t;
             return ss;
         }
 
         template <typename T, size_t N>
-        std::ostream& stream(std::ostream& ss, T const (&n)[N])
+        inline std::ostream& stream(std::ostream& ss, T const (&n)[N])
         {
             ss << "{\n        [0] = ";
             stream(ss, n[0]);
@@ -204,7 +204,7 @@ namespace wowgm::graphics
         }
 
         template <>
-        std::ostream& stream<VkDeviceSize>(std::ostream& ss, VkDeviceSize const& deviceSize)
+        inline std::ostream& stream<VkDeviceSize>(std::ostream& ss, VkDeviceSize const& deviceSize)
         {
             static const int unit = 1024;
             if (deviceSize < unit)

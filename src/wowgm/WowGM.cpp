@@ -178,17 +178,18 @@ int main()
         pipeline->SetStencilTest(false);
         pipeline->SetWireframe(false);
         pipeline->SetPrimitiveType(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+        pipeline->SetCulling(VK_CULL_MODE_NONE);
         pipeline->AddShader(vertexShader);
         pipeline->AddShader(fragmentShader);
         pipeline->Finalize();
 
         for (int i = 0; i < 3; ++i)
         {
-            FrameBuffer* frameBuffers = new FrameBuffer(renderPass, swapChain);
+            FrameBuffer* frameBuffers = new FrameBuffer(renderPass, swapChain); // leak
             frameBuffers->AttachImageView(swapChain->GetImageView(i));
             frameBuffers->Finalize();
 
-            CommandBuffer* drawBuffer = device->GetGraphicsQueue()->GetCommandPool()->AllocatePrimaryBuffer();
+            CommandBuffer* drawBuffer = device->GetGraphicsQueue()->GetCommandPool()->AllocatePrimaryBuffer(); //pool leaks
             drawBuffer->BeginRecording(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
             drawBuffer->Record<BeginRenderPassCommand>(renderPass, frameBuffers, swapChain->GetExtent());
             drawBuffer->Record<BindPipelineCommand>(VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
@@ -203,6 +204,8 @@ int main()
             window->Execute();
             device->Draw(swapChain);
         }
+
+        delete pipeline;
 
         delete swapChain;
         instance.reset();
