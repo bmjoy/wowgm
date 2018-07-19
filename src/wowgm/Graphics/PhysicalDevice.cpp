@@ -66,7 +66,7 @@ namespace wowgm::graphics
                     _queueFamilyIndices.Graphics = i;
 
                 if (presentSupport && queueFamily.queueCount > 0)
-                    _queueFamilyIndices.Present = 1;
+                    _queueFamilyIndices.Present = i;
 
                 if (_queueFamilyIndices.IsComplete())
                     break;
@@ -78,12 +78,10 @@ namespace wowgm::graphics
         _CreateSwapChainSupportDetails();
 
         bool extensionsSupported = CheckDeviceExtensionSupport();
-        bool swapChainAdequate = false;
-        if (extensionsSupported)
-            swapChainAdequate = !_surfaceFormats.empty() && !_surfacePresentModes.empty();
+        bool swapChainAdequate = !_surfaceFormats.empty() && !_surfacePresentModes.empty();
 
         // Ignore devices without a graphics queue, without the required expansion support, or without swap chain support
-        if (_queueFamilyIndices.Graphics == -1 || !extensionsSupported || !swapChainAdequate)
+        if (!_queueFamilyIndices.IsComplete() || !extensionsSupported || !swapChainAdequate)
             _deviceScore = 0;
     }
 
@@ -193,10 +191,10 @@ namespace wowgm::graphics
         {
             ss << "{\n        [0] = ";
             stream(ss, n[0]);
-            ss << ",\n        ";
+            ss << ",\n";
             for (int i = 1; i < N; ++i)
             {
-                ss << "[" << i << "] = ";
+                ss << "        [" << i << "] = ";
                 stream(ss, n[i]);
                 ss << ",\n";
             }

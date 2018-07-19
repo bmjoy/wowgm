@@ -62,13 +62,9 @@ namespace wowgm::graphics
         }
 
         createInfo.preTransform = capabilities.currentTransform;
-        // Blending with other windows; no thanks.
         createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-
         createInfo.presentMode = _presentMode;
         createInfo.clipped = VK_TRUE;
-
-        // This is used for swap chain invalidation (typically resize)
         createInfo.oldSwapchain = VK_NULL_HANDLE;
 
         if (vkCreateSwapchainKHR(*_physicalDevice->GetInstance()->GetLogicalDevice(), &createInfo, nullptr, &_swapChain) != VK_SUCCESS)

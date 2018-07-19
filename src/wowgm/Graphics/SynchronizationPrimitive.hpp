@@ -7,9 +7,6 @@ namespace wowgm::graphics
 {
     class LogicalDevice;
 
-    template <typename T, typename C>
-    using PrimitiveAllocator = VkResult(*)(VkDevice, C const*, VkAllocationCallbacks const*, T*);
-
     template <typename T>
     using PrimitiveDestroyer = void(*)(VkDevice, T, VkAllocationCallbacks const*);
 
@@ -23,7 +20,7 @@ namespace wowgm::graphics
         SynchronizationPrimitive(LogicalDevice* device, PrimitiveDestroyer<T> destroyer)
             : _device(device), _destroyer(destroyer)
         {
-
+            _primitive = VK_NULL_HANDLE;
         }
 
         virtual ~SynchronizationPrimitive()
@@ -62,7 +59,7 @@ namespace wowgm::graphics
     public:
         Fence(LogicalDevice* device) : SynchronizationPrimitive(device, &vkDestroyFence)
         {
-            VkFenceCreateInfo createInfo = {};
+            VkFenceCreateInfo createInfo = { };
             createInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
             createInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 

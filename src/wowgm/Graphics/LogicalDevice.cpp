@@ -109,7 +109,6 @@ namespace wowgm::graphics
         presentInfo.pImageIndices = &imageIndex;
 
         result = vkQueuePresentKHR(*_presentQueue, &presentInfo);
-        result = vkQueueWaitIdle(*_presentQueue); // Fix me with flight frames
 
         currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     }
