@@ -6,6 +6,7 @@
 #include "SharedGraphicsDefines.hpp"
 #include "Assert.hpp"
 #include "SynchronizationPrimitive.hpp"
+#include "SwapChain.hpp"
 
 #undef min
 #undef max
@@ -15,16 +16,6 @@
 
 #include <set>
 #include <limits>
-
-/// Execution chain
-/// 1. Create an Instance
-/// 2. Setup the debug callbacks
-/// 3. Bind a Surface
-/// 4. Select a PhysicalDevice
-/// 5. Create a LogicalDevice
-/// 6. Create a SwapChain
-/// 7. Create ImageViews for the Swap chain (TODO: Fold to 6.)
-/// 8. Create a Pipeline
 
 namespace wowgm::graphics
 {
@@ -93,14 +84,15 @@ namespace wowgm::graphics
 
     Instance::Instance(Instance::ctor_tag, VkInstance instance) : _instance(instance)
     {
-        _surface = VK_NULL_HANDLE;
     }
 
     Instance::~Instance()
     {
         // Dstroy surface
-        delete _surface;
-        _surface = nullptr;
+        for (auto&& surface : _ownedSurfaces)
+            delete surface;
+
+        _ownedSurfaces.clear();
 
 #ifdef ENABLE_VALIDATION_LAYERS
         details::DestroyDebugReportCallbackEXT(_instance, _debugReportCallback, nullptr);
@@ -168,29 +160,39 @@ namespace wowgm::graphics
         return _logicalDevice;
     }
 
+    SwapChain* Instance::CreateSwapChain()
+    {
+        return new SwapChain(GetPhysicalDevice());
+    }
+
     Surface* Instance::CreateSurface(Window* window)
     {
-        VkSurfaceKHR surface;
-        VkResult windowCreateResult = glfwCreateWindowSurface(_instance, window->GetHandle(), nullptr, &surface);
+        VkSurfaceKHR surfaceKHR;
+        VkResult windowCreateResult = glfwCreateWindowSurface(_instance, window->GetHandle(), nullptr, &surfaceKHR);
         if (windowCreateResult != VK_SUCCESS)
             wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create a surface"));
 
-        _surface = new Surface(this, surface, window->GetWidth(), window->GetHeight());
+        Surface* surface = new Surface(this, surfaceKHR, window->GetWidth(), window->GetHeight());
 
-        // NOTE: This was previously in the ctor but we need _surface for emplace
-        std::uint32_t physicalDeviceCount = 0;
-        vkEnumeratePhysicalDevices(_instance, &physicalDeviceCount, nullptr);
+        if (_physicalDevices.size() == 0)
+        {
+            // NOTE: This was previously in the ctor but we need _surface for emplace
+            std::uint32_t physicalDeviceCount = 0;
+            vkEnumeratePhysicalDevices(_instance, &physicalDeviceCount, nullptr);
 
-        std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
-        vkEnumeratePhysicalDevices(_instance, &physicalDeviceCount, physicalDevices.data());
+            std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
+            vkEnumeratePhysicalDevices(_instance, &physicalDeviceCount, physicalDevices.data());
 
-        _physicalDevices.resize(physicalDeviceCount);
-        for (std::uint32_t i = 0; i < physicalDeviceCount; ++i)
-            _physicalDevices[i] = std::make_unique<PhysicalDevice>(physicalDevices[i], _surface);
+            _physicalDevices.resize(physicalDeviceCount);
+            for (std::uint32_t i = 0; i < physicalDeviceCount; ++i)
+                _physicalDevices[i] = std::make_unique<PhysicalDevice>(physicalDevices[i], surface);
 
-        _SelectPhysicalDevice();
+            _SelectPhysicalDevice();
+        }
 
-        return _surface;
+        _ownedSurfaces.push_back(surface);
+
+        return surface;
     }
 
     void Instance::_SelectPhysicalDevice()

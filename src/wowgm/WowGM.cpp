@@ -152,9 +152,7 @@ int main()
 
         Surface* surface = instance->CreateSurface(window); // Owned by instance
         LogicalDevice* device = instance->CreateLogicalDevice(); // Owned by instance
-        SwapChain* swapChain = new SwapChain(instance->GetPhysicalDevice());
-
-        // std::cout << instance->ToString();
+        SwapChain* swapChain = instance->CreateSwapChain();
 
         RenderPass* renderPass = new RenderPass(device);
         VkAttachmentDescription colorAttachment = {};
@@ -209,6 +207,9 @@ int main()
         }
 
         device->WaitIdle();
+
+        for (auto&& itr : buffers)
+            delete itr;
 
         delete pipeline;
         delete swapChain;

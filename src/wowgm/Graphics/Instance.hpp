@@ -18,6 +18,7 @@ namespace wowgm::graphics
     class PhysicalDevice;
     class Semaphore;
     class CommandBuffer;
+    class SwapChain;
 
     class Instance
     {
@@ -38,8 +39,8 @@ namespace wowgm::graphics
         PhysicalDevice* GetPhysicalDevice();
 
         Surface* CreateSurface(Window* window);
-
         LogicalDevice* CreateLogicalDevice();
+        SwapChain* CreateSwapChain();
 
         LogicalDevice* GetLogicalDevice();
 
@@ -55,7 +56,7 @@ namespace wowgm::graphics
         VkInstance _instance;
 
         LogicalDevice* _logicalDevice;
-        Surface* _surface;
+        std::vector<Surface*> _ownedSurfaces;
 
 #ifdef ENABLE_VALIDATION_LAYERS
         VkDebugReportCallbackEXT _debugReportCallback;
