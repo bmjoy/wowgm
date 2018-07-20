@@ -16,6 +16,7 @@ namespace wowgm::graphics
         friend class CommandPool;
 
         CommandBuffer(VkCommandBuffer buffer);
+
         CommandBuffer(CommandBuffer&&) = delete;
         CommandBuffer(const CommandBuffer&) = delete;
 
@@ -29,9 +30,11 @@ namespace wowgm::graphics
         void BeginRecording(VkCommandBufferUsageFlagBits usageFlags);
         void FinishRecording();
 
-        template <typename T, typename... Args, typename std::enable_if<std::is_base_of<Command, T>::value, int>::type = 0>
-        void Record(Args&&... args)
+        template <typename T, typename... Args>
+        inline void Record(Args&&... args)
         {
+            static_assert(std::is_base_of<Command, T>::value, "Record must be provided a type that publicly inherits wowgm::graphics::Command!");
+
             T command(std::forward<Args>(args)...);
             command.Enqueue(this);
         }
