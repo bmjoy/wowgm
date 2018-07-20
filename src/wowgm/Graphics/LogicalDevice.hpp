@@ -49,6 +49,8 @@ namespace wowgm::graphics
 
         operator VkDevice() const { return _device; }
 
+        void WaitIdle();
+
     private:
         VkDevice _device;
 

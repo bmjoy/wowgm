@@ -6,7 +6,7 @@
 
 namespace wowgm::graphics
 {
-    BeginRenderPassCommand::BeginRenderPassCommand(RenderPass* renderPass, FrameBuffer* frameBuffer, VkExtent2D extent) : Command()
+    BeginRenderPass::BeginRenderPass(RenderPass* renderPass, FrameBuffer* frameBuffer, VkExtent2D extent) : Command()
     {
         _command.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
         _command.pNext = nullptr;
@@ -20,26 +20,26 @@ namespace wowgm::graphics
         _command.pClearValues = &clearColor;
     }
 
-    void BeginRenderPassCommand::Enqueue(CommandBuffer* buffer)
+    void BeginRenderPass::Enqueue(CommandBuffer* buffer)
     {
         vkCmdBeginRenderPass(*buffer, &_command, VK_SUBPASS_CONTENTS_INLINE);
     }
 
-    BindPipelineCommand::BindPipelineCommand(VkPipelineBindPoint bindPoint, Pipeline* pipeline) : Command(), _bindPoint(bindPoint), _pipeline(pipeline)
+    BindPipeline::BindPipeline(VkPipelineBindPoint bindPoint, Pipeline* pipeline) : Command(), _bindPoint(bindPoint), _pipeline(pipeline)
     {
     }
 
-    void BindPipelineCommand::Enqueue(CommandBuffer* buffer)
+    void BindPipeline::Enqueue(CommandBuffer* buffer)
     {
         vkCmdBindPipeline(*buffer, _bindPoint, *_pipeline);
     }
 
-    EndRenderPassCommand::EndRenderPassCommand() : Command()
+    EndRenderPass::EndRenderPass() : Command()
     {
 
     }
 
-    void EndRenderPassCommand::Enqueue(CommandBuffer* buffer)
+    void EndRenderPass::Enqueue(CommandBuffer* buffer)
     {
         vkCmdEndRenderPass(*buffer);
     }

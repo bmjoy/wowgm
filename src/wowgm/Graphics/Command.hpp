@@ -22,10 +22,10 @@ namespace wowgm::graphics
         virtual void Enqueue(CommandBuffer* buffer) = 0;
     };
 
-    class BeginRenderPassCommand : public Command
+    class BeginRenderPass : public Command
     {
     public:
-        BeginRenderPassCommand(RenderPass* renderPass, FrameBuffer* frameBuffer, VkExtent2D extent);
+        BeginRenderPass(RenderPass* renderPass, FrameBuffer* frameBuffer, VkExtent2D extent);
 
         virtual void Enqueue(CommandBuffer* buffer) override final;
 
@@ -33,10 +33,10 @@ namespace wowgm::graphics
         VkRenderPassBeginInfo _command;
     };
 
-    class BindPipelineCommand : public Command
+    class BindPipeline : public Command
     {
     public:
-        BindPipelineCommand(VkPipelineBindPoint bindPoint, Pipeline* pipeline);
+        BindPipeline(VkPipelineBindPoint bindPoint, Pipeline* pipeline);
 
         virtual void Enqueue(CommandBuffer* buffer) override final;
 
@@ -45,10 +45,10 @@ namespace wowgm::graphics
         Pipeline* _pipeline;
     };
 
-    class EndRenderPassCommand : public Command
+    class EndRenderPass : public Command
     {
     public:
-        EndRenderPassCommand();
+        EndRenderPass();
 
         virtual void Enqueue(CommandBuffer* buffer) override final;
     };

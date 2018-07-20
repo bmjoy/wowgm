@@ -42,6 +42,9 @@ namespace wowgm::graphics
             delete _inflightFence[i];
         }
 
+        for (std::uint32_t i = 0; i < _commandBuffers.size(); ++i)
+            delete _commandBuffers[i];
+
         delete _graphicsQueue;
         _graphicsQueue = nullptr;
         delete _presentQueue;
@@ -49,6 +52,11 @@ namespace wowgm::graphics
 
         vkDestroyDevice(_device, nullptr);
         _device = VK_NULL_HANDLE;
+    }
+
+    void LogicalDevice::WaitIdle()
+    {
+        vkDeviceWaitIdle(_device);
     }
 
     Queue* LogicalDevice::GetGraphicsQueue()

@@ -183,18 +183,21 @@ int main()
         pipeline->AddShader(fragmentShader);
         pipeline->Finalize();
 
+        std::vector<FrameBuffer*> buffers;
+
         for (int i = 0; i < 3; ++i)
         {
             FrameBuffer* frameBuffers = new FrameBuffer(renderPass, swapChain); // leak
             frameBuffers->AttachImageView(swapChain->GetImageView(i));
             frameBuffers->Finalize();
+            buffers.push_back(frameBuffers);
 
-            CommandBuffer* drawBuffer = device->GetGraphicsQueue()->GetCommandPool()->AllocatePrimaryBuffer(); //pool leaks
+            CommandBuffer* drawBuffer = device->GetGraphicsQueue()->GetCommandPool()->AllocatePrimaryBuffer();
             drawBuffer->BeginRecording(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
-            drawBuffer->Record<BeginRenderPassCommand>(renderPass, frameBuffers, swapChain->GetExtent());
-            drawBuffer->Record<BindPipelineCommand>(VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+            drawBuffer->Record<BeginRenderPass>(renderPass, frameBuffers, swapChain->GetExtent());
+            drawBuffer->Record<BindPipeline>(VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
             drawBuffer->Draw(3);
-            drawBuffer->Record<EndRenderPassCommand>();
+            drawBuffer->Record<EndRenderPass>();
             drawBuffer->FinishRecording();
             device->AddCommandBuffer(drawBuffer);
         }
@@ -204,6 +207,11 @@ int main()
             window->Execute();
             device->Draw(swapChain);
         }
+
+        device->WaitIdle();
+
+        for (auto&& otr : buffers)
+            delete otr;
 
         delete pipeline;
 
