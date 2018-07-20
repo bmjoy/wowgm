@@ -21,7 +21,7 @@ namespace wowgm::graphics
 
             VkQueue deviceQueue;
             vkGetDeviceQueue(device, queueIndice, 0, &deviceQueue);
-            reinterpret_cast<Queue**>(&_graphicsQueue)[i] = new Queue(this, deviceQueue, queueIndice);
+            reinterpret_cast<std::unique_ptr<Queue>*>(&_graphicsQueue)[i] = std::make_unique<Queue>(this, deviceQueue, queueIndice);
         }
 
         for (std::uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
@@ -45,10 +45,8 @@ namespace wowgm::graphics
         for (std::uint32_t i = 0; i < _commandBuffers.size(); ++i)
             delete _commandBuffers[i];
 
-        delete _graphicsQueue;
-        _graphicsQueue = nullptr;
-        delete _presentQueue;
-        _presentQueue = nullptr;
+        _graphicsQueue.reset();
+        _presentQueue.reset();
 
         vkDestroyDevice(_device, nullptr);
         _device = VK_NULL_HANDLE;
@@ -61,12 +59,12 @@ namespace wowgm::graphics
 
     Queue* LogicalDevice::GetGraphicsQueue()
     {
-        return _graphicsQueue;
+        return _graphicsQueue.get();
     }
 
     Queue* LogicalDevice::GetPresentQueue()
     {
-        return _presentQueue;
+        return _presentQueue.get();
     }
 
     void LogicalDevice::Draw(SwapChain* swapChain)

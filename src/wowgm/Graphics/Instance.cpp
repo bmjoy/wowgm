@@ -106,6 +106,9 @@ namespace wowgm::graphics
         details::DestroyDebugReportCallbackEXT(_instance, _debugReportCallback, nullptr);
 #endif
 
+        delete _logicalDevice;
+        _logicalDevice = nullptr;
+
         // Destroy instance
         vkDestroyInstance(_instance, nullptr);
         _instance = VK_NULL_HANDLE;

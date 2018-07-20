@@ -12,6 +12,8 @@ namespace wowgm::graphics
     Queue::~Queue()
     {
         _queue = VK_NULL_HANDLE;
+
+        _commandPool.clear();
     }
 
     std::uint32_t Queue::GetFamilyIndice()
@@ -28,10 +30,10 @@ namespace wowgm::graphics
     {
         auto itr = _commandPool.find(createFlags);
         if (itr != _commandPool.end())
-            return itr->second;
+            return itr->second.get();
 
-        auto newPool = new CommandPool(this, createFlags);
-        _commandPool[createFlags] = newPool;
-        return newPool;
+        auto newPool = std::make_unique<CommandPool>(this, createFlags);
+        _commandPool[createFlags] = std::move(newPool);
+        return _commandPool[createFlags].get();
     }
 }

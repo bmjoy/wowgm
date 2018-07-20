@@ -6,11 +6,11 @@
 
 namespace wowgm::graphics
 {
-    BeginRenderPass::BeginRenderPass(RenderPass* renderPass, FrameBuffer* frameBuffer, VkExtent2D extent) : Command()
+    BeginRenderPass::BeginRenderPass(FrameBuffer* frameBuffer, VkExtent2D extent) : Command()
     {
         _command.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
         _command.pNext = nullptr;
-        _command.renderPass = *renderPass;
+        _command.renderPass = *frameBuffer->GetRenderPass();
         _command.framebuffer = *frameBuffer;
         _command.renderArea.offset = { 0, 0 };
         _command.renderArea.extent = extent;

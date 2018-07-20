@@ -17,12 +17,15 @@ namespace wowgm::graphics
 
         if (vkCreateCommandPool(*assignedQueue->GetDevice(), &poolInfo, nullptr, &_commandPool) != VK_SUCCESS)
             wowgm::exceptions::throw_with_trace(std::runtime_error("Failed to create a command pool!"));
+
+        std::cout << "COMMAND POOL ALLOCATED";
     }
 
     CommandPool::~CommandPool()
     {
         vkDestroyCommandPool(*_assignedQueue->GetDevice(), _commandPool, nullptr);
-        _assignedQueue = nullptr;
+
+        std::cout << "COMMAND POOL RELEASED";
     }
 
     VkCommandPoolCreateFlags CommandPool::GetCreateFlags()

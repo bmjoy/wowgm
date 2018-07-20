@@ -85,7 +85,16 @@ namespace wowgm::graphics
 
     Pipeline::~Pipeline()
     {
+        vkDestroyPipeline(*_swapchain->GetLogicalDevice(), _pipeline, nullptr);
+        vkDestroyPipelineLayout(*_swapchain->GetLogicalDevice(), _pipelineLayout, nullptr);
 
+        delete _renderPass;
+
+        _swapchain = nullptr;
+        _renderPass = nullptr;
+
+        for (auto&& itr : _shaders)
+            delete itr;
     }
 
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <cstdint>
 #include <unordered_map>
 #include <vulkan/vulkan.h>
@@ -22,7 +23,7 @@ namespace wowgm::graphics
      * and each family may contain one or more queues. To check what operations can be performed on the given hardware,
      * we need to query the properties of all queue families.
      */
-    class Queue
+    class Queue : public std::enable_shared_from_this<Queue>
     {
         Queue(Queue&&) = delete;
         Queue(const Queue&) = delete;
@@ -30,7 +31,6 @@ namespace wowgm::graphics
     public:
 
         Queue(LogicalDevice* device, VkQueue queue, std::uint32_t indice);
-
         ~Queue();
 
         std::uint32_t GetFamilyIndice();
@@ -43,7 +43,7 @@ namespace wowgm::graphics
 
     private:
         LogicalDevice* _device;
-        std::unordered_map<VkCommandPoolCreateFlags, CommandPool*> _commandPool;
+        std::unordered_map<VkCommandPoolCreateFlags, std::unique_ptr<CommandPool>> _commandPool;
 
         VkQueue _queue;
         std::uint32_t _indice;

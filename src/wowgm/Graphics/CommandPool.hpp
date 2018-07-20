@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <vulkan/vulkan.h>
 
 namespace wowgm::graphics
@@ -29,7 +30,6 @@ namespace wowgm::graphics
     private:
         VkCommandPool _commandPool;
         VkCommandPoolCreateFlags _createFlags;
-
 
         Queue* _assignedQueue;
     };

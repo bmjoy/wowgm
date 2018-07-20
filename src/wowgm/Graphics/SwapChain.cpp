@@ -92,10 +92,12 @@ namespace wowgm::graphics
         for (std::uint32_t i = 0; i < _swapChainImages.size(); ++i)
         {
             delete _swapChainImages[i];
+            delete _imageViews[i];
             _swapChainImages[i] = nullptr;
+            _imageViews[i] = nullptr;
         }
-        _swapChainImages.clear();
 
+        _swapChainImages.clear();
         _imageViews.clear();
     }
 

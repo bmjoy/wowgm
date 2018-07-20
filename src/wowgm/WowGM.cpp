@@ -154,7 +154,7 @@ int main()
         LogicalDevice* device = instance->CreateLogicalDevice(); // Owned by instance
         SwapChain* swapChain = new SwapChain(instance->GetPhysicalDevice());
 
-        std::cout << instance->ToString();
+        // std::cout << instance->ToString();
 
         RenderPass* renderPass = new RenderPass(device);
         VkAttachmentDescription colorAttachment = {};
@@ -194,7 +194,7 @@ int main()
 
             CommandBuffer* drawBuffer = device->GetGraphicsQueue()->GetCommandPool()->AllocatePrimaryBuffer();
             drawBuffer->BeginRecording(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
-            drawBuffer->Record<BeginRenderPass>(renderPass, frameBuffers, swapChain->GetExtent());
+            drawBuffer->Record<BeginRenderPass>(frameBuffers, swapChain->GetExtent());
             drawBuffer->Record<BindPipeline>(VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
             drawBuffer->Draw(3);
             drawBuffer->Record<EndRenderPass>();
@@ -210,11 +210,7 @@ int main()
 
         device->WaitIdle();
 
-        for (auto&& otr : buffers)
-            delete otr;
-
         delete pipeline;
-
         delete swapChain;
         instance.reset();
 

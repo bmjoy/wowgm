@@ -25,7 +25,7 @@ namespace wowgm::graphics
     class BeginRenderPass : public Command
     {
     public:
-        BeginRenderPass(RenderPass* renderPass, FrameBuffer* frameBuffer, VkExtent2D extent);
+        BeginRenderPass(FrameBuffer* frameBuffer, VkExtent2D extent);
 
         virtual void Enqueue(CommandBuffer* buffer) override final;
 
