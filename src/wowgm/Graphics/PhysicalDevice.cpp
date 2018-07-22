@@ -28,10 +28,8 @@ namespace wowgm::graphics
     {
         _surface = nullptr;
 
-        // Managed by Vulkan (no vkCreate... call!)
         _device = VK_NULL_HANDLE;
     }
-
 
     VkPhysicalDeviceMemoryProperties& PhysicalDevice::GetMemoryProperties()
     {
@@ -62,11 +60,20 @@ namespace wowgm::graphics
                 VkBool32 presentSupport = false;
                 vkGetPhysicalDeviceSurfaceSupportKHR(device, i, *surface, &presentSupport);
 
-                if (queueFamily.queueCount > 0 && queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
-                    _queueFamilyIndices.Graphics = i;
+                if (queueFamily.queueCount > 0)
+                {
+                    if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+                        _queueFamilyIndices.Graphics = i;
 
-                if (presentSupport && queueFamily.queueCount > 0)
-                    _queueFamilyIndices.Present = i;
+                    if (queueFamily.queueFlags & VK_QUEUE_COMPUTE_BIT)
+                        _queueFamilyIndices.Compute = i;
+
+                    if (queueFamily.queueFlags & VK_QUEUE_TRANSFER_BIT)
+                        _queueFamilyIndices.Transfer = i;
+
+                    if (queueFamily.queueCount > 0)
+                        _queueFamilyIndices.Present = i;
+                }
 
                 if (_queueFamilyIndices.IsComplete())
                     break;
@@ -78,7 +85,7 @@ namespace wowgm::graphics
         _CreateSwapChainSupportDetails();
 
         bool extensionsSupported = CheckDeviceExtensionSupport();
-        bool swapChainAdequate = !_surfaceFormats.empty() && !_surfacePresentModes.empty();
+        bool swapChainAdequate = !_possibleSurfaceFormats.empty() && !_possibleSurfacePresentModes.empty();
 
         // Ignore devices without a graphics queue, without the required expansion support, or without swap chain support
         if (!_queueFamilyIndices.IsComplete() || !extensionsSupported || !swapChainAdequate)
@@ -128,12 +135,12 @@ namespace wowgm::graphics
 
     std::vector<VkSurfaceFormatKHR>& PhysicalDevice::GetFormats()
     {
-        return _surfaceFormats;
+        return _possibleSurfaceFormats;
     }
 
     std::vector<VkPresentModeKHR> PhysicalDevice::GetPresentModes()
     {
-        return _surfacePresentModes;
+        return _possibleSurfacePresentModes;
     }
 
     void PhysicalDevice::_CreateSwapChainSupportDetails()
@@ -145,8 +152,8 @@ namespace wowgm::graphics
 
         if (formatCount != 0)
         {
-            _surfaceFormats.resize(formatCount);
-            vkGetPhysicalDeviceSurfaceFormatsKHR(_device, *_surface, &formatCount, _surfaceFormats.data());
+            _possibleSurfaceFormats.resize(formatCount);
+            vkGetPhysicalDeviceSurfaceFormatsKHR(_device, *_surface, &formatCount, _possibleSurfaceFormats.data());
         }
 
         uint32_t presentModeCount;
@@ -154,8 +161,8 @@ namespace wowgm::graphics
 
         if (presentModeCount != 0)
         {
-            _surfacePresentModes.resize(presentModeCount);
-            vkGetPhysicalDeviceSurfacePresentModesKHR(_device, *_surface, &presentModeCount, _surfacePresentModes.data());
+            _possibleSurfacePresentModes.resize(presentModeCount);
+            vkGetPhysicalDeviceSurfacePresentModesKHR(_device, *_surface, &presentModeCount, _possibleSurfacePresentModes.data());
         }
     }
 

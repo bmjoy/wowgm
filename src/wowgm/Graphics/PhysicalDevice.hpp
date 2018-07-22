@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <unordered_map>
 #include <vulkan/vulkan.h>
 
 namespace wowgm::graphics
@@ -16,6 +17,9 @@ namespace wowgm::graphics
         /// Whenever you add/edit this block, make sure to fix the queues assignments in
         /// LogicalDevice.
         std::int32_t Graphics = -1;
+        std::int32_t Compute = -1;
+        std::int32_t Transfer = -1;
+
         std::int32_t Present = -1;
 
         std::uint32_t GetQueueCount();
@@ -68,8 +72,8 @@ namespace wowgm::graphics
         QueueFamilyIndices _queueFamilyIndices;
 
         VkSurfaceCapabilitiesKHR _surfaceCapabilities;
-        std::vector<VkSurfaceFormatKHR> _surfaceFormats;
-        std::vector<VkPresentModeKHR> _surfacePresentModes;
+        std::vector<VkSurfaceFormatKHR> _possibleSurfaceFormats;
+        std::vector<VkPresentModeKHR> _possibleSurfacePresentModes;
 
 
         std::uint32_t _deviceScore;

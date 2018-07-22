@@ -1,12 +1,14 @@
 #pragma once
+#include "Instance.hpp"
+
 #include <vector>
 #include <cstdint>
 #include <vulkan/vulkan.h>
 
 namespace wowgm::graphics
 {
-    class PhysicalDevice;
     class LogicalDevice;
+    class PhysicalDevice;
     class Surface;
     class ImageView;
     class Image;
@@ -15,11 +17,13 @@ namespace wowgm::graphics
 
     class SwapChain
     {
+        friend SwapChain* Instance::CreateSwapChain();
+        SwapChain(PhysicalDevice* device);
+
         SwapChain(SwapChain&&) = delete;
         SwapChain(SwapChain const&) = delete;
 
     public:
-        SwapChain(PhysicalDevice* device);
         ~SwapChain();
 
         VkSurfaceFormatKHR GetSurfaceFormat();

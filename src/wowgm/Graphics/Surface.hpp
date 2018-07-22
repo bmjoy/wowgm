@@ -15,7 +15,6 @@ namespace wowgm::graphics
     class Surface
     {
         friend Surface* Instance::CreateSurface(Window* window);
-
         Surface(Instance* instance, VkSurfaceKHR surface, std::uint32_t _width, std::uint32_t height);
 
         Surface(Surface&&) = delete;

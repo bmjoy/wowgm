@@ -4,7 +4,7 @@
 
 namespace wowgm::graphics
 {
-    Queue::Queue(LogicalDevice* device, VkQueue queue, std::uint32_t indice) : _device(device), _queue(queue), _indice(indice)
+    Queue::Queue(LogicalDevice* device, VkQueueFlagBits type, VkQueue queue, std::uint32_t indice) : _device(device), _queue(queue), _indice(indice), _queueType(type)
     {
 
     }
@@ -35,5 +35,10 @@ namespace wowgm::graphics
         auto newPool = std::make_unique<CommandPool>(this, createFlags);
         _commandPool[createFlags] = std::move(newPool);
         return _commandPool[createFlags].get();
+    }
+
+    bool Queue::IsQueueType(VkQueueFlagBits type)
+    {
+        return (_queueType & type) != 0;
     }
 }

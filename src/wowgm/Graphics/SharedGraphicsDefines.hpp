@@ -5,8 +5,8 @@
 #endif
 
 #include <array>
-#include <vulkan/vulkan.h>
 #include <type_traits>
+#include <vulkan/vulkan.h>
 
 namespace wowgm::graphics::details
 {

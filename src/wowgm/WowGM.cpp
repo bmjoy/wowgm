@@ -154,7 +154,7 @@ int main()
         LogicalDevice* device = instance->CreateLogicalDevice(); // Owned by instance
         SwapChain* swapChain = instance->CreateSwapChain();
 
-        RenderPass* renderPass = new RenderPass(device);
+        RenderPass* renderPass = device->CreateRenderPass();
         VkAttachmentDescription colorAttachment = {};
         colorAttachment.format = swapChain->GetSurfaceFormat().format;
         colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -181,14 +181,11 @@ int main()
         pipeline->AddShader(fragmentShader);
         pipeline->Finalize();
 
-        std::vector<FrameBuffer*> buffers;
-
         for (int i = 0; i < 3; ++i)
         {
-            FrameBuffer* frameBuffers = new FrameBuffer(renderPass, swapChain); // leak
+            FrameBuffer* frameBuffers = renderPass->CreateFrameBuffer(swapChain);
             frameBuffers->AttachImageView(swapChain->GetImageView(i));
             frameBuffers->Finalize();
-            buffers.push_back(frameBuffers);
 
             CommandBuffer* drawBuffer = device->GetGraphicsQueue()->GetCommandPool()->AllocatePrimaryBuffer();
             drawBuffer->BeginRecording(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
@@ -208,13 +205,9 @@ int main()
 
         device->WaitIdle();
 
-        for (auto&& itr : buffers)
-            delete itr;
-
         delete pipeline;
         delete swapChain;
         instance.reset();
-
         window->Cleanup();
         delete window;
     }

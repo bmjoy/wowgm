@@ -1,13 +1,15 @@
 #pragma once
 
-#include <vulkan/vulkan.h>
+#include "LogicalDevice.hpp"
 
 #include <vector>
+#include <vulkan/vulkan.h>
 
 namespace wowgm::graphics
 {
-    class LogicalDevice;
     class Subpass;
+    class FrameBuffer;
+    class RenderPass;
 
     /*
      * A render pass contains subpasses and attachments. It describes the structure
@@ -18,12 +20,14 @@ namespace wowgm::graphics
      */
     class RenderPass
     {
+        friend RenderPass* LogicalDevice::CreateRenderPass();
+        RenderPass(LogicalDevice* device);
+
         RenderPass(RenderPass&&) = delete;
         RenderPass(RenderPass const&) = delete;
 
     public:
 
-        RenderPass(LogicalDevice* device);
         ~RenderPass();
 
         void Finalize();
@@ -34,6 +38,8 @@ namespace wowgm::graphics
 
         void AddAttachment(VkAttachmentDescription attachment);
 
+        FrameBuffer* CreateFrameBuffer(SwapChain* swapChain);
+
         operator VkRenderPass() const { return _renderPass; }
 
     private:
@@ -42,6 +48,8 @@ namespace wowgm::graphics
         VkRenderPass _renderPass;
 
         LogicalDevice* _device;
+
+        std::vector<FrameBuffer*> _ownedFrameBuffers;
 
         std::vector<VkSubpassDependency> _subpassDependencies;
         std::vector<Subpass*> _subpasses;

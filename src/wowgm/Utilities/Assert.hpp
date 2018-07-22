@@ -2,18 +2,12 @@
 #define WOWGM_ASSERT_H_
 
 #include <iostream>
-#include <signal.h>
 
 #include <boost/stacktrace.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/date_time.hpp>
 #include <boost/exception/all.hpp>
 
 #define BOOST_ENABLE_ASSERT_DEBUG_HANDLER
 #include <boost/assert.hpp>
-
-#include <boost/stacktrace.hpp>
-#include <boost/exception/all.hpp>
 
 struct tag_stacktrace { };
 

@@ -1,7 +1,5 @@
 #include "SharedGraphicsDefines.hpp"
 
-#include <vulkan/vulkan.h>
-
 namespace wowgm::graphics::details
 {
     const std::array<const char*, 1> ValidationLayers = {

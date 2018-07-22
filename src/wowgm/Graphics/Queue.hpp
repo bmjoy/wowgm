@@ -30,7 +30,7 @@ namespace wowgm::graphics
 
     public:
 
-        Queue(LogicalDevice* device, VkQueue queue, std::uint32_t indice);
+        Queue(LogicalDevice* device, VkQueueFlagBits type, VkQueue queue, std::uint32_t indice);
         ~Queue();
 
         std::uint32_t GetFamilyIndice();
@@ -38,6 +38,8 @@ namespace wowgm::graphics
         LogicalDevice* GetDevice();
 
         CommandPool* GetCommandPool(VkCommandPoolCreateFlags createFlags = 0);
+
+        bool IsQueueType(VkQueueFlagBits type);
 
         operator VkQueue() const { return _queue; }
 
@@ -47,5 +49,6 @@ namespace wowgm::graphics
 
         VkQueue _queue;
         std::uint32_t _indice;
+        VkQueueFlagBits _queueType;
     };
 }

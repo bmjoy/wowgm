@@ -1,21 +1,24 @@
 #pragma once
 
+#include "RenderPass.hpp"
+
 #include <vector>
 #include <vulkan/vulkan.h>
 
 namespace wowgm::graphics
 {
-    class RenderPass;
     class ImageView;
     class SwapChain;
 
     class FrameBuffer
     {
+        friend FrameBuffer* RenderPass::CreateFrameBuffer(SwapChain* swapChain);
+        FrameBuffer(RenderPass* renderPass, SwapChain* swapChain);
+
         FrameBuffer(FrameBuffer&&) = delete;
         FrameBuffer(const FrameBuffer&) = delete;
 
     public:
-        FrameBuffer(RenderPass* renderPass, SwapChain* swapChain);
         ~FrameBuffer();
 
         void Finalize();

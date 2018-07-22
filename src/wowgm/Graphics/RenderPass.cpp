@@ -3,6 +3,7 @@
 #include "LogicalDevice.hpp"
 #include "Assert.hpp"
 #include "LogicalDevice.hpp"
+#include "FrameBuffer.hpp"
 
 #include <boost/iterator/transform_iterator.hpp>
 
@@ -29,9 +30,13 @@ namespace wowgm::graphics
         if (_renderPass != VK_NULL_HANDLE)
             vkDestroyRenderPass(*_device, _renderPass, nullptr);
 
-        for (std::uint32_t i = 0; i < _subpasses.size(); ++i)
-            delete _subpasses[i];
+        for (auto&& itr : _subpasses)
+            delete itr;
 
+        for (auto&& itr : _ownedFrameBuffers)
+            delete itr;
+
+        _ownedFrameBuffers.clear();
         _subpasses.clear();
 
         _device = nullptr;
@@ -95,5 +100,12 @@ namespace wowgm::graphics
         VkResult result = vkCreateRenderPass(*_device, &renderPassInfo, nullptr, &_renderPass);
         if (result != VK_SUCCESS)
             wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create a render pass!"));
+    }
+
+    FrameBuffer* RenderPass::CreateFrameBuffer(SwapChain* swapChain)
+    {
+        FrameBuffer* frameBuffer = new FrameBuffer(this, swapChain);
+        _ownedFrameBuffers.push_back(frameBuffer);
+        return frameBuffer;
     }
 }

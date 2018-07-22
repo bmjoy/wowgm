@@ -1,19 +1,19 @@
 #pragma once
 #include "Instance.hpp"
+#include "Queue.hpp"
 
 #include <vector>
-#include <memory>
-#include <vulkan/vulkan.h>
+#include <memory>                // for enable_shared_from_this
+#include <cstdint>               // for uint32_t
+#include <vulkan/vulkan_core.h>  // for VkDevice, VkDevice_T
 
 namespace wowgm::graphics
 {
-    class PhysicalDevice;
-    class Queue;
     class SwapChain;
-    class Semaphore;
     class CommandBuffer;
+    class Semaphore;
     class Fence;
-    class CommandPool;
+    class RenderPass;
     struct QueueFamilyIndices;
 
     /*
@@ -52,20 +52,31 @@ namespace wowgm::graphics
 
         void WaitIdle();
 
+        Semaphore* CreateSemaphore();
+        Fence* CreateFence();
+        Queue* CreateQueue(VkQueueFlagBits queueType, VkQueue queueObject, std::int32_t indice);
+        RenderPass* CreateRenderPass();
+
     private:
         VkDevice _device;
 
-        // This *needs* to be in the same order as indices defined in QueueFamilyIndices.
-        // (We are more or less memcpy-ing)
-        std::unique_ptr<Queue> _graphicsQueue;
-        std::unique_ptr<Queue> _presentQueue;
+        // Mirrors into the `_ownedQueues` vector.
+        Queue* _graphicsQueue;
+        Queue* _presentQueue;
+
+        std::vector<Queue*> _ownedQueues;
 
         static const constexpr std::uint32_t MAX_FRAMES_IN_FLIGHT = 2;
 
+        std::vector<Semaphore*> _ownedSemaphores;
+        std::vector<Fence*> _ownedFences;
+        std::vector<CommandBuffer*> _ownedCommandBuffers;
+        std::vector<RenderPass*> _ownedRenderPasses;
+
+        // These mirror into the vectors above.
         Semaphore* _imageAvailable[MAX_FRAMES_IN_FLIGHT];
         Semaphore* _renderFinished[MAX_FRAMES_IN_FLIGHT];
         Fence* _inflightFence[MAX_FRAMES_IN_FLIGHT];
-        std::vector<CommandBuffer*> _commandBuffers;
 
         std::uint32_t _currentFrame = 0;
     };

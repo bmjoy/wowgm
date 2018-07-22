@@ -1,55 +1,88 @@
 #include "LogicalDevice.hpp"
 #include "PhysicalDevice.hpp"
-#include "Queue.hpp"
 #include "SynchronizationPrimitive.hpp"
 #include "Assert.hpp"
 #include "CommandBuffer.hpp"
 #include "SwapChain.hpp"
-
 #include "SharedGraphicsDefines.hpp"
+#include "RenderPass.hpp"
 
+#include <limits>
+
+// Fucking hell.
 #undef min
 #undef max
+#undef CreateSemaphore
 
 namespace wowgm::graphics
 {
-    LogicalDevice::LogicalDevice(VkDevice device, QueueFamilyIndices& indices) : _device(device), _graphicsQueue(nullptr), _presentQueue(nullptr)
+    LogicalDevice::LogicalDevice(VkDevice device, QueueFamilyIndices& indices) : _device(device)
     {
-        for (std::uint32_t i = 0; i < indices.GetQueueCount(); ++i)
-        {
-            auto queueIndice = indices.EnumerateFamilies()[i];
+        auto getDeviceQueue = [](VkDevice& device, std::int32_t indice) -> VkQueue {
+            VkQueue queue;
+            vkGetDeviceQueue(device, indice, 0, &queue);
+            return queue;
+        };
 
-            VkQueue deviceQueue;
-            vkGetDeviceQueue(device, queueIndice, 0, &deviceQueue);
-            reinterpret_cast<std::unique_ptr<Queue>*>(&_graphicsQueue)[i] = std::make_unique<Queue>(this, deviceQueue, queueIndice);
+        _graphicsQueue = CreateQueue(VK_QUEUE_GRAPHICS_BIT, getDeviceQueue(device, indices.Graphics), indices.Graphics);
+        CreateQueue(VK_QUEUE_COMPUTE_BIT,  getDeviceQueue(device, indices.Compute),  indices.Compute);
+        Queue* transferQueue = CreateQueue(VK_QUEUE_TRANSFER_BIT, getDeviceQueue(device, indices.Transfer), indices.Transfer);
+
+        for (auto&& itr : _ownedQueues)
+        {
+            if (itr->GetFamilyIndice() == indices.Present)
+            {
+                _presentQueue = itr;
+                break;
+            }
         }
 
         for (std::uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
         {
-            _imageAvailable[i] = new Semaphore(this);
-            _renderFinished[i] = new Semaphore(this);
-            _inflightFence[i] = new Fence(this);
+            _imageAvailable[i] = CreateSemaphore();
+            _renderFinished[i] = CreateSemaphore();
+            _inflightFence[i] = CreateFence();
         }
     }
 
     LogicalDevice::~LogicalDevice()
     {
-        vkDeviceWaitIdle(_device);
-        for (std::uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
-        {
-            delete _imageAvailable[i];
-            delete _renderFinished[i];
-            delete _inflightFence[i];
-        }
+        // Wait for work to be done on the device before cleaning up
+        WaitIdle();
 
-        for (std::uint32_t i = 0; i < _commandBuffers.size(); ++i)
-            delete _commandBuffers[i];
+        for (auto&& itr : _ownedFences)
+            delete itr;
+        _ownedFences.clear();
 
-        _graphicsQueue.reset();
-        _presentQueue.reset();
+        for (auto&& itr : _ownedSemaphores)
+            delete itr;
+        _ownedSemaphores.clear();
+
+        for (auto&& itr : _ownedCommandBuffers)
+            delete itr;
+        _ownedCommandBuffers.clear();
+
+        for (auto&& itr : _ownedQueues)
+            delete itr;
+        _ownedQueues.clear();
+
+        for (auto&& itr : _ownedRenderPasses)
+            delete itr;
+        _ownedRenderPasses.clear();
 
         vkDestroyDevice(_device, nullptr);
         _device = VK_NULL_HANDLE;
+
+        // Housekeeping, nullptr everything
+        _graphicsQueue = nullptr;
+        _presentQueue = nullptr;
+
+        for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+        {
+            _inflightFence[i] = nullptr;
+            _imageAvailable[i] = nullptr;
+            _renderFinished[i] = nullptr;
+        }
     }
 
     void LogicalDevice::WaitIdle()
@@ -59,12 +92,12 @@ namespace wowgm::graphics
 
     Queue* LogicalDevice::GetGraphicsQueue()
     {
-        return _graphicsQueue.get();
+        return _graphicsQueue;
     }
 
     Queue* LogicalDevice::GetPresentQueue()
     {
-        return _presentQueue.get();
+        return _presentQueue;
     }
 
     void LogicalDevice::Draw(SwapChain* swapChain)
@@ -90,7 +123,7 @@ namespace wowgm::graphics
         submitInfo.pWaitDstStageMask = waitStages;
 
         submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &_commandBuffers[imageIndex]->AsCommandBuffer();
+        submitInfo.pCommandBuffers = &_ownedCommandBuffers[imageIndex]->AsCommandBuffer();
 
         VkSemaphore signalSemaphores[] = { *_renderFinished[_currentFrame] };
         submitInfo.signalSemaphoreCount = 1;
@@ -118,6 +151,34 @@ namespace wowgm::graphics
 
     void LogicalDevice::AddCommandBuffer(CommandBuffer* buffer)
     {
-        _commandBuffers.push_back(buffer);
+        _ownedCommandBuffers.push_back(buffer);
+    }
+
+    Semaphore* LogicalDevice::CreateSemaphore()
+    {
+        Semaphore* semaphore = new Semaphore(this);
+        _ownedSemaphores.push_back(semaphore);
+        return semaphore;
+    }
+
+    Fence* LogicalDevice::CreateFence()
+    {
+        Fence* fence = new Fence(this);
+        _ownedFences.push_back(fence);
+        return fence;
+    }
+
+    Queue* LogicalDevice::CreateQueue(VkQueueFlagBits queueType, VkQueue queueObject, std::int32_t indice)
+    {
+        Queue* queue = new Queue(this, queueType, queueObject, indice);
+        _ownedQueues.push_back(queue);
+        return queue;
+    }
+
+    RenderPass*  LogicalDevice::CreateRenderPass()
+    {
+        RenderPass* renderPass = new RenderPass(this);
+        _ownedRenderPasses.push_back(renderPass);
+        return renderPass;
     }
 }
