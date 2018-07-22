@@ -15,7 +15,7 @@ namespace wowgm::graphics
     {
         friend class CommandPool;
 
-        CommandBuffer(VkCommandBuffer buffer);
+        explicit CommandBuffer(VkCommandBuffer buffer);
 
         CommandBuffer(CommandBuffer&&) = delete;
         CommandBuffer(const CommandBuffer&) = delete;

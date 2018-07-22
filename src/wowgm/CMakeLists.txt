@@ -13,6 +13,8 @@ CollectSourceFiles(
   PRIVATE_SOURCES
 )
 
+find_package(GLM REQUIRED)
+
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
 CollectIncludeDirectories(
@@ -37,6 +39,7 @@ target_include_directories(WowGM
     ${Boost_INCLUDE_DIR}
     ${OPENSSL_INCLUDE_DIR}
     ${glfw_INCLUDE_DIRS}
-    ${GLM_INCLUDE_DIR})
+    ${GLM_INCLUDE_DIRS}
+    ${IMGUI_INCLUDE_DIR})
 
 install(TARGETS WowGM DESTINATION "${CMAKE_INSTALL_PREFIX}")

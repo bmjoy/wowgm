@@ -71,7 +71,7 @@ namespace wowgm::graphics
                     if (queueFamily.queueFlags & VK_QUEUE_TRANSFER_BIT)
                         _queueFamilyIndices.Transfer = i;
 
-                    if (queueFamily.queueCount > 0)
+                    if (presentSupport)
                         _queueFamilyIndices.Present = i;
                 }
 

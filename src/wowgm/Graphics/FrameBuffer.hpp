@@ -26,6 +26,7 @@ namespace wowgm::graphics
         operator VkFramebuffer() const { return _frameBuffer; }
 
         void AttachImageView(ImageView* imageView);
+        std::uint32_t GetAttachmentCount();
 
         RenderPass* GetRenderPass();
 

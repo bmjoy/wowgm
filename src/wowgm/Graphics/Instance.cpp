@@ -82,7 +82,7 @@ namespace wowgm::graphics
         return std::make_unique<Instance>(ctor_tag(), instance);
     }
 
-    Instance::Instance(Instance::ctor_tag, VkInstance instance) : _instance(instance)
+    Instance::Instance(Instance::ctor_tag, VkInstance instance) : _instance(instance), _logicalDevice(nullptr), _selectedPhysicalDevice(0)
     {
     }
 

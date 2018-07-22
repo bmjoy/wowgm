@@ -58,6 +58,11 @@ namespace wowgm::graphics
             wowgm::exceptions::throw_with_trace(std::runtime_error("failed to create framebuffer!"));
     }
 
+    std::uint32_t FrameBuffer::GetAttachmentCount()
+    {
+        return _attachments.size();
+    }
+
     RenderPass* FrameBuffer::GetRenderPass()
     {
         return _renderPass;

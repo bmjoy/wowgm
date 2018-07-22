@@ -10,7 +10,7 @@ namespace wowgm::graphics
         Image(const Image&) = delete;
 
     public:
-        Image(VkImage image);
+        explicit Image(VkImage image);
         Image();
 
         ~Image() = default;

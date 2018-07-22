@@ -189,7 +189,7 @@ int main()
 
             CommandBuffer* drawBuffer = device->GetGraphicsQueue()->GetCommandPool()->AllocatePrimaryBuffer();
             drawBuffer->BeginRecording(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
-            drawBuffer->Record<BeginRenderPass>(frameBuffers, swapChain->GetExtent());
+            drawBuffer->Record<BeginRenderPass>(frameBuffers, swapChain->GetExtent(), VkClearValue { 0.0f, 0.0f, 0.0f, 1.0f });
             drawBuffer->Record<BindPipeline>(VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
             drawBuffer->Draw(3);
             drawBuffer->Record<EndRenderPass>();

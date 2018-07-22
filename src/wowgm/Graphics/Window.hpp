@@ -13,7 +13,7 @@ namespace wowgm::graphics
     {
     public:
         Window(std::uint32_t width, std::uint32_t height, const char* title);
-        Window(const char* title);
+        explicit Window(const char* title);
 
         Window(Window&&) = delete;
         Window(Window const&) = delete;

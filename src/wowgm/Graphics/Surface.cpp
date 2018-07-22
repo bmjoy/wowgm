@@ -7,7 +7,6 @@ namespace wowgm::graphics
 {
     Surface::Surface(Instance* instance, VkSurfaceKHR surface, std::uint32_t width, std::uint32_t height) : _instance(instance), _surface(surface), _width(width), _height(height)
     {
-
     }
 
     Surface::~Surface()

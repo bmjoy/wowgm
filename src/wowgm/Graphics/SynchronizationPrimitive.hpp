@@ -44,7 +44,7 @@ namespace wowgm::graphics
     class Semaphore : public SynchronizationPrimitive<VkSemaphore>
     {
     public:
-        Semaphore(LogicalDevice* device) : SynchronizationPrimitive(device, &vkDestroySemaphore)
+        explicit Semaphore(LogicalDevice* device) : SynchronizationPrimitive(device, &vkDestroySemaphore)
         {
             VkSemaphoreCreateInfo createInfo = {};
             createInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -57,7 +57,7 @@ namespace wowgm::graphics
     class Fence : public SynchronizationPrimitive<VkFence>
     {
     public:
-        Fence(LogicalDevice* device) : SynchronizationPrimitive(device, &vkDestroyFence)
+        explicit Fence(LogicalDevice* device) : SynchronizationPrimitive(device, &vkDestroyFence)
         {
             VkFenceCreateInfo createInfo = { };
             createInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
