@@ -305,7 +305,7 @@ void ImGui_ImplVulkan_RenderDrawData(ImDrawData* draw_data, VkCommandBuffer comm
                 scissor.extent.width = (uint32_t)(pcmd->ClipRect.z - pcmd->ClipRect.x);
                 scissor.extent.height = (uint32_t)(pcmd->ClipRect.w - pcmd->ClipRect.y + 1); // FIXME: Why +1 here?
                 vkCmdSetScissor(command_buffer, 0, 1, &scissor);
-                
+
                 // Draw
                 vkCmdDrawIndexed(command_buffer, pcmd->ElemCount, 1, idx_offset, vtx_offset, 0);
             }
@@ -789,7 +789,7 @@ VkSurfaceFormatKHR ImGui_ImplVulkanH_SelectSurfaceFormat(VkPhysicalDevice physic
     }
     else
     {
-        // Request several formats, the first found will be used 
+        // Request several formats, the first found will be used
         for (int request_i = 0; request_i < request_formats_count; request_i++)
             for (uint32_t avail_i = 0; avail_i < avail_count; avail_i++)
                 if (avail_format[avail_i].format == request_formats[request_i] && avail_format[avail_i].colorSpace == request_color_space)
@@ -878,7 +878,7 @@ int ImGui_ImplVulkanH_GetMinImageCountFromPresentMode(VkPresentModeKHR present_m
 
 void ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(VkPhysicalDevice physical_device, VkDevice device, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator, int w, int h)
 {
-    uint32_t min_image_count = 2;	// FIXME: this should become a function parameter
+    uint32_t min_image_count = 3;	// FIXME: this should become a function parameter
 
     VkResult err;
     VkSwapchainKHR old_swapchain = wd->Swapchain;
@@ -896,7 +896,7 @@ void ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(VkPhysicalDevice 
     wd->BackBufferCount = 0;
     if (wd->RenderPass)
         vkDestroyRenderPass(device, wd->RenderPass, allocator);
-   
+
     // If min image count was not specified, request different count of images dependent on selected present mode
     if (min_image_count == 0)
         min_image_count = ImGui_ImplVulkanH_GetMinImageCountFromPresentMode(wd->PresentMode);
@@ -906,7 +906,7 @@ void ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(VkPhysicalDevice 
         VkSwapchainCreateInfoKHR info = {};
         info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
         info.surface = wd->Surface;
-		info.minImageCount = min_image_count;
+        info.minImageCount = min_image_count;
         info.imageFormat = wd->SurfaceFormat.format;
         info.imageColorSpace = wd->SurfaceFormat.colorSpace;
         info.imageArrayLayers = 1;
@@ -920,10 +920,10 @@ void ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(VkPhysicalDevice 
         VkSurfaceCapabilitiesKHR cap;
         err = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical_device, wd->Surface, &cap);
         check_vk_result(err);
-		if (info.minImageCount < cap.minImageCount)
-			info.minImageCount = cap.minImageCount;
-		else if (info.minImageCount > cap.maxImageCount)
-			info.minImageCount = cap.maxImageCount;
+        if (info.minImageCount < cap.minImageCount)
+            info.minImageCount = cap.minImageCount;
+        else if (info.minImageCount > cap.maxImageCount)
+            info.minImageCount = cap.maxImageCount;
 
         if (cap.currentExtent.width == 0xffffffff)
         {
@@ -945,6 +945,13 @@ void ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(VkPhysicalDevice 
     if (old_swapchain)
         vkDestroySwapchainKHR(device, old_swapchain, allocator);
 
+    ImGui_ImplVulkanH_CreateFrameBuffer(physical_device, device, wd, allocator);
+}
+
+void ImGui_ImplVulkanH_CreateFrameBuffer(VkPhysicalDevice physical_device, VkDevice device, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator)
+{
+    VkResult err;
+
     // Create the Render Pass
     {
         VkAttachmentDescription attachment = {};
@@ -956,13 +963,16 @@ void ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(VkPhysicalDevice 
         attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
         attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
         VkAttachmentReference color_attachment = {};
         color_attachment.attachment = 0;
         color_attachment.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
         VkSubpassDescription subpass = {};
         subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
         subpass.colorAttachmentCount = 1;
         subpass.pColorAttachments = &color_attachment;
+
         VkSubpassDependency dependency = {};
         dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
         dependency.dstSubpass = 0;
@@ -970,6 +980,7 @@ void ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(VkPhysicalDevice 
         dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
         dependency.srcAccessMask = 0;
         dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+
         VkRenderPassCreateInfo info = {};
         info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
         info.attachmentCount = 1;
@@ -978,6 +989,7 @@ void ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(VkPhysicalDevice 
         info.pSubpasses = &subpass;
         info.dependencyCount = 1;
         info.pDependencies = &dependency;
+
         err = vkCreateRenderPass(device, &info, allocator, &wd->RenderPass);
         check_vk_result(err);
     }

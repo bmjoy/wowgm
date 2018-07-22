@@ -10,7 +10,7 @@
 
 #include <vulkan/vulkan.h>
 
-#define IMGUI_VK_QUEUED_FRAMES 2
+#define IMGUI_VK_QUEUED_FRAMES 3
 
 struct ImGui_ImplVulkan_InitInfo
 {
@@ -38,7 +38,7 @@ IMGUI_IMPL_API bool     ImGui_ImplVulkan_CreateDeviceObjects();
 
 //-------------------------------------------------------------------------
 // Miscellaneous Vulkan Helpers
-// Generally we try to NOT provide any kind of superfluous high-level helpers in the examples. 
+// Generally we try to NOT provide any kind of superfluous high-level helpers in the examples.
 // But for the upcoming multi-viewport feature, the Vulkan will need this code anyway, so we decided to shared it and use it in the examples' main.cpp
 // If your application/engine already has code to create all that data (swap chain, render pass, frame buffers, etc.) you can ignore all of this.
 //-------------------------------------------------------------------------
@@ -50,6 +50,7 @@ struct ImGui_ImplVulkanH_WindowData;
 
 IMGUI_IMPL_API void                 ImGui_ImplVulkanH_CreateWindowDataCommandBuffers(VkPhysicalDevice physical_device, VkDevice device, uint32_t queue_family, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator);
 IMGUI_IMPL_API void                 ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(VkPhysicalDevice physical_device, VkDevice device, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator, int w, int h);
+IMGUI_IMPL_API void                 ImGui_ImplVulkanH_CreateFrameBuffer(VkPhysicalDevice physical_device, VkDevice device, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator);
 IMGUI_IMPL_API void                 ImGui_ImplVulkanH_DestroyWindowData(VkInstance instance, VkDevice device, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator);
 IMGUI_IMPL_API VkSurfaceFormatKHR   ImGui_ImplVulkanH_SelectSurfaceFormat(VkPhysicalDevice physical_device, VkSurfaceKHR surface, const VkFormat* request_formats, int request_formats_count, VkColorSpaceKHR request_color_space);
 IMGUI_IMPL_API VkPresentModeKHR     ImGui_ImplVulkanH_SelectPresentMode(VkPhysicalDevice physical_device, VkSurfaceKHR surface, const VkPresentModeKHR* request_modes, int request_modes_count);
