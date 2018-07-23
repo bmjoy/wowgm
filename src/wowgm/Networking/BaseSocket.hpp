@@ -1,12 +1,10 @@
 #pragma once
 
-#include <boost/array.hpp>
 #include <boost/asio/ip/tcp.hpp>
 
-namespace wowgm::networking {
-
-    namespace asio = boost::asio;
-    using tcp = asio::ip::tcp;
+namespace wowgm::networking
+{
+    using tcp = boost::asio::ip::tcp;
 
     class MessageBuffer;
 
