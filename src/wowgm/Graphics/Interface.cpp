@@ -33,6 +33,9 @@ namespace wowgm::graphics
 
     Interface::Interface(std::unique_ptr<Instance>& instance, Window* window) : _window(window)
     {
+        memset(_username, 0, 16);
+        memset(_password, 0, 16);
+
         _surface = instance->CreateSurface(_window);
         _device = instance->CreateLogicalDevice();
         _swapChain = instance->CreateSwapChain();
@@ -305,7 +308,7 @@ namespace wowgm::graphics
         {
             std::stringstream ss;
             ss << "Frame draw time: " << std::fixed << std::setprecision(3) << _frameDrawTime << " FPS: " << (1000.0f / _frameDrawTime);
-            ImGui::MenuItem(ss.str().c_str());
+            ImGui::Text(ss.str().c_str());
             ImGui::EndMainMenuBar();
         }
 

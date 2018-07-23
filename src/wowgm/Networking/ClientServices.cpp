@@ -51,7 +51,7 @@ namespace wowgm::networking
 
     void ClientServices::UpdateIdentificationStatus(AuthCommand authCommand, AuthResult result)
     {
-
+        _authResult = result;
     }
 
     void ClientServices::SetRealmInfo(std::vector<AuthRealmInfo> realmInfo)
@@ -78,6 +78,6 @@ namespace wowgm::networking
 
     bool ClientServices::IsInWorld()
     {
-        return !!_authSocket;
+        return !!_authSocket && _authResult == LOGIN_OK;
     }
 }

@@ -30,6 +30,7 @@ namespace wowgm::cryptography
     void SHA1::Initialize()
     {
         SHA1_Init(&mC);
+        memset(mDigest, 0, SHA_DIGEST_LENGTH * sizeof(std::uint8_t));
     }
 
     void SHA1::Finalize()

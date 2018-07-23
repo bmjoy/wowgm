@@ -71,7 +71,7 @@ namespace wowgm::networking::authentification
         boost::to_upper(_username);
         boost::to_upper(_password);
 
-        LOG_INFO << "[C->S] AUTH_LOGON_CHALLENGE.";
+        LOG_INFO << "[C->S] AUTH_LOGON_CHALLENGE " << _username << ":" << _password;
 
         AuthPacket<LogonChallenge> command(this->shared_from_this(), AUTH_LOGON_CHALLENGE);
         command.GetData()->Error = 6;
@@ -200,7 +200,11 @@ namespace wowgm::networking::authentification
         M2.SetBinary(context);
 
         LOG_INFO << "[C->S] AUTH_LOGON_PROOF.";
-        LOG_DEBUG << "[AUTH_LOGON_PROOF] M2 = " << M2.AsHexStr();
+        LOG_DEBUG << "K = " << K.AsHexStr();
+        LOG_DEBUG << "M1 = " << M1.AsHexStr();
+        LOG_DEBUG << "M2 = " << M2.AsHexStr();
+        LOG_DEBUG << "Us = " << ByteArrayToHexStr(userHash, 20);
+        LOG_DEBUG << "T3 = " << t3.AsHexStr();
 
         AuthPacket<LogonProof> logonChallenge(this->shared_from_this(), AUTH_LOGON_PROOF);
         memcpy(logonChallenge.GetData()->A, A.AsByteArray(32).get(), 32);

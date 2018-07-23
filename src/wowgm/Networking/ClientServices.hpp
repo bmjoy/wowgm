@@ -54,6 +54,7 @@ namespace wowgm::networking
         std::shared_ptr<SocketManager> _socketUpdater;
         std::shared_ptr<AuthSocket> _authSocket;
         bool _isConnected;
+        AuthResult _authResult = LOGIN_OK;
 
         boost::optional<std::vector<AuthRealmInfo>> _realmInfos;
     };
