@@ -62,8 +62,6 @@ struct ImGui_ImplVulkanH_FrameData
     VkCommandPool       CommandPool;
     VkCommandBuffer     CommandBuffer;
     VkFence             Fence;
-    VkSemaphore         ImageAcquiredSemaphore;
-    VkSemaphore         RenderCompleteSemaphore;
 
     IMGUI_IMPL_API ImGui_ImplVulkanH_FrameData();
 };

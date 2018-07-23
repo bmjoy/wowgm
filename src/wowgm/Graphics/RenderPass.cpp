@@ -108,4 +108,9 @@ namespace wowgm::graphics
         _ownedFrameBuffers.push_back(frameBuffer);
         return frameBuffer;
     }
+
+    FrameBuffer* RenderPass::GetFrameBuffer(std::uint32_t index)
+    {
+        return _ownedFrameBuffers[index];
+    }
 }

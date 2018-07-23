@@ -189,6 +189,11 @@ namespace wowgm::graphics
         return _physicalDevice->GetInstance()->GetLogicalDevice();
     }
 
+    std::uint32_t SwapChain::GetImageCount()
+    {
+        return _swapChainImages.size();
+    }
+
     Image* SwapChain::GetImage(std::uint32_t index)
     {
         return _swapChainImages[index];
@@ -197,5 +202,10 @@ namespace wowgm::graphics
     ImageView* SwapChain::GetImageView(std::uint32_t index)
     {
         return _imageViews[index];
+    }
+
+    std::vector<ImageView*>& SwapChain::GetImageViews()
+    {
+        return _imageViews;
     }
 }

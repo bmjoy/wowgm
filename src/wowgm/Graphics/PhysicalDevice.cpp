@@ -112,6 +112,14 @@ namespace wowgm::graphics
         return _deviceProperties;
     }
 
+    std::uint32_t PhysicalDevice::GetMemoryTypeIndex(VkMemoryPropertyFlags memoryFlags, std::uint32_t typeBits)
+    {
+        for (uint32_t i = 0; i < _deviceMemoryProperties.memoryTypeCount; i++)
+            if ((_deviceMemoryProperties.memoryTypes[i].propertyFlags & memoryFlags) != 0 && typeBits & (1u << i))
+                return i;
+        return 0xFFFFFFFF; // Unable to find memoryType
+    }
+
     bool PhysicalDevice::CheckDeviceExtensionSupport()
     {
         uint32_t extensionCount;

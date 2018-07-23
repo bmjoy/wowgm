@@ -1,6 +1,7 @@
 #pragma once
 
 #include "imgui.h"
+#include "imgui_impl_glfw.h"
 #include "imgui_impl_vulkan.h"
 
 #include <vulkan/vulkan.h>
@@ -10,23 +11,32 @@ namespace wowgm::graphics
     class Window;
     class Instance;
     class Surface;
+    class SwapChain;
+    class RenderPass;
 
     class GUI
     {
+        GUI(GUI&&) = delete;
+        GUI(const GUI&) = delete;
+
     public:
 
-        explicit GUI(Window* window, Instance* instance, Surface* surface);
+        explicit GUI(Window* window, Instance* instance, Surface* surface, SwapChain* swapChain);
         ~GUI();
+
+        void Draw();
 
     private: /* ImGUI */
 
         Window* _window;
         Instance* _instance;
         Surface* _surface;
+        SwapChain* _swapChain;
 
         void ResizeFrameBuffer(int width, int height);
 
-        void Draw();
+        void CreateWindowDataCommandBuffers();
+
 
         static void CheckVulkanResult(VkResult result);
 

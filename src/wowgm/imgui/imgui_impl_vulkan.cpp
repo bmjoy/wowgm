@@ -735,8 +735,6 @@ ImGui_ImplVulkanH_FrameData::ImGui_ImplVulkanH_FrameData()
     CommandPool = VK_NULL_HANDLE;
     CommandBuffer = VK_NULL_HANDLE;
     Fence = VK_NULL_HANDLE;
-    ImageAcquiredSemaphore = VK_NULL_HANDLE;
-    RenderCompleteSemaphore = VK_NULL_HANDLE;
 }
 
 ImGui_ImplVulkanH_WindowData::ImGui_ImplVulkanH_WindowData()
@@ -851,14 +849,6 @@ void ImGui_ImplVulkanH_CreateWindowDataCommandBuffers(VkPhysicalDevice physical_
             info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
             info.flags = VK_FENCE_CREATE_SIGNALED_BIT;
             err = vkCreateFence(device, &info, allocator, &fd->Fence);
-            check_vk_result(err);
-        }
-        {
-            VkSemaphoreCreateInfo info = {};
-            info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-            err = vkCreateSemaphore(device, &info, allocator, &fd->ImageAcquiredSemaphore);
-            check_vk_result(err);
-            err = vkCreateSemaphore(device, &info, allocator, &fd->RenderCompleteSemaphore);
             check_vk_result(err);
         }
     }
@@ -1045,8 +1035,6 @@ void ImGui_ImplVulkanH_DestroyWindowData(VkInstance instance, VkDevice device, I
         vkDestroyFence(device, fd->Fence, allocator);
         vkFreeCommandBuffers(device, fd->CommandPool, 1, &fd->CommandBuffer);
         vkDestroyCommandPool(device, fd->CommandPool, allocator);
-        vkDestroySemaphore(device, fd->ImageAcquiredSemaphore, allocator);
-        vkDestroySemaphore(device, fd->RenderCompleteSemaphore, allocator);
     }
     for (uint32_t i = 0; i < wd->BackBufferCount; i++)
     {

@@ -66,24 +66,29 @@ namespace wowgm::graphics
 
     public: /* Attributes and Bindings */
 
-        void AddBinding(VkVertexInputBindingDescription binding);
+        void AddVertexBinding(VkVertexInputBindingDescription binding);
 
         template <typename T>
-        void AddBinding(std::uint32_t index, VkVertexInputRate inputRate) {
-            AddBinding({ index, sizeof(T), inputRate });
+        void AddVertexBinding(std::uint32_t index, VkVertexInputRate inputRate) {
+            AddVertexBinding({ index, sizeof(T), inputRate });
         }
 
         // TODO: This was needed in OpenGL; is it still needed in Vulkan?
         // template <>
-        // void AddBinding<glm::mat4>(std::uint32_t index, VkVertexInputRate inputRate)
+        // void AddVertexBinding<glm::mat4>(std::uint32_t index, VkVertexInputRate inputRate)
         // {
-        //     AddBinding({ index, sizeof(glm::vec4), inputRate });
-        //     AddBinding({ index + 1, sizeof(glm::vec4), inputRate });
-        //     AddBinding({ index + 2, sizeof(glm::vec4), inputRate });
-        //     AddBinding({ index + 3, sizeof(glm::vec4), inputRate });
+        //     AddVertexBinding({ index, sizeof(glm::vec4), inputRate });
+        //     AddVertexBinding({ index + 1, sizeof(glm::vec4), inputRate });
+        //     AddVertexBinding({ index + 2, sizeof(glm::vec4), inputRate });
+        //     AddVertexBinding({ index + 3, sizeof(glm::vec4), inputRate });
         // }
 
-        void AddAttribute(VkVertexInputAttributeDescription attrDescription);
+        void AddVertexAttribute(VkVertexInputAttributeDescription attrDescription);
+
+        void AddPushConstant(VkPushConstantRange constantRange);
+        void AddDescriptorSetLayout(VkDescriptorSetLayout descriptor);
+
+        void SetColorBlendState(VkPipelineColorBlendStateCreateInfo blendState);
 
     private:
         VkPipelineLayout _pipelineLayout;
@@ -106,6 +111,7 @@ namespace wowgm::graphics
         VkPipelineMultisampleStateCreateInfo                    _multisamplingState; // Multisampling is optional IFF rasterization is off.
         VkPipelineDepthStencilStateCreateInfo                   _depthStencilState;
         VkPipelineColorBlendStateCreateInfo                     _colorBlendState;
+        VkPipelineColorBlendAttachmentState                     _colorBlendAttachmentState;
 
         bool                                                    _useDynamicState;
         VkPipelineDynamicStateCreateInfo                        _dynamicState;

@@ -42,6 +42,7 @@ namespace wowgm::graphics
         QueueFamilyIndices& GetQueues();
         VkPhysicalDeviceFeatures& GetPhysicalDeviceFeatures();
         VkPhysicalDeviceProperties& GetPhysicalDeviceProperties();
+        std::uint32_t GetMemoryTypeIndex(VkMemoryPropertyFlags memoryFlags, std::uint32_t typeBits);
 
         bool CheckDeviceExtensionSupport();
 

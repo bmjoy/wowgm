@@ -80,6 +80,21 @@ namespace wowgm::graphics
         _depthStencilState.stencilTestEnable = VK_FALSE;
 
         //! TODO: Blending
+        _colorBlendAttachmentState = {};
+        _colorBlendAttachmentState.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+        _colorBlendAttachmentState.blendEnable = VK_FALSE;
+
+        _colorBlendState = {};
+        _colorBlendState.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+        _colorBlendState.logicOpEnable = VK_FALSE;
+        _colorBlendState.logicOp = VK_LOGIC_OP_COPY;
+        _colorBlendState.attachmentCount = 1;
+        _colorBlendState.pAttachments = &_colorBlendAttachmentState;
+        _colorBlendState.blendConstants[0] = 0.0f;
+        _colorBlendState.blendConstants[1] = 0.0f;
+        _colorBlendState.blendConstants[2] = 0.0f;
+        _colorBlendState.blendConstants[3] = 0.0f;
+
         //! TODO: Dynamic state
     }
 
@@ -175,21 +190,6 @@ namespace wowgm::graphics
         _graphicsPipelineCreateInfo.subpass = 0; // Index of the subpass where this pipeline will be used
         _graphicsPipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-        VkPipelineColorBlendAttachmentState colorBlendAttachment = { };
-        colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-        colorBlendAttachment.blendEnable = VK_FALSE;
-
-        _colorBlendState = { };
-        _colorBlendState.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-        _colorBlendState.logicOpEnable = VK_FALSE;
-        _colorBlendState.logicOp = VK_LOGIC_OP_COPY;
-        _colorBlendState.attachmentCount = 1;
-        _colorBlendState.pAttachments = &colorBlendAttachment;
-        _colorBlendState.blendConstants[0] = 0.0f;
-        _colorBlendState.blendConstants[1] = 0.0f;
-        _colorBlendState.blendConstants[2] = 0.0f;
-        _colorBlendState.blendConstants[3] = 0.0f;
-
         result = vkCreateGraphicsPipelines(*_swapchain->GetLogicalDevice(), VK_NULL_HANDLE, 1, &_graphicsPipelineCreateInfo, nullptr, &_pipeline);
         if (result != VK_SUCCESS)
             wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create pipeline"));
@@ -271,13 +271,28 @@ namespace wowgm::graphics
         return _pipelineLayout != VK_NULL_HANDLE;
     }
 
-    void Pipeline::AddBinding(VkVertexInputBindingDescription binding)
+    void Pipeline::AddVertexBinding(VkVertexInputBindingDescription binding)
     {
         _vertexBindingDescriptions.push_back(binding);
     }
 
-    void Pipeline::AddAttribute(VkVertexInputAttributeDescription attrDescription)
+    void Pipeline::AddVertexAttribute(VkVertexInputAttributeDescription attrDescription)
     {
         _vertexAttributeDescriptions.push_back(attrDescription);
+    }
+
+    void Pipeline::AddPushConstant(VkPushConstantRange constantRange)
+    {
+        _pushConstantRanges.push_back(constantRange);
+    }
+
+    void Pipeline::AddDescriptorSetLayout(VkDescriptorSetLayout descriptor)
+    {
+        _descriptorSets.push_back(descriptor);
+    }
+
+    void Pipeline::SetColorBlendState(VkPipelineColorBlendStateCreateInfo blendState)
+    {
+        memcpy(&_colorBlendState, &blendState, sizeof(VkPipelineColorBlendStateCreateInfo));
     }
 }

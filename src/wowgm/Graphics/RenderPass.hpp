@@ -39,6 +39,7 @@ namespace wowgm::graphics
         void AddAttachment(VkAttachmentDescription attachment);
 
         FrameBuffer* CreateFrameBuffer(SwapChain* swapChain);
+        FrameBuffer* GetFrameBuffer(std::uint32_t index);
 
         operator VkRenderPass() const { return _renderPass; }
 

@@ -5,6 +5,11 @@
 #include "Instance.hpp"
 #include "PhysicalDevice.hpp"
 #include "LogicalDevice.hpp"
+#include "SwapChain.hpp"
+#include "RenderPass.hpp"
+#include "ImageView.hpp"
+#include "Image.hpp"
+#include "FrameBuffer.hpp"
 
 #include <iostream>
 #include <stdexcept>
@@ -21,50 +26,41 @@
 #undef min
 #undef max
 
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_vulkan.h"
-
 namespace wowgm::graphics
 {
-    GUI::GUI(Window* window, Instance* instance, Surface* surface) : _window(window), _instance(instance), _surface(surface)
+    GUI::GUI(Window* window, Instance* instance, Surface* surface, SwapChain* swapChain) : _window(window), _instance(instance), _surface(surface), _swapChain(swapChain)
     {
         if (!glfwVulkanSupported())
             wowgm::exceptions::throw_with_trace(std::runtime_error("Vulkan is not supported on your system!"));
 
+        RenderPass* renderPass = instance->GetLogicalDevice()->CreateRenderPass();
+
         _windowData.Surface = *surface;
         _physicalDevice = *instance->GetPhysicalDevice();
         _queueFamily = instance->GetPhysicalDevice()->GetQueues().Graphics;
-        _device = *instance->CreateLogicalDevice();
+        _windowData.Swapchain = *swapChain;
+        _windowData.RenderPass = *renderPass;
+        _device = *instance->GetLogicalDevice();
+        _queue = *instance->GetLogicalDevice()->GetGraphicsQueue();
 
-        { // Create descriptor pool
-            VkDescriptorPoolSize pool_sizes[] =
-            {
-                { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
-                { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
-                { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
-                { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
-                { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
-                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
-                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
-                { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
-            };
-            VkDescriptorPoolCreateInfo pool_info = {};
-            pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-            pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-            pool_info.maxSets = 1000 * IM_ARRAYSIZE(pool_sizes);
-            pool_info.poolSizeCount = (uint32_t)IM_ARRAYSIZE(pool_sizes);
-            pool_info.pPoolSizes = pool_sizes;
-            VkResult err = vkCreateDescriptorPool(_device, &pool_info, _allocator, &_descriptorPool);
-            if (err != VK_SUCCESS)
-                wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to allocate descriptor pools"));
+        _windowData.ClearEnable = true;
+        _windowData.ClearValue = { 0.45f, 0.55f, 0.60f, 1.00f };
+
+        int index = 0;
+        for (auto&& itr : swapChain->GetImageViews())
+        {
+            _windowData.BackBuffer[index] = *itr->GetImage();
+            _windowData.BackBufferView[index] = *itr;
+            _windowData.Framebuffer[index] = *renderPass->GetFrameBuffer(index);
+
+            ++index;
         }
 
-        glfwSetFramebufferSizeCallback(window->GetHandle(), [this](GLFWwindow* window, int width, int height) -> void {
+        _windowData.BackBufferCount = index;
+
+       /* glfwSetFramebufferSizeCallback(window->GetHandle(), [this](GLFWwindow* window, int width, int height) -> void {
             this->ResizeFrameBuffer(width, height);
-        });
+        });*/
 
         VkBool32 physicalSurfaceSupport;
         vkGetPhysicalDeviceSurfaceSupportKHR(_physicalDevice, _queueFamily, *surface, &physicalSurfaceSupport);
@@ -77,32 +73,31 @@ namespace wowgm::graphics
         VkPresentModeKHR present_mode = VK_PRESENT_MODE_FIFO_KHR;
         _windowData.PresentMode = ImGui_ImplVulkanH_SelectPresentMode(_physicalDevice, _windowData.Surface, &present_mode, 1);
 
-        ImGui_ImplVulkanH_CreateWindowDataCommandBuffers(_physicalDevice, _device, _queueFamily, &_windowData, _allocator);
-        ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(_physicalDevice, _device, &_windowData, _allocator, window->GetWidth(), window->GetHeight());
+        CreateWindowDataCommandBuffers();
 
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
 
         ImGui_ImplGlfw_InitForVulkan(window->GetHandle(), true);
 
-        ImGui_ImplVulkan_InitInfo init_info = {};
-        init_info.Instance = *_instance;
-        init_info.PhysicalDevice = _physicalDevice;
-        init_info.Device = _device;
-        init_info.QueueFamily = _queueFamily;
-        init_info.Queue = _queue;
-        init_info.PipelineCache = _pipelineCache;
-        init_info.DescriptorPool = _descriptorPool;
-        init_info.Allocator = _allocator;
-        init_info.CheckVkResultFn = &GUI::CheckVulkanResult;
-        ImGui_ImplVulkan_Init(&init_info, _windowData.RenderPass);
+        ImGui_ImplVulkan_InitInfo initInfo = {};
+        initInfo.Instance = *_instance;
+        initInfo.PhysicalDevice = _physicalDevice;
+        initInfo.Device = _device;
+        initInfo.QueueFamily = _queueFamily;
+        initInfo.Queue = _queue;
+        initInfo.PipelineCache = _pipelineCache;
+        initInfo.DescriptorPool = _descriptorPool;
+        initInfo.Allocator = _allocator;
+        initInfo.CheckVkResultFn = &GUI::CheckVulkanResult;
+        ImGui_ImplVulkan_Init(&initInfo, _windowData.RenderPass);
 
         ImGui::StyleColorsDark();
 
         { // Upload Fonts
             // Use any command queue
-            VkCommandPool command_pool = _windowData.Frames[wd->FrameIndex].CommandPool;
-            VkCommandBuffer command_buffer = _windowData.Frames[wd->FrameIndex].CommandBuffer;
+            VkCommandPool command_pool = _windowData.Frames[_windowData.FrameIndex].CommandPool;
+            VkCommandBuffer command_buffer = _windowData.Frames[_windowData.FrameIndex].CommandBuffer;
 
             CheckVulkanResult(vkResetCommandPool(_device, command_pool, 0));
             VkCommandBufferBeginInfo begin_info = {};
@@ -131,17 +126,58 @@ namespace wowgm::graphics
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
 
-        ImGui_ImplVulkanH_DestroyWindowData(*_instance, _device, &_windowData, _allocator);
         vkDestroyDescriptorPool(_device, _descriptorPool, _allocator);
+    }
 
-        vkDestroyDevice(_device, _allocator);
+    void GUI::CreateWindowDataCommandBuffers()
+    {
+        for (int i = 0; i < IMGUI_VK_QUEUED_FRAMES; i++)
+        {
+            ImGui_ImplVulkanH_FrameData* fd = &_windowData.Frames[i];
+            {
+                VkCommandPoolCreateInfo info = { };
+                info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+                info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+                info.queueFamilyIndex = _queueFamily;
+
+                if (vkCreateCommandPool(_device, &info, _allocator, &fd->CommandPool) != VK_SUCCESS)
+                    wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create command pool in ImGui"));
+            }
+
+            {
+                VkCommandBufferAllocateInfo info = { };
+                info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+                info.commandPool = fd->CommandPool;
+                info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+                info.commandBufferCount = 1;
+
+                if (vkAllocateCommandBuffers(_device, &info, &fd->CommandBuffer) != VK_SUCCESS)
+                    wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to allocate command buffers in ImGui"));
+            }
+
+            {
+                VkFenceCreateInfo info = {};
+                info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+                info.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+                if (vkCreateFence(_device, &info, _allocator, &fd->Fence) != VK_SUCCESS)
+                    wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create fence in ImGui"));
+            }
+            {
+                VkSemaphoreCreateInfo info = {};
+                info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+                if (vkCreateSemaphore(_device, &info, _allocator, &fd->ImageAcquiredSemaphore) != VK_SUCCESS)
+                    wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create semaphore in ImGui"));
+                if (vkCreateSemaphore(_device, &info, _allocator, &fd->RenderCompleteSemaphore) != VK_SUCCESS)
+                    wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create semaphore in ImGui"));
+            }
+        }
     }
 
     void GUI::Draw()
     {
         if (_resizeWanted)
         {
-            ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(_physicalDevice, _device, &_windowData, _allocator, _resizeWidth, _resizeHeight);
+            // ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(_physicalDevice, _device, &_windowData, _allocator, _resizeWidth, _resizeHeight);
             _resizeWanted = false;
         }
 
@@ -158,7 +194,6 @@ namespace wowgm::graphics
         ImGui::End();
 
         // Done setting up
-
         ImGui::Render();
 
         // Render
@@ -187,7 +222,7 @@ namespace wowgm::graphics
             info.renderArea.extent.height = _windowData.Height;
             info.clearValueCount = 1;
             info.pClearValues = &_windowData.ClearValue;
-            vkCmdBeginRenderPass(&fd->CommandBuffer, &info, VK_SUBPASS_CONTENTS_INLINE);
+            vkCmdBeginRenderPass(fd->CommandBuffer, &info, VK_SUBPASS_CONTENTS_INLINE);
         }
 
         ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), fd->CommandBuffer);
@@ -210,7 +245,6 @@ namespace wowgm::graphics
         }
 
         // Present
-        ImGui_ImplVulkanH_FrameData* fd = &_windowData.Frames[_windowData.FrameIndex];
         VkPresentInfoKHR info = {};
         info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
         info.waitSemaphoreCount = 1;

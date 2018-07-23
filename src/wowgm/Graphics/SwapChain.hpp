@@ -35,6 +35,8 @@ namespace wowgm::graphics
 
         Image* GetImage(std::uint32_t index);
         ImageView* GetImageView(std::uint32_t index);
+        std::vector<ImageView*>& GetImageViews();
+        std::uint32_t GetImageCount();
 
         operator VkSwapchainKHR() const { return _swapChain; }
 

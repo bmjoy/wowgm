@@ -8,6 +8,7 @@
 #include "RenderPass.hpp"
 
 #include <limits>
+#include <boost/iterator/transform_iterator.hpp>
 
 // Fucking hell.
 #undef min
@@ -59,7 +60,8 @@ namespace wowgm::graphics
         _ownedSemaphores.clear();
 
         for (auto&& itr : _ownedCommandBuffers)
-            delete itr;
+            for (auto&& itr2 : itr.second)
+                delete itr2;
         _ownedCommandBuffers.clear();
 
         for (auto&& itr : _ownedQueues)
@@ -100,18 +102,34 @@ namespace wowgm::graphics
         return _presentQueue;
     }
 
-    void LogicalDevice::Draw(SwapChain* swapChain)
+    std::uint32_t LogicalDevice::AcquireNextImage(SwapChain* swapChain)
     {
         constexpr static const std::uint64_t MAX_TIMEOUT = std::numeric_limits<std::uint64_t>::max();
 
-        VkFence currentFence = *_inflightFence[_currentFrame];
-
-        VkResult result = vkWaitForFences(_device, 1, &currentFence, VK_TRUE, MAX_TIMEOUT);
+        VkResult result = vkWaitForFences(_device, _waitFences.size(), _waitFences.data(), VK_TRUE, MAX_TIMEOUT);
 
         std::uint32_t imageIndex;
         result = vkAcquireNextImageKHR(_device, *swapChain, MAX_TIMEOUT, *_imageAvailable[_currentFrame], VK_NULL_HANDLE, &imageIndex);
+        result = vkResetFences(_device, _waitFences.size(), _waitFences.data());
 
-        result = vkResetFences(_device, 1, &currentFence);
+        _waitFences.clear();
+
+        return imageIndex;
+    }
+
+    void LogicalDevice::AddWaitFence(Fence* fence)
+    {
+        _waitFences.push_back(*fence);
+    }
+
+    void LogicalDevice::AddWaitFence(VkFence fence)
+    {
+        _waitFences.push_back(fence);
+    }
+
+    void LogicalDevice::Submit(std::uint32_t imageIndex, SwapChain* swapChain, Fence* submitFence)
+    {
+        VkFence currentFence = *submitFence;
 
         VkSubmitInfo submitInfo = {};
         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -119,39 +137,65 @@ namespace wowgm::graphics
         VkSemaphore waitSemaphores[] = { *_imageAvailable[_currentFrame] };
         VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
         submitInfo.waitSemaphoreCount = 1;
-        submitInfo.pWaitSemaphores = waitSemaphores;
+        submitInfo.pWaitSemaphores = waitSemaphores; // Wait for this semaphore to signal before executing
         submitInfo.pWaitDstStageMask = waitStages;
 
-        submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &_ownedCommandBuffers[imageIndex]->AsCommandBuffer();
+        submitInfo.commandBufferCount = _ownedCommandBuffers[imageIndex].size();
+        auto fn = [](CommandBuffer* b) -> VkCommandBuffer { return *b; };
+        auto itr = boost::make_transform_iterator(_ownedCommandBuffers[imageIndex].begin(), fn);
+        auto end = boost::make_transform_iterator(_ownedCommandBuffers[imageIndex].end(), fn);
+        std::vector<VkCommandBuffer> commandBuffers(itr, end);
+
+        submitInfo.pCommandBuffers = commandBuffers.data();
 
         VkSemaphore signalSemaphores[] = { *_renderFinished[_currentFrame] };
         submitInfo.signalSemaphoreCount = 1;
-        submitInfo.pSignalSemaphores = signalSemaphores;
+        submitInfo.pSignalSemaphores = signalSemaphores; // Signal this semaphore when submitted
 
-        result = vkQueueSubmit(*_graphicsQueue, 1, &submitInfo, currentFence);
+        VkResult result = vkQueueSubmit(*_graphicsQueue, 1, &submitInfo, currentFence);
         if (result != VK_SUCCESS)
             wowgm::exceptions::throw_with_trace(std::runtime_error("Failed to submit a draw command buffer!"));
+    }
+
+    void LogicalDevice::Present(std::uint32_t imageToPresent, SwapChain* swapChain, Semaphore* waitSemaphore)
+    {
+        VkSemaphore signalSemaphores[] = { *_renderFinished[_currentFrame] };
+        VkSemaphore waitSemaphore_ = *waitSemaphore;
 
         VkPresentInfoKHR presentInfo = {};
         presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
         presentInfo.waitSemaphoreCount = 1;
-        presentInfo.pWaitSemaphores = signalSemaphores;
+        presentInfo.pWaitSemaphores = &waitSemaphore_;
 
         VkSwapchainKHR swapChains[] = { *swapChain };
         presentInfo.swapchainCount = 1;
         presentInfo.pSwapchains = swapChains;
-        presentInfo.pImageIndices = &imageIndex;
+        presentInfo.pImageIndices = &imageToPresent;
 
-        result = vkQueuePresentKHR(*_presentQueue, &presentInfo);
+        VkResult result = vkQueuePresentKHR(*_presentQueue, &presentInfo);
 
         _currentFrame = (_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     }
 
-    void LogicalDevice::AddCommandBuffer(CommandBuffer* buffer)
+    void LogicalDevice::AddCommandBuffer(std::uint32_t frameIndex, CommandBuffer* buffer)
     {
-        _ownedCommandBuffers.push_back(buffer);
+        _ownedCommandBuffers[frameIndex].push_back(buffer);
+    }
+
+    Semaphore* LogicalDevice::GetImageAvailableSemaphore()
+    {
+        return _imageAvailable[_currentFrame];
+    }
+
+    Semaphore* LogicalDevice::GetSignalSemaphore()
+    {
+        return _renderFinished[_currentFrame];
+    }
+
+    Fence* LogicalDevice::GetFlightFence()
+    {
+        return _inflightFence[_currentFrame];
     }
 
     Semaphore* LogicalDevice::CreateSemaphore()

@@ -16,6 +16,8 @@ namespace wowgm::graphics
         ImageView(SwapChain* swapChain, Image* image);
         ~ImageView();
 
+        Image* GetImage();
+
         operator VkImageView() const { return _imageView; }
 
         SwapChain* GetSwapChain();
@@ -23,6 +25,7 @@ namespace wowgm::graphics
     private:
         VkImageView _imageView;
 
+        Image* _image;
         SwapChain* _swapChain;
     };
 }

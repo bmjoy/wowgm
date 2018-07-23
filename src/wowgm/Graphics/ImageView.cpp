@@ -8,7 +8,7 @@
 
 namespace wowgm::graphics
 {
-    ImageView::ImageView(SwapChain* swapChain, Image* image) : _swapChain(swapChain)
+    ImageView::ImageView(SwapChain* swapChain, Image* image) : _swapChain(swapChain), _image(image)
     {
         VkImageViewCreateInfo createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -36,6 +36,13 @@ namespace wowgm::graphics
     {
         vkDestroyImageView(*_swapChain->GetLogicalDevice(), _imageView, nullptr);
         _imageView = VK_NULL_HANDLE;
+
+        _image = nullptr;
+    }
+
+    Image* ImageView::GetImage()
+    {
+        return _image;
     }
 
     SwapChain* ImageView::GetSwapChain()

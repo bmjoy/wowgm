@@ -44,9 +44,15 @@ namespace wowgm::graphics
 
         Queue* GetPresentQueue();
 
-        void Draw(SwapChain* swapChain);
+        std::uint32_t AcquireNextImage(SwapChain* swapChain);
 
-        void AddCommandBuffer(CommandBuffer* buffer);
+        void AddWaitFence(Fence* fence);
+        void AddWaitFence(VkFence fence);
+
+        void Submit(std::uint32_t imageIndex, SwapChain* swapChain, Fence* submitFence);
+        void Present(std::uint32_t imageToPresent, SwapChain* swapChain, Semaphore* waitSemaphore);
+
+        void AddCommandBuffer(std::uint32_t frameIndex, CommandBuffer* buffer);
 
         operator VkDevice() const { return _device; }
 
@@ -57,6 +63,10 @@ namespace wowgm::graphics
         Queue* CreateQueue(VkQueueFlagBits queueType, VkQueue queueObject, std::int32_t indice);
         RenderPass* CreateRenderPass();
 
+        Semaphore* GetImageAvailableSemaphore();
+        Semaphore* GetSignalSemaphore();
+        Fence* GetFlightFence();
+
     private:
         VkDevice _device;
 
@@ -66,11 +76,13 @@ namespace wowgm::graphics
 
         std::vector<Queue*> _ownedQueues;
 
-        static const constexpr std::uint32_t MAX_FRAMES_IN_FLIGHT = 2;
+        std::vector<VkFence> _waitFences;
+
+        static const constexpr std::uint32_t MAX_FRAMES_IN_FLIGHT = 3;
 
         std::vector<Semaphore*> _ownedSemaphores;
         std::vector<Fence*> _ownedFences;
-        std::vector<CommandBuffer*> _ownedCommandBuffers;
+        std::unordered_map<std::uint32_t, std::vector<CommandBuffer*>> _ownedCommandBuffers;
         std::vector<RenderPass*> _ownedRenderPasses;
 
         // These mirror into the vectors above.

@@ -119,20 +119,8 @@ int main(int argc, char* argv[])
 #else
 #include "Window.hpp"
 #include "Instance.hpp"
-#include "Surface.hpp"
-#include "LogicalDevice.hpp"
-#include "SwapChain.hpp"
-#include "PhysicalDevice.hpp"
 #include "Assert.hpp"
-#include "Shader.hpp"
-#include "Pipeline.hpp"
-#include "FrameBuffer.hpp"
-#include "Queue.hpp"
-#include "CommandPool.hpp"
-#include "CommandBuffer.hpp"
-#include "Command.hpp"
-#include "RenderPass.hpp"
-#include "FrameBuffer.hpp"
+#include "Interface.hpp"
 
 #include <iostream>
 #include <boost/stacktrace.hpp>
@@ -150,63 +138,16 @@ int main()
         auto instance = Instance::Create("Vulkan", "No Engine");
         instance->SetupDebugCallback();
 
-        Surface* surface = instance->CreateSurface(window); // Owned by instance
-        LogicalDevice* device = instance->CreateLogicalDevice(); // Owned by instance
-        SwapChain* swapChain = instance->CreateSwapChain();
-
-        RenderPass* renderPass = device->CreateRenderPass();
-        VkAttachmentDescription colorAttachment = {};
-        colorAttachment.format = swapChain->GetSurfaceFormat().format;
-        colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-        colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-        colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-        colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-        colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-        renderPass->AddAttachment(colorAttachment);
-        renderPass->Finalize();
-
-        Pipeline* pipeline = new Pipeline(swapChain, renderPass);
-
-        Shader* vertexShader = Shader::CreateVertexShader(device, "main", "C:\\Users\\Vincent Piquet\\source\\repos\\WowGM\\src\\wowgm\\Shaders\\vert.spv");
-        Shader* fragmentShader = Shader::CreateFragmentShader(device, "main", "C:\\Users\\Vincent Piquet\\source\\repos\\WowGM\\src\\wowgm\\Shaders\\frag.spv");
-
-        pipeline->SetDepthTest(false);
-        pipeline->SetStencilTest(false);
-        pipeline->SetWireframe(false);
-        pipeline->SetPrimitiveType(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
-        pipeline->SetCulling(VK_CULL_MODE_NONE);
-        pipeline->AddShader(vertexShader);
-        pipeline->AddShader(fragmentShader);
-        pipeline->Finalize();
-
-        for (int i = 0; i < 3; ++i)
-        {
-            FrameBuffer* frameBuffers = renderPass->CreateFrameBuffer(swapChain);
-            frameBuffers->AttachImageView(swapChain->GetImageView(i));
-            frameBuffers->Finalize();
-
-            CommandBuffer* drawBuffer = device->GetGraphicsQueue()->GetCommandPool()->AllocatePrimaryBuffer();
-            drawBuffer->BeginRecording(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
-            drawBuffer->Record<BeginRenderPass>(frameBuffers, swapChain->GetExtent(), VkClearValue { 0.0f, 0.0f, 0.0f, 1.0f });
-            drawBuffer->Record<BindPipeline>(VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-            drawBuffer->Draw(3);
-            drawBuffer->Record<EndRenderPass>();
-            drawBuffer->FinishRecording();
-            device->AddCommandBuffer(drawBuffer);
-        }
+        Interface* gui = new Interface(instance, window);
 
         while (!window->ShouldClose())
         {
             window->Execute();
-            device->Draw(swapChain);
+            gui->Draw();
         }
 
-        device->WaitIdle();
+        delete gui;
 
-        delete pipeline;
-        delete swapChain;
         instance.reset();
         window->Cleanup();
         delete window;
