@@ -12,12 +12,14 @@ namespace wowgm::threading {
 
     class Updater
     {
-    public:
         Updater() { }
+    public:
         ~Updater()
         {
             Stop();
         }
+
+        static Updater* instance();
 
     public:
         void Start();
@@ -47,5 +49,7 @@ namespace wowgm::threading {
         std::promise<void> _promise;
         std::thread _worker;
     };
+
+#define sUpdater Updater::instance()
 
 } // wowgm::threading

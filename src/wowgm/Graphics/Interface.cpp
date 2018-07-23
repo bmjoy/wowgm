@@ -16,8 +16,10 @@
 #include "ImageView.hpp"
 #include "Surface.hpp"
 #include "SynchronizationPrimitive.hpp"
+#include "ClientServices.hpp"
 
 #include <stdexcept>
+#include <chrono>
 
 #define IMGUI_UNLIMITED_FRAME_RATE
 
@@ -164,8 +166,6 @@ namespace wowgm::graphics
         }
 
         { // Create rendering data for the 3D geometry
-            VkClearValue clearValue = { 0.0f, 0.0f, 0.0f, 1.0f };
-
             _geometryRenderStage.FrameBuffers.resize(_swapChain->GetImageCount());
             _geometryRenderStage.CommandBuffers.resize(_swapChain->GetImageCount());
 
@@ -177,55 +177,82 @@ namespace wowgm::graphics
                 _geometryRenderStage.FrameBuffers[frameIndex]->AttachImageView(_swapChain->GetImageView(frameIndex));
                 _geometryRenderStage.FrameBuffers[frameIndex]->Finalize();
 
-                _geometryRenderStage.CommandBuffers[frameIndex] = _device->GetGraphicsQueue()->GetCommandPool()->AllocatePrimaryBuffer();
-                _geometryRenderStage.CommandBuffers[frameIndex]->BeginRecording(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
-                _geometryRenderStage.CommandBuffers[frameIndex]->Record<BeginRenderPass>(_geometryRenderStage.FrameBuffers[frameIndex], _swapChain->GetExtent(), clearValue);
-                _geometryRenderStage.CommandBuffers[frameIndex]->Record<BindPipeline>(VK_PIPELINE_BIND_POINT_GRAPHICS, _geometryRenderStage.Pipeline);
-                _geometryRenderStage.CommandBuffers[frameIndex]->Draw(3);
-                _geometryRenderStage.CommandBuffers[frameIndex]->Record<EndRenderPass>();
-                _geometryRenderStage.CommandBuffers[frameIndex]->FinishRecording();
-
-                _device->AddCommandBuffer(frameIndex, _geometryRenderStage.CommandBuffers[frameIndex]);
+                PrepareCommandBuffers(frameIndex);
 
                 _interfaceSemaphores[frameIndex] = _device->CreateSemaphore();
             }
         }
     }
 
-    void Interface::PrepareCommandBuffers()
+    void Interface::PrepareCommandBuffers(std::uint32_t frameIndex)
     {
+        VkClearValue clearValue = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+        _geometryRenderStage.CommandBuffers[frameIndex] = _device->GetGraphicsQueue()->GetCommandPool()->AllocatePrimaryBuffer();
+        _geometryRenderStage.CommandBuffers[frameIndex]->BeginRecording(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
+        _geometryRenderStage.CommandBuffers[frameIndex]->Record<BeginRenderPass>(_geometryRenderStage.FrameBuffers[frameIndex], _swapChain->GetExtent(), clearValue);
+        _geometryRenderStage.CommandBuffers[frameIndex]->Record<BindPipeline>(VK_PIPELINE_BIND_POINT_GRAPHICS, _geometryRenderStage.Pipeline);
+        _geometryRenderStage.CommandBuffers[frameIndex]->Draw(3);
+        _geometryRenderStage.CommandBuffers[frameIndex]->Record<EndRenderPass>();
+        _geometryRenderStage.CommandBuffers[frameIndex]->FinishRecording();
+
+        _device->AddCommandBuffer(frameIndex, _geometryRenderStage.CommandBuffers[frameIndex]);
     }
 
     void Interface::Draw()
     {
+        auto drawStart = std::chrono::high_resolution_clock::now();
+
         // This semaphore signals when an image is acquired
         Semaphore* imageAvailableSemaphore = _device->GetImageAvailableSemaphore();
         // This semaphore signals when the geometry has been rendered.
         Semaphore* geometryRenderedSemaphore = _device->GetSignalSemaphore();
 
         // Acquires the next image, waiting on the provided fence and immediately resetting it for reuse.
-        _device->AddWaitFence(_device->GetFlightFence());
-        _device->AddWaitFence(_interfaceWindowData.Frames[_interfaceWindowData.FrameIndex].Fence);
+        _device->AddWaitFence(_device->GetFlightFence()); // Wait on geometry
+        _device->AddWaitFence(_interfaceWindowData.Frames[_interfaceWindowData.FrameIndex].Fence); // Wait on GUI
         std::uint32_t image = _device->AcquireNextImage(_swapChain);
 
         Semaphore* interfaceRenderedSemaphore = _interfaceSemaphores[image];
-        // ImGui stuff here
-        {
-            ImGui_ImplVulkan_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
 
-            ImGui::Begin("Hello world");
-            ImGui::Text("Hello");
-            ImGui::End();
-
-            ImGui::Render();
-        }
+        PrepareGUI();
         _device->Submit(image, _swapChain, _device->GetFlightFence());
 
         RenderImGui(*geometryRenderedSemaphore, *interfaceRenderedSemaphore);
 
         _device->Present(image, _swapChain, interfaceRenderedSemaphore);
+
+        _frameDrawTime = float(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - drawStart).count()) / 1000.0f;
+    }
+
+    void Interface::PrepareGUI()
+    {
+        ImGui_ImplVulkan_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        if (ImGui::BeginMainMenuBar())
+        {
+            std::stringstream ss;
+            ss << "Frame draw time: " << std::fixed << std::setprecision(3) << _frameDrawTime << " FPS: " << (1000.0f / _frameDrawTime);
+            ImGui::MenuItem(ss.str().c_str());
+            ImGui::EndMainMenuBar();
+        }
+
+        if (!_isLoggedIn)
+        {
+            ImGui::Begin("Connect");
+            ImGui::InputText("Username", _username, 16);
+            ImGui::InputText("Password", _password, 16, ImGuiInputTextFlags_Password);
+            if (ImGui::Button("Log in"))
+            {
+                sClientServices->Connect(_username, _password);
+            }
+
+            ImGui::End();
+        }
+
+        ImGui::Render();
     }
 
     void Interface::RenderImGui(VkSemaphore canStartRenderingSemaphore, VkSemaphore signalSemaphore)

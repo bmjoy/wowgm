@@ -4,7 +4,13 @@
 #include <iostream>
 #include <chrono>
 
-namespace wowgm::threading {
+namespace wowgm::threading
+{
+    Updater* Updater::instance()
+    {
+        static Updater instance;
+        return &instance;
+    }
 
     void Updater::Start()
     {

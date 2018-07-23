@@ -35,7 +35,7 @@ namespace wowgm::networking::authentification
 
         AuthSocket& operator = (AuthSocket const&) = delete;
 
-        inline void SendAuthChallenge(std::string& username, std::string& password) {
+        inline void SendAuthChallenge(std::string username, std::string password) {
             SendAuthChallenge(std::forward<std::string>(username), std::forward<std::string>(password), std::string("x86"), std::string("Win"), std::string("enUS"), std::string("WoW"));
         }
 

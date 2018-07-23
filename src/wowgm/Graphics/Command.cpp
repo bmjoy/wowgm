@@ -6,7 +6,7 @@
 
 namespace wowgm::graphics
 {
-    BeginRenderPass::BeginRenderPass(FrameBuffer* frameBuffer, VkExtent2D extent, VkClearValue clearValue) : Command()
+    BeginRenderPass::BeginRenderPass(FrameBuffer* frameBuffer, VkExtent2D extent, VkClearValue clearValue) : Command(), _clearValue(clearValue)
     {
         _command = { };
         _command.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -17,7 +17,7 @@ namespace wowgm::graphics
         _command.renderArea.extent = extent;
 
         _command.clearValueCount = 1;
-        _command.pClearValues = &clearValue;
+        _command.pClearValues = &_clearValue;
     }
 
     void BeginRenderPass::Enqueue(CommandBuffer* buffer)

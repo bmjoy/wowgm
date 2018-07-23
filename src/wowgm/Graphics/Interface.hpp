@@ -31,8 +31,9 @@ namespace wowgm::graphics
 
         void Draw();
 
-        void PrepareCommandBuffers();
+        void PrepareCommandBuffers(std::uint32_t frameIndex);
 
+        void PrepareGUI();
         void RenderImGui(VkSemaphore image_acquired_semaphore, VkSemaphore signalSemaphore);
 
         void CreatePipeline();
@@ -58,5 +59,11 @@ namespace wowgm::graphics
         ImGui_ImplVulkanH_WindowData _interfaceWindowData;
         VkPipelineCache g_PipelineCache = VK_NULL_HANDLE;
         VkDescriptorPool g_DescriptorPool = VK_NULL_HANDLE;
+
+        bool _isLoggedIn = false;
+        char _username[16] = { };
+        char _password[16] = { } ;
+
+        float _frameDrawTime;
     };
 }

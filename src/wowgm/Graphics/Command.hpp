@@ -31,6 +31,7 @@ namespace wowgm::graphics
 
     private:
         VkRenderPassBeginInfo _command;
+        VkClearValue _clearValue;
     };
 
     class BindPipeline : public Command
