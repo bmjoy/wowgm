@@ -12,12 +12,14 @@ namespace wowgm::threading
         return &instance;
     }
 
+    Updater::Updater() : _worker(std::thread(&Updater::ThreadWorker, this, std::move(_startPromise.get_future()), std::move(_promise.get_future())))
+    {
+
+    }
+
     void Updater::Start()
     {
-        auto future = _promise.get_future();
-
-        //! fixme.
-        new (&_worker) std::thread(&Updater::ThreadWorker, this, std::move(future));
+        _startPromise.set_value();
     }
 
     void Updater::Stop()
@@ -32,8 +34,10 @@ namespace wowgm::threading
         _updatables.resize(0);
     }
 
-    void Updater::ThreadWorker(std::future<void> future)
+    void Updater::ThreadWorker(std::future<void> startFuture, std::future<void> future)
     {
+        while (startFuture.wait_for(std::chrono::milliseconds(1)) == std::future_status::timeout);
+
         namespace chrono = std::chrono;
         using hrc = chrono::high_resolution_clock;
 

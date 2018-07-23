@@ -10,6 +10,7 @@
 #include "Assert.hpp"
 #include "Interface.hpp"
 #include "Logger.hpp"
+#include "Updater.hpp"
 
 namespace po = boost::program_options;
 
@@ -75,6 +76,8 @@ int main(int argc, char* argv[])
         instance->SetupDebugCallback();
 
         Interface* gui = new Interface(instance, window);
+
+        sUpdater->Start();
 
         while (!window->ShouldClose())
         {

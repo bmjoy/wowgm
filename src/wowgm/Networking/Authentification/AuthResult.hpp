@@ -19,6 +19,7 @@ namespace wowgm::networking::authentification
         LOGIN_PARENTAL_CONTROL    = 15,
         LOGIN_LOCKED_ENFORCED     = 16,
         LOGIN_CONVERSION_REQUIRED = 32,
+        LOGIN_INVALID_SRP6        = 254, // Custom value
         LOGIN_DISCONNECTED        = 255
     };
 

@@ -7,6 +7,8 @@
 #include <cstdint>               // for uint32_t
 #include <vulkan/vulkan_core.h>  // for VkDevice, VkDevice_T
 
+#undef CreateSemaphore
+
 namespace wowgm::graphics
 {
     class SwapChain;

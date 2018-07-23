@@ -12,7 +12,7 @@ namespace wowgm::threading {
 
     class Updater
     {
-        Updater() { }
+        Updater();
     public:
         ~Updater()
         {
@@ -42,14 +42,15 @@ namespace wowgm::threading {
         }
 
     private:
-        void ThreadWorker(std::future<void> future);
+        void ThreadWorker(std::future<void> startFuture, std::future<void> future);
 
         std::vector<std::shared_ptr<Updatable>> _updatables;
 
+        std::promise<void> _startPromise;
         std::promise<void> _promise;
         std::thread _worker;
     };
 
-#define sUpdater Updater::instance()
-
 } // wowgm::threading
+
+#define sUpdater wowgm::threading::Updater::instance()

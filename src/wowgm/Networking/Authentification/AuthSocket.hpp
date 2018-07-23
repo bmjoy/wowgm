@@ -45,10 +45,6 @@ namespace wowgm::networking::authentification
         bool HandleAuthProof();
         bool HandleRealmList();
 
-        AuthRealmInfo& GetRealm(std::uint32_t index) {
-            return _realms[index];
-        }
-
     protected:
         void ReadHandler() override;
 
@@ -68,8 +64,6 @@ namespace wowgm::networking::authentification
 
         BigNumber K;
         BigNumber M2;
-
-        std::vector<AuthRealmInfo> _realms;
     };
 
 } // namespace wowgm

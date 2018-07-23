@@ -35,7 +35,7 @@ namespace wowgm::threading
     private:
         std::shared_ptr<BaseSocket> _socket;
 
-        boost::asio::io_context _context;
+        static boost::asio::io_context _context;
     };
 
 } // wowgm::threading

@@ -1,3 +1,5 @@
+#include "ClientServices.hpp"
+#include "RealmList.hpp"
 #include "Interface.hpp"
 #include "LogicalDevice.hpp"
 #include "PhysicalDevice.hpp"
@@ -16,7 +18,7 @@
 #include "ImageView.hpp"
 #include "Surface.hpp"
 #include "SynchronizationPrimitive.hpp"
-#include "ClientServices.hpp"
+
 
 #include <stdexcept>
 #include <chrono>
@@ -296,6 +298,9 @@ namespace wowgm::graphics
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
+        ImGuiIO& io = ImGui::GetIO();
+        ImGui::PushFont(io.Fonts->Fonts[2]);
+
         if (ImGui::BeginMainMenuBar())
         {
             std::stringstream ss;
@@ -304,9 +309,13 @@ namespace wowgm::graphics
             ImGui::EndMainMenuBar();
         }
 
-        if (!_isLoggedIn)
+        if (!sClientServices->IsInWorld())
         {
-            ImGui::Begin("Connect");
+            ImVec2 size = { 300.0f, 145.0f };
+            ImGui::SetNextWindowSizeConstraints(size, size);
+            ImGui::SetNextWindowPos({ 5.0f, 28.0f });
+
+            ImGui::Begin("Connection");
             ImGui::InputText("Username", _username, 16);
             ImGui::InputText("Password", _password, 16, ImGuiInputTextFlags_Password);
             if (ImGui::Button("Log in"))
@@ -314,6 +323,40 @@ namespace wowgm::graphics
 
             ImGui::End();
         }
+
+        if (sClientServices->GetAvailableRealmCount() != 0)
+        {
+            ImVec2 size = { 180.0f, 120.0f * sClientServices->GetAvailableRealmCount() + 20.0f };
+            ImGui::SetNextWindowSizeConstraints(size, size);
+            ImGui::SetNextWindowPos({ 5.0f, 28.0f });
+
+            ImGui::Begin("Realm selection");
+
+            using namespace wowgm::networking::authentification;
+
+            for (std::uint32_t i = 0; i < sClientServices->GetAvailableRealmCount(); ++i)
+            {
+                AuthRealmInfo* realmInfo = sClientServices->GetRealmInfo(i);
+
+                ImGui::PushFont(io.Fonts->Fonts[3]);
+                ImGui::TextColored({ 1.0f,1.0f,0.0f,1.0f }, realmInfo->Name.c_str());
+                ImGui::PopFont();
+                ImGui::SameLine();
+
+                std::stringstream ss;
+                ss << realmInfo->GetEndpoint();
+
+                if (ImGui::Button(ss.str().c_str()))
+                {
+                     // Realm select, log on it
+                }
+
+            }
+
+            ImGui::End();
+        }
+
+        ImGui::PopFont();
 
         ImGui::Render();
     }

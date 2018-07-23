@@ -31,7 +31,7 @@ enum severity_level
     critical,
     debug,
     trace,
-    graphics,
+    rendering,
     max_security
 };
 
@@ -52,7 +52,6 @@ BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(severity_logger, src::severity_logger_mt<
 
 namespace wowgm::log
 {
-
     void initialize();
 
 } // namespace wowgm::log
@@ -70,5 +69,5 @@ namespace wowgm::log
 #endif
 
 #define LOG_TRACE     BOOST_LOG_SEV(severity_logger::get(), trace)
-#define LOG_GRAPHICS  BOOST_LOG_SEV(severity_logger::get(), graphics)
+#define LOG_RENDERING BOOST_LOG_SEV(severity_logger::get(), rendering)
 

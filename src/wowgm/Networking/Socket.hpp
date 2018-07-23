@@ -30,7 +30,7 @@ namespace wowgm::networking
     class Socket : public BaseSocket, public std::enable_shared_from_this<T>
     {
     public:
-        Socket(asio::io_context& ioService) : _socket(nullptr), _closed(false), _closing(false), _ioContext(ioService)
+        Socket(asio::io_context& ioService) : _ioContext(ioService), _socket(nullptr), _closed(false), _closing(false)
         {
         }
 
@@ -50,7 +50,11 @@ namespace wowgm::networking
         void Connect(tcp::endpoint& endpoint) override
         {
             _socket = new tcp::socket(_ioContext);
-            _socket->connect(endpoint);
+
+            boost::system::error_code errorCode;
+            _socket->connect(endpoint, errorCode);
+            if (errorCode != 0)
+                wowgm::exceptions::throw_with_trace(errorCode);
         }
 
         void CloseSocket() override final
@@ -59,7 +63,10 @@ namespace wowgm::networking
                 return;
 
             boost::system::error_code errorCode;
-            _socket->shutdown(boost::asio::socket_base::shutdown_send, errorCode);
+            _socket->shutdown(boost::asio::socket_base::shutdown_both, errorCode);
+
+            if (errorCode != 0)
+                wowgm::exceptions::throw_with_trace(errorCode);
 
             OnClose();
         }
@@ -70,7 +77,9 @@ namespace wowgm::networking
             _closing = true;
         }
 
-        bool IsOpen() const override final { return _socket != nullptr && _socket->is_open() && !_closed && !_closing; }
+        bool IsOpen() const override final {
+            return _socket != nullptr && _socket->is_open() && !_closed && !_closing;
+        }
 
         void AsyncRead()
         {
@@ -96,8 +105,11 @@ namespace wowgm::networking
 
         void Update() override
         {
-            if (!_writeQueue.empty()) {
+            if (!IsOpen())
+                return;
 
+            if (!_writeQueue.empty())
+            {
                 bool success = SendMessageInternal(_writeQueue.front());
                 if (success)
                     _writeQueue.pop();
@@ -122,7 +134,7 @@ namespace wowgm::networking
             std::size_t bytesSent = _socket->write_some(buffer.AsReadBuffer(), errorCode);
 
             if (errorCode != 0)
-                wowgm::exceptions::throw_with_trace(std::exception(errorCode.message().c_str()));
+                wowgm::exceptions::throw_with_trace(errorCode);
 
             buffer.ReadCompleted(bytesSent);
 
@@ -145,7 +157,7 @@ namespace wowgm::networking
     private:
         void ReadHandlerInternal(const boost::system::error_code& errorCode, size_t transferredBytes)
         {
-            if (errorCode != 0)
+            if (errorCode != 0 && transferredBytes != 0) // TODO: The second check should NOT be needed
             {
                 CloseSocket();
                 return;
@@ -156,6 +168,8 @@ namespace wowgm::networking
         }
 
     protected:
+
+        boost::asio::io_context& _ioContext;
         boost::asio::ip::tcp::socket* _socket;
 
         MessageBuffer _readBuffer;
@@ -163,8 +177,6 @@ namespace wowgm::networking
 
         std::atomic<bool> _closed;
         std::atomic<bool> _closing;
-
-        boost::asio::io_context& _ioContext;
     };
 
 } // wowgm::networking

@@ -3,6 +3,8 @@
 
 namespace wowgm::threading {
 
+    boost::asio::io_context SocketManager::_context;
+
     void SocketManager::Update(std::uint32_t timeInterval)
     {
         _context.run();

@@ -33,6 +33,12 @@ namespace wowgm::networking
     {
         ip::tcp::endpoint authEndpoint(ip::make_address(realmAddress), port);
 
+        if (_authSocket)
+        {
+            _authSocket->CloseSocket();
+            _authSocket.reset();
+        }
+
         _authSocket = _socketUpdater->Create<AuthSocket>(_socketUpdater->GetContext());
         _authSocket->Connect(authEndpoint);
         _authSocket->SendAuthChallenge(username, password);
@@ -41,5 +47,37 @@ namespace wowgm::networking
     bool ClientServices::IsConnected()
     {
         return _authSocket->IsOpen();
+    }
+
+    void ClientServices::UpdateIdentificationStatus(AuthCommand authCommand, AuthResult result)
+    {
+
+    }
+
+    void ClientServices::SetRealmInfo(std::vector<AuthRealmInfo> realmInfo)
+    {
+        _realmInfos = std::move(realmInfo);
+    }
+
+    AuthRealmInfo* ClientServices::GetRealmInfo(std::uint32_t index)
+    {
+        if (_realmInfos.is_initialized())
+            return &(_realmInfos.get()[index]);
+
+        return nullptr;
+    }
+
+    std::uint32_t ClientServices::GetAvailableRealmCount()
+    {
+        if (_realmInfos.is_initialized())
+            return _realmInfos->size();
+
+        return 0u;
+    }
+
+
+    bool ClientServices::IsInWorld()
+    {
+        return !!_authSocket;
     }
 }

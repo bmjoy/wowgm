@@ -1,8 +1,14 @@
 #pragma once
 
+#include "AuthCommand.hpp"
+#include "AuthResult.hpp"
+
 #include <string>
 #include <cstdint>
 #include <memory>
+#include <vector>
+
+#include <boost/optional.hpp>
 
 namespace wowgm::threading
 {
@@ -14,6 +20,7 @@ namespace wowgm::networking
     namespace authentification
     {
         class AuthSocket;
+        struct AuthRealmInfo;
     }
 
     using namespace wowgm::threading;
@@ -31,10 +38,24 @@ namespace wowgm::networking
 
         bool IsConnected();
 
+        void UpdateIdentificationStatus(AuthCommand authCommand, AuthResult result);
+
+    public: /* Realms */
+        void SetRealmInfo(std::vector<AuthRealmInfo> realmInfo);
+
+        AuthRealmInfo* GetRealmInfo(std::uint32_t index);
+        std::uint32_t GetAvailableRealmCount();
+
+    public: /* World */
+
+        bool IsInWorld();
+
     private:
         std::shared_ptr<SocketManager> _socketUpdater;
         std::shared_ptr<AuthSocket> _authSocket;
         bool _isConnected;
+
+        boost::optional<std::vector<AuthRealmInfo>> _realmInfos;
     };
 
 }
