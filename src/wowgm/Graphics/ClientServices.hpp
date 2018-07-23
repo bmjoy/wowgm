@@ -11,7 +11,13 @@ namespace wowgm::threading
 
 namespace wowgm::networking
 {
+    namespace authentification
+    {
+        class AuthSocket;
+    }
+
     using namespace wowgm::threading;
+    using namespace authentification;
 
     class ClientServices
     {
@@ -20,11 +26,15 @@ namespace wowgm::networking
     public:
         static ClientServices* instance();
 
-        void Connect(std::string username, std::string password);
-        void Connect(std::string username, std::string password, const std::string& realmAddress, std::int32_t port = 3724);
+        void AsyncConnect(std::string username, std::string password);
+        void AsyncConnect(std::string username, std::string password, const std::string& realmAddress, std::int32_t port = 3724);
+
+        bool IsConnected();
 
     private:
         std::shared_ptr<SocketManager> _socketUpdater;
+        std::shared_ptr<AuthSocket> _authSocket;
+        bool _isConnected;
     };
 
 }

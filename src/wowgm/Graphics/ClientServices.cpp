@@ -24,17 +24,22 @@ namespace wowgm::networking
     {
     }
 
-    void ClientServices::Connect(std::string username, std::string password)
+    void ClientServices::AsyncConnect(std::string username, std::string password)
     {
-        Connect(username, password, "127.0.0.1", 3724);
+        AsyncConnect(username, password, "127.0.0.1", 3724);
     }
 
-    void ClientServices::Connect(std::string username, std::string password, const std::string& realmAddress, std::int32_t port /* = 3724 */)
+    void ClientServices::AsyncConnect(std::string username, std::string password, const std::string& realmAddress, std::int32_t port /* = 3724 */)
     {
         ip::tcp::endpoint authEndpoint(ip::make_address(realmAddress), port);
 
-        std::shared_ptr<AuthSocket> loginSocket = _socketUpdater->Create<AuthSocket>(_socketUpdater->GetContext());
-        loginSocket->Connect(authEndpoint);
-        loginSocket->SendAuthChallenge(username, password);
+        _authSocket = _socketUpdater->Create<AuthSocket>(_socketUpdater->GetContext());
+        _authSocket->Connect(authEndpoint);
+        _authSocket->SendAuthChallenge(username, password);
+    }
+
+    bool ClientServices::IsConnected()
+    {
+        return _authSocket->IsOpen();
     }
 }

@@ -42,4 +42,11 @@ target_include_directories(WowGM
     ${GLM_INCLUDE_DIRS}
     ${IMGUI_INCLUDE_DIR})
 
+add_custom_command(TARGET WowGM POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+		${CMAKE_CURRENT_SOURCE_DIR}/fonts $<TARGET_FILE_DIR:WowGM>/fonts)
+add_custom_command(TARGET WowGM POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+		${CMAKE_CURRENT_SOURCE_DIR}/shaders $<TARGET_FILE_DIR:WowGM>/shaders)
+
 install(TARGETS WowGM DESTINATION "${CMAKE_INSTALL_PREFIX}")
