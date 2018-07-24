@@ -62,7 +62,6 @@ namespace wowgm::networking::authentification
         std::string _username;
         std::string _password;
 
-        BigNumber K;
         BigNumber M2;
     };
 

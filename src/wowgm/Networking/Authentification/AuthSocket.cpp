@@ -93,7 +93,7 @@ namespace wowgm::networking::authentification
 
     bool AuthSocket::HandleAuthChallenge()
     {
-        BigNumber N, A, B, a, u, x, S, salt, g, M1;
+        BigNumber N, A, B, a, u, x, S, salt, g, M1, K;
 
         { // Scoping the pointers so they get properly deallocated
             AuthPacket<AuthLogonChallenge> command(_readBuffer);
@@ -165,6 +165,7 @@ namespace wowgm::networking::authentification
             keyData[i * 2 + 1] = context.GetDigest()[i];
 
         K.SetBinary(keyData, 40);
+        sClientServices->SetSessionKey(K);
 
         std::uint8_t gNHash[20];
         context.Initialize();

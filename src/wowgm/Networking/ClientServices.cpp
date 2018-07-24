@@ -54,9 +54,20 @@ namespace wowgm::networking
         _authResult = result;
     }
 
+    AuthResult ClientServices::GetAuthentificationResult()
+    {
+        return _authResult;
+    }
+
     void ClientServices::SetRealmInfo(std::vector<AuthRealmInfo> realmInfo)
     {
-        _realmInfos = std::move(realmInfo);
+        if (realmInfo.size() == 0)
+            return;
+
+        if (realmInfo.size() > 1)
+            _realmInfos = std::move(realmInfo);
+        else
+            ConnectToRealm(realmInfo[0]);
     }
 
     AuthRealmInfo* ClientServices::GetRealmInfo(std::uint32_t index)
@@ -75,9 +86,27 @@ namespace wowgm::networking
         return 0u;
     }
 
+    void ClientServices::ConnectToRealm(AuthRealmInfo const& realmInfo)
+    {
+        // Close auth socket
+        _authSocket->CloseSocket();
+        _authSocket.reset();
+
+        // _socketUpdater->Create<WorldSocket>(_socketUpdater->GetContext());
+    }
 
     bool ClientServices::IsInWorld()
     {
         return !!_authSocket && _authResult == LOGIN_OK;
+    }
+
+    void ClientServices::SetSessionKey(BigNumber const& K)
+    {
+        _sessionKey = K;
+    }
+
+    BigNumber const& ClientServices::GetSessionKey()
+    {
+        return _sessionKey;
     }
 }

@@ -2,6 +2,7 @@
 
 #include "AuthCommand.hpp"
 #include "AuthResult.hpp"
+#include "BigNumber.hpp"
 
 #include <string>
 #include <cstdint>
@@ -10,9 +11,10 @@
 
 #include <boost/optional.hpp>
 
-namespace wowgm::threading
-{
-    class SocketManager;
+namespace wowgm {
+    namespace threading {
+        class SocketManager;
+    }
 }
 
 namespace wowgm::networking
@@ -24,6 +26,7 @@ namespace wowgm::networking
     }
 
     using namespace wowgm::threading;
+    using namespace wowgm::cryptography;
     using namespace authentification;
 
     class ClientServices
@@ -38,13 +41,20 @@ namespace wowgm::networking
 
         bool IsConnected();
 
-        void UpdateIdentificationStatus(AuthCommand authCommand, AuthResult result);
 
     public: /* Realms */
+        void UpdateIdentificationStatus(AuthCommand authCommand, AuthResult result);
+        AuthResult GetAuthentificationResult();
+
         void SetRealmInfo(std::vector<AuthRealmInfo> realmInfo);
 
         AuthRealmInfo* GetRealmInfo(std::uint32_t index);
         std::uint32_t GetAvailableRealmCount();
+
+        void ConnectToRealm(AuthRealmInfo const& realmInfo);
+
+        void SetSessionKey(BigNumber const& K);
+        BigNumber const& GetSessionKey();
 
     public: /* World */
 
@@ -57,6 +67,8 @@ namespace wowgm::networking
         AuthResult _authResult = LOGIN_OK;
 
         boost::optional<std::vector<AuthRealmInfo>> _realmInfos;
+
+        BigNumber _sessionKey;
     };
 
 }
