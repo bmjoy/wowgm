@@ -11,6 +11,7 @@
 #include "Interface.hpp"
 #include "Logger.hpp"
 #include "Updater.hpp"
+#include "BigNumber.hpp"
 
 namespace po = boost::program_options;
 
@@ -18,6 +19,12 @@ using namespace wowgm::graphics;
 
 int main(int argc, char* argv[])
 {
+
+    // Seed the OpenSSL's PRNG here.
+    // That way it won't auto-seed when calling BigNumber::SetRand and slow down the first world login
+    wowgm::cryptography::BigNumber seed;
+    seed.SetRand(16 * 8);
+
     wowgm::log::initialize();
 
     try {

@@ -118,7 +118,8 @@ namespace wowgm::networking::authentification
         // Hash the password now
         BigNumber passwordHash(CalculateSHA1(_username + ":" + _password));
         SHA1 context;
-        context.UpdateBigNumbers(salt, passwordHash);
+        context.UpdateBigNumbers(salt);
+        context.UpdateBigNumbers(passwordHash);
         context.Finalize();
         x.SetBinary(context);
 
@@ -131,7 +132,8 @@ namespace wowgm::networking::authentification
 
         // Compute the session key
         context.Initialize();
-        context.UpdateBigNumbers(A, B);
+        context.UpdateBigNumbers(A);
+        context.UpdateBigNumbers(B);
         context.Finalize();
         u.SetBinary(context);
 
@@ -192,7 +194,10 @@ namespace wowgm::networking::authentification
         context.Initialize();
         context.UpdateBigNumbers(t3);
         context.UpdateData(userHash, 20);
-        context.UpdateBigNumbers(salt, A, B, K);
+        context.UpdateBigNumbers(salt);
+        context.UpdateBigNumbers(A);
+        context.UpdateBigNumbers(B);
+        context.UpdateBigNumbers(K);
         context.Finalize();
         M1.SetBinary(context);
 

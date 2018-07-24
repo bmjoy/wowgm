@@ -37,6 +37,9 @@ namespace wowgm::graphics
         memset(_username, 0, 16);
         memset(_password, 0, 16);
 
+        memset(_realmAddress, 0, 100);
+        strcpy(_realmAddress, "127.0.0.1");
+
         _surface = instance->CreateSurface(_window);
         _device = instance->CreateLogicalDevice();
         _swapChain = instance->CreateSwapChain();
@@ -313,7 +316,7 @@ namespace wowgm::graphics
 
         if (sClientServices->GetAvailableRealmCount() == 0)
         {
-            ImVec2 size = { 300.0f, 145.0f };
+            ImVec2 size = { 300.0f, 165.0f };
 
             if (sClientServices->GetAuthentificationResult() != wowgm::networking::authentification::LOGIN_OK)
                 size.y += 30.0f;
@@ -322,6 +325,7 @@ namespace wowgm::graphics
             ImGui::SetNextWindowPos({ 5.0f, 28.0f });
 
             ImGui::Begin("Connection");
+            ImGui::InputText("Realm", _realmAddress, 100);
             ImGui::InputText("Username", _username, 16);
             ImGui::InputText("Password", _password, 16, ImGuiInputTextFlags_Password);
             if (ImGui::Button("Log in"))

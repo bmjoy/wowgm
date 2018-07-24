@@ -29,7 +29,7 @@ namespace wowgm::cryptography
         std::uint32_t GetLength() const { return DigestLength; }
 
     private:
-        HMAC_CTX * _ctx;
+        HMAC_CTX* _ctx;
         std::uint8_t _digest[DigestLength];
     };
 

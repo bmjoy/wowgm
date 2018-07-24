@@ -61,8 +61,10 @@ namespace wowgm::graphics
         VkDescriptorPool g_DescriptorPool = VK_NULL_HANDLE;
 
         bool _isLoggedIn = false;
+
+        char _realmAddress[100] = { };
         char _username[16] = { };
-        char _password[16] = { } ;
+        char _password[16] = { };
 
         float _frameDrawTime;
     };
