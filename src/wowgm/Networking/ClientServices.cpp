@@ -2,6 +2,7 @@
 #include "Updater.hpp"
 #include "SocketManager.hpp"
 #include "AuthSocket.hpp"
+#include "Logger.hpp"
 
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/ip/address.hpp>
@@ -88,9 +89,13 @@ namespace wowgm::networking
 
     void ClientServices::ConnectToRealm(AuthRealmInfo const& realmInfo)
     {
+        LOG_INFO << "Disconnecting from authentification server.";
+
         // Close auth socket
         _authSocket->CloseSocket();
         _authSocket.reset();
+
+        LOG_DEBUG << "Connecting to realm " << realmInfo.Name << " at " << realmInfo.GetEndpoint();
 
         // _socketUpdater->Create<WorldSocket>(_socketUpdater->GetContext());
     }

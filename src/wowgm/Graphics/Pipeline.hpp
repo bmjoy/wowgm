@@ -34,16 +34,11 @@ namespace wowgm::graphics
 
     public: /* Rasterization*/
 
-        void SetWireframe(bool wireframe);
-        void SetFragmentClampState(bool clampFragments);
-        void SetCulling(VkCullModeFlagBits cullMode);
-        void SetFrontFaceOrientation(bool clockWise);
+        VkPipelineRasterizationStateCreateInfo& GetRasterizationStateInfo();
 
     public: /* DepthStencil */
 
-        void SetDepthTest(bool enable);
-        void SetDepthTest(VkCompareOp op);
-        void SetStencilTest(bool enable);
+        VkPipelineDepthStencilStateCreateInfo& GetDepthStencilStateInfo();
 
     public: /* InputAssembly */
 
@@ -58,11 +53,9 @@ namespace wowgm::graphics
         void SetTessellationControlPoints(std::uint32_t controlPoints);
 
     public: /* Viewport and scissors */
-        void SetViewport(std::uint32_t width, std::uint32_t height);
 
-        void SetViewportDepth(float minDepth, float maxDepth);
-
-        void SetScissors(std::uint32_t width, std::uint32_t height);
+        void CreateViewport(std::uint32_t x, std::uint32_t y, std::uint32_t w, std::uint32_t h, float minDepth = 0.0f, float maxDepth = 1.0f);
+        void CreateViewport(std::uint32_t w, std::uint32_t h, float minDepth = 0.0f, float maxDepth = 1.0f);
 
     public: /* Attributes and Bindings */
 
@@ -91,6 +84,11 @@ namespace wowgm::graphics
         void SetColorBlendState(VkPipelineColorBlendStateCreateInfo blendState);
 
     private:
+        void _GenerateVertexInputState();
+        void _InitializeResterizationState();
+        void _InitializeMultiSamplingState();
+        void _InitializeDefaultViewPort();
+
         VkPipelineLayout _pipelineLayout;
         VkPipeline _pipeline;
 
@@ -119,7 +117,12 @@ namespace wowgm::graphics
 
         VkGraphicsPipelineCreateInfo _graphicsPipelineCreateInfo;
 
-        VkViewport _viewport;
-        VkRect2D   _scissors;
+        struct ViewportInfo
+        {
+            VkViewport Viewport;
+            VkRect2D Scissors;
+        };
+
+        std::vector<ViewportInfo> _viewports;
     };
 }

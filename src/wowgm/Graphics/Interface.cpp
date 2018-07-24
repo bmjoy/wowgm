@@ -226,11 +226,11 @@ namespace wowgm::graphics
             Shader* vertexShader = Shader::CreateVertexShader(_device, "main", "./shaders/geometry/vert.spv");
             Shader* fragmentShader = Shader::CreateFragmentShader(_device, "main", "./shaders/geometry/frag.spv");
 
-            _geometryRenderStage.Pipeline->SetDepthTest(false); // Fixme
-            _geometryRenderStage.Pipeline->SetStencilTest(false); // Fixme
-            _geometryRenderStage.Pipeline->SetWireframe(false);
+            _geometryRenderStage.Pipeline->GetDepthStencilStateInfo().depthTestEnable = false;
+            _geometryRenderStage.Pipeline->GetDepthStencilStateInfo().stencilTestEnable = false;
+            _geometryRenderStage.Pipeline->GetRasterizationStateInfo().polygonMode = VK_POLYGON_MODE_FILL;
             _geometryRenderStage.Pipeline->SetPrimitiveType(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
-            _geometryRenderStage.Pipeline->SetCulling(VK_CULL_MODE_NONE);
+            _geometryRenderStage.Pipeline->GetRasterizationStateInfo().cullMode = VK_CULL_MODE_NONE;
             _geometryRenderStage.Pipeline->AddShader(vertexShader);
             _geometryRenderStage.Pipeline->AddShader(fragmentShader);
             _geometryRenderStage.Pipeline->Finalize();
@@ -400,16 +400,13 @@ namespace wowgm::graphics
                 ss << realmInfo->GetEndpoint();
 
                 if (ImGui::Button(ss.str().c_str()))
-                {
-                     // Realm select, log on it
-                }
+                    sClientServices->ConnectToRealm(*realmInfo);
             }
 
             ImGui::End();
         }
 
         ImGui::PopFont();
-
         ImGui::Render();
     }
 
@@ -419,46 +416,41 @@ namespace wowgm::graphics
 
         ImGui_ImplVulkanH_FrameData* fd = &_interfaceWindowData.Frames[_interfaceWindowData.FrameIndex];
 
-        {
-            // err = vkResetCommandPool(*_device, fd->CommandPool, 0);
-            VkCommandBufferBeginInfo info = {};
-            info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-            info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-            err = vkBeginCommandBuffer(fd->CommandBuffer, &info);
-        }
+        err = vkResetCommandPool(*_device, fd->CommandPool, 0);
+        VkCommandBufferBeginInfo commandBufferBeginInfo = {};
+        commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        commandBufferBeginInfo.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        err = vkBeginCommandBuffer(fd->CommandBuffer, &commandBufferBeginInfo);
 
-        {
-            VkRenderPassBeginInfo info = {};
-            info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            info.renderPass = _interfaceWindowData.RenderPass;
-            info.framebuffer = _interfaceWindowData.Framebuffer[_interfaceWindowData.FrameIndex];
-            info.renderArea.extent.width = _interfaceWindowData.Width;
-            info.renderArea.extent.height = _interfaceWindowData.Height;
-            info.clearValueCount = 1;
-            info.pClearValues = &_interfaceWindowData.ClearValue;
-            vkCmdBeginRenderPass(fd->CommandBuffer, &info, VK_SUBPASS_CONTENTS_INLINE);
-        }
+        VkRenderPassBeginInfo renderPassBeginInfo = {};
+        renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        renderPassBeginInfo.renderPass = _interfaceWindowData.RenderPass;
+        renderPassBeginInfo.framebuffer = _interfaceWindowData.Framebuffer[_interfaceWindowData.FrameIndex];
+        renderPassBeginInfo.renderArea.extent.width = _interfaceWindowData.Width;
+        renderPassBeginInfo.renderArea.extent.height = _interfaceWindowData.Height;
+        renderPassBeginInfo.clearValueCount = 1;
+        renderPassBeginInfo.pClearValues = &_interfaceWindowData.ClearValue;
+        vkCmdBeginRenderPass(fd->CommandBuffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
         // Record Imgui Draw Data and draw funcs into command buffer
         ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), fd->CommandBuffer);
 
         // Submit command buffer
         vkCmdEndRenderPass(fd->CommandBuffer);
-        {
-            VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            VkSubmitInfo info = {};
-            info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-            info.waitSemaphoreCount = 1;
-            info.pWaitSemaphores = &canStartRenderingSemaphore;
-            info.pWaitDstStageMask = &wait_stage;
-            info.commandBufferCount = 1;
-            info.pCommandBuffers = &fd->CommandBuffer;
-            info.signalSemaphoreCount = 1;
-            info.pSignalSemaphores = &signalSemaphore;
 
-            err = vkEndCommandBuffer(fd->CommandBuffer);
-            err = vkQueueSubmit(*_device->GetPresentQueue(), 1, &info, fd->Fence);
-        }
+        VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        VkSubmitInfo submitInfo = {};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submitInfo.waitSemaphoreCount = 1;
+        submitInfo.pWaitSemaphores = &canStartRenderingSemaphore;
+        submitInfo.pWaitDstStageMask = &wait_stage;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &fd->CommandBuffer;
+        submitInfo.signalSemaphoreCount = 1;
+        submitInfo.pSignalSemaphores = &signalSemaphore;
+
+        err = vkEndCommandBuffer(fd->CommandBuffer);
+        err = vkQueueSubmit(*_device->GetPresentQueue(), 1, &submitInfo, fd->Fence);
 
         _interfaceWindowData.FrameIndex = (_interfaceWindowData.FrameIndex + 1) % IMGUI_VK_QUEUED_FRAMES;
     }

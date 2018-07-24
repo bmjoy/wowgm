@@ -41,7 +41,7 @@ namespace wowgm::networking::authentification
         std::uint8_t ExpFlags[2]; // 2.x, 3.x
                                   // 1.12.1 1.12.2 have different values.
 
-        std::uint32_t GetPort()
+        std::uint32_t GetPort() const
         {
             auto pos = Address.find(':');
             if (pos == std::string::npos)
@@ -52,7 +52,7 @@ namespace wowgm::networking::authentification
             return port;
         }
 
-        boost::asio::ip::tcp::endpoint GetEndpoint()
+        boost::asio::ip::tcp::endpoint GetEndpoint() const
         {
             std::string_view sv(Address);
             return boost::asio::ip::tcp::endpoint(boost::asio::ip::make_address(sv.substr(0, sv.find(':'))), GetPort());
