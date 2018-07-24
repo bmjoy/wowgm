@@ -27,7 +27,7 @@ namespace wowgm::graphics
 
         _graphicsQueue = CreateQueue(VK_QUEUE_GRAPHICS_BIT, getDeviceQueue(device, indices.Graphics), indices.Graphics);
         CreateQueue(VK_QUEUE_COMPUTE_BIT,  getDeviceQueue(device, indices.Compute),  indices.Compute);
-        Queue* transferQueue = CreateQueue(VK_QUEUE_TRANSFER_BIT, getDeviceQueue(device, indices.Transfer), indices.Transfer);
+        // CreateQueue(VK_QUEUE_TRANSFER_BIT, getDeviceQueue(device, indices.Transfer), indices.Transfer);
 
         for (auto&& itr : _ownedQueues)
         {
@@ -127,7 +127,7 @@ namespace wowgm::graphics
         _waitFences.push_back(fence);
     }
 
-    void LogicalDevice::Submit(std::uint32_t imageIndex, SwapChain* swapChain, Fence* submitFence)
+    void LogicalDevice::Submit(std::uint32_t imageIndex, Fence* submitFence)
     {
         VkFence currentFence = *submitFence;
 
@@ -159,7 +159,6 @@ namespace wowgm::graphics
 
     void LogicalDevice::Present(std::uint32_t imageToPresent, SwapChain* swapChain, Semaphore* waitSemaphore)
     {
-        VkSemaphore signalSemaphores[] = { *_renderFinished[_currentFrame] };
         VkSemaphore waitSemaphore_ = *waitSemaphore;
 
         VkPresentInfoKHR presentInfo = {};
@@ -174,6 +173,8 @@ namespace wowgm::graphics
         presentInfo.pImageIndices = &imageToPresent;
 
         VkResult result = vkQueuePresentKHR(*_presentQueue, &presentInfo);
+        if (result != VK_SUCCESS)
+            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to present"));
 
         _currentFrame = (_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     }

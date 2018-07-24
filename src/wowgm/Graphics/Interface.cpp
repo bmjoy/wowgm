@@ -78,7 +78,7 @@ namespace wowgm::graphics
 
             _interfaceWindowData.PresentMode = _swapChain->GetPresentMode();
 
-            ImGui_ImplVulkanH_CreateWindowDataCommandBuffers(*_swapChain->GetPhysicalDevice(), *_device, _swapChain->GetPhysicalDevice()->GetQueues().Graphics, &_interfaceWindowData, nullptr);
+            ImGui_ImplVulkanH_CreateWindowDataCommandBuffers(*_device, _swapChain->GetPhysicalDevice()->GetQueues().Graphics, &_interfaceWindowData, nullptr);
             _interfaceWindowData.BackBufferCount = _swapChain->GetImageCount();
             vkGetSwapchainImagesKHR(*_device, *_swapChain, &_interfaceWindowData.BackBufferCount, _interfaceWindowData.BackBuffer);
             ImGui_ImplVulkanH_CreateFrameBuffer(*_swapChain->GetPhysicalDevice(), *_device, &_interfaceWindowData, nullptr);
@@ -273,8 +273,6 @@ namespace wowgm::graphics
     {
         auto drawStart = std::chrono::high_resolution_clock::now();
 
-        // This semaphore signals when an image is acquired
-        Semaphore* imageAvailableSemaphore = _device->GetImageAvailableSemaphore();
         // This semaphore signals when the geometry has been rendered.
         Semaphore* geometryRenderedSemaphore = _device->GetSignalSemaphore();
 
@@ -286,7 +284,7 @@ namespace wowgm::graphics
         Semaphore* interfaceRenderedSemaphore = _interfaceSemaphores[image];
 
         PrepareGUI();
-        _device->Submit(image, _swapChain, _device->GetFlightFence());
+        _device->Submit(image, _device->GetFlightFence());
 
         RenderImGui(*geometryRenderedSemaphore, *interfaceRenderedSemaphore);
 

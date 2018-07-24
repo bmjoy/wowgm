@@ -817,9 +817,9 @@ VkPresentModeKHR ImGui_ImplVulkanH_SelectPresentMode(VkPhysicalDevice physical_d
     return VK_PRESENT_MODE_FIFO_KHR; // Always available
 }
 
-void ImGui_ImplVulkanH_CreateWindowDataCommandBuffers(VkPhysicalDevice physical_device, VkDevice device, uint32_t queue_family, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator)
+void ImGui_ImplVulkanH_CreateWindowDataCommandBuffers(VkDevice device, uint32_t queue_family, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator)
 {
-    IM_ASSERT(physical_device != NULL && device != NULL);
+    IM_ASSERT(device != NULL);
     (void)allocator;
 
     // Create Command Buffers

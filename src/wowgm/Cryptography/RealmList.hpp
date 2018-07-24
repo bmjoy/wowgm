@@ -43,7 +43,7 @@ namespace wowgm::networking::authentification
 
         std::uint32_t GetPort()
         {
-            auto pos = Address.find(":");
+            auto pos = Address.find(':');
             if (pos == std::string::npos)
                 return 3724u;
 

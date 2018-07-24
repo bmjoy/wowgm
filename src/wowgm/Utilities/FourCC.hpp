@@ -20,7 +20,7 @@ namespace wowgm
                 Data.Integer = *reinterpret_cast<std::uint32_t*>(buffer.GetReadPointer());
             }
 
-            FourCC() { }
+            FourCC() { Data.Integer = 0; }
 
             union {
                 std::uint32_t Integer;

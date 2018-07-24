@@ -4,7 +4,7 @@
 
 namespace wowgm::graphics
 {
-    Queue::Queue(LogicalDevice* device, VkQueueFlagBits type, VkQueue queue, std::uint32_t indice) : _device(device), _queue(queue), _indice(indice), _queueType(type)
+    Queue::Queue(LogicalDevice* device, VkQueueFlagBits type, VkQueue queue, std::int32_t indice) : _device(device), _queue(queue), _indice(indice), _queueType(type)
     {
 
     }
@@ -16,7 +16,7 @@ namespace wowgm::graphics
         _commandPool.clear();
     }
 
-    std::uint32_t Queue::GetFamilyIndice()
+    std::int32_t Queue::GetFamilyIndice()
     {
         return _indice;
     }

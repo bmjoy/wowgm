@@ -49,7 +49,7 @@ namespace wowgm::networking
         return _authSocket->IsOpen();
     }
 
-    void ClientServices::UpdateIdentificationStatus(AuthCommand authCommand, AuthResult result)
+    void ClientServices::UpdateIdentificationStatus(AuthCommand /* authCommand */, AuthResult result)
     {
         _authResult = result;
     }

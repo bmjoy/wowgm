@@ -12,7 +12,9 @@ namespace wowgm::networking::authentification
         std::uint8_t NumberOfKeys;
         std::uint8_t SecurityFlags;
     };
+    #pragma pack(pop)
 
+    #pragma pack(push, 1)
     struct AuthLogonProof
     {
         std::uint8_t Command;

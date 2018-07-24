@@ -51,7 +51,7 @@ namespace wowgm::graphics
         void AddWaitFence(Fence* fence);
         void AddWaitFence(VkFence fence);
 
-        void Submit(std::uint32_t imageIndex, SwapChain* swapChain, Fence* submitFence);
+        void Submit(std::uint32_t imageIndex, Fence* submitFence);
         void Present(std::uint32_t imageToPresent, SwapChain* swapChain, Semaphore* waitSemaphore);
 
         void AddCommandBuffer(std::uint32_t frameIndex, CommandBuffer* buffer);

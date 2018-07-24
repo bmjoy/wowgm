@@ -39,7 +39,7 @@ namespace wowgm::networking::authentification
     {
         while (_readBuffer.GetActiveSize())
         {
-            AuthCommand command = (AuthCommand)_readBuffer.GetReadPointer()[0];
+            AuthCommand command = AuthCommand(_readBuffer.GetReadPointer()[0]);
 
             auto itr = _packetHandlers.find(command);
             if (itr == _packetHandlers.end())
@@ -52,7 +52,6 @@ namespace wowgm::networking::authentification
             if (_readBuffer.GetActiveSize() < itr->second.size)
                 break;
 
-            std::uint8_t* readPos = _readBuffer.GetReadPointer();
             if (!(*this.*itr->second.handler)())
             {
                 CloseSocket();
@@ -122,6 +121,8 @@ namespace wowgm::networking::authentification
         context.UpdateBigNumbers(salt, passwordHash);
         context.Finalize();
         x.SetBinary(context);
+
+        LOG_DEBUG << "x = " << x.AsHexStr();
 
         do {
             a.SetRand(19 * 8);
@@ -234,10 +235,7 @@ namespace wowgm::networking::authentification
             return false;
         }
 
-        BigNumber serverM2;
-        serverM2.SetBinary(proof->M2, sizeof(AuthLogonProof::M2));
-
-        if (memcmp(proof->M2, M2.AsByteArray().get(), sizeof(M2)) == 0)
+        if (memcmp(proof->M2, M2.AsByteArray().get(), sizeof(proof->M2)) == 0)
         {
             sClientServices->UpdateIdentificationStatus(AUTH_LOGON_PROOF, LOGIN_INVALID_SRP6);
             return false;

@@ -40,9 +40,8 @@ extern const char* severity_level_str[];
 template <typename CharT, typename TraitsT>
 std::basic_ostream<CharT, TraitsT>& operator << (std::basic_ostream< CharT, TraitsT >& strm, severity_level lvl)
 {
-    const char* str = severity_level_str[lvl];
-    if (lvl < static_cast<int>(max_security) && lvl >= 0)
-        strm << str;
+    if (lvl < static_cast<int>(max_security))
+        strm << severity_level_str[lvl];
     else
         strm << static_cast<int>(lvl);
     return strm;
