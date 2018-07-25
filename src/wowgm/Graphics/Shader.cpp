@@ -15,7 +15,7 @@ namespace wowgm::graphics
     {
         std::ifstream fs(fileName, std::ios::binary);
         if (!fs.is_open())
-            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to open shader file!"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("Unable to open shader file!");
 
         std::size_t fileSize = boost::filesystem::file_size(fileName);
         std::vector<char> byteCode(fileSize);
@@ -31,7 +31,7 @@ namespace wowgm::graphics
         createInfo.pCode = reinterpret_cast<const uint32_t*>(byteCode.data());
 
         if (vkCreateShaderModule(*_logicalDevice, &createInfo, nullptr, &_shaderModule) != VK_SUCCESS)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create shader module"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("Unable to create shader module");
 
         _shaderStageInfo = { };
         _shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;

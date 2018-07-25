@@ -16,7 +16,7 @@ namespace wowgm::graphics
         poolInfo.flags = createFlags; // Optional
 
         if (vkCreateCommandPool(*assignedQueue->GetDevice(), &poolInfo, nullptr, &_commandPool) != VK_SUCCESS)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("Failed to create a command pool!"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("Failed to create a command pool!");
     }
 
     CommandPool::~CommandPool()
@@ -41,7 +41,7 @@ namespace wowgm::graphics
         allocInfo.commandBufferCount = 1;
 
         if (vkAllocateCommandBuffers(*_assignedQueue->GetDevice(), &allocInfo, &buffer) != VK_SUCCESS)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("Failed to allocate a command buffer!"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("Failed to allocate a command buffer!");
 
         return new CommandBuffer(buffer);
     }

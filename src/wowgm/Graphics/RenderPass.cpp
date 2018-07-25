@@ -45,7 +45,7 @@ namespace wowgm::graphics
     void RenderPass::AddAttachment(VkAttachmentDescription attachment)
     {
         if (_renderPass != VK_NULL_HANDLE)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to add attachments to a finalized render pass"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("Unable to add attachments to a finalized render pass");
 
         _attachmentDescriptions.push_back(attachment);
     }
@@ -60,7 +60,7 @@ namespace wowgm::graphics
     std::uint32_t RenderPass::Insert(Subpass* subpass)
     {
         if (_renderPass != VK_NULL_HANDLE)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to add a subpass to a finalized render pass"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("Unable to add a subpass to a finalized render pass");
 
         std::uint32_t attachmentIndex = _subpasses.size();
         _subpasses.push_back(subpass);
@@ -70,14 +70,14 @@ namespace wowgm::graphics
     void RenderPass::SetDependency(VkSubpassDependency dependency)
     {
         if (_renderPass != VK_NULL_HANDLE)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to set subpass dependencies on a finalized render pass"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("Unable to set subpass dependencies on a finalized render pass");
         _subpassDependencies.push_back(dependency);
     }
 
     void RenderPass::Finalize()
     {
         if (_renderPass != VK_NULL_HANDLE)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("RenderPass::Finalize called twice!"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("RenderPass::Finalize called twice!");
 
         VkRenderPassCreateInfo renderPassInfo = {};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
@@ -99,7 +99,7 @@ namespace wowgm::graphics
 
         VkResult result = vkCreateRenderPass(*_device, &renderPassInfo, nullptr, &_renderPass);
         if (result != VK_SUCCESS)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create a render pass!"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("Unable to create a render pass!");
     }
 
     FrameBuffer* RenderPass::CreateFrameBuffer(SwapChain* swapChain)

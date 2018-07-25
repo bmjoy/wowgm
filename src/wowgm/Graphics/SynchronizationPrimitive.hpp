@@ -50,7 +50,7 @@ namespace wowgm::graphics
             createInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
             if (vkCreateSemaphore(*device, &createInfo, nullptr, &_primitive) != VK_SUCCESS)
-                wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create a semaphore"));
+                wowgm::exceptions::throw_with_trace<std::runtime_error>("Unable to create a semaphore");
         }
     };
 
@@ -64,7 +64,7 @@ namespace wowgm::graphics
             createInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
             if (vkCreateFence(*device, &createInfo, nullptr, &_primitive) != VK_SUCCESS)
-                wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create a fence"));
+                wowgm::exceptions::throw_with_trace<std::runtime_error>("Unable to create a fence");
         }
     };
 }

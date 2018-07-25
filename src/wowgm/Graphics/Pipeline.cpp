@@ -182,7 +182,7 @@ namespace wowgm::graphics
 
         VkResult result = vkCreatePipelineLayout(*_swapchain->GetLogicalDevice(), &pipelineLayoutInfo, nullptr, &_pipelineLayout);
         if (result != VK_SUCCESS)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create a pipeline layout!"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("Unable to create a pipeline layout!");
 
         _graphicsPipelineCreateInfo = { };
         _graphicsPipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -219,7 +219,7 @@ namespace wowgm::graphics
 
         result = vkCreateGraphicsPipelines(*_swapchain->GetLogicalDevice(), VK_NULL_HANDLE, 1, &_graphicsPipelineCreateInfo, nullptr, &_pipeline);
         if (result != VK_SUCCESS)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to create pipeline"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("Unable to create pipeline");
     }
 
 

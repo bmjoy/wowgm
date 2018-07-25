@@ -37,13 +37,13 @@ namespace wowgm::graphics
 
         VkResult result = vkBeginCommandBuffer(_commandBuffer, &beginInfo);
         if (result != VK_SUCCESS)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to begin recording!"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("Unable to begin recording!");
     }
 
     void CommandBuffer::FinishRecording()
     {
         VkResult result = vkEndCommandBuffer(_commandBuffer);
         if (result != VK_SUCCESS)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to end recording!"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("Unable to end recording!");
     }
 }

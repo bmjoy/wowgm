@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
         window->Cleanup();
         delete window;
     }
-    catch (const std::runtime_error& e)
+    catch (const std::exception& e)
     {
         std::cerr << e.what() << std::endl;
 

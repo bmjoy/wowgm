@@ -68,7 +68,7 @@ namespace wowgm::graphics
         createInfo.oldSwapchain = VK_NULL_HANDLE;
 
         if (vkCreateSwapchainKHR(*_physicalDevice->GetInstance()->GetLogicalDevice(), &createInfo, nullptr, &_swapChain) != VK_SUCCESS)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("Failed to create swap chain!"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("Failed to create swap chain!");
 
         vkGetSwapchainImagesKHR(*_physicalDevice->GetInstance()->GetLogicalDevice(), _swapChain, &imageCount, nullptr);
 

@@ -1,5 +1,4 @@
 #include "SHA1.hpp"
-#include "Utilities.hpp"
 
 #include <cstring>
 #include <stdarg.h>

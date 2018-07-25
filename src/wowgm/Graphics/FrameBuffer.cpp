@@ -34,7 +34,7 @@ namespace wowgm::graphics
     void FrameBuffer::Finalize()
     {
         if (_frameBuffer != VK_NULL_HANDLE)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("FrameBuffer::Finalize called twice"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("FrameBuffer::Finalize called twice");
 
         VkFramebufferCreateInfo framebufferInfo = {};
         framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -55,7 +55,7 @@ namespace wowgm::graphics
         framebufferInfo.layers = 1;
 
         if (vkCreateFramebuffer(*_swapChain->GetLogicalDevice(), &framebufferInfo, nullptr, &_frameBuffer) != VK_SUCCESS)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("failed to create framebuffer!"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("failed to create framebuffer!");
     }
 
     std::uint32_t FrameBuffer::GetAttachmentCount()

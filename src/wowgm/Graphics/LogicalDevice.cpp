@@ -154,7 +154,7 @@ namespace wowgm::graphics
 
         VkResult result = vkQueueSubmit(*_graphicsQueue, 1, &submitInfo, currentFence);
         if (result != VK_SUCCESS)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("Failed to submit a draw command buffer!"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("Failed to submit a draw command buffer!");
     }
 
     void LogicalDevice::Present(std::uint32_t imageToPresent, SwapChain* swapChain, Semaphore* waitSemaphore)
@@ -174,7 +174,7 @@ namespace wowgm::graphics
 
         VkResult result = vkQueuePresentKHR(*_presentQueue, &presentInfo);
         if (result != VK_SUCCESS)
-            wowgm::exceptions::throw_with_trace(std::runtime_error("Unable to present"));
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("Unable to present");
 
         _currentFrame = (_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     }

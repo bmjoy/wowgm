@@ -5,7 +5,7 @@
 #include "AuthPacket.hpp"
 #include "AuthResult.hpp"
 #include "RealmList.hpp"
-#include "Utilities.hpp"
+#include "Utils.hpp"
 #include "SHA1.hpp"
 #include "Logger.hpp"
 #include "ClientServices.hpp"
@@ -93,7 +93,7 @@ namespace wowgm::networking::authentification
 
     bool AuthSocket::HandleAuthChallenge()
     {
-        BigNumber N, A, B, a, u, x, S, salt, g, M1, K;
+        BigNumber B, g, N, salt;
 
         { // Scoping the pointers so they get properly deallocated
             AuthPacket<AuthLogonChallenge> command(_readBuffer);
@@ -112,6 +112,8 @@ namespace wowgm::networking::authentification
             N.SetBinary(challenge->N, challenge->n_length);
             salt.SetBinary(challenge->Salt, sizeof(AuthLogonChallenge::Salt));
         }
+
+        BigNumber A, a, u, x, S, M1, K;
 
         LOG_INFO << "[S->C] AUTH_LOGON_CHALLENGE.";
 
@@ -215,7 +217,7 @@ namespace wowgm::networking::authentification
         LOG_DEBUG << "K = " << K.AsHexStr();
         LOG_DEBUG << "M1= " << M1.AsHexStr();
         LOG_DEBUG << "M2= " << M2.AsHexStr();
-        LOG_DEBUG << "Us= " << ByteArrayToHexStr(userHash, 20);
+        LOG_DEBUG << "Us= " << wowgm::utilities::ByteArrayToHexStr(userHash, 20);
         LOG_DEBUG << "T3= " << t3.AsHexStr();
 
         AuthPacket<LogonProof> logonChallenge(this->shared_from_this(), AUTH_LOGON_PROOF);
