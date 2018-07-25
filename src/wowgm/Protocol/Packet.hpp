@@ -2,7 +2,7 @@
 
 #include "MessageBuffer.hpp"
 
-namespace wowgm::networking {
+namespace wowgm::protocol {
 
     class Packet : public MessageBuffer
     {
@@ -24,4 +24,4 @@ namespace wowgm::networking {
         }
     };
 
-} // wowgm::networking
+} // wowgm::protocol

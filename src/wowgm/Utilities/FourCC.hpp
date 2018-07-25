@@ -10,7 +10,7 @@ namespace wowgm
 {
     namespace datatypes
     {
-        using namespace wowgm::networking;
+        using namespace wowgm::protocol;
 
         struct FourCC
         {

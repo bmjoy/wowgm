@@ -6,8 +6,8 @@
 
 #include <boost/asio/buffer.hpp>
 
-namespace wowgm::networking {
-
+namespace wowgm::protocol
+{
     class MessageBuffer
     {
         typedef std::vector<std::uint8_t>::size_type size_type;
@@ -143,10 +143,17 @@ namespace wowgm::networking {
             return *this;
         }
 
+        std::vector<std::uint8_t>&& Move()
+        {
+            _wpos = 0;
+            _rpos = 0;
+            return std::move(_storage);
+        }
+
     private:
         size_type _wpos;
         size_type _rpos;
         std::vector<std::uint8_t> _storage;
     };
 
-} // wowgm::networking
+} // wowgm::protocol

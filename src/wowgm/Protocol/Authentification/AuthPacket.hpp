@@ -7,9 +7,9 @@
 #include "Packet.hpp"
 #include "AuthCommand.hpp"
 
-namespace wowgm::networking { class BaseSocket; }
+namespace wowgm::protocol { class BaseSocket; }
 
-namespace wowgm::networking::authentification
+namespace wowgm::protocol::authentification
 {
     template <typename T>
     class AuthPacket

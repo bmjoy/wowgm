@@ -9,11 +9,11 @@
 
 namespace ip = boost::asio::ip;
 
-using namespace wowgm::networking;
-using namespace wowgm::networking::authentification;
+using namespace wowgm::protocol;
+using namespace wowgm::protocol::authentification;
 using namespace wowgm::threading;
 
-namespace wowgm::networking
+namespace wowgm::protocol
 {
     ClientServices* ClientServices::instance()
     {

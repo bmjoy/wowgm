@@ -318,7 +318,7 @@ namespace wowgm::graphics
         {
             ImVec2 size = { 300.0f, 165.0f };
 
-            if (sClientServices->GetAuthentificationResult() != wowgm::networking::authentification::LOGIN_OK)
+            if (sClientServices->GetAuthentificationResult() != wowgm::protocol::authentification::LOGIN_OK)
                 size.y += 30.0f;
 
             ImGui::SetNextWindowSizeConstraints(size, size);
@@ -331,47 +331,47 @@ namespace wowgm::graphics
             if (ImGui::Button("Log in"))
                 sClientServices->AsyncConnect(_username, _password);
 
-            if (sClientServices->GetAuthentificationResult() != wowgm::networking::authentification::LOGIN_OK)
+            if (sClientServices->GetAuthentificationResult() != wowgm::protocol::authentification::LOGIN_OK)
             {
                 switch (sClientServices->GetAuthentificationResult())
                 {
-                    case wowgm::networking::authentification::LOGIN_BANNED:
+                    case wowgm::protocol::authentification::LOGIN_BANNED:
                         ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "This account has been banned.");
                         break;
-                    case wowgm::networking::authentification::LOGIN_UNKNOWN_ACCOUNT:
+                    case wowgm::protocol::authentification::LOGIN_UNKNOWN_ACCOUNT:
                         ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "This account does not exist.");
                         break;
-                    case wowgm::networking::authentification::LOGIN_ALREADY_ONLINE:
+                    case wowgm::protocol::authentification::LOGIN_ALREADY_ONLINE:
                         ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "This account is already online.");
                         break;
-                    case wowgm::networking::authentification::LOGIN_NO_TIME: // CN
+                    case wowgm::protocol::authentification::LOGIN_NO_TIME: // CN
                         ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "This account has exceeded its online play time.");
                         break;
-                    case wowgm::networking::authentification::LOGIN_BUSY:
+                    case wowgm::protocol::authentification::LOGIN_BUSY:
                         ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "Login server is busy.");
                         break;
-                    case wowgm::networking::authentification::LOGIN_BAD_VERSION:
+                    case wowgm::protocol::authentification::LOGIN_BAD_VERSION:
                         ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "The server is not accepting connection from your version.");
                         break;
-                    case wowgm::networking::authentification::LOGIN_DOWNLOAD_FILE:
+                    case wowgm::protocol::authentification::LOGIN_DOWNLOAD_FILE:
                         ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "Unsupported action requested by the server.");
                         break;
-                    case wowgm::networking::authentification::LOGIN_SUSPENDED:
+                    case wowgm::protocol::authentification::LOGIN_SUSPENDED:
                         ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "The login operation was suspended.");
                         break;
-                    case wowgm::networking::authentification::LOGIN_PARENTAL_CONTROL:
+                    case wowgm::protocol::authentification::LOGIN_PARENTAL_CONTROL:
                         ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "Your account is locked due to parental control.");
                         break;
-                    case wowgm::networking::authentification::LOGIN_LOCKED_ENFORCED:
+                    case wowgm::protocol::authentification::LOGIN_LOCKED_ENFORCED:
                         ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "This account is locked.");
                         break;
-                    case wowgm::networking::authentification::LOGIN_CONVERSION_REQUIRED:
+                    case wowgm::protocol::authentification::LOGIN_CONVERSION_REQUIRED:
                         ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "This account needs to be converted to Battle.NET.");
                         break;
-                    case wowgm::networking::authentification::LOGIN_DISCONNECTED:
+                    case wowgm::protocol::authentification::LOGIN_DISCONNECTED:
                         ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "You've been disconnected.");
                         break;
-                    case wowgm::networking::authentification::LOGIN_INVALID_SRP6:
+                    case wowgm::protocol::authentification::LOGIN_INVALID_SRP6:
                     default:
                         ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "You've been disconnected.");
                         break;
@@ -389,7 +389,7 @@ namespace wowgm::graphics
 
             ImGui::Begin("Realm selection");
 
-            using namespace wowgm::networking::authentification;
+            using namespace wowgm::protocol::authentification;
 
             for (std::uint32_t i = 0; i < sClientServices->GetAvailableRealmCount(); ++i)
             {

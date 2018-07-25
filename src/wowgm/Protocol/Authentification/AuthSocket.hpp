@@ -19,7 +19,7 @@ namespace boost {
 namespace asio = boost::asio;
 using tcp = asio::ip::tcp;
 
-namespace wowgm::networking::authentification
+namespace wowgm::protocol::authentification
 {
     using namespace wowgm::cryptography;
 

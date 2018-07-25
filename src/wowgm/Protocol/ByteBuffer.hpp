@@ -6,7 +6,7 @@
 
 #include "NetworkingExceptions.hpp"
 
-namespace wowgm::networking
+namespace wowgm::protocol
 {
     using namespace exceptions;
 

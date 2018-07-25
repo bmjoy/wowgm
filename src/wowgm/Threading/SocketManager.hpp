@@ -10,7 +10,7 @@
 
 namespace wowgm::threading
 {
-    using namespace wowgm::networking;
+    using namespace wowgm::protocol;
 
     class SocketManager : public Updatable
     {

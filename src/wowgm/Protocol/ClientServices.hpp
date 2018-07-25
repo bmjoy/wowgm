@@ -17,7 +17,7 @@ namespace wowgm {
     }
 }
 
-namespace wowgm::networking
+namespace wowgm::protocol
 {
     namespace authentification
     {
@@ -73,4 +73,4 @@ namespace wowgm::networking
 
 }
 
-#define sClientServices wowgm::networking::ClientServices::instance()
+#define sClientServices wowgm::protocol::ClientServices::instance()

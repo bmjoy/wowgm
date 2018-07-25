@@ -4,7 +4,7 @@
 
 #include "FourCC.hpp"
 
-namespace wowgm::networking::authentification
+namespace wowgm::protocol::authentification
 {
     #pragma pack(push, 1)
     struct LogonChallenge
@@ -44,4 +44,4 @@ namespace wowgm::networking::authentification
     };
     #pragma pack(pop)
 
-} // namespace wowgm::networking::authentification
+} // namespace wowgm::protocol::authentification

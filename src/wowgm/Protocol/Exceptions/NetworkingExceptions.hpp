@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-namespace wowgm::networking::exceptions
+namespace wowgm::protocol::exceptions
 {
     class ByteBufferException : public std::exception
     {

@@ -14,7 +14,7 @@
 
 #include <boost/algorithm/string.hpp>
 
-namespace wowgm::networking::authentification
+namespace wowgm::protocol::authentification
 {
     using namespace wowgm::cryptography;
 
@@ -305,4 +305,4 @@ namespace wowgm::networking::authentification
         return true;
     }
 
-} // wowgm::networking::authentification
+} // wowgm::protocol::authentification

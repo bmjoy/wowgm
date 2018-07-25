@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace wowgm::networking::authentification
+namespace wowgm::protocol::authentification
 {
 
     enum AuthResult : std::uint8_t

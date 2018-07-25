@@ -2,7 +2,7 @@
 
 #include <boost/asio/ip/tcp.hpp>
 
-namespace wowgm::networking
+namespace wowgm::protocol
 {
     using tcp = boost::asio::ip::tcp;
 
@@ -18,9 +18,9 @@ namespace wowgm::networking
 
             virtual void QueuePacket(MessageBuffer& buffer) = 0;
 
-            virtual void Connect(tcp::endpoint& endpoint) = 0;
+            virtual bool Connect(tcp::endpoint const& endpoint) = 0;
 
             virtual tcp::endpoint GetLocalEndpoint() = 0;
     };
 
-} // wowgm::networking
+} // wowgm::protocol

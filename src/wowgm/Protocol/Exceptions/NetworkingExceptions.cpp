@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-namespace wowgm::networking::exceptions
+namespace wowgm::protocol::exceptions
 {
     ByteBufferPositionException::ByteBufferPositionException(size_t pos, size_t size, size_t valueSize)
     {

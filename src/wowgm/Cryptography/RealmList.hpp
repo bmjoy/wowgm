@@ -6,7 +6,7 @@
 #include <boost/asio/ip/address.hpp>
 #include <boost/asio/ip/tcp.hpp>
 
-namespace wowgm::networking::authentification
+namespace wowgm::protocol::authentification
 {
 
     #pragma pack(push, 1)
@@ -59,4 +59,4 @@ namespace wowgm::networking::authentification
         }
     };
 
-} // wowgm::networking::authentification
+} // wowgm::protocol::authentification

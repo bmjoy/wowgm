@@ -6,6 +6,7 @@
 
 #include <boost/array.hpp>
 #include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/buffer.hpp>
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/placeholders.hpp>
 #include <boost/system/error_code.hpp>
@@ -23,7 +24,7 @@ namespace boost {
 namespace asio = boost::asio;
 using tcp = asio::ip::tcp;
 
-namespace wowgm::networking
+namespace wowgm::protocol
 {
 
     template <class T>
@@ -47,14 +48,15 @@ namespace wowgm::networking
             delete _socket;
         }
 
-        void Connect(tcp::endpoint& endpoint) override
+        bool Connect(tcp::endpoint const& endpoint) override
         {
             _socket = new tcp::socket(_ioContext);
 
             boost::system::error_code errorCode;
             _socket->connect(endpoint, errorCode);
             if (errorCode != 0)
-                wowgm::exceptions::throw_with_trace(errorCode);
+                wowgm::exceptions::throw_with_trace<std::runtime_error>(errorCode.message().c_str());
+            return true;
         }
 
         void CloseSocket() override final
@@ -66,7 +68,7 @@ namespace wowgm::networking
             _socket->shutdown(boost::asio::socket_base::shutdown_both, errorCode);
 
             if (errorCode != 0)
-                wowgm::exceptions::throw_with_trace(errorCode);
+                wowgm::exceptions::throw_with_trace<std::runtime_error>(errorCode.message().c_str());
 
             OnClose();
         }
@@ -123,6 +125,8 @@ namespace wowgm::networking
             return _socket->local_endpoint();
         }
 
+        MessageBuffer& GetReadBuffer() { return _readBuffer; }
+
     private:
 
         bool SendMessageInternal(MessageBuffer& buffer)
@@ -134,7 +138,7 @@ namespace wowgm::networking
             std::size_t bytesSent = _socket->write_some(buffer.AsReadBuffer(), errorCode);
 
             if (errorCode != 0)
-                wowgm::exceptions::throw_with_trace(errorCode);
+                wowgm::exceptions::throw_with_trace<std::runtime_error>(errorCode.message().c_str());
 
             buffer.ReadCompleted(bytesSent);
 
@@ -147,6 +151,29 @@ namespace wowgm::networking
 
                 return true;
             }
+        }
+
+    protected:
+        template <typename ConstBufferSequence>
+        bool SendRawPacket(ConstBufferSequence const& buffer)
+        {
+            // Pretend send was successful for an empty buffer
+            if (buffer.size() == 0)
+                return true;
+
+            if (!IsOpen())
+                return false;
+
+            boost::system::error_code errorCode;
+            std::size_t bytesSent = _socket->write_some(buffer, errorCode);
+
+            if (errorCode != 0)
+                wowgm::exceptions::throw_with_trace<std::runtime_error>(errorCode.message().c_str());
+
+            if (_closing)
+                CloseSocket();
+
+            return true;
         }
 
     protected:
@@ -179,4 +206,4 @@ namespace wowgm::networking
         std::atomic<bool> _closing;
     };
 
-} // wowgm::networking
+} // wowgm::protocol

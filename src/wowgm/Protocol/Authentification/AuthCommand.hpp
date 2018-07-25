@@ -1,6 +1,6 @@
 #pragma once
 
-namespace wowgm::networking::authentification
+namespace wowgm::protocol::authentification
 {
     enum AuthCommand
     {
@@ -10,4 +10,4 @@ namespace wowgm::networking::authentification
         AUTH_RECONNECT_PROOF = 0x03,
         REALM_LIST = 0x10,
     };
-} // namespace wowgm::networking::authentification
+} // namespace wowgm::protocol::authentification
