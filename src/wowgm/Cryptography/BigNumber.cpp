@@ -151,12 +151,12 @@ namespace wowgm::cryptography
         return ret;
     }
 
-    int32_t BigNumber::GetNumBytes()
+    int32_t BigNumber::GetNumBytes() const
     {
         return BN_num_bytes(_bn);
     }
 
-    std::uint32_t BigNumber::AsDword()
+    std::uint32_t BigNumber::AsDword() const
     {
         return (std::uint32_t)BN_get_word(_bn);
     }
@@ -171,7 +171,7 @@ namespace wowgm::cryptography
         return BN_is_negative(_bn);
     }
 
-    std::unique_ptr<std::uint8_t[]> BigNumber::AsByteArray(int32_t minSize, bool littleEndian)
+    std::unique_ptr<std::uint8_t[]> BigNumber::AsByteArray(int32_t minSize, bool littleEndian) const
     {
         int numBytes = GetNumBytes();
         int length = (minSize >= numBytes) ? minSize : numBytes;

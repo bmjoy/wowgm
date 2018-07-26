@@ -69,13 +69,13 @@ namespace wowgm::cryptography
         BigNumber ModExp(BigNumber const& bn1, BigNumber const& bn2);
         BigNumber Exp(BigNumber const&);
 
-        std::int32_t GetNumBytes(void);
+        std::int32_t GetNumBytes(void) const;
 
         struct bignum_st *BN() { return _bn; }
 
-        std::uint32_t AsDword();
+        std::uint32_t AsDword() const;
 
-        std::unique_ptr<std::uint8_t[]> AsByteArray(std::int32_t minSize = 0, bool littleEndian = true);
+        std::unique_ptr<std::uint8_t[]> AsByteArray(std::int32_t minSize = 0, bool littleEndian = true) const;
 
         std::string AsHexStr() const;
         std::string AsDecStr() const;
