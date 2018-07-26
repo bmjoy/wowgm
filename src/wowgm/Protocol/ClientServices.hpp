@@ -19,9 +19,10 @@ namespace wowgm {
 
 namespace wowgm::protocol
 {
+    class BaseSocket;
+
     namespace authentification
     {
-        class AuthSocket;
         struct AuthRealmInfo;
     }
 
@@ -56,19 +57,33 @@ namespace wowgm::protocol
         void SetSessionKey(BigNumber const& K);
         BigNumber const& GetSessionKey();
 
+        void SetUsername(const std::string& username);
+        std::string const& GetUsername();
+
+        void SetPassword(const std::string& password);
+        std::string const& GetPassword();
+
+        BigNumber& GetPasswordHash();
+
     public: /* World */
 
         bool IsInWorld();
 
     private:
         std::shared_ptr<SocketManager> _socketUpdater;
-        std::shared_ptr<AuthSocket> _authSocket;
-        bool _isConnected;
+        std::shared_ptr<BaseSocket> _socket;
+
         AuthResult _authResult = LOGIN_OK;
 
         boost::optional<std::vector<AuthRealmInfo>> _realmInfos;
 
+        std::string _username;
+        std::string _password;
+
         BigNumber _sessionKey;
+        boost::optional<BigNumber> _passwordHash;
+
+        bool _isConnected;
     };
 
 }

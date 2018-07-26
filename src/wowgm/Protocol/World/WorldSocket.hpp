@@ -9,6 +9,7 @@
 #include "MessageBuffer.hpp"
 #include "PacketHeaders.hpp"
 
+#include <boost/asio/detail/type_traits.hpp>
 #include <boost/asio/io_context.hpp>
 #include <string>
 #include <cstdint>
@@ -28,6 +29,11 @@ namespace wowgm::protocol::world
     using namespace wowgm::cryptography;
     using namespace wowgm::utilities;
 
+    namespace packets
+    {
+        struct ClientConnectionAuthChallenge;
+    }
+
     class EncryptablePacket;
 
     class WorldSocket : public Socket<WorldSocket>
@@ -35,18 +41,17 @@ namespace wowgm::protocol::world
         WorldSocket(WorldSocket&&) = delete;
         WorldSocket(WorldSocket const&) = delete;
 
-        static std::string const ServerConnectionInitialize;
-        static std::string const ClientConnectionInitialize;
-
         typedef Socket<WorldSocket> BaseSocket;
 
         bool ReadHeaderHandler();
         bool ReadDataHandler();
 
+    public: /* Handlers */
+
+        bool HandleAuthChallenge(wowgm::protocol::world::packets::ClientConnectionAuthChallenge& packet);
+
     public:
         WorldSocket(asio::io_context& service);
-
-        bool Connect(asio::ip::tcp::endpoint const& endpoint) override final;
 
     protected:
         void ReadHandler() override;

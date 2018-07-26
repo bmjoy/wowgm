@@ -64,17 +64,15 @@ namespace wowgm::protocol::authentification
 
     void AuthSocket::SendAuthChallenge(std::string&& username, std::string&& password, std::string&& platform, std::string&& operatingSystem, std::string&& countryCode, std::string&& gameCode)
     {
-        _username = username;
-        _password = password;
+        boost::to_upper(username);
+        boost::to_upper(password);
 
-        boost::to_upper(_username);
-        boost::to_upper(_password);
-
-        LOG_INFO << "[C->S] AUTH_LOGON_CHALLENGE " << _username << ":" << _password;
+        sClientServices->SetUsername(username);
+        sClientServices->SetPassword(password);
 
         AuthPacket<LogonChallenge> command(this->shared_from_this(), AUTH_LOGON_CHALLENGE);
         command.GetData()->Error = 6;
-        command.GetData()->Size = std::uint16_t(30 + _username.length());
+        command.GetData()->Size = std::uint16_t(30 + username.length());
         command.GetData()->Game = gameCode;
         command.GetData()->Version[0] = 4;
         command.GetData()->Version[1] = 3;
@@ -85,8 +83,8 @@ namespace wowgm::protocol::authentification
         command.GetData()->CountryCode = countryCode;
         command.GetData()->timeZoneBias = 0x3C;
         command.GetData()->IP = *reinterpret_cast<std::uint32_t*>(GetLocalEndpoint().address().to_v4().to_bytes().data());
-        command.GetData()->Name.Length = std::uint8_t(_username.length());
-        command += _username;
+        command.GetData()->Name.Length = std::uint8_t(username.length());
+        command += username;
 
         // Sent when out of scope
     }
@@ -117,8 +115,8 @@ namespace wowgm::protocol::authentification
 
         LOG_INFO << "[S->C] AUTH_LOGON_CHALLENGE.";
 
-        // Hash the password now
-        BigNumber passwordHash(CalculateSHA1(_username + ":" + _password));
+        BigNumber& passwordHash = sClientServices->GetPasswordHash();
+
         SHA1 context;
         context.UpdateBigNumbers(salt);
         context.UpdateBigNumbers(passwordHash);
@@ -189,7 +187,7 @@ namespace wowgm::protocol::authentification
 
         std::uint8_t userHash[20];
         context.Initialize();
-        context.UpdateData(_username);
+        context.UpdateData(sClientServices->GetUsername());
         context.Finalize();
         memcpy(userHash, context.GetDigest(), SHA_DIGEST_LENGTH);
 

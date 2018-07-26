@@ -26,6 +26,11 @@ namespace wowgm::cryptography
         UpdateData((std::uint8_t const*)str.c_str(), str.length());
     }
 
+    void SHA1::UpdateData(char c)
+    {
+        UpdateData((std::uint8_t const*)&c, 1);
+    }
+
     void SHA1::Initialize()
     {
         SHA1_Init(&mC);
@@ -35,16 +40,6 @@ namespace wowgm::cryptography
     void SHA1::Finalize()
     {
         SHA1_Final(mDigest, &mC);
-    }
-
-    BigNumber CalculateSHA1(std::string const& content)
-    {
-        std::uint8_t digest[SHA_DIGEST_LENGTH];
-        ::SHA1((unsigned char*)content.c_str(), content.length(), (unsigned char*)&digest);
-
-        BigNumber bigNumber;
-        bigNumber.SetBinary(digest, SHA_DIGEST_LENGTH);
-        return bigNumber;
     }
 
 } // namespace wowgm::cryptography

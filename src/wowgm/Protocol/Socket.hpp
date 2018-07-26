@@ -55,7 +55,9 @@ namespace wowgm::protocol
             boost::system::error_code errorCode;
             _socket->connect(endpoint, errorCode);
             if (errorCode != 0)
-                wowgm::exceptions::throw_with_trace<std::runtime_error>(errorCode.message().c_str());
+            {
+                BOOST_ASSERT_MSG(false, errorCode.message().c_str());
+            }
             return true;
         }
 

@@ -28,9 +28,6 @@ namespace wowgm::threading
         if (_worker.joinable())
             _worker.join(); // join
 
-        _worker.~thread();
-        ::operator delete(&_worker);
-
         _updatables.resize(0);
     }
 

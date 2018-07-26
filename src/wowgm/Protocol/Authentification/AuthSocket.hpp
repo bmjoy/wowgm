@@ -59,8 +59,6 @@ namespace wowgm::protocol::authentification
         };
 
         std::unordered_map<std::uint8_t, AuthHandler> _packetHandlers;
-        std::string _username;
-        std::string _password;
 
         BigNumber M2;
     };

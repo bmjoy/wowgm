@@ -2,7 +2,9 @@
 #include "Updater.hpp"
 #include "SocketManager.hpp"
 #include "AuthSocket.hpp"
+#include "WorldSocket.hpp"
 #include "Logger.hpp"
+#include "SHA1.hpp"
 
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/ip/address.hpp>
@@ -10,6 +12,7 @@
 namespace ip = boost::asio::ip;
 
 using namespace wowgm::protocol;
+using namespace wowgm::protocol::world;
 using namespace wowgm::protocol::authentification;
 using namespace wowgm::threading;
 
@@ -34,20 +37,23 @@ namespace wowgm::protocol
     {
         ip::tcp::endpoint authEndpoint(ip::make_address(realmAddress), port);
 
-        if (_authSocket)
+        if (_socket)
         {
-            _authSocket->CloseSocket();
-            _authSocket.reset();
+            _socket->CloseSocket();
+            _socket.reset();
         }
 
-        _authSocket = _socketUpdater->Create<AuthSocket>(_socketUpdater->GetContext());
-        _authSocket->Connect(authEndpoint);
-        _authSocket->SendAuthChallenge(username, password);
+        auto authSocket = _socketUpdater->Create<AuthSocket>(_socketUpdater->GetContext());
+
+        _socket = authSocket;
+
+        authSocket->Connect(authEndpoint);
+        authSocket->SendAuthChallenge(username, password);
     }
 
     bool ClientServices::IsConnected()
     {
-        return _authSocket->IsOpen();
+        return _socket->IsOpen();
     }
 
     void ClientServices::UpdateIdentificationStatus(AuthCommand /* authCommand */, AuthResult result)
@@ -92,17 +98,18 @@ namespace wowgm::protocol
         LOG_INFO << "Disconnecting from authentification server.";
 
         // Close auth socket
-        _authSocket->CloseSocket();
-        _authSocket.reset();
+        _socket->CloseSocket();
+        _socket.reset();
 
         LOG_DEBUG << "Connecting to realm " << realmInfo.Name << " at " << realmInfo.GetEndpoint();
 
-        // _socketUpdater->Create<WorldSocket>(_socketUpdater->GetContext());
+        _socket = _socketUpdater->Create<WorldSocket>(_socketUpdater->GetContext());
+        _socket->Connect(realmInfo.GetEndpoint());
     }
 
     bool ClientServices::IsInWorld()
     {
-        return !!_authSocket && _authResult == LOGIN_OK;
+        return !!_socket && _authResult == LOGIN_OK;
     }
 
     void ClientServices::SetSessionKey(BigNumber const& K)
@@ -113,5 +120,46 @@ namespace wowgm::protocol
     BigNumber const& ClientServices::GetSessionKey()
     {
         return _sessionKey;
+    }
+
+    void ClientServices::SetUsername(const std::string& username)
+    {
+        _username = username;
+        _passwordHash = boost::none;
+    }
+
+    std::string const& ClientServices::GetUsername()
+    {
+        return _username;
+    }
+
+    void ClientServices::SetPassword(const std::string& password)
+    {
+        _password = password;
+        _passwordHash = boost::none;
+    }
+
+    std::string const& ClientServices::GetPassword()
+    {
+        return _password;
+    }
+
+    BigNumber& ClientServices::GetPasswordHash()
+    {
+        if (_passwordHash.is_initialized())
+            return _passwordHash.get();
+
+        SHA1 context;
+        context.Initialize();
+        context.UpdateData(_username);
+        context.UpdateData(':');
+        context.UpdateData(_password);
+        context.Finalize();
+
+        BigNumber bn;
+        bn.SetBinary(context);
+        _passwordHash = bn;
+
+        return _passwordHash.get();
     }
 }

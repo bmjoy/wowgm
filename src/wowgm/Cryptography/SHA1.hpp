@@ -27,19 +27,20 @@ namespace wowgm::cryptography
         ~SHA1();
 
         template <typename T, typename... Args, typename std::enable_if<std::is_same<T, BigNumber>::value, int>::type = 0>
-        void UpdateBigNumbers(T& bn0, Args&&... args)
+        void UpdateBigNumbers(T const& bn0, Args&&... args)
         {
             UpdateData(bn0.AsByteArray().get(), bn0.GetNumBytes());
             UpdateBigNumbers(std::forward<Args>(args)...);
         }
 
         template <typename T, typename std::enable_if<std::is_same<T, BigNumber>::value, int>::type = 0>
-        void UpdateBigNumbers(T& bn0)
+        void UpdateBigNumbers(T const& bn0)
         {
             UpdateData(bn0.AsByteArray().get(), bn0.GetNumBytes());
         }
 
         void UpdateData(const std::uint8_t *dta, int len);
+        void UpdateData(char c);
         void UpdateData(const std::string &str);
 
         void Initialize();
@@ -52,8 +53,5 @@ namespace wowgm::cryptography
         SHA_CTX mC;
         std::uint8_t mDigest[SHA_DIGEST_LENGTH];
     };
-
-    /// Returns the SHA1 hash of the given content as hex string.
-    BigNumber CalculateSHA1(std::string const& content);
 } // wowgm::cryptography
 

@@ -97,6 +97,14 @@ int main(int argc, char* argv[])
         window->Cleanup();
         delete window;
     }
+    catch (const boost::system::system_error& se)
+    {
+        std::cerr << se.code() << " " << se.what() << std::endl;
+
+        const boost::stacktrace::stacktrace* st = boost::get_error_info<traced>(se);
+        if (st)
+            std::cerr << *st << std::endl;
+    }
     catch (const std::exception& e)
     {
         std::cerr << e.what() << std::endl;

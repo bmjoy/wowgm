@@ -48,7 +48,7 @@ namespace wowgm::protocol::authentification
                 return 3724u;
 
             std::uint32_t port;
-            std::from_chars(Address.data() + pos, Address.data() + Address.size(), port);
+            std::from_chars(Address.data() + pos + 1, Address.data() + Address.size(), port);
             return port;
         }
 
