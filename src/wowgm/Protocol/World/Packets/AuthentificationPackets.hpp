@@ -31,7 +31,6 @@ namespace wowgm::protocol::world::packets
         std::uint8_t LoginServerType = 0;
         std::uint32_t RealmID = 0;
         std::uint16_t Build = 0;
-        std::uint32_t LocalChallenge = 0;
         std::array<std::uint8_t, SHA_DIGEST_LENGTH> Digest = { };
         std::uint32_t RegionID;
         std::string AccountName;

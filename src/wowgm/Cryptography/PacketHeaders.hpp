@@ -15,7 +15,7 @@ namespace wowgm::protocol::world
 
         ServerPacketHeader();
 
-        bool Read(WorldSocket* socket, WorldPacketCrypt& authCrypt);
+        bool Read(WorldSocket* socket, WorldPacketCrypt& authCrypt, bool initialized);
         void Reset();
 
     private:
@@ -29,7 +29,7 @@ namespace wowgm::protocol::world
     {
         ClientPacketHeader(std::uint16_t size, std::uint32_t opcode) : Size(size), Opcode(opcode)
         {
-
+            std::swap(Data[0], Data[1]);
         }
 
         union
@@ -40,6 +40,8 @@ namespace wowgm::protocol::world
                 std::uint32_t Opcode;
             };
         };
+
+        enum { data_size = 6, size_size = 2, opcode_size = 4 };
 
         bool IsValidSize() const { return Size >= 4 && Size < 10240; }
     };

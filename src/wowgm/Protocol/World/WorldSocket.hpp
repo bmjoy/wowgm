@@ -31,6 +31,8 @@ namespace wowgm::protocol::world
 
     namespace packets
     {
+        class ClientPacket;
+
         struct ClientConnectionAuthChallenge;
     }
 
@@ -43,7 +45,6 @@ namespace wowgm::protocol::world
 
         typedef Socket<WorldSocket> BaseSocket;
 
-        bool ReadHeaderHandler();
         bool ReadDataHandler();
 
     public: /* Handlers */
@@ -51,8 +52,13 @@ namespace wowgm::protocol::world
         bool HandleAuthChallenge(wowgm::protocol::world::packets::ClientConnectionAuthChallenge& packet);
 
     public:
+
         WorldSocket(asio::io_context& service);
 
+        void SendPacket(packets::ClientPacket& packet);
+        void SendPacket(WorldPacket const* worldPacket);
+
+        void Update() override final;
     protected:
         void ReadHandler() override;
 

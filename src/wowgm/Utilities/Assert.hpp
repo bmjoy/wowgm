@@ -56,7 +56,7 @@ namespace boost
 
                     if (!found_non_boost_yet)
                     {
-                        bool is_boost_frame = f.name().find("boost::") == 0;
+                        bool is_boost_frame = name.find("boost::") == 0;
                         found_non_boost_yet = !is_boost_frame; // Cant check npos since arguments can take boost::...
 
                         if (is_boost_frame)
@@ -396,7 +396,6 @@ namespace boost
 } // namespace boost
 
 #endif // WOWGM_ASSERT_H_
-
 
 #define BOOST_ASSERT_MSG_FMT(expr, msg, ...) (BOOST_LIKELY(!!(expr))? ((void)0): ::boost::assertion_failed_msg_fmt(#expr, msg, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__, ##__VA_ARGS__))
 

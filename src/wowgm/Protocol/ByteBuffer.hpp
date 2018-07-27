@@ -488,6 +488,8 @@ namespace wowgm::protocol
             _wpos = size();
         }
 
+        bool HasData() const { return _wpos != 0; }
+
         void reserve(size_t ressize)
         {
             if (ressize > size())

@@ -50,11 +50,11 @@ namespace wowgm::protocol::world::packets
         _worldPacket << std::uint32_t(RealmID);
         _worldPacket << std::uint8_t(0);
         _worldPacket << std::uint8_t(Digest[17]);
-        _worldPacket << std::uint8_t(Digest[16]);
+        _worldPacket << std::uint8_t(Digest[6]);
         _worldPacket << std::uint8_t(Digest[0]);
         _worldPacket << std::uint8_t(Digest[1]);
         _worldPacket << std::uint8_t(Digest[11]);
-        _worldPacket << std::uint32_t(ClientSeed);
+        _worldPacket << std::uint32_t(ClientSeed); // LocalChallenge
         _worldPacket << std::uint8_t(Digest[2]);
         _worldPacket << std::uint32_t(RegionID);
         _worldPacket << std::uint8_t(Digest[14]);

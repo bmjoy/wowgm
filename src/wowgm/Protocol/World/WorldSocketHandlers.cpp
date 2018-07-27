@@ -25,8 +25,21 @@ namespace wowgm::protocol::world
         context.UpdateData(username);
         context.UpdateBigNumbers(zero, clientSeed, serverSeed);
         context.UpdateBigNumbers(sClientServices->GetSessionKey());
+        context.Finalize();
 
         UserRouterClientAuthSession authSession;
+        authSession.AccountName = sClientServices->GetUsername();
+        authSession.BattlegroupID = 0;
+        authSession.Build = 15595;
+        authSession.ClientSeed = clientSeed.AsDword();
+        memcpy(authSession.Digest.data(), context.GetDigest(), context.GetLength());
+        authSession.LoginServerType = 1;
+        authSession.RealmID = 0; // FIXME
+        authSession.RegionID = 0; // FIXME
+        authSession.ServerID = 0; // FIXME
+        authSession.UseIPv6 = false;
+        authSession.Write();
+        SendPacket(authSession);
 
         return true;
     }

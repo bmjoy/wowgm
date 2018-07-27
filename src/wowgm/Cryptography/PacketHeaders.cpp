@@ -11,7 +11,7 @@ namespace wowgm::protocol::world
 
     }
 
-    bool ServerPacketHeader::Read(WorldSocket* socket, WorldPacketCrypt& authCrypt)
+    bool ServerPacketHeader::Read(WorldSocket* socket, WorldPacketCrypt& authCrypt, bool initialized)
     {
         // Size different from zero means we successfully parsed (since size should include opcode size)
         if (Size != 0)
@@ -21,6 +21,19 @@ namespace wowgm::protocol::world
 
         if (packet.GetActiveSize() == 0)
             return false;
+
+        if (!initialized)
+        {
+            auto initializerSize = std::min(packet.GetActiveSize(), size_t(2));
+            _headerBuffer.Write(packet.GetReadPointer(), initializerSize);
+            packet.ReadCompleted(initializerSize);
+
+            // This is cheating, but i don't care. The size of the handshake string fits 1 byte.
+            if (_headerBuffer.GetActiveSize() == 2)
+                Size = _headerBuffer.GetReadPointer()[1] + 2; // This size does include the opcode, but there isn't any, and we expect there to be one in the code immediately after.
+
+            return initializerSize == 2;
+        }
 
         // Single out the first byte of the header
         if (!_receivedFirstByte)
@@ -47,6 +60,7 @@ namespace wowgm::protocol::world
         _headerBuffer.Write(packet.GetReadPointer(), remainderHeaderSize);
         authCrypt.DecryptRecv(_headerBuffer.GetReadPointer(), remainderHeaderSize);
         _headerBuffer.ReadCompleted(remainderHeaderSize);
+        packet.ReadCompleted(remainderHeaderSize);
 
         if (_headerBuffer.GetActiveSize() == (!_isLargePacket ? 0 : 1))
         {
@@ -72,6 +86,8 @@ namespace wowgm::protocol::world
     {
         _receivedFirstByte = false;
         _isLargePacket = false;
+
+        _headerBuffer.Reset();
 
         Size = 0;
     }

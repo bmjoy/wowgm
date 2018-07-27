@@ -53,11 +53,8 @@ namespace wowgm::protocol
             _socket = new tcp::socket(_ioContext);
 
             boost::system::error_code errorCode;
-            _socket->connect(endpoint, errorCode);
-            if (errorCode != 0)
-            {
-                BOOST_ASSERT_MSG(false, errorCode.message().c_str());
-            }
+           _socket->connect(endpoint, errorCode);
+            BOOST_ASSERT_MSG(errorCode == 0, errorCode.message().c_str());
             return true;
         }
 
@@ -69,8 +66,7 @@ namespace wowgm::protocol
             boost::system::error_code errorCode;
             _socket->shutdown(boost::asio::socket_base::shutdown_both, errorCode);
 
-            if (errorCode != 0)
-                wowgm::exceptions::throw_with_trace<std::runtime_error>(errorCode.message().c_str());
+            BOOST_ASSERT_MSG(errorCode == 0, errorCode.message().c_str());
 
             OnClose();
         }
@@ -139,8 +135,7 @@ namespace wowgm::protocol
             boost::system::error_code errorCode;
             std::size_t bytesSent = _socket->write_some(buffer.AsReadBuffer(), errorCode);
 
-            if (errorCode != 0)
-                wowgm::exceptions::throw_with_trace<std::runtime_error>(errorCode.message().c_str());
+            BOOST_ASSERT_MSG(errorCode == 0, errorCode.message().c_str());
 
             buffer.ReadCompleted(bytesSent);
 
@@ -169,8 +164,7 @@ namespace wowgm::protocol
             boost::system::error_code errorCode;
             std::size_t bytesSent = _socket->write_some(buffer, errorCode);
 
-            if (errorCode != 0)
-                wowgm::exceptions::throw_with_trace<std::runtime_error>(errorCode.message().c_str());
+            BOOST_ASSERT_MSG(errorCode == 0, errorCode.message().c_str());
 
             if (_closing)
                 CloseSocket();

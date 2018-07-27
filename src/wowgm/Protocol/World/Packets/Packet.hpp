@@ -48,5 +48,6 @@ namespace wowgm::protocol::world::packets
             ~ClientPacket();
 
             void Read() override final;
+            bool IsWritten() const;
     };
 }

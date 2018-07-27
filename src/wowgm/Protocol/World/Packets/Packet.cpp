@@ -59,6 +59,11 @@ namespace wowgm::protocol::world::packets
 
     }
 
+    bool ClientPacket::IsWritten() const
+    {
+        return _worldPacket.empty() || _worldPacket.HasData();
+    }
+
     WorldPacket const* ServerPacket::Write()
     {
         BOOST_ASSERT_MSG(false, "Write not allowed for server packets.");
