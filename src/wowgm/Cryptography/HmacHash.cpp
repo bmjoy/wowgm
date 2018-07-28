@@ -56,9 +56,9 @@ namespace wowgm::cryptography
     }
 
     template<HashCreateFn HashCreator, std::uint32_t DigestLength>
-    std::uint8_t* HmacHash<HashCreator, DigestLength>::ComputeHash(BigNumber* bn)
+    std::uint8_t* HmacHash<HashCreator, DigestLength>::ComputeHash(BigNumber const& bn)
     {
-        HMAC_Update(_ctx, bn->AsByteArray().get(), bn->GetNumBytes());
+        HMAC_Update(_ctx, bn.AsByteArray().get(), bn.GetNumBytes());
         Finalize();
         return _digest;
     }

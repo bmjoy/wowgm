@@ -9,6 +9,6 @@ namespace wowgm::protocol::world
         public:
             WorldPacketCrypt();
 
-            void Init(BigNumber* K) override;
+            void Init(const BigNumber& K) override;
     };
 }

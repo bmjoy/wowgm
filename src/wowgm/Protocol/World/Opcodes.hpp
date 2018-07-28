@@ -1387,6 +1387,11 @@ namespace wowgm::protocol::world
                 return _opcodeHandlers[static_cast<KeyType>(opcode)];
             }
 
+            bool HasHandler(Opcode opcode) const
+            {
+                return _opcodeHandlers.find(static_cast<KeyType>(opcode)) != _opcodeHandlers.end();
+            }
+
             template <typename Handler, Handler HandlerFunction>
             void DefineHandler(Opcode opcode);
 

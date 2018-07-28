@@ -60,6 +60,8 @@ namespace wowgm::protocol::world
         authSession.Write();
         SendPacket(authSession);
 
+        _authCrypt.Init(sClientServices->GetSessionKey());
+
         return true;
     }
 

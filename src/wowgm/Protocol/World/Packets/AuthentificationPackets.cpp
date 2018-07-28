@@ -59,13 +59,14 @@ namespace wowgm::protocol::world::packets
     void ClientConnectionAuthResponse::Read()
     {
         bool hasQueueInfo = _worldPacket.ReadBit();
-        bool hasAccountInfo = _worldPacket.ReadBit();
 
         if (hasQueueInfo)
         {
             QueueInfo = boost::in_place();
             QueueInfo->Bit = _worldPacket.ReadBit();
         }
+
+        bool hasAccountInfo = _worldPacket.ReadBit();
 
         if (hasAccountInfo)
             _worldPacket >> AccountInfo;

@@ -15,7 +15,7 @@ namespace wowgm::protocol
         PacketCrypt(std::uint32_t digestLength);
         virtual ~PacketCrypt() { }
 
-        virtual void Init(BigNumber* K) = 0;
+        virtual void Init(const BigNumber& K) = 0;
         void DecryptRecv(std::uint8_t* data, size_t length);
         void EncryptSend(std::uint8_t* data, size_t length);
 

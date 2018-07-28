@@ -24,7 +24,7 @@ namespace wowgm::cryptography
         void UpdateData(std::uint8_t const* data, size_t len);
         void Finalize();
 
-        std::uint8_t* ComputeHash(BigNumber* bn);
+        std::uint8_t* ComputeHash(BigNumber const& bn);
         std::uint8_t* GetDigest() { return _digest; }
         std::uint32_t GetLength() const { return DigestLength; }
 

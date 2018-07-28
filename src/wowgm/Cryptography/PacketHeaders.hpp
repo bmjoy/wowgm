@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MessageBuffer.hpp"
+#include "Opcodes.hpp"
 #include <cstdint>
 
 namespace wowgm::protocol::world
@@ -11,12 +12,14 @@ namespace wowgm::protocol::world
     struct ServerPacketHeader
     {
         std::uint16_t Size;
-        std::uint32_t Opcode;
+        Opcode Command;
 
         ServerPacketHeader();
 
         bool Read(WorldSocket* socket, WorldPacketCrypt& authCrypt, bool initialized);
         void Reset();
+
+        enum { data_size = 5, size_size = 3, opcode_size = 2 };
 
     private:
         MessageBuffer _headerBuffer;
@@ -27,7 +30,7 @@ namespace wowgm::protocol::world
     #pragma pack(push, 1)
     struct ClientPacketHeader
     {
-        ClientPacketHeader(std::uint16_t size, std::uint32_t opcode) : Size(size), Opcode(opcode)
+        ClientPacketHeader(std::uint16_t size, Opcode opcode) : Size(size), Command(opcode)
         {
             std::swap(Data[0], Data[1]);
         }
@@ -37,7 +40,7 @@ namespace wowgm::protocol::world
             std::uint8_t Data[6];
             struct {
                 std::uint16_t Size;
-                std::uint32_t Opcode;
+                Opcode Command;
             };
         };
 

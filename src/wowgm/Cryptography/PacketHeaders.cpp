@@ -6,7 +6,7 @@
 
 namespace wowgm::protocol::world
 {
-    ServerPacketHeader::ServerPacketHeader() : _headerBuffer(5), _isLargePacket(false), _receivedFirstByte(false), Size(0u), Opcode(0u)
+    ServerPacketHeader::ServerPacketHeader() : _headerBuffer(5), _isLargePacket(false), _receivedFirstByte(false), Size(0u), Command(Opcode::NULL_OPCODE)
     {
 
     }
@@ -30,7 +30,7 @@ namespace wowgm::protocol::world
 
             // This is cheating, but i don't care. The size of the handshake string fits 1 byte.
             if (_headerBuffer.GetActiveSize() == 2)
-                Size = _headerBuffer.GetReadPointer()[1] + 2; // This size does include the opcode, but there isn't any, and we expect there to be one in the code immediately after.
+                Size = _headerBuffer.GetReadPointer()[1];
 
             return initializerSize == 2;
         }
@@ -45,14 +45,7 @@ namespace wowgm::protocol::world
             authCrypt.DecryptRecv(_headerBuffer.GetReadPointer(), 1);
             _isLargePacket = _headerBuffer.GetReadPointer()[0] & 0x80;
 
-            if (_isLargePacket)
-            {
-                _headerBuffer.GetReadPointer()[0] &= 0x7F;
-            }
-
             packet.ReadCompleted(1);
-
-            // Needed for cases where we get bytes on the wire 1 by 1
             _headerBuffer.ReadCompleted(1);
         }
 
@@ -62,20 +55,29 @@ namespace wowgm::protocol::world
         _headerBuffer.ReadCompleted(remainderHeaderSize);
         packet.ReadCompleted(remainderHeaderSize);
 
-        if (_headerBuffer.GetActiveSize() == (!_isLargePacket ? 0 : 1))
+        if (_isLargePacket)
         {
+            BOOST_ASSERT(_headerBuffer.GetActiveSize() == 0);
+
             _headerBuffer.Reset();
             std::uint8_t* headerData = _headerBuffer.GetReadPointer();
-            if (!_isLargePacket)
-            {
-                Size = ((headerData[0] << 8) | headerData[1]);
-                Opcode = (headerData[3] << 8) | headerData[2];
-            }
-            else
-            {
-                Size = ((headerData[0] << 16) | (headerData[1] << 8) | headerData[2]);
-                Opcode = (headerData[4] << 8) | headerData[3];
-            }
+
+            BOOST_ASSERT(_headerBuffer.GetActiveSize() == 0);
+            Size = ((headerData[0] & 0x7F) << 16) | (headerData[1] << 8) | headerData[2];
+            Command = Opcode((headerData[4] << 8) | headerData[3]);
+
+            return true;
+        }
+        else
+        {
+            BOOST_ASSERT(_headerBuffer.GetActiveSize() == 0);
+
+            _headerBuffer.Reset();
+            std::uint8_t* headerData = _headerBuffer.GetReadPointer();
+
+            Size = (headerData[0] << 8) | headerData[1];
+            Command = Opcode((headerData[3] << 8) | headerData[2]);
+
             return true;
         }
 
@@ -90,5 +92,6 @@ namespace wowgm::protocol::world
         _headerBuffer.Reset();
 
         Size = 0;
+        Command = Opcode::NULL_OPCODE;
     }
 }

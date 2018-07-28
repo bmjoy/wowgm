@@ -6,6 +6,7 @@
 #include <boost/asio/buffer.hpp>
 #include <boost/core/demangle.hpp>
 #include <typeinfo>
+#include <iomanip>
 
 namespace wowgm::protocol::world
 {
@@ -42,7 +43,7 @@ namespace wowgm::protocol::world
                 break;
             }
             else
-                _packetBuffer.Resize(_headerBuffer.Size - 2);
+                _packetBuffer.Resize(_headerBuffer.Size - (!_isInitialized ? 0 : ServerPacketHeader::opcode_size));
 
             // Load data payload
             if (_packetBuffer.GetRemainingSpace() > 0)
@@ -74,12 +75,14 @@ namespace wowgm::protocol::world
     {
         if (_isInitialized)
         {
-            Opcode opcode = Opcode(_headerBuffer.Opcode);
-            LOG_INFO << "[S->C] " << opcode;
+            LOG_INFO << "[S->C] " << _headerBuffer.Command << " (0x" << std::hex << std::setw(4) << std::setfill('0') << std::uint32_t(_headerBuffer.Command) << ", " << std::dec << _packetBuffer.GetBufferSize() << " bytes)";
 
-            WorldPacket worldPacket(opcode, std::move(_packetBuffer));
+            WorldPacket worldPacket(_headerBuffer.Command, std::move(_packetBuffer));
 
-            return (*sOpcodeHandler)[Opcode(_headerBuffer.Opcode)]->Call(this, worldPacket);
+            if (!sOpcodeHandler->HasHandler(_headerBuffer.Command))
+                return true;
+
+            return (*sOpcodeHandler)[_headerBuffer.Command]->Call(this, worldPacket);
         }
         else
         {
@@ -92,7 +95,7 @@ namespace wowgm::protocol::world
             _isInitialized = true;
 
             MessageBuffer clientInitializer(50);
-            ClientPacketHeader clientHeader(48, 0);
+            ClientPacketHeader clientHeader(48, Opcode::NULL_OPCODE);
             clientInitializer.Write(clientHeader.Data, ClientPacketHeader::size_size);
             clientInitializer.Write(&ClientConnectionInitialize[0], 48);
             QueuePacket(std::move(clientInitializer));
@@ -125,10 +128,9 @@ namespace wowgm::protocol::world
             // if (!queued->IsCompressed())
             //     queued->Compress(GetCompressionStream());
 
-            ClientPacketHeader packetHeader(std::uint16_t(queued->size() + ClientPacketHeader::opcode_size), std::uint32_t(queued->GetOpcode()));
+            ClientPacketHeader packetHeader(std::uint16_t(queued->size() + ClientPacketHeader::opcode_size), queued->GetOpcode());
 
-            if (_isInitialized)
-                LOG_INFO << "[C->S] " << Opcode(packetHeader.Opcode);
+            LOG_INFO << "[C->S] " << packetHeader.Command << " (0x" << std::hex << std::setw(4) << std::setfill('0') << std::uint32_t(packetHeader.Command) << ", " << std::dec << queued->size() << " bytes)";
 
             if (queued->NeedsEncryption())
                 _authCrypt.EncryptSend(packetHeader.Data, ClientPacketHeader::data_size);
