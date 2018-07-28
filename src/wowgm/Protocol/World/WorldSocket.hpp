@@ -32,6 +32,7 @@ namespace wowgm::protocol::world
 
         struct ClientConnectionAuthChallenge;
         struct ClientConnectionAuthResponse;
+        struct ClientEnumCharactersResult;
     }
 
     using namespace wowgm::protocol::world::packets;
@@ -54,6 +55,7 @@ namespace wowgm::protocol::world
 
         bool HandleAuthResponse(ClientConnectionAuthResponse& packet);
         bool HandleAuthChallenge(ClientConnectionAuthChallenge& packet);
+        bool HandleEnumerateCharacterResult(ClientEnumCharactersResult& packet);
 
     public:
 

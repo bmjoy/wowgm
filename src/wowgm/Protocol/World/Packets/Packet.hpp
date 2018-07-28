@@ -50,4 +50,16 @@ namespace wowgm::protocol::world::packets
             void Read() override final;
             bool IsWritten() const;
     };
+
+    class EmptyClientPacket : public ClientPacket
+    {
+        public:
+            EmptyClientPacket(Opcode opcode) : ClientPacket(opcode, 0)
+            {
+
+            }
+
+            WorldPacket const* Write() override final { return &_worldPacket; };
+            bool IsWritten() const { return true; }
+    };
 }

@@ -128,7 +128,7 @@ namespace wowgm::protocol::world
             ClientPacketHeader packetHeader(std::uint16_t(queued->size() + ClientPacketHeader::opcode_size), std::uint32_t(queued->GetOpcode()));
 
             if (_isInitialized)
-                std::cout << "[C->S] " << Opcode(packetHeader.Opcode);
+                LOG_INFO << "[C->S] " << Opcode(packetHeader.Opcode);
 
             if (queued->NeedsEncryption())
                 _authCrypt.EncryptSend(packetHeader.Data, ClientPacketHeader::data_size);

@@ -95,13 +95,12 @@ namespace wowgm::protocol
 
     void ClientServices::ConnectToRealm(AuthRealmInfo const& realmInfo)
     {
-        LOG_INFO << "Disconnecting from authentification server.";
-
         // Close auth socket
         _socket->CloseSocket();
         _socket.reset();
 
-        LOG_DEBUG << "Connecting to realm " << realmInfo.Name << " at " << realmInfo.GetEndpoint();
+        LOG_INFO << "Disconnecting from authentification server.";
+        LOG_INFO << "Connecting to realm " << realmInfo.Name << " at " << realmInfo.GetEndpoint();
 
         _socket = _socketUpdater->Create<WorldSocket>(_socketUpdater->GetContext());
         _socket->Connect(realmInfo.GetEndpoint());

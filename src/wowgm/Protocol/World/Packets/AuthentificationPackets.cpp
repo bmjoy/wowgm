@@ -16,6 +16,12 @@ namespace wowgm::protocol::world::packets
         return worldPacket;
     }
 
+    inline WorldPacket& operator >> (WorldPacket& worldPacket, ResponseCodes& responseCode)
+    {
+        responseCode = worldPacket.read<ResponseCodes>();
+        return worldPacket;
+    }
+
     inline WorldPacket& operator >> (WorldPacket& worldPacket, AccountInfo& accInfo)
     {
         worldPacket >> accInfo.BillingTimeRemaining;
@@ -63,6 +69,8 @@ namespace wowgm::protocol::world::packets
 
         if (hasAccountInfo)
             _worldPacket >> AccountInfo;
+
+        _worldPacket >> AuthResult;
 
         if (hasQueueInfo)
             _worldPacket >> QueueInfo->Position;

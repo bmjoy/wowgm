@@ -1,6 +1,8 @@
 #include "Opcodes.hpp"
 #include "WorldSocket.hpp"
+
 #include "AuthentificationPackets.hpp"
+#include "CharacterPackets.hpp"
 
 namespace wowgm::protocol::world
 {
@@ -45,8 +47,9 @@ namespace wowgm::protocol::world
     {
 #define DEFINE_HANDLER(opcode, handler) DefineHandler<decltype(handler), handler>(Opcode::opcode);
 
-        DEFINE_HANDLER(SMSG_AUTH_CHALLENGE, &WorldSocket::HandleAuthChallenge);
-        DEFINE_HANDLER(SMSG_AUTH_RESPONSE, &WorldSocket::HandleAuthResponse);
+        DEFINE_HANDLER(SMSG_AUTH_CHALLENGE,              &WorldSocket::HandleAuthChallenge);
+        DEFINE_HANDLER(SMSG_AUTH_RESPONSE,               &WorldSocket::HandleAuthResponse);
+        DEFINE_HANDLER(SMSG_CHAR_ENUM,                   &WorldSocket::HandleEnumerateCharacterResult);
 
 #undef DEFINE_HANDLER
     }

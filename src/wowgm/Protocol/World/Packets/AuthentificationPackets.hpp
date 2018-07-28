@@ -9,6 +9,8 @@
 #include <cstdint>        // for uint32_t, uint8_t, uint16_t
 #include <string>         // for string
 
+#include "ResponseCodes.hpp"
+
 namespace wowgm::protocol::world::packets
 {
     struct ClientConnectionAuthChallenge final : public ServerPacket
@@ -45,8 +47,7 @@ namespace wowgm::protocol::world::packets
 
         boost::optional<QueueInfo> QueueInfo;
         boost::optional<AccountInfo> AccountInfo;
-        std::uint8_t AuthResult;
-
+        ResponseCodes AuthResult;
     };
 
     struct UserRouterClientAuthSession final : public ClientPacket

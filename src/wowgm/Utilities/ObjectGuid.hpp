@@ -70,15 +70,15 @@ namespace wowgm::utilities
 
             typedef std::uint32_t LowType;
 
-            ObjectGuid() { _data._guid = 0uLL); }
+            ObjectGuid() { _data._guid = 0uLL; }
             explicit ObjectGuid(std::uint64_t guid) { _data._guid = guid; }
             ObjectGuid(HighGuid hi, std::uint32_t entry, std::uint32_t counter) { _data._guid = counter ? std::uint64_t(counter) | (std::uint64_t(entry) << 32) | (std::uint64_t(hi) << ((hi == HighGuid::Corpse || hi == HighGuid::AreaTrigger) ? 48 : 52)) : 0; }
             ObjectGuid(HighGuid hi, std::uint32_t counter) { _data._guid = counter ? std::uint64_t(counter) | (std::uint64_t(hi) << ((hi == HighGuid::Corpse || hi == HighGuid::AreaTrigger) ? 48 : 52)) : 0; }
             ObjectGuid(ObjectGuid const& r) : _data(r._data) { }
             ObjectGuid(ObjectGuid&& r) : _data(r._data) { }
 
-            ObjectGuid& operator=(ObjectGuid const& r) { _data = r._data; return *this; }
-            ObjectGuid& operator=(ObjectGuid&& r) { _data = r._data; return *this; }
+            ObjectGuid& operator = (ObjectGuid const& r) { _data = r._data; return *this; }
+            ObjectGuid& operator = (ObjectGuid&& r) { _data = r._data; return *this; }
 
             operator std::uint32_t() const { return _data._guid; }
             PackedGuidReader ReadAsPacked() { return PackedGuidReader(*this); }
@@ -91,10 +91,10 @@ namespace wowgm::utilities
             std::uint32_t   GetRawValue() const { return _data._guid; }
             HighGuid GetHigh() const
             {
-                HighGuid temp = static_cast<HighGuid>((std::uint32_t(_data._guid) >> 48) & 0x0000FFFF);
+                HighGuid temp = static_cast<HighGuid>(std::uint32_t((_data._guid >> 48) & 0x0000FFFF));
                 return HighGuid((temp == HighGuid::Corpse || temp == HighGuid::AreaTrigger) ? temp : HighGuid(((std::uint32_t)temp >> 4) & 0x00000FFF));
             }
-            std::uint32_t   GetEntry() const { return HasEntry() ? std::uint32_t((_data._guid >> 32) & 0x00000000000FFFFFuLL) : 0; }
+            std::uint32_t   GetEntry() const { return HasEntry() ? std::uint64_t((_data._guid >> 32) & 0x00000000000FFFFFuLL) : 0; }
             std::uint32_t   GetCounter()  const
             {
                 return std::uint32_t(_data._guid & 0x00000000FFFFFFFFuLL);

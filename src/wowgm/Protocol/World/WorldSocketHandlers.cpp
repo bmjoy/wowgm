@@ -1,9 +1,14 @@
 #include "WorldSocket.hpp"
 #include "WorldPacket.hpp"
+
 #include "AuthentificationPackets.hpp"
+#include "CharacterPackets.hpp"
+#include "Packet.hpp"
+
 #include "BigNumber.hpp"
 #include "SHA1.hpp"
 #include "ClientServices.hpp"
+#include "ResponseCodes.hpp"
 
 namespace wowgm::protocol::world
 {
@@ -12,9 +17,11 @@ namespace wowgm::protocol::world
 
     bool WorldSocket::HandleAuthResponse(ClientConnectionAuthResponse& packet)
     {
-        if (!packet.AccountInfo.is_initialized())
+        if (packet.AuthResult != ResponseCodes::AUTH_OK)
             return false;
 
+        EmptyClientPacket charEnumerate(Opcode::CMSG_CHAR_ENUM);
+        SendPacket(charEnumerate);
         return true;
     }
 
@@ -53,6 +60,11 @@ namespace wowgm::protocol::world
         authSession.Write();
         SendPacket(authSession);
 
+        return true;
+    }
+
+    bool WorldSocket::HandleEnumerateCharacterResult(ClientEnumCharactersResult& packet)
+    {
         return true;
     }
 }
