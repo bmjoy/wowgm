@@ -524,6 +524,25 @@ namespace wowgm::protocol
             *this << packed;
         }
 
+        void appendPackGUID(std::uint64_t guid)
+        {
+            std::uint8_t packGUID[8 + 1];
+            packGUID[0] = 0;
+            size_t size = 1;
+            for (std::uint8_t i = 0; guid != 0; ++i)
+            {
+                if (guid & 0xFF)
+                {
+                    packGUID[0] |= std::uint8_t(1 << i);
+                    packGUID[size] = std::uint8_t(guid & 0xFF);
+                    ++size;
+                }
+
+                guid >>= 8;
+            }
+            append(packGUID, size);
+        }
+
         void AppendPackedUInt64(std::uint64_t guid)
         {
             std::uint8_t mask = 0;
