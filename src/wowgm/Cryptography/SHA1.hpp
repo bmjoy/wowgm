@@ -39,6 +39,13 @@ namespace wowgm::cryptography
             UpdateData(bn0.AsByteArray().get(), bn0.GetNumBytes());
         }
 
+        template <typename T, size_t N>
+        void UpdateData(std::array<T, N>& arr)
+        {
+            static_assert(std::is_standard_layout<T>::value, "T must be a simple data type");
+            UpdateData(reinterpret_cast<std::uint8_t*>(arr.data()), arr.size() * sizeof(T));
+        }
+
         void UpdateData(const std::uint8_t *dta, int len);
         void UpdateData(char c);
         void UpdateData(const std::string &str);

@@ -10,8 +10,8 @@ namespace wowgm::protocol::world
     class PacketHandler : public ServerOpcodeHandler
     {
     public:
-        explicit PacketHandler(char const* name)
-            : ServerOpcodeHandler(name) { }
+        explicit PacketHandler()
+            : ServerOpcodeHandler() { }
 
         bool Call(WorldSocket* session, WorldPacket& packet) const override
         {
@@ -33,19 +33,20 @@ namespace wowgm::protocol::world
     }
 
     template<typename Handler, Handler HandlerFunction>
-    void OpcodeTable::DefineHandler(Opcode opcode, char const* name)
+    void OpcodeTable::DefineHandler(Opcode opcode)
     {
         if (opcode == Opcode::NULL_OPCODE || int(opcode) == 0)
             return;
 
-        _opcodeHandlers[static_cast<KeyType>(opcode)] = new PacketHandler<typename detail::get_packet_class_t<Handler>::type, HandlerFunction>(name);
+        _opcodeHandlers[static_cast<KeyType>(opcode)] = new PacketHandler<typename detail::get_packet_class_t<Handler>::type, HandlerFunction>();
     }
 
     void OpcodeTable::Initialize()
     {
-#define DEFINE_HANDLER(opcode, handler) DefineHandler<decltype(handler), handler>(Opcode::opcode, #opcode);
+#define DEFINE_HANDLER(opcode, handler) DefineHandler<decltype(handler), handler>(Opcode::opcode);
 
         DEFINE_HANDLER(SMSG_AUTH_CHALLENGE, &WorldSocket::HandleAuthChallenge);
+        DEFINE_HANDLER(SMSG_AUTH_RESPONSE, &WorldSocket::HandleAuthResponse);
 
 #undef DEFINE_HANDLER
     }

@@ -26,15 +26,18 @@ using tcp = asio::ip::tcp;
 
 namespace wowgm::protocol::world
 {
-    using namespace wowgm::cryptography;
-    using namespace wowgm::utilities;
-
     namespace packets
     {
         class ClientPacket;
 
         struct ClientConnectionAuthChallenge;
+        struct ClientConnectionAuthResponse;
     }
+
+    using namespace wowgm::protocol::world::packets;
+    using namespace wowgm::cryptography;
+    using namespace wowgm::utilities;
+
 
     class EncryptablePacket;
 
@@ -49,7 +52,8 @@ namespace wowgm::protocol::world
 
     public: /* Handlers */
 
-        bool HandleAuthChallenge(wowgm::protocol::world::packets::ClientConnectionAuthChallenge& packet);
+        bool HandleAuthResponse(ClientConnectionAuthResponse& packet);
+        bool HandleAuthChallenge(ClientConnectionAuthChallenge& packet);
 
     public:
 

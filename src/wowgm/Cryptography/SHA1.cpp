@@ -1,7 +1,6 @@
 #include "SHA1.hpp"
 
 #include <cstring>
-#include <stdarg.h>
 
 namespace wowgm::cryptography
 {

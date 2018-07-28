@@ -3,9 +3,31 @@
 #include "Opcodes.hpp"      // for Opcode, Opcode::CMSG_AUTH_SESSION
 
 #include <type_traits>      // for move
+#include <boost/utility/in_place_factory.hpp>
 
 namespace wowgm::protocol::world::packets
 {
+    template <typename T>
+    inline WorldPacket& operator >> (WorldPacket& worldPacket, boost::optional<T>& optional)
+    {
+        optional = boost::in_place();
+        worldPacket >> *optional;
+
+        return worldPacket;
+    }
+
+    inline WorldPacket& operator >> (WorldPacket& worldPacket, AccountInfo& accInfo)
+    {
+        worldPacket >> accInfo.BillingTimeRemaining;
+        worldPacket >> accInfo.PlayerExpansion;
+        worldPacket >> accInfo.UnkAccountInfo;
+        worldPacket >> accInfo.AccountExpansion;
+        worldPacket >> accInfo.BillingTimeRested;
+        worldPacket >> accInfo.BillingFlags;
+
+        return worldPacket;
+    }
+
     ClientConnectionAuthChallenge::ClientConnectionAuthChallenge(WorldPacket&& worldPacket) : ServerPacket(std::move(worldPacket))
     {
 
@@ -21,6 +43,29 @@ namespace wowgm::protocol::world::packets
 
         _worldPacket >> AuthSeed;
         _worldPacket.read_skip<std::uint8_t>();
+    }
+
+    ClientConnectionAuthResponse::ClientConnectionAuthResponse(WorldPacket&& worldPacket) : ServerPacket(std::move(worldPacket))
+    {
+
+    }
+
+    void ClientConnectionAuthResponse::Read()
+    {
+        bool hasQueueInfo = _worldPacket.ReadBit();
+        bool hasAccountInfo = _worldPacket.ReadBit();
+
+        if (hasQueueInfo)
+        {
+            QueueInfo = boost::in_place();
+            QueueInfo->Bit = _worldPacket.ReadBit();
+        }
+
+        if (hasAccountInfo)
+            _worldPacket >> AccountInfo;
+
+        if (hasQueueInfo)
+            _worldPacket >> QueueInfo->Position;
     }
 
     UserRouterClientAuthSession::UserRouterClientAuthSession() : ClientPacket(Opcode::CMSG_AUTH_SESSION)

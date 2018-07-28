@@ -1357,21 +1357,10 @@ namespace wowgm::protocol::world
         SMSG_ZONE_UNDER_ATTACK                              = 0x0A06,
     };
 
-    class OpcodeHandler
-    {
-        public:
-            explicit OpcodeHandler(char const* name) : Name(name) { }
-            virtual ~OpcodeHandler() { }
-
-            char const* Name;
-    };
-
-
-    class ServerOpcodeHandler : public OpcodeHandler
+    class ServerOpcodeHandler
     {
     public:
-        explicit ServerOpcodeHandler(char const* name)
-            : OpcodeHandler(name) { }
+        ServerOpcodeHandler() { }
 
         virtual bool Call(WorldSocket* session, WorldPacket& packet) const = 0;
     };
@@ -1398,13 +1387,8 @@ namespace wowgm::protocol::world
                 return _opcodeHandlers[static_cast<KeyType>(opcode)];
             }
 
-            const char* GetOpcodeName(Opcode opcode)
-            {
-                return this->operator[](opcode)->Name;
-            }
-
             template <typename Handler, Handler HandlerFunction>
-            void DefineHandler(Opcode opcode, char const* name);
+            void DefineHandler(Opcode opcode);
 
         private:
             std::unordered_map<KeyType, ServerOpcodeHandler*> _opcodeHandlers;
@@ -1412,11 +1396,14 @@ namespace wowgm::protocol::world
 
 #define sOpcodeHandler wowgm::protocol::world::OpcodeTable::instance()
 
+
+    const char* GetOpcodeNameForLogging(Opcode opcode);
+
     /// Outputs stacktrace in a human readable format to output stream; unsafe to use in async handlers.
     template <class CharT, class TraitsT>
     std::basic_ostream<CharT, TraitsT>& operator<<(std::basic_ostream<CharT, TraitsT>& os, Opcode opcode)
     {
-        os << sOpcodeHandler->GetOpcodeName(opcode);
+        os << GetOpcodeNameForLogging(opcode);
 
         return os;
     }

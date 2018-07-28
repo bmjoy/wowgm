@@ -74,7 +74,6 @@ namespace wowgm::protocol::world
     {
         if (_isInitialized)
         {
-
             Opcode opcode = Opcode(_headerBuffer.Opcode);
             LOG_INFO << "[S->C] " << opcode;
 
@@ -105,7 +104,7 @@ namespace wowgm::protocol::world
 
     void WorldSocket::SendPacket(packets::ClientPacket& clientPacket)
     {
-        BOOST_ASSERT_MSG_FMT(clientPacket.IsWritten(), "Erorr while sending a packet. Did you forget to call %s::Write() ?", boost::core::demangle(typeid(clientPacket).name()));
+        BOOST_ASSERT_MSG_FMT(clientPacket.IsWritten(), "Erorr while sending a structured packet. Did you forget to call %s::Write() ?", boost::core::demangle(typeid(clientPacket).name()));
 
         SendPacket(clientPacket.GetPacket());
     }
@@ -123,10 +122,14 @@ namespace wowgm::protocol::world
         while (_bufferQueue.Dequeue(queued))
         {
             std::uint32_t packetSize = queued->size();
-            // if (!queued->IsCompressed()){
+            // if (!queued->IsCompressed())
             //     queued->Compress(GetCompressionStream());
 
-            ClientPacketHeader packetHeader(std::uint16_t(queued->size() + 4), std::uint32_t(queued->GetOpcode()));
+            ClientPacketHeader packetHeader(std::uint16_t(queued->size() + ClientPacketHeader::opcode_size), std::uint32_t(queued->GetOpcode()));
+
+            if (_isInitialized)
+                std::cout << "[C->S] " << Opcode(packetHeader.Opcode);
+
             if (queued->NeedsEncryption())
                 _authCrypt.EncryptSend(packetHeader.Data, ClientPacketHeader::data_size);
 
@@ -142,7 +145,7 @@ namespace wowgm::protocol::world
                 if (!queued->empty())
                     buffer.Write(queued->contents(), queued->size());
             }
-            else
+            else // Packet is larger than _sendBufferSize, in-place buffer construction
             {
                 MessageBuffer packetBuffer(queued->size() + ClientPacketHeader::data_size);
                 packetBuffer.Write(packetHeader.Data, ClientPacketHeader::data_size);

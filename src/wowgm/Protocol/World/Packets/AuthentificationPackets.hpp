@@ -2,11 +2,12 @@
 
 #include "Packet.hpp"
 
+#include <boost/optional.hpp>
 #include <cstdint>
 #include <array>
 #include <openssl/sha.h>  // for SHA_DIGEST_LENGTH
-#include "stdint.h"       // for uint32_t, uint8_t, uint16_t
-#include "xstring"        // for string
+#include <cstdint>        // for uint32_t, uint8_t, uint16_t
+#include <string>         // for string
 
 namespace wowgm::protocol::world::packets
 {
@@ -18,6 +19,34 @@ namespace wowgm::protocol::world::packets
 
         std::array<std::uint8_t, 16> Seeds[2] = { };
         std::uint32_t AuthSeed;
+    };
+
+    struct AccountInfo
+    {
+        std::uint32_t BillingTimeRemaining;
+        std::uint8_t PlayerExpansion;
+        std::uint32_t UnkAccountInfo;
+        std::uint8_t AccountExpansion;
+        std::uint32_t BillingTimeRested;
+        std::uint8_t BillingFlags;
+    };
+
+    struct QueueInfo
+    {
+        std::uint32_t Position;
+        bool Bit;
+    };
+
+    struct ClientConnectionAuthResponse final : public ServerPacket
+    {
+        ClientConnectionAuthResponse(WorldPacket&& packet);
+
+        void Read() override;
+
+        boost::optional<QueueInfo> QueueInfo;
+        boost::optional<AccountInfo> AccountInfo;
+        std::uint8_t AuthResult;
+
     };
 
     struct UserRouterClientAuthSession final : public ClientPacket
