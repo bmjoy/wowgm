@@ -20,17 +20,17 @@ namespace wowgm::protocol::world
         HmacSha1 clientEncryptHmac(SEED_KEY_SIZE, (std::uint8_t*)ClientEncryptionKey);
         std::uint8_t* encryptHash = clientEncryptHmac.ComputeHash(K);
 
-        _clientDecrypt.Init(decryptHash);
-        _serverEncrypt.Init(encryptHash);
+        _clientEncrypt.Init(decryptHash);
+        _serverDecrypt.Init(encryptHash);
 
         // Drop first 1024 bytes, as WoW uses ARC4-drop1024.
         std::uint8_t syncBuf[1024];
 
         memset(syncBuf, 0, 1024);
-        _serverEncrypt.UpdateData(1024, syncBuf);
+        _clientEncrypt.UpdateData(1024, syncBuf);
 
         memset(syncBuf, 0, 1024);
-        _clientDecrypt.UpdateData(1024, syncBuf);
+        _serverDecrypt.UpdateData(1024, syncBuf);
 
         _initialized = true;
     }

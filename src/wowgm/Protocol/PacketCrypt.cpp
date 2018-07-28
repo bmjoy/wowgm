@@ -3,7 +3,7 @@
 namespace wowgm::protocol
 {
     PacketCrypt::PacketCrypt(std::uint32_t digestSize)
-        : _clientDecrypt(digestSize), _serverEncrypt(digestSize), _initialized(false)
+        : _clientEncrypt(digestSize), _serverDecrypt(digestSize), _initialized(false)
     {
     }
 
@@ -12,7 +12,7 @@ namespace wowgm::protocol
         if (!_initialized)
             return;
 
-        _clientDecrypt.UpdateData(len, data);
+        _serverDecrypt.UpdateData(len, data);
     }
 
     void PacketCrypt::EncryptSend(std::uint8_t* data, size_t len)
@@ -20,7 +20,7 @@ namespace wowgm::protocol
         if (!_initialized)
             return;
 
-        _serverEncrypt.UpdateData(len, data);
+        _clientEncrypt.UpdateData(len, data);
     }
 
 }

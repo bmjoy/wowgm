@@ -22,8 +22,8 @@ namespace wowgm::protocol
         bool IsInitialized() const { return _initialized; }
 
     protected:
-        ARC4 _clientDecrypt;
-        ARC4 _serverEncrypt;
+        ARC4 _serverDecrypt;
+        ARC4 _clientEncrypt;
         bool _initialized;
     };
 }
