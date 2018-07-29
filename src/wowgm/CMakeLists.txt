@@ -31,6 +31,7 @@ target_link_libraries(WowGM
   boost
   glfw
   Vulkan::Vulkan
+  zlib
 )
 
 target_include_directories(WowGM
@@ -40,7 +41,8 @@ target_include_directories(WowGM
     ${OPENSSL_INCLUDE_DIR}
     ${glfw_INCLUDE_DIRS}
     ${GLM_INCLUDE_DIRS}
-    ${IMGUI_INCLUDE_DIR})
+    ${IMGUI_INCLUDE_DIR}
+	${CMAKE_CURRENT_SOURCE_DIR}/../../dep/zlib)
 
 add_definitions(-DWIN32_LEAN_AND_MEAN)
 
