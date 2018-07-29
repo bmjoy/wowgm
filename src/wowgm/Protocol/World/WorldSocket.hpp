@@ -78,9 +78,6 @@ namespace wowgm::protocol::world
     private:
         z_stream_s * _decompressionStream;
 
-        std::string _username;
-        std::string _password;
-
         BigNumber M2;
 
         BigNumber _encryptionSeed;

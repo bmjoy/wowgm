@@ -30,7 +30,7 @@ namespace wowgm::protocol
 
     void ClientServices::AsyncConnect(std::string username, std::string password)
     {
-        AsyncConnect(username, password, "127.0.0.1", 3724);
+        AsyncConnect(username, password, GetHostname(), *GetHostPort());
     }
 
     void ClientServices::AsyncConnect(std::string username, std::string password, const std::string& realmAddress, std::int32_t port /* = 3724 */)
@@ -141,6 +141,21 @@ namespace wowgm::protocol
     std::string const& ClientServices::GetPassword()
     {
         return _password;
+    }
+
+    void ClientServices::SetHostname(const std::string& hostname)
+    {
+        _hostname = hostname;
+    }
+
+    std::string const& ClientServices::GetHostname()
+    {
+        return _hostname;
+    }
+
+    std::uint32_t* ClientServices::GetHostPort()
+    {
+        return &_hostPort;
     }
 
     BigNumber& ClientServices::GetPasswordHash()

@@ -325,7 +325,15 @@ namespace wowgm::graphics
             ImGui::SetNextWindowPos({ 5.0f, 28.0f });
 
             ImGui::Begin("Connection");
-            ImGui::InputText("Realm", _realmAddress, 100);
+            ImGui::PushItemWidth(125.0f);
+            ImGui::InputText("##Realm", _realmAddress, 100);
+            ImGui::PopItemWidth();
+
+            ImGui::SameLine();
+            ImGui::PushItemWidth(57.0f);
+            ImGui::InputInt("Realm", reinterpret_cast<std::int32_t*>(sClientServices->GetHostPort()), 0, 0);
+            ImGui::PopItemWidth();
+
             ImGui::InputText("Username", _username, 16);
             ImGui::InputText("Password", _password, 16, ImGuiInputTextFlags_Password);
             if (ImGui::Button("Log in"))

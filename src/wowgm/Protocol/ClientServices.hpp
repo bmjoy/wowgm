@@ -63,6 +63,11 @@ namespace wowgm::protocol
         void SetPassword(const std::string& password);
         std::string const& GetPassword();
 
+        void SetHostname(const std::string& hostname);
+        std::string const& GetHostname();
+
+        std::uint32_t* GetHostPort();
+
         BigNumber& GetPasswordHash();
 
     public: /* World */
@@ -79,6 +84,8 @@ namespace wowgm::protocol
 
         std::string _username;
         std::string _password;
+        std::string _hostname;
+        std::uint32_t _hostPort = 3724;
 
         BigNumber _sessionKey;
         boost::optional<BigNumber> _passwordHash;
