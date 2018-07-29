@@ -37,3 +37,5 @@ include_directories(
 set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(zlib STATIC ${zlib_STAT_SRCS})
+
+set(ZLIB_PACKAGE_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "ZLIB source directory")

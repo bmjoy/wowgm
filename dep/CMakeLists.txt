@@ -1,3 +1,6 @@
 add_subdirectory(boost)
 add_subdirectory(openssl)
 add_subdirectory(zlib)
+add_subdirectory(gli)
+add_subdirectory(glm)
+add_subdirectory(glfw)
