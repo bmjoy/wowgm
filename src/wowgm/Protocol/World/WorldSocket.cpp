@@ -18,6 +18,7 @@ namespace wowgm::protocol::world
             bool NeedsEncryption() const { return _encrypt; }
 
         private:
+
             bool _encrypt;
     };
 
@@ -26,6 +27,14 @@ namespace wowgm::protocol::world
 
     WorldSocket::WorldSocket(asio::io_context& io_context) : Socket(io_context), _sendBufferSize(0x1000)
     {
+        _decompressionStream = new z_stream();
+        _decompressionStream->zalloc = (alloc_func)nullptr;
+        _decompressionStream->zfree = (free_func)nullptr;
+        _decompressionStream->opaque = (voidpf)nullptr;
+        _decompressionStream->avail_in = 0;
+        _decompressionStream->next_in = nullptr;
+        std::int32_t z_res = inflateInit(_decompressionStream);
+        BOOST_ASSERT_MSG_FMT(z_res == Z_OK, "Can't initialize packet decompression (zlib: inflateInit) Error code: %i (%s)", z_res, zError(z_res));
     }
 
     void WorldSocket::ReadHandler()
@@ -66,7 +75,6 @@ namespace wowgm::protocol::world
                 CloseSocket();
                 return;
             }
-
             _headerBuffer.Reset();
         }
     }
@@ -75,14 +83,17 @@ namespace wowgm::protocol::world
     {
         if (_isInitialized)
         {
-            LOG_INFO << "[S->C] " << _headerBuffer.Command << " (0x" << std::hex << std::setw(4) << std::setfill('0') << std::uint32_t(_headerBuffer.Command) << ", " << std::dec << _packetBuffer.GetBufferSize() << " bytes)";
-
             WorldPacket worldPacket(_headerBuffer.Command, std::move(_packetBuffer));
+            bool isCompressed = worldPacket.IsCompressed();
+            if (isCompressed)
+                worldPacket.Decompress(GetDecompressionStream());
 
-            if (!sOpcodeHandler->HasHandler(_headerBuffer.Command))
+            LOG_INFO << "[S->C] " << worldPacket.GetOpcode() << " (0x" << std::hex << std::setw(4) << std::setfill('0') << std::uint32_t(worldPacket.GetOpcode()) << ", " << std::dec << worldPacket.size() << " bytes" << (isCompressed ? ", compressed" : "" ) << ")";
+
+            if (!sOpcodeHandler->HasHandler(worldPacket.GetOpcode()))
                 return true;
 
-            return (*sOpcodeHandler)[_headerBuffer.Command]->Call(this, worldPacket);
+            return (*sOpcodeHandler)[worldPacket.GetOpcode()]->Call(this, worldPacket);
         }
         else
         {
@@ -125,9 +136,6 @@ namespace wowgm::protocol::world
         while (_bufferQueue.Dequeue(queued))
         {
             std::uint32_t packetSize = queued->size();
-            // if (!queued->IsCompressed())
-            //     queued->Compress(GetCompressionStream());
-
             ClientPacketHeader packetHeader(std::uint16_t(queued->size() + ClientPacketHeader::opcode_size), queued->GetOpcode());
 
             LOG_INFO << "[C->S] " << packetHeader.Command << " (0x" << std::hex << std::setw(4) << std::setfill('0') << std::uint32_t(packetHeader.Command) << ", " << std::dec << queued->size() << " bytes)";

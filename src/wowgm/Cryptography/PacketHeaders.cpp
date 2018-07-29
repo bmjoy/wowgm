@@ -43,7 +43,7 @@ namespace wowgm::protocol::world
             _headerBuffer.Write(packet.GetReadPointer(), 1);
 
             authCrypt.DecryptRecv(_headerBuffer.GetReadPointer(), 1);
-            _isLargePacket = _headerBuffer.GetReadPointer()[0] & 0x80;
+            _isLargePacket = (_headerBuffer.GetReadPointer()[0] & 0x80) != 0;
 
             packet.ReadCompleted(1);
             _headerBuffer.ReadCompleted(1);

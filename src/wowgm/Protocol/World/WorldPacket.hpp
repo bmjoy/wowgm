@@ -7,6 +7,8 @@
 #include <type_traits>     // for move
 #include <vector>          // for vector
 
+#include <zlib.h>
+
 namespace wowgm::protocol::world
 {
     class WorldPacket : public ByteBuffer
@@ -71,7 +73,17 @@ namespace wowgm::protocol::world
 
         std::uint32_t GetConnection() const { return _connection; }
 
+
+        bool IsCompressed() const { return (std::uint32_t(GetOpcode()) & 0x8000) != 0; }
+
+        void Decompress(z_stream* decompressionStream);
+        void Decompress(std::uint8_t* dst, std::uint32_t* dst_size, std::uint8_t* src, std::uint32_t src_size);
+
+    private:
+        z_stream * _decompressionStream;
+
     protected:
+
         Opcode _opcode;
         std::uint32_t _connection;
     };

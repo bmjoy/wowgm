@@ -15,6 +15,8 @@
 #include <cstdint>
 #include <unordered_map>
 
+#include <zlib.h>
+
 namespace boost {
     namespace system {
         class error_code;
@@ -65,12 +67,16 @@ namespace wowgm::protocol::world
         void SendPacket(WorldPacket const* worldPacket);
 
         void Update() override final;
+
+        z_stream_s* GetDecompressionStream() { return _decompressionStream; }
+
     protected:
         void ReadHandler() override;
 
         void OnClose() override;
 
     private:
+        z_stream_s * _decompressionStream;
 
         std::string _username;
         std::string _password;

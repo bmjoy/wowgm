@@ -45,7 +45,7 @@ namespace wowgm::protocol::world::packets
         std::uint8_t HairStyleID;
         std::uint8_t FaceID;
 
-        std::uint32_t Level;
+        std::uint8_t Level;
 
         bool HasPet() const;
         bool IsInGuild() const;

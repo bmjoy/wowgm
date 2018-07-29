@@ -83,6 +83,8 @@ namespace wowgm::protocol::world::packets
             _worldPacket.ReadByteSeq(charInfo.GUID[5]);
             _worldPacket.ReadByteSeq(charInfo.GUID[1]);
             _worldPacket >> charInfo.ZoneID;
+
+            ++i;
         }
     }
 
