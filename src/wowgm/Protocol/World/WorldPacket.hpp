@@ -3,7 +3,7 @@
 #include "ByteBuffer.hpp"
 #include "Opcodes.hpp"
 
-#include <cstdint>         // for uint32_t
+#include <cstdint>         // for std::uint32_t
 #include <type_traits>     // for move
 #include <vector>          // for vector
 

@@ -15,8 +15,8 @@ namespace wowgm
                 UINT byteswap(UINT const a);
 
                 template<>
-                constexpr uint16_t byteswap(uint16_t const a) {
-                    constexpr uint8_t b[] = { 8 * (2 - 1) };
+                constexpr std::uint16_t byteswap(uint16_t const a) {
+                    constexpr std::uint8_t b[] = { 8 * (2 - 1) };
 
                     auto const x =
                         (0x00ffULL & a) << b[0] |
@@ -27,8 +27,8 @@ namespace wowgm
                 }
 
                 template<>
-                constexpr uint32_t byteswap(uint32_t const a) {
-                    constexpr uint8_t b[] = {
+                constexpr std::uint32_t byteswap(uint32_t const a) {
+                    constexpr std::uint8_t b[] = {
                         8 * (2 - 1),
                         8 * (4 - 1)
                     };
@@ -44,8 +44,8 @@ namespace wowgm
                 }
 
                 template<>
-                constexpr uint64_t byteswap(uint64_t const a) {
-                    constexpr uint8_t b[] = {
+                constexpr std::uint64_t byteswap(uint64_t const a) {
+                    constexpr std::uint8_t b[] = {
                         8 * (2 - 1),
                         8 * (4 - 1),
                         8 * (6 - 1),
@@ -69,8 +69,8 @@ namespace wowgm
                 // ==============================
 
                 class is_big_endian {
-                    constexpr static uint32_t u4 = 1;
-                    constexpr static uint8_t  u1 = (const uint8_t &)u4;
+                    constexpr static std::uint32_t u4 = 1;
+                    constexpr static std::uint8_t  u1 = (const std::uint8_t &)u4;
                 public:
                     constexpr static bool value = u1 == 0;
                 };

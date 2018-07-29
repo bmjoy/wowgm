@@ -31,7 +31,7 @@ static const VkAllocationCallbacks* g_Allocator = NULL;
 static VkPhysicalDevice             g_PhysicalDevice = VK_NULL_HANDLE;
 static VkInstance                   g_Instance = VK_NULL_HANDLE;
 static VkDevice                     g_Device = VK_NULL_HANDLE;
-static uint32_t                     g_QueueFamily = (uint32_t)-1;
+static std::uint32_t                     g_QueueFamily = (uint32_t)-1;
 static VkQueue                      g_Queue = VK_NULL_HANDLE;
 static VkPipelineCache              g_PipelineCache = VK_NULL_HANDLE;
 static VkDescriptorPool             g_DescriptorPool = VK_NULL_HANDLE;
@@ -69,7 +69,7 @@ static VkBuffer               g_UploadBuffer = VK_NULL_HANDLE;
 
 // glsl_shader.vert, compiled with:
 // # glslangValidator -V -x -o glsl_shader.vert.u32 glsl_shader.vert
-static uint32_t __glsl_shader_vert_spv[] =
+static std::uint32_t __glsl_shader_vert_spv[] =
 {
     0x07230203,0x00010000,0x00080001,0x0000002e,0x00000000,0x00020011,0x00000001,0x0006000b,
     0x00000001,0x4c534c47,0x6474732e,0x3035342e,0x00000000,0x0003000e,0x00000000,0x00000001,
@@ -116,7 +116,7 @@ static uint32_t __glsl_shader_vert_spv[] =
 
 // glsl_shader.frag, compiled with:
 // # glslangValidator -V -x -o glsl_shader.frag.u32 glsl_shader.frag
-static uint32_t __glsl_shader_frag_spv[] =
+static std::uint32_t __glsl_shader_frag_spv[] =
 {
     0x07230203,0x00010000,0x00080001,0x0000001e,0x00000000,0x00020011,0x00000001,0x0006000b,
     0x00000001,0x4c534c47,0x6474732e,0x3035342e,0x00000000,0x0003000e,0x00000000,0x00000001,
@@ -145,7 +145,7 @@ static uint32_t __glsl_shader_frag_spv[] =
     0x00010038
 };
 
-static uint32_t ImGui_ImplVulkan_MemoryType(VkMemoryPropertyFlags properties, uint32_t type_bits)
+static std::uint32_t ImGui_ImplVulkan_MemoryType(VkMemoryPropertyFlags properties, std::uint32_t type_bits)
 {
     VkPhysicalDeviceMemoryProperties prop;
     vkGetPhysicalDeviceMemoryProperties(g_PhysicalDevice, &prop);
@@ -763,7 +763,7 @@ VkSurfaceFormatKHR ImGui_ImplVulkanH_SelectSurfaceFormat(VkPhysicalDevice physic
     // Assuming that the default behavior is without setting this bit, there is no need for separate Swapchain image and image view format
     // Additionally several new color spaces were introduced with Vulkan Spec v1.0.40,
     // hence we must make sure that a format with the mostly available color space, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR, is found and used.
-    uint32_t avail_count;
+    std::uint32_t avail_count;
     vkGetPhysicalDeviceSurfaceFormatsKHR(physical_device, surface, &avail_count, NULL);
     ImVector<VkSurfaceFormatKHR> avail_format;
     avail_format.resize((int)avail_count);
@@ -804,7 +804,7 @@ VkPresentModeKHR ImGui_ImplVulkanH_SelectPresentMode(VkPhysicalDevice physical_d
     IM_ASSERT(request_modes_count > 0);
 
     // Request a certain mode and confirm that it is available. If not use VK_PRESENT_MODE_FIFO_KHR which is mandatory
-    uint32_t avail_count = 0;
+    std::uint32_t avail_count = 0;
     vkGetPhysicalDeviceSurfacePresentModesKHR(physical_device, surface, &avail_count, NULL);
     ImVector<VkPresentModeKHR> avail_modes;
     avail_modes.resize((int)avail_count);
@@ -817,7 +817,7 @@ VkPresentModeKHR ImGui_ImplVulkanH_SelectPresentMode(VkPhysicalDevice physical_d
     return VK_PRESENT_MODE_FIFO_KHR; // Always available
 }
 
-void ImGui_ImplVulkanH_CreateWindowDataCommandBuffers(VkDevice device, uint32_t queue_family, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator)
+void ImGui_ImplVulkanH_CreateWindowDataCommandBuffers(VkDevice device, std::uint32_t queue_family, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator)
 {
     IM_ASSERT(device != NULL);
     (void)allocator;
@@ -868,7 +868,7 @@ int ImGui_ImplVulkanH_GetMinImageCountFromPresentMode(VkPresentModeKHR present_m
 
 void ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(VkPhysicalDevice physical_device, VkDevice device, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator, int w, int h)
 {
-    uint32_t min_image_count = 3;	// FIXME: this should become a function parameter
+    std::uint32_t min_image_count = 3;	// FIXME: this should become a function parameter
 
     VkResult err;
     VkSwapchainKHR old_swapchain = wd->Swapchain;

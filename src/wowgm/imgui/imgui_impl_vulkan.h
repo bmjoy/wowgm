@@ -9,6 +9,7 @@
 // https://github.com/ocornut/imgui
 
 #include <vulkan/vulkan.h>
+#include <cstdint>
 
 #define IMGUI_VK_QUEUED_FRAMES 3
 
@@ -17,7 +18,7 @@ struct ImGui_ImplVulkan_InitInfo
     VkInstance                      Instance;
     VkPhysicalDevice                PhysicalDevice;
     VkDevice                        Device;
-    uint32_t                        QueueFamily;
+    std::uint32_t                        QueueFamily;
     VkQueue                         Queue;
     VkPipelineCache                 PipelineCache;
     VkDescriptorPool                DescriptorPool;
@@ -48,7 +49,7 @@ IMGUI_IMPL_API bool     ImGui_ImplVulkan_CreateDeviceObjects();
 struct ImGui_ImplVulkanH_FrameData;
 struct ImGui_ImplVulkanH_WindowData;
 
-IMGUI_IMPL_API void                 ImGui_ImplVulkanH_CreateWindowDataCommandBuffers(VkDevice device, uint32_t queue_family, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator);
+IMGUI_IMPL_API void                 ImGui_ImplVulkanH_CreateWindowDataCommandBuffers(VkDevice device, std::uint32_t queue_family, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator);
 IMGUI_IMPL_API void                 ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(VkPhysicalDevice physical_device, VkDevice device, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator, int w, int h);
 IMGUI_IMPL_API void                 ImGui_ImplVulkanH_CreateFrameBuffer(VkPhysicalDevice physical_device, VkDevice device, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator);
 IMGUI_IMPL_API void                 ImGui_ImplVulkanH_DestroyWindowData(VkInstance instance, VkDevice device, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator);
@@ -58,7 +59,7 @@ IMGUI_IMPL_API int                  ImGui_ImplVulkanH_GetMinImageCountFromPresen
 
 struct ImGui_ImplVulkanH_FrameData
 {
-    uint32_t            BackbufferIndex;    // keep track of recently rendered swapchain frame indices
+    std::uint32_t            BackbufferIndex;    // keep track of recently rendered swapchain frame indices
     VkCommandPool       CommandPool;
     VkCommandBuffer     CommandBuffer;
     VkFence             Fence;
@@ -77,11 +78,11 @@ struct ImGui_ImplVulkanH_WindowData
     VkRenderPass        RenderPass;
     bool                ClearEnable;
     VkClearValue        ClearValue;
-    uint32_t            BackBufferCount;
+    std::uint32_t            BackBufferCount;
     VkImage             BackBuffer[16];
     VkImageView         BackBufferView[16];
     VkFramebuffer       Framebuffer[16];
-    uint32_t            FrameIndex;
+    std::uint32_t            FrameIndex;
     ImGui_ImplVulkanH_FrameData Frames[IMGUI_VK_QUEUED_FRAMES];
 
     IMGUI_IMPL_API ImGui_ImplVulkanH_WindowData();

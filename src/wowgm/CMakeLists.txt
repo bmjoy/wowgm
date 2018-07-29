@@ -14,6 +14,8 @@ CollectSourceFiles(
 )
 
 find_package(GLM REQUIRED)
+find_package(GLI REQUIRED)
+find_package(ZLIB REQUIRED)
 
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -37,20 +39,16 @@ target_link_libraries(WowGM
 target_include_directories(WowGM
   PUBLIC
     ${PUBLIC_INCLUDES}
+    ${GLM_INCLUDE_DIR}
     ${Boost_INCLUDE_DIR}
     ${OPENSSL_INCLUDE_DIR}
     ${glfw_INCLUDE_DIRS}
-    ${GLM_INCLUDE_DIRS}
-    ${IMGUI_INCLUDE_DIR}
-	${CMAKE_CURRENT_SOURCE_DIR}/../../dep/zlib)
+    ${IMGUI_INCLUDE_DIR})
 
 add_definitions(-DWIN32_LEAN_AND_MEAN)
 
 add_custom_command(TARGET WowGM POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory
-		${CMAKE_CURRENT_SOURCE_DIR}/fonts $<TARGET_FILE_DIR:WowGM>/fonts)
-add_custom_command(TARGET WowGM POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy_directory
-		${CMAKE_CURRENT_SOURCE_DIR}/shaders $<TARGET_FILE_DIR:WowGM>/shaders)
+		${CMAKE_CURRENT_SOURCE_DIR}/resources $<TARGET_FILE_DIR:WowGM>/resources)
 
 install(TARGETS WowGM DESTINATION "${CMAKE_INSTALL_PREFIX}")

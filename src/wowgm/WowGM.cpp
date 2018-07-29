@@ -5,17 +5,15 @@
 #include <string>
 #include <vulkan/vulkan.h>
 
-#include "Window.hpp"
-#include "Instance.hpp"
 #include "Assert.hpp"
-#include "Interface.hpp"
 #include "Logger.hpp"
 #include "Updater.hpp"
 #include "BigNumber.hpp"
+#include "glfw.hpp"
+
+#include "./Window.hpp"
 
 namespace po = boost::program_options;
-
-using namespace wowgm::graphics;
 
 int main(int argc, char* argv[])
 {
@@ -72,30 +70,10 @@ int main(int argc, char* argv[])
         std::cout << std::endl;
 
         auto authserver = mapped_values["server"].as<std::string>();
-
-        // Initialize GUI
-
-        Window* window = new Window(800, 600, "Vulkan");
-        window->InitializeWindow();
-
-        auto instance = Instance::Create("Vulkan", "No Engine");
-        instance->SetupDebugCallback();
-
-        Interface* gui = new Interface(instance, window);
-
         sUpdater->Start();
 
-        while (!window->ShouldClose())
-        {
-            window->Execute();
-            gui->Draw();
-        }
-
-        delete gui;
-
-        instance.reset();
-        window->Cleanup();
-        delete window;
+        wowgm::Window window;
+        window.run();
     }
     catch (const boost::system::system_error& se)
     {
