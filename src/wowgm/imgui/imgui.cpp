@@ -4395,7 +4395,7 @@ bool ImGui::Begin(const char* name, bool* p_open, const ImVec2& size_on_first_us
     clip_rect.Min.y = ImFloor(0.5f + title_bar_rect.Max.y + window->MenuBarHeight() + border_size);
     clip_rect.Max.x = ImFloor(0.5f + window->Pos.x + window->Size.x - window->ScrollbarSizes.x - ImMax(border_size, ImFloor(window->WindowPadding.x*0.5f)));
     clip_rect.Max.y = ImFloor(0.5f + window->Pos.y + window->Size.y - window->ScrollbarSizes.y - border_size);
-    PushClipRect(clip_rect.Min, clip_rect.Max, true);
+    PushClipRect(clip_rect.Min, clip_rect.Max, true); //! TODO: Because we are caching commands, this needs to be updated somehow
 
     // Clear 'accessed' flag last thing
     if (first_begin_of_the_frame)
