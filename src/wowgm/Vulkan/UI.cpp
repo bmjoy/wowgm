@@ -356,9 +356,6 @@ void UIOverlay::update()
     // Note: Alignment is done inside buffer creation
     vk::DeviceSize vertexBufferSize = imDrawData->TotalVtxCount * sizeof(ImDrawVert);
     vk::DeviceSize indexBufferSize = imDrawData->TotalIdxCount * sizeof(ImDrawIdx);
-
-    if (vertexBufferSize == 0 || indexBufferSize == 0)
-        return;
     // Update buffers only if vertex or index count has been changed compared to current buffer size
 
     // Vertex buffer
