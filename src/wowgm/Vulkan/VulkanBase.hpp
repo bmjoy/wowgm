@@ -216,9 +216,11 @@ namespace vkx {
             virtual void SetupWindow();
             virtual void GetEnabledFeatures();
             virtual void Draw();
-            virtual void Render();
+            virtual std::chrono::microseconds Render();
             virtual void Update(float deltaTime);
             virtual void ViewChanged() { }
+
+            virtual void OnFrame() { }
 
             // Called when the window has been resized
             // Can be overriden in derived class to recreate or rebuild resources attached to the frame buffer / swapchain
@@ -248,15 +250,8 @@ namespace vkx {
             // Start the main render loop
             void RenderLoop();
 
-            // Prepare the frame for workload submission
-            // - Acquires the next image from the swap chain
-            // - Submits a post present barrier
-            // - Sets the default wait and signal semaphores
             void PrepareFrame();
 
-            // Submit the frames' workload
-            // - Submits the text overlay (if enabled)
-            // -
             void SubmitFrame();
 
             virtual const glm::mat4& getProjection() const { return camera.matrices.perspective; }

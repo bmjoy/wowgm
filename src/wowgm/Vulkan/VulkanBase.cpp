@@ -60,7 +60,8 @@ BaseWindow::~BaseWindow()
 
 void BaseWindow::Run()
 {
-    // Android initialization is handled in APP_CMD_INIT_WINDOW event
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
     glfwInit();
     SetupWindow();
     InitVulkan();
@@ -72,6 +73,8 @@ void BaseWindow::Run()
     // Once we exit the render loop, wait for everything to become idle before proceeding to the descructor.
     context.queue.waitIdle();
     context.device.waitIdle();
+
+    ImGui::DestroyContext();
 }
 
 void BaseWindow::GetEnabledFeatures()
@@ -191,21 +194,18 @@ bool BaseWindow::PlatformLoopCondition()
 
 void BaseWindow::RenderLoop()
 {
-    auto tStart = std::chrono::high_resolution_clock::now();
+    std::chrono::time_point<std::chrono::high_resolution_clock> tStart;
 
     while (PlatformLoopCondition())
     {
-        auto tEnd = std::chrono::high_resolution_clock::now();
-        auto tDiff = std::chrono::duration<float, std::milli>(tEnd - tStart).count();
-        auto tDiffSeconds = tDiff / 1000.0f;
-        tStart = tEnd;
+        OnFrame();
 
         // Render frame
         if (_prepared)
         {
-            Render();
+            auto elapsedTime = Render();
 
-            Update(tDiffSeconds);
+            Update(float(elapsedTime.count()) / 1000.0f);
         }
     }
 }
@@ -521,12 +521,17 @@ void BaseWindow::Draw() {
     SubmitFrame();
 }
 
-void BaseWindow::Render()
+std::chrono::microseconds BaseWindow::Render()
 {
     if (!_prepared)
-        return;
+        return std::chrono::microseconds(0);
 
+    auto tStart = std::chrono::high_resolution_clock::now();
     Draw();
+    auto tEnd = std::chrono::high_resolution_clock::now();
+
+    auto elapsedTime = tEnd - tStart;
+    return std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime);
 }
 
 void BaseWindow::Update(float deltaTime)
