@@ -17,30 +17,34 @@ using namespace vkx;
 
 // Avoid doing work in the ctor as it can't make use of overridden virtual functions
 // Instead, use the `prepare` and `run` methods
-BaseWindow::BaseWindow() {
-    camera.setPerspective(60.0f, size, 0.1f, 256.0f);
+BaseWindow::BaseWindow()
+{
+    camera.setPerspective(60.0f, _size, 0.1f, 256.0f);
 }
 
-BaseWindow::~BaseWindow() {
+BaseWindow::~BaseWindow()
+{
     context.queue.waitIdle();
     context.device.waitIdle();
 
     // Clean up Vulkan resources
     swapChain.destroy();
     // FIXME destroy surface
-    if (descriptorPool) {
+
+    if (descriptorPool)
         device.destroyDescriptorPool(descriptorPool);
-    }
-    if (!commandBuffers.empty()) {
+
+    if (!commandBuffers.empty())
+    {
         device.freeCommandBuffers(cmdPool, commandBuffers);
         commandBuffers.clear();
     }
-    device.destroyRenderPass(renderPass);
-    for (uint32_t i = 0; i < framebuffers.size(); i++) {
-        device.destroyFramebuffer(framebuffers[i]);
-    }
 
-    depthStencil.destroy();
+    device.destroyRenderPass(renderPass);
+    for (uint32_t i = 0; i < framebuffers.size(); i++)
+        device.destroyFramebuffer(framebuffers[i]);
+
+    _depthStencil.destroy();
 
     device.destroySemaphore(semaphores.acquireComplete);
     device.destroySemaphore(semaphores.renderComplete);
@@ -50,29 +54,32 @@ BaseWindow::~BaseWindow() {
 
     context.destroy();
 
-    glfwDestroyWindow(window);
+    glfwDestroyWindow(_window);
     glfwTerminate();
 }
 
-void BaseWindow::run() {
+void BaseWindow::Run()
+{
     // Android initialization is handled in APP_CMD_INIT_WINDOW event
     glfwInit();
-    setupWindow();
-    initVulkan();
-    setupSwapchain();
-    prepare();
+    SetupWindow();
+    InitVulkan();
+    SetupSwapchain();
+    Prepare();
 
-    renderLoop();
+    RenderLoop();
 
     // Once we exit the render loop, wait for everything to become idle before proceeding to the descructor.
     context.queue.waitIdle();
     context.device.waitIdle();
 }
 
-void BaseWindow::getEnabledFeatures() {
+void BaseWindow::GetEnabledFeatures()
+{
 }
 
-void BaseWindow::initVulkan() {
+void BaseWindow::InitVulkan()
+{
     // TODO make this less stupid
     context.setDeviceFeaturesPicker([this](const vk::PhysicalDevice& device, vk::PhysicalDeviceFeatures2& features) {
         if (deviceFeatures.textureCompressionBC) {
@@ -87,14 +94,17 @@ void BaseWindow::initVulkan() {
         if (deviceFeatures.samplerAnisotropy) {
             enabledFeatures.samplerAnisotropy = VK_TRUE;
         }
-        getEnabledFeatures();
+        GetEnabledFeatures();
     });
 
+#if _DEBUG
+    context.setValidationEnabled(true);
+#endif
     context.requireExtensions(glfw::Window::getRequiredInstanceExtensions());
     context.requireDeviceExtensions({ VK_KHR_SWAPCHAIN_EXTENSION_NAME });
-    context.createInstance(version);
+    context.createInstance(_version);
 
-    surface = glfw::Window::createWindowSurface(window, context.instance);
+    surface = glfw::Window::createWindowSurface(_window, context.instance);
 
     context.createDevice(surface);
 
@@ -117,15 +127,16 @@ void BaseWindow::initVulkan() {
     renderSignalSemaphores.push_back(semaphores.renderComplete);
 }
 
-void BaseWindow::setupSwapchain() {
+void BaseWindow::SetupSwapchain()
+{
     swapChain.setup(context.physicalDevice, context.device, context.queue, context.queueIndices.graphics);
     swapChain.setSurface(surface);
 }
 
-bool BaseWindow::platformLoopCondition() {
-    if (0 != glfwWindowShouldClose(window)) {
+bool BaseWindow::PlatformLoopCondition()
+{
+    if (glfwWindowShouldClose(_window))
         return false;
-    }
 
     glfwPollEvents();
 
@@ -133,86 +144,82 @@ bool BaseWindow::platformLoopCondition() {
         // FIXME implement joystick handling
         int axisCount{ 0 };
         const float* axes = glfwGetJoystickAxes(0, &axisCount);
-        if (axisCount >= 2) {
-            gamePadState.axisLeft.x = axes[0] * 0.01f;
-            gamePadState.axisLeft.y = axes[1] * -0.01f;
+        if (axisCount >= 2)
+        {
+            _gamePadState.axisLeft.x = axes[0] * 0.01f;
+            _gamePadState.axisLeft.y = axes[1] * -0.01f;
         }
-        if (axisCount >= 4) {
-            gamePadState.axisRight.x = axes[0] * 0.01f;
-            gamePadState.axisRight.y = axes[1] * -0.01f;
+        if (axisCount >= 4)
+        {
+            _gamePadState.axisRight.x = axes[0] * 0.01f;
+            _gamePadState.axisRight.y = axes[1] * -0.01f;
         }
-        if (axisCount >= 6) {
+        if (axisCount >= 6)
+        {
             float lt = (axes[4] + 1.0f) / 2.0f;
             float rt = (axes[5] + 1.0f) / 2.0f;
-            gamePadState.rz = (rt - lt);
+            _gamePadState.rz = (rt - lt);
         }
         uint32_t newButtons{ 0 };
         static uint32_t oldButtons{ 0 };
         {
             int buttonCount{ 0 };
             const uint8_t* buttons = glfwGetJoystickButtons(0, &buttonCount);
-            for (uint8_t i = 0; i < buttonCount && i < 64; ++i) {
-                if (0 != buttons[i]) {
+            for (uint8_t i = 0; i < buttonCount && i < 64; ++i)
+                if (0 != buttons[i])
                     newButtons |= (1 << i);
-                }
-            }
         }
         auto changedButtons = newButtons & ~oldButtons;
-        if (changedButtons & 0x01) {
-            keyPressed(GAMEPAD_BUTTON_A);
-        }
-        if (changedButtons & 0x02) {
-            keyPressed(GAMEPAD_BUTTON_B);
-        }
-        if (changedButtons & 0x04) {
-            keyPressed(GAMEPAD_BUTTON_X);
-        }
-        if (changedButtons & 0x08) {
-            keyPressed(GAMEPAD_BUTTON_Y);
-        }
-        if (changedButtons & 0x10) {
-            keyPressed(GAMEPAD_BUTTON_L1);
-        }
-        if (changedButtons & 0x20) {
-            keyPressed(GAMEPAD_BUTTON_R1);
-        }
+        if (changedButtons & 0x01)
+            KeyPressed(GAMEPAD_BUTTON_A);
+        if (changedButtons & 0x02)
+            KeyPressed(GAMEPAD_BUTTON_B);
+        if (changedButtons & 0x04)
+            KeyPressed(GAMEPAD_BUTTON_X);
+        if (changedButtons & 0x08)
+            KeyPressed(GAMEPAD_BUTTON_Y);
+        if (changedButtons & 0x10)
+            KeyPressed(GAMEPAD_BUTTON_L1);
+        if (changedButtons & 0x20)
+            KeyPressed(GAMEPAD_BUTTON_R1);
         oldButtons = newButtons;
     }
-    else {
-        memset(&gamePadState, 0, sizeof(gamePadState));
-    }
+    else
+        memset(&_gamePadState, 0, sizeof(_gamePadState));
     return true;
 }
 
-void BaseWindow::renderLoop() {
+void BaseWindow::RenderLoop()
+{
     auto tStart = std::chrono::high_resolution_clock::now();
 
-    while (platformLoopCondition()) {
+    while (PlatformLoopCondition())
+    {
         auto tEnd = std::chrono::high_resolution_clock::now();
         auto tDiff = std::chrono::duration<float, std::milli>(tEnd - tStart).count();
         auto tDiffSeconds = tDiff / 1000.0f;
         tStart = tEnd;
 
         // Render frame
-        if (prepared) {
-            render();
-            update(tDiffSeconds);
+        if (_prepared)
+        {
+            Render();
+
+            Update(tDiffSeconds);
         }
     }
 }
 
-std::string BaseWindow::getWindowTitle() {
-    std::string device(context.deviceProperties.deviceName);
-    std::string windowTitle;
-    windowTitle = title + " - " + device + " - " + std::to_string(frameCounter) + " fps";
-    return windowTitle;
+std::string BaseWindow::getWindowTitle()
+{
+    return _title;
 }
 
-void BaseWindow::setupUi() {
-    settings.overlay = settings.overlay && (!benchmark.active);
-    if (!settings.overlay) {
+void BaseWindow::SetupInterface()
+{
+    _settings.overlay = _settings.overlay && !_benchmark.active;
+    if (!_settings.overlay)
         return;
-    }
 
     struct vkx::ui::UIOverlayCreateInfo overlayCreateInfo;
     // Setup default overlay creation info
@@ -220,45 +227,49 @@ void BaseWindow::setupUi() {
     overlayCreateInfo.framebuffers = framebuffers;
     overlayCreateInfo.colorformat = swapChain.colorFormat;
     overlayCreateInfo.depthformat = depthFormat;
-    overlayCreateInfo.size = size;
+    overlayCreateInfo.size = _size;
 
     // Virtual function call for example to customize overlay creation
-    OnSetupUIOverlay(overlayCreateInfo);
+    OnSetupInterface(overlayCreateInfo);
     ui.create(overlayCreateInfo);
 
-    for (auto& shader : overlayCreateInfo.shaders) {
+    for (auto& shader : overlayCreateInfo.shaders)
+    {
         context.device.destroyShaderModule(shader.module);
         shader.module = vk::ShaderModule{};
     }
-    updateOverlay();
+    UpdateOverlay();
 }
 
-void BaseWindow::prepare() {
+void BaseWindow::Prepare()
+{
     cmdPool = context.getCommandPool();
 
-    swapChain.create(size, enableVsync);
-    setupDepthStencil();
-    setupRenderPass();
-    setupRenderPassBeginInfo();
-    setupFrameBuffer();
-    setupUi();
-    loadAssets();
+    swapChain.create(_size, enableVsync);
+    SetupDepthStencil();
+    SetupRenderPass();
+    SetupRenderPassBeginInfo();
+    SetupFrameBuffer();
+    SetupInterface();
+    LoadAssets();
 }
 
-void BaseWindow::setupRenderPassBeginInfo() {
+void BaseWindow::SetupRenderPassBeginInfo()
+{
     clearValues.clear();
     clearValues.push_back(vks::util::clearColor(glm::vec4(0.1, 0.1, 0.1, 1.0)));
     clearValues.push_back(vk::ClearDepthStencilValue{ 1.0f, 0 });
 
     renderPassBeginInfo = vk::RenderPassBeginInfo();
     renderPassBeginInfo.renderPass = renderPass;
-    renderPassBeginInfo.renderArea.extent = size;
+    renderPassBeginInfo.renderArea.extent = _size;
     renderPassBeginInfo.clearValueCount = (uint32_t)clearValues.size();
     renderPassBeginInfo.pClearValues = clearValues.data();
 }
 
-void BaseWindow::allocateCommandBuffers() {
-    clearCommandBuffers();
+void BaseWindow::AllocateCommandBuffers()
+{
+    ClearCommandBuffers();
     // Create one command buffer per image in the swap chain
 
     // Command buffers store a reference to the
@@ -268,52 +279,60 @@ void BaseWindow::allocateCommandBuffers() {
     commandBuffers = device.allocateCommandBuffers({ cmdPool, vk::CommandBufferLevel::ePrimary, swapChain.imageCount });
 }
 
-void BaseWindow::clearCommandBuffers() {
-    if (!commandBuffers.empty()) {
-        context.trashCommandBuffers(cmdPool, commandBuffers);
-        // FIXME find a better way to ensure that the draw and text buffers are no longer in use before
-        // executing them within this command buffer.
-        context.queue.waitIdle();
-        context.device.waitIdle();
-        context.recycle();
-    }
+void BaseWindow::ClearCommandBuffers()
+{
+    if (commandBuffers.empty())
+        return;
+
+    context.trashCommandBuffers(cmdPool, commandBuffers);
+    // FIXME find a better way to ensure that the draw and text buffers are no longer in use before
+    // executing them within this command buffer.
+    context.queue.waitIdle();
+    context.device.waitIdle();
+    context.recycle();
 }
 
-void BaseWindow::buildCommandBuffers() {
+void BaseWindow::BuildCommandBuffers()
+{
     // Destroy and recreate command buffers if already present
-    allocateCommandBuffers();
+    AllocateCommandBuffers();
 
     vk::CommandBufferBeginInfo cmdBufInfo{ vk::CommandBufferUsageFlagBits::eSimultaneousUse };
-    for (size_t i = 0; i < swapChain.imageCount; ++i) {
+    for (size_t i = 0; i < swapChain.imageCount; ++i)
+    {
         const auto& cmdBuffer = commandBuffers[i];
         cmdBuffer.reset(vk::CommandBufferResetFlagBits::eReleaseResources);
         cmdBuffer.begin(cmdBufInfo);
-        updateCommandBufferPreDraw(cmdBuffer);
+        UpdateCommandBufferPreDraw(cmdBuffer);
         // Let child classes execute operations outside the renderpass, like buffer barriers or query pool operations
         renderPassBeginInfo.framebuffer = framebuffers[i];
         cmdBuffer.beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
-        updateDrawCommandBuffer(cmdBuffer);
+        UpdateDrawCommandBuffer(cmdBuffer);
         cmdBuffer.endRenderPass();
-        updateCommandBufferPostDraw(cmdBuffer);
+        UpdateCommandBufferPostDraw(cmdBuffer);
         cmdBuffer.end();
     }
 }
 
-void BaseWindow::prepareFrame() {
+void BaseWindow::PrepareFrame()
+{
     // Acquire the next image from the swap chaing
     auto resultValue = swapChain.acquireNextImage(semaphores.acquireComplete);
-    if (resultValue.result == vk::Result::eSuboptimalKHR) {
+    if (resultValue.result == vk::Result::eSuboptimalKHR)
+    {
         ivec2 newSize;
-        glfwGetWindowSize(window, &newSize.x, &newSize.y);
-        windowResize(newSize);
+        glfwGetWindowSize(_window, &newSize.x, &newSize.y);
+        WindowResize(newSize);
         resultValue = swapChain.acquireNextImage(semaphores.acquireComplete);
     }
     currentBuffer = resultValue.value;
 }
 
-void BaseWindow::submitFrame() {
-    bool submitOverlay = settings.overlay && ui.visible;
-    if (submitOverlay) {
+void BaseWindow::SubmitFrame()
+{
+    bool submitOverlay = _settings.overlay && ui.visible;
+    if (submitOverlay)
+    {
         vk::SubmitInfo submitInfo;
         // Wait for color attachment output to finish before rendering the text overlay
         vk::PipelineStageFlags stageFlags = vk::PipelineStageFlagBits::eBottomOfPipe;
@@ -333,20 +352,21 @@ void BaseWindow::submitFrame() {
     swapChain.queuePresent(submitOverlay ? semaphores.overlayComplete : semaphores.renderComplete);
 }
 
-void BaseWindow::setupDepthStencil() {
-    depthStencil.destroy();
+void BaseWindow::SetupDepthStencil()
+{
+    _depthStencil.destroy();
 
     vk::ImageAspectFlags aspect = vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil;
     vk::ImageCreateInfo depthStencilCreateInfo;
     depthStencilCreateInfo.imageType = vk::ImageType::e2D;
-    depthStencilCreateInfo.extent = vk::Extent3D{ size.width, size.height, 1 };
+    depthStencilCreateInfo.extent = vk::Extent3D { _size.width, _size.height, 1 };
     depthStencilCreateInfo.format = depthFormat;
     depthStencilCreateInfo.mipLevels = 1;
     depthStencilCreateInfo.arrayLayers = 1;
     depthStencilCreateInfo.usage = vk::ImageUsageFlagBits::eDepthStencilAttachment | vk::ImageUsageFlagBits::eTransferSrc;
-    depthStencil = context.createImage(depthStencilCreateInfo);
+    _depthStencil = context.createImage(depthStencilCreateInfo);
 
-    context.setImageLayout(depthStencil.image, aspect, vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthStencilAttachmentOptimal);
+    context.setImageLayout(_depthStencil.image, aspect, vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthStencilAttachmentOptimal);
 
     vk::ImageViewCreateInfo depthStencilView;
     depthStencilView.viewType = vk::ImageViewType::e2D;
@@ -354,37 +374,36 @@ void BaseWindow::setupDepthStencil() {
     depthStencilView.subresourceRange.aspectMask = aspect;
     depthStencilView.subresourceRange.levelCount = 1;
     depthStencilView.subresourceRange.layerCount = 1;
-    depthStencilView.image = depthStencil.image;
-    depthStencil.view = device.createImageView(depthStencilView);
+    depthStencilView.image = _depthStencil.image;
+    _depthStencil.view = device.createImageView(depthStencilView);
 }
 
-void BaseWindow::setupFrameBuffer() {
+void BaseWindow::SetupFrameBuffer() {
     // Recreate the frame buffers
     if (!framebuffers.empty()) {
-        for (uint32_t i = 0; i < framebuffers.size(); i++) {
+        for (uint32_t i = 0; i < framebuffers.size(); i++)
             device.destroyFramebuffer(framebuffers[i]);
-        }
         framebuffers.clear();
     }
 
     vk::ImageView attachments[2];
 
     // Depth/Stencil attachment is the same for all frame buffers
-    attachments[1] = depthStencil.view;
+    attachments[1] = _depthStencil.view;
 
     vk::FramebufferCreateInfo framebufferCreateInfo;
     framebufferCreateInfo.renderPass = renderPass;
     framebufferCreateInfo.attachmentCount = 2;
     framebufferCreateInfo.pAttachments = attachments;
-    framebufferCreateInfo.width = size.width;
-    framebufferCreateInfo.height = size.height;
+    framebufferCreateInfo.width = _size.width;
+    framebufferCreateInfo.height = _size.height;
     framebufferCreateInfo.layers = 1;
 
     // Create frame buffers for every swap chain image
     framebuffers = swapChain.createFramebuffers(framebufferCreateInfo);
 }
 
-void BaseWindow::setupRenderPass() {
+void BaseWindow::SetupRenderPass() {
     if (renderPass) {
         device.destroyRenderPass(renderPass);
     }
@@ -462,12 +481,12 @@ void BaseWindow::setupRenderPass() {
     renderPass = device.createRenderPass(renderPassInfo);
 }
 
-void BaseWindow::addRenderWaitSemaphore(const vk::Semaphore& semaphore, const vk::PipelineStageFlags& waitStages) {
+void BaseWindow::AddRenderWaitSemaphore(const vk::Semaphore& semaphore, const vk::PipelineStageFlags& waitStages) {
     renderWaitSemaphores.push_back(semaphore);
     renderWaitStages.push_back(waitStages);
 }
 
-void BaseWindow::drawCurrentCommandBuffer() {
+void BaseWindow::DrawCurrentCommandBuffer() {
     vk::Fence fence = swapChain.getSubmitFence();
     {
         uint32_t fenceIndex = currentBuffer;
@@ -493,49 +512,30 @@ void BaseWindow::drawCurrentCommandBuffer() {
     context.recycle();
 }
 
-void BaseWindow::draw() {
+void BaseWindow::Draw() {
     // Get next image in the swap chain (back/front buffer)
-    prepareFrame();
+    PrepareFrame();
     // Execute the compiled command buffer for the current swap chain image
-    drawCurrentCommandBuffer();
+    DrawCurrentCommandBuffer();
     // Push the rendered frame to the surface
-    submitFrame();
+    SubmitFrame();
 }
 
-void BaseWindow::render() {
-    if (!prepared) {
+void BaseWindow::Render()
+{
+    if (!_prepared)
         return;
-    }
-    draw();
+
+    Draw();
 }
 
-void BaseWindow::update(float deltaTime) {
-    frameTimer = deltaTime;
-    ++frameCounter;
-
+void BaseWindow::Update(float deltaTime)
+{
     camera.update(deltaTime);
-    if (camera.moving()) {
+    if (camera.moving())
         viewUpdated = true;
-    }
 
-    // Convert to clamped timer value
-    if (!paused) {
-        timer += timerSpeed * frameTimer;
-        if (timer > 1.0) {
-            timer -= 1.0f;
-        }
-    }
-    fpsTimer += frameTimer;
-    if (fpsTimer > 1.0f) {
-        std::string windowTitle = getWindowTitle();
-        glfwSetWindowTitle(window, windowTitle.c_str());
-
-        lastFPS = frameCounter;
-        fpsTimer = 0.0f;
-        frameCounter = 0;
-    }
-
-    updateOverlay();
+    UpdateOverlay();
 
     // Check gamepad state
     const float deadZone = 0.0015f;
@@ -543,264 +543,268 @@ void BaseWindow::update(float deltaTime) {
     // todo : time based and relative axis positions
     if (camera.type != Camera::CameraType::firstperson) {
         // Rotate
-        if (std::abs(gamePadState.axisLeft.x) > deadZone) {
-            camera.rotate(glm::vec3(0.0f, gamePadState.axisLeft.x * 0.5f, 0.0f));
+        if (std::abs(_gamePadState.axisLeft.x) > deadZone)
+        {
+            camera.rotate(glm::vec3(0.0f, _gamePadState.axisLeft.x * 0.5f, 0.0f));
             viewUpdated = true;
         }
-        if (std::abs(gamePadState.axisLeft.y) > deadZone) {
-            camera.rotate(glm::vec3(gamePadState.axisLeft.y * 0.5f, 0.0f, 0.0f));
-            viewUpdated = true;
-        }
-        // Zoom
-        if (std::abs(gamePadState.axisRight.y) > deadZone) {
-            camera.dolly(gamePadState.axisRight.y * 0.01f * zoomSpeed);
-            viewUpdated = true;
-        }
-    }
-    else {
-        viewUpdated |= camera.updatePad(gamePadState.axisLeft, gamePadState.axisRight, frameTimer);
-    }
 
-    if (viewUpdated) {
+        if (std::abs(_gamePadState.axisLeft.y) > deadZone)
+        {
+            camera.rotate(glm::vec3(_gamePadState.axisLeft.y * 0.5f, 0.0f, 0.0f));
+            viewUpdated = true;
+        }
+
+        // Zoom
+        if (std::abs(_gamePadState.axisRight.y) > deadZone)
+        {
+            camera.dolly(_gamePadState.axisRight.y * 0.01f * zoomSpeed);
+            viewUpdated = true;
+        }
+    }
+    else
+        viewUpdated |= camera.updatePad(_gamePadState.axisLeft, _gamePadState.axisRight, deltaTime);
+
+    if (viewUpdated)
+    {
         viewUpdated = false;
-        viewChanged();
+        ViewChanged();
     }
 }
 
-void BaseWindow::windowResize(const glm::uvec2& newSize) {
-    if (!prepared) {
+void BaseWindow::WindowResize(const glm::uvec2& newSize)
+{
+    if (!_prepared)
         return;
-    }
-    prepared = false;
+
+    _prepared = false;
 
     queue.waitIdle();
     device.waitIdle();
 
     // Recreate swap chain
-    size.width = newSize.x;
-    size.height = newSize.y;
-    swapChain.create(size, enableVsync);
+    _size.width = newSize.x;
+    _size.height = newSize.y;
+    swapChain.create(_size, enableVsync);
 
-    setupDepthStencil();
-    setupFrameBuffer();
-    setupRenderPassBeginInfo();
+    SetupDepthStencil();
+    SetupFrameBuffer();
+    SetupRenderPassBeginInfo();
 
-    if (settings.overlay) {
-        ui.resize(size, framebuffers);
-    }
+    if (_settings.overlay)
+        ui.resize(_size, framebuffers);
 
     // Notify derived class
-    windowResized();
+    WindowResized();
 
     // Command buffers need to be recreated as they may store
     // references to the recreated frame buffer
-    clearCommandBuffers();
-    allocateCommandBuffers();
-    buildCommandBuffers();
+    ClearCommandBuffers();
+    AllocateCommandBuffers();
+    BuildCommandBuffers();
 
-    viewChanged();
+    ViewChanged();
 
-    prepared = true;
+    _prepared = true;
 }
 
-void BaseWindow::updateOverlay() {
-    if (!settings.overlay) {
+void BaseWindow::UpdateOverlay()
+{
+    if (!_settings.overlay)
         return;
-    }
 
     ImGuiIO& io = ImGui::GetIO();
 
-    io.DisplaySize = ImVec2((float)size.width, (float)size.height);
-    io.DeltaTime = frameTimer;
+    io.DisplaySize = ImVec2(float(_size.width), float(_size.height));
 
     io.MousePos = ImVec2(mousePos.x, mousePos.y);
-    io.MouseDown[0] = mouseButtons.left;
-    io.MouseDown[1] = mouseButtons.right;
+    io.MouseDown[0] = _mouseButtons.left;
+    io.MouseDown[1] = _mouseButtons.right;
 
     ImGui::NewFrame();
 
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
-    ImGui::SetNextWindowPos(ImVec2(10, 10));
-    ImGui::SetNextWindowSize(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
-    ImGui::Begin("Vulkan Example", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
-    ImGui::TextUnformatted(title.c_str());
-    ImGui::TextUnformatted(context.deviceProperties.deviceName);
-    ImGui::Text("%.2f ms/frame (%.1d fps)", (1000.0f / lastFPS), lastFPS);
-
-    ImGui::ShowMetricsWindow();
-
-    ImGui::PushItemWidth(110.0f * ui.scale);
-    OnUpdateUIOverlay();
-    ImGui::PopItemWidth();
-
+    ImGui::Begin("WowGM", nullptr);
+    ImGui::Text(context.deviceProperties.deviceName);
     ImGui::End();
-    ImGui::PopStyleVar();
+
+    OnUpdateOverlay();
+
     ImGui::Render();
 
     ui.update();
-
-#if defined(VK_USE_PLATFORM_ANDROID_KHR)
-    if (mouseButtons.left) {
-        mouseButtons.left = false;
-    }
-#endif
 }
 
-void BaseWindow::mouseMoved(const glm::vec2& newPos) {
+void BaseWindow::MouseMoved(const glm::vec2& newPos)
+{
     auto imgui = ImGui::GetIO();
-    if (imgui.WantCaptureMouse) {
+    if (imgui.WantCaptureMouse)
+    {
         mousePos = newPos;
         return;
     }
 
     glm::vec2 deltaPos = mousePos - newPos;
-    if (deltaPos == vec2()) {
+    if (deltaPos == vec2())
         return;
-    }
 
     const auto& dx = deltaPos.x;
     const auto& dy = deltaPos.y;
     bool handled = false;
-    if (settings.overlay) {
+    if (_settings.overlay)
+    {
         ImGuiIO& io = ImGui::GetIO();
         handled = io.WantCaptureMouse;
     }
 
-    if (mouseButtons.left) {
+    if (handled)
+        return;
+
+    if (_mouseButtons.left)
+    {
         camera.rotate(glm::vec3(dy * camera.rotationSpeed, -dx * camera.rotationSpeed, 0.0f));
         viewUpdated = true;
     }
-    if (mouseButtons.right) {
+    if (_mouseButtons.right)
+    {
         camera.dolly(dy * .005f * zoomSpeed);
         viewUpdated = true;
     }
-    if (mouseButtons.middle) {
+    if (_mouseButtons.middle) {
         camera.translate(glm::vec3(-dx * 0.01f, -dy * 0.01f, 0.0f));
         viewUpdated = true;
     }
     mousePos = newPos;
 }
 
-void BaseWindow::mouseScrolled(float delta) {
-    camera.translate(glm::vec3(0.0f, 0.0f, (float)delta * 0.005f * zoomSpeed));
+void BaseWindow::MouseScrolled(float delta)
+{
+    camera.translate(glm::vec3(0.0f, 0.0f, delta * 0.005f * zoomSpeed));
     viewUpdated = true;
 }
 
-void BaseWindow::keyPressed(uint32_t key) {
-    if (camera.firstperson) {
-        switch (key) {
-        case GLFW_KEY_W:
-            camera.keys.up = true;
-            break;
-        case GLFW_KEY_S:
-            camera.keys.down = true;
-            break;
-        case GLFW_KEY_A:
-            camera.keys.left = true;
-            break;
-        case GLFW_KEY_D:
-            camera.keys.right = true;
-            break;
+void BaseWindow::KeyPressed(uint32_t key)
+{
+    if (camera.firstperson)
+    {
+        switch (key)
+        {
+            case GLFW_KEY_W:
+                camera.keys.up = true;
+                break;
+            case GLFW_KEY_S:
+                camera.keys.down = true;
+                break;
+            case GLFW_KEY_A:
+                camera.keys.left = true;
+                break;
+            case GLFW_KEY_D:
+                camera.keys.right = true;
+                break;
         }
     }
 
-    switch (key) {
-    case GLFW_KEY_P:
-        paused = !paused;
-        break;
+    switch (key)
+    {
+        case GLFW_KEY_P:
+            _paused = !_paused;
+            break;
 
-    case GLFW_KEY_F1:
-        ui.visible = !ui.visible;
-        break;
+        case GLFW_KEY_F1:
+            ui.visible = !ui.visible;
+            break;
 
-    case GLFW_KEY_ESCAPE:
-        glfwSetWindowShouldClose(window, 1);
-        break;
+        case GLFW_KEY_ESCAPE:
+            glfwSetWindowShouldClose(_window, 1);
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
 }
 
-void BaseWindow::keyReleased(uint32_t key) {
-    if (camera.firstperson) {
-        switch (key) {
-        case GLFW_KEY_W:
-            camera.keys.up = false;
-            break;
-        case GLFW_KEY_S:
-            camera.keys.down = false;
-            break;
-        case GLFW_KEY_A:
-            camera.keys.left = false;
-            break;
-        case GLFW_KEY_D:
-            camera.keys.right = false;
-            break;
+void BaseWindow::KeyReleased(uint32_t key)
+{
+    if (camera.firstperson)
+    {
+        switch (key)
+        {
+            case GLFW_KEY_W:
+                camera.keys.up = false;
+                break;
+            case GLFW_KEY_S:
+                camera.keys.down = false;
+                break;
+            case GLFW_KEY_A:
+                camera.keys.left = false;
+                break;
+            case GLFW_KEY_D:
+                camera.keys.right = false;
+                break;
         }
     }
 }
 
-void BaseWindow::setupWindow() {
+void BaseWindow::SetupWindow()
+{
     bool fullscreen = false;
 
     // Check command line arguments
-    for (int32_t i = 0; i < __argc; i++) {
-        if (__argv[i] == std::string("-fullscreen")) {
+    for (int32_t i = 0; i < __argc; i++)
+        if (__argv[i] == std::string("-fullscreen"))
             fullscreen = true;
-        }
-    }
 
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     auto monitor = glfwGetPrimaryMonitor();
     auto mode = glfwGetVideoMode(monitor);
-    size.width = mode->width;
-    size.height = mode->height;
+    _size.width = mode->width;
+    _size.height = mode->height;
 
-    if (fullscreen) {
-        window = glfwCreateWindow(size.width, size.height, "My Title", monitor, nullptr);
-    }
-    else {
-        size.width /= 2;
-        size.height /= 2;
-        window = glfwCreateWindow(size.width, size.height, "Window Title", nullptr, nullptr);
+    if (fullscreen)
+        _window = glfwCreateWindow(_size.width, _size.height, "WowGM", monitor, nullptr);
+    else
+    {
+        _size.width /= 2;
+        _size.height /= 2;
+        _window = glfwCreateWindow(_size.width, _size.height, "WowGM", nullptr, nullptr);
     }
 
-    glfwSetWindowUserPointer(window, this);
-    glfwSetKeyCallback(window, KeyboardHandler);
-    glfwSetMouseButtonCallback(window, MouseHandler);
-    glfwSetCursorPosCallback(window, MouseMoveHandler);
-    glfwSetWindowCloseCallback(window, CloseHandler);
-    glfwSetFramebufferSizeCallback(window, FramebufferSizeHandler);
-    glfwSetScrollCallback(window, MouseScrollHandler);
-    if (!window) {
+    glfwSetWindowUserPointer(_window, this);
+    glfwSetKeyCallback(_window, KeyboardHandler);
+    glfwSetMouseButtonCallback(_window, MouseHandler);
+    glfwSetCursorPosCallback(_window, MouseMoveHandler);
+    glfwSetWindowCloseCallback(_window, CloseHandler);
+    glfwSetFramebufferSizeCallback(_window, FramebufferSizeHandler);
+    glfwSetScrollCallback(_window, MouseScrollHandler);
+    if (!_window)
         throw std::runtime_error("Could not create window");
+}
+
+void BaseWindow::MouseAction(int button, int action, int mods)
+{
+    switch (button)
+    {
+        case GLFW_MOUSE_BUTTON_LEFT:
+            _mouseButtons.left = action == GLFW_PRESS;
+            break;
+        case GLFW_MOUSE_BUTTON_RIGHT:
+            _mouseButtons.right = action == GLFW_PRESS;
+            break;
+        case GLFW_MOUSE_BUTTON_MIDDLE:
+            _mouseButtons.middle = action == GLFW_PRESS;
+            break;
     }
 }
 
-void BaseWindow::mouseAction(int button, int action, int mods) {
-    switch (button) {
-    case GLFW_MOUSE_BUTTON_LEFT:
-        mouseButtons.left = action == GLFW_PRESS;
-        break;
-    case GLFW_MOUSE_BUTTON_RIGHT:
-        mouseButtons.right = action == GLFW_PRESS;
-        break;
-    case GLFW_MOUSE_BUTTON_MIDDLE:
-        mouseButtons.middle = action == GLFW_PRESS;
-        break;
-    }
-}
-
-void BaseWindow::KeyboardHandler(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    auto example = (BaseWindow*)glfwGetWindowUserPointer(window);
+void BaseWindow::KeyboardHandler(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    auto example = static_cast<BaseWindow*>(glfwGetWindowUserPointer(window));
     switch (action) {
     case GLFW_PRESS:
-        example->keyPressed(key);
+        example->KeyPressed(key);
         break;
 
     case GLFW_RELEASE:
-        example->keyReleased(key);
+        example->KeyReleased(key);
         break;
 
     default:
@@ -808,29 +812,33 @@ void BaseWindow::KeyboardHandler(GLFWwindow* window, int key, int scancode, int 
     }
 }
 
-void BaseWindow::MouseHandler(GLFWwindow* window, int button, int action, int mods) {
-    auto example = (BaseWindow*)glfwGetWindowUserPointer(window);
-    example->mouseAction(button, action, mods);
+void BaseWindow::MouseHandler(GLFWwindow* window, int button, int action, int mods)
+{
+    auto example = static_cast<BaseWindow*>(glfwGetWindowUserPointer(window));
+    example->MouseAction(button, action, mods);
 }
 
-void BaseWindow::MouseMoveHandler(GLFWwindow* window, double posx, double posy) {
-    auto example = (BaseWindow*)glfwGetWindowUserPointer(window);
-    example->mouseMoved(glm::vec2(posx, posy));
+void BaseWindow::MouseMoveHandler(GLFWwindow* window, double posx, double posy)
+{
+    auto example = static_cast<BaseWindow*>(glfwGetWindowUserPointer(window));
+    example->MouseMoved(glm::vec2(posx, posy));
 }
 
-void BaseWindow::MouseScrollHandler(GLFWwindow* window, double xoffset, double yoffset) {
-    auto example = (BaseWindow*)glfwGetWindowUserPointer(window);
-    example->mouseScrolled((float)yoffset);
+void BaseWindow::MouseScrollHandler(GLFWwindow* window, double xoffset, double yoffset)
+{
+    auto example = static_cast<BaseWindow*>(glfwGetWindowUserPointer(window));
+    example->MouseScrolled((float)yoffset);
 }
 
-void BaseWindow::CloseHandler(GLFWwindow* window) {
-    auto example = (BaseWindow*)glfwGetWindowUserPointer(window);
-    example->prepared = false;
+void BaseWindow::CloseHandler(GLFWwindow* window)
+{
+    auto example = static_cast<BaseWindow*>(glfwGetWindowUserPointer(window));
+    example->_prepared = false;
     glfwSetWindowShouldClose(window, 1);
 }
 
-void BaseWindow::FramebufferSizeHandler(GLFWwindow* window, int width, int height) {
-    auto example = (BaseWindow*)glfwGetWindowUserPointer(window);
-    example->windowResize(glm::uvec2(width, height));
+void BaseWindow::FramebufferSizeHandler(GLFWwindow* window, int width, int height)
+{
+    auto example = static_cast<BaseWindow*>(glfwGetWindowUserPointer(window));
+    example->WindowResize(glm::uvec2(width, height));
 }
-

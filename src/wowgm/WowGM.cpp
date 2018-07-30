@@ -72,8 +72,8 @@ int main(int argc, char* argv[])
         auto authserver = mapped_values["server"].as<std::string>();
         sUpdater->Start();
 
-        wowgm::Window window;
-        window.run();
+        wowgm::Window window("WowGM");
+        window.Run();
     }
     catch (const boost::system::system_error& se)
     {
