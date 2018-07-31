@@ -1,9 +1,15 @@
 #include "Window.hpp"
 #include "ClientServices.hpp"
+#include "AuthResult.hpp"
+#include "RealmList.hpp"
+
+#include "CharacterPackets.hpp"
 
 #include <imgui.h>
 
 using namespace wowgm;
+using namespace wowgm::protocol::authentification;
+using namespace wowgm::protocol::world::packets;
 
 Window::Window(std::string const& title)
 {
@@ -188,28 +194,91 @@ void Window::SetupDescriptorSet()
 void Window::OnUpdateOverlay()
 {
     ImGui::BeginMainMenuBar();
+    if (ImGui::BeginMenu("Options"))
+    {
+        ImGui::MenuItem("Hello");
+        ImGui::EndMenu();
+    }
     ImGui::EndMainMenuBar();
 
-    ImGui::SetNextWindowPos({ 10, 10 }, ImGuiCond_FirstUseEver);
-    ImGui::SetNextWindowSizeConstraints({ 300.0f, 165.0f }, { 300.0f, 165.0f });
 
-    ImGui::Begin("Connect", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse);
+    if (!sClientServices->IsInWorld() && sClientServices->GetCharacterCount() == 0)
+    {
+        ImGui::SetNextWindowPos({ 10.0f, 35.0f });
 
-    ImGui::PushItemWidth(125.0f);
-    ImGui::InputText("##RealmHost", _realmAddress, 100);
-    ImGui::PopItemWidth();
+        if (ImGui::Begin("Connect", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse))
+        {
+            ImGui::PushItemWidth(125.0f);
+            ImGui::InputText("##RealmHost", _realmAddress, 100);
+            ImGui::PopItemWidth();
 
-    ImGui::SameLine();
+            ImGui::SameLine();
 
-    ImGui::PushItemWidth(57.0f);
-    ImGui::InputInt("Realm##RealmPort", reinterpret_cast<std::int32_t*>(sClientServices->GetHostPort()), 0, 0);
-    ImGui::PopItemWidth();
+            ImGui::PushItemWidth(57.0f);
+            ImGui::InputInt("Realm##RealmPort", reinterpret_cast<std::int32_t*>(sClientServices->GetHostPort()), 0, 0);
+            ImGui::PopItemWidth();
 
-    ImGui::InputText("Account name##GruntAccountName", _accountName, 100);
-    ImGui::InputText("Password##GruntAccountPassword", _accountPassword, 100, ImGuiInputTextFlags_Password);
+            ImGui::PushItemWidth(196.0f);
+            ImGui::InputText("Account name##GruntAccountName", _accountName, 100);
+            ImGui::InputText("Password##GruntAccountPassword", _accountPassword, 100, ImGuiInputTextFlags_Password);
+            ImGui::PopItemWidth();
 
-    if (ImGui::Button("Connect##ConnectionButton"))
-        sClientServices->AsyncConnect(_accountName, _accountPassword, _realmAddress, *sClientServices->GetHostPort());
+            if (ImGui::Button("Connect##ConnectionButton"))
+                sClientServices->AsyncConnect(_accountName, _accountPassword, _realmAddress, *sClientServices->GetHostPort());
 
-    ImGui::End();
+            ImGui::End();
+        }
+    }
+
+    if (sClientServices->GetAvailableRealmCount() > 1)
+    {
+        ImGui::SetNextWindowPos({ 10.0f, 35.0f });
+
+        if (ImGui::Begin("Realm selection", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
+        {
+            for (std::uint32_t i = 0; i < sClientServices->GetAvailableRealmCount(); ++i)
+            {
+                AuthRealmInfo* realmInfo = sClientServices->GetRealmInfo(i);
+
+                ImGuiIO& io = ImGui::GetIO();
+                ImGui::PushFont(io.Fonts->Fonts[3]);
+                ImGui::TextColored({ 1.0f, 1.0f, 0.0f, 1.0f }, realmInfo->Name.c_str());
+                ImGui::PopFont();
+                ImGui::SameLine();
+
+                std::stringstream ss;
+                ss << realmInfo->GetEndpoint();
+
+                if (ImGui::Button(ss.str().c_str()))
+                    sClientServices->ConnectToRealm(*realmInfo);
+            }
+
+            ImGui::End();
+        }
+    }
+
+    if (sClientServices->GetCharacterCount() != 0)
+    {
+        ImGui::SetNextWindowPos({ 10.0f, 35.0f });
+
+        if (ImGui::Begin("Character selection", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
+        {
+            auto i = 0;
+            for (auto&& characterInfo : sClientServices->GetCharacters())
+            {
+                if (ImGui::Button(characterInfo.Name.c_str()))
+                    sClientServices->EnterWorld(characterInfo);
+
+                ImGui::Text("Level %u <Gender> <Class> <Race>", characterInfo.Level);
+#if _DEBUG
+                ImGui::Text(characterInfo.GUID.ToString().c_str());
+#endif
+
+                if (++i < sClientServices->GetCharacterCount())
+                    ImGui::Separator();
+            }
+
+            ImGui::End();
+        }
+    }
 }

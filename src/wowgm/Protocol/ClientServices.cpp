@@ -106,7 +106,7 @@ namespace wowgm::protocol
         _socket->Connect(realmInfo.GetEndpoint());
     }
 
-    bool ClientServices::IsInWorld()
+    bool ClientServices::IsInWorld() const
     {
         return !!_socket && _authResult == LOGIN_OK;
     }
@@ -116,7 +116,7 @@ namespace wowgm::protocol
         _sessionKey = K;
     }
 
-    BigNumber const& ClientServices::GetSessionKey()
+    BigNumber const& ClientServices::GetSessionKey() const
     {
         return _sessionKey;
     }
@@ -127,7 +127,7 @@ namespace wowgm::protocol
         _passwordHash = boost::none;
     }
 
-    std::string const& ClientServices::GetUsername()
+    std::string const& ClientServices::GetUsername() const
     {
         return _username;
     }
@@ -138,7 +138,7 @@ namespace wowgm::protocol
         _passwordHash = boost::none;
     }
 
-    std::string const& ClientServices::GetPassword()
+    std::string const& ClientServices::GetPassword() const
     {
         return _password;
     }
@@ -148,7 +148,7 @@ namespace wowgm::protocol
         _hostname = hostname;
     }
 
-    std::string const& ClientServices::GetHostname()
+    std::string const& ClientServices::GetHostname() const
     {
         return _hostname;
     }
@@ -175,5 +175,29 @@ namespace wowgm::protocol
         _passwordHash = bn;
 
         return _passwordHash.get();
+    }
+
+    std::uint32_t ClientServices::GetCharacterCount() const
+    {
+        return _characters.size();
+    }
+
+    std::vector<world::packets::CharacterInfo> const& ClientServices::GetCharacters() const
+    {
+        return _characters;
+    }
+
+    void ClientServices::SetCharacters(std::vector<world::packets::CharacterInfo> const& characters)
+    {
+        _characters = std::move(characters);
+    }
+
+    void ClientServices::EnterWorld(world::packets::CharacterInfo const& characterInfo)
+    {
+        _selectedCharacter = std::move(characterInfo);
+
+        // Cleanup some state
+        _characters.clear();
+        _realmInfos = boost::none;
     }
 }

@@ -10,7 +10,6 @@
 #include <imgui.h>
 #include <GLFW/glfw3.h>
 #ifdef _WIN32
-#undef APIENTRY
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>   // for glfwGetWin32Window
 #endif
@@ -181,7 +180,8 @@ bool BaseWindow::PlatformLoopCondition()
 
     glfwPollEvents();
 
-    if (0 != glfwJoystickPresent(0)) {
+    if (0 != glfwJoystickPresent(0))
+    {
         // FIXME implement joystick handling
         int axisCount{ 0 };
         const float* axes = glfwGetJoystickAxes(0, &axisCount);
@@ -807,10 +807,10 @@ void BaseWindow::SetupWindow()
 
     glfwSetWindowUserPointer(_window, this);
     glfwSetKeyCallback(_window, KeyboardHandler);
-    glfwSetCharCallback(_window, [](GLFWwindow* window, unsigned int c) {
+    glfwSetCharCallback(_window, [](GLFWwindow* window, unsigned int c) -> void {
         ImGuiIO& io = ImGui::GetIO();
         if (c > 0 && c < 0x10000)
-            io.AddInputCharacter((unsigned short)c);
+            io.AddInputCharacter(static_cast<unsigned short>(c));
     });
     glfwSetMouseButtonCallback(_window, MouseHandler);
     glfwSetCursorPosCallback(_window, MouseMoveHandler);

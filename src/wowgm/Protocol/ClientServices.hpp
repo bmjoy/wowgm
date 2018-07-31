@@ -4,6 +4,8 @@
 #include "AuthResult.hpp"
 #include "BigNumber.hpp"
 
+#include "CharacterPackets.hpp"
+
 #include <string>
 #include <cstdint>
 #include <memory>
@@ -55,16 +57,16 @@ namespace wowgm::protocol
         void ConnectToRealm(AuthRealmInfo const& realmInfo);
 
         void SetSessionKey(BigNumber const& K);
-        BigNumber const& GetSessionKey();
+        BigNumber const& GetSessionKey() const;
 
         void SetUsername(const std::string& username);
-        std::string const& GetUsername();
+        std::string const& GetUsername() const;
 
         void SetPassword(const std::string& password);
-        std::string const& GetPassword();
+        std::string const& GetPassword() const;
 
         void SetHostname(const std::string& hostname);
-        std::string const& GetHostname();
+        std::string const& GetHostname() const;
 
         std::uint32_t* GetHostPort();
 
@@ -72,7 +74,13 @@ namespace wowgm::protocol
 
     public: /* World */
 
-        bool IsInWorld();
+        std::uint32_t GetCharacterCount() const;
+        std::vector<world::packets::CharacterInfo> const& GetCharacters() const;
+        void SetCharacters(std::vector<world::packets::CharacterInfo> const& characters);
+
+        void EnterWorld(world::packets::CharacterInfo const& characterInfo);
+
+        bool IsInWorld() const;
 
     private:
         std::shared_ptr<SocketManager> _socketUpdater;
@@ -81,6 +89,9 @@ namespace wowgm::protocol
         AuthResult _authResult = LOGIN_OK;
 
         boost::optional<std::vector<AuthRealmInfo>> _realmInfos;
+
+        std::vector<world::packets::CharacterInfo> _characters;
+        world::packets::CharacterInfo _selectedCharacter;
 
         std::string _username;
         std::string _password;

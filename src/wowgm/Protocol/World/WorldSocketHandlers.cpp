@@ -67,6 +67,7 @@ namespace wowgm::protocol::world
 
     bool WorldSocket::HandleEnumerateCharacterResult(ClientEnumCharactersResult& packet)
     {
+        sClientServices->SetCharacters(packet.Characters);
         return true;
     }
 }
