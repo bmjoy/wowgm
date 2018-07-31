@@ -488,7 +488,13 @@ namespace wowgm::protocol
             _wpos = size();
         }
 
-        bool HasData() const { return _wpos != 0; }
+        bool HasData() const
+        {
+            if (empty())
+                return _storage.capacity() == 0;
+
+            return _wpos == _storage.size();
+        }
 
         void reserve(size_t ressize)
         {

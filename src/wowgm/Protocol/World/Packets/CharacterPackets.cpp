@@ -97,4 +97,32 @@ namespace wowgm::protocol::world::packets
     {
         return !GuildGUID.IsEmpty();
     }
+
+    UserClientPlayerLogin::UserClientPlayerLogin() : ClientPacket(Opcode::CMSG_PLAYER_LOGIN, 9)
+    {
+
+    }
+
+    WorldPacket const* UserClientPlayerLogin::Write()
+    {
+        _worldPacket.WriteBit(GUID[2]);
+        _worldPacket.WriteBit(GUID[3]);
+        _worldPacket.WriteBit(GUID[0]);
+        _worldPacket.WriteBit(GUID[6]);
+        _worldPacket.WriteBit(GUID[4]);
+        _worldPacket.WriteBit(GUID[5]);
+        _worldPacket.WriteBit(GUID[1]);
+        _worldPacket.WriteBit(GUID[7]);
+
+        _worldPacket.WriteByteSeq(GUID[2]);
+        _worldPacket.WriteByteSeq(GUID[7]);
+        _worldPacket.WriteByteSeq(GUID[0]);
+        _worldPacket.WriteByteSeq(GUID[3]);
+        _worldPacket.WriteByteSeq(GUID[5]);
+        _worldPacket.WriteByteSeq(GUID[6]);
+        _worldPacket.WriteByteSeq(GUID[1]);
+        _worldPacket.WriteByteSeq(GUID[4]);
+
+        return &_worldPacket;
+    }
 }

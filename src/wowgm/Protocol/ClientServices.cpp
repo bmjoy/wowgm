@@ -199,5 +199,13 @@ namespace wowgm::protocol
         // Cleanup some state
         _characters.clear();
         _realmInfos = boost::none;
+
+        if (WorldSocket* socket = GetSocket<WorldSocket>())
+        {
+            UserClientPlayerLogin playerLogin;
+            playerLogin.GUID = characterInfo.GUID;
+
+            socket->SendPacket(playerLogin.Write());
+        }
     }
 }

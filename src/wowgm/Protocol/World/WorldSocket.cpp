@@ -118,7 +118,7 @@ namespace wowgm::protocol::world
 
     void WorldSocket::SendPacket(packets::ClientPacket& clientPacket)
     {
-        BOOST_ASSERT_MSG_FMT(clientPacket.IsWritten(), "Erorr while sending a structured packet. Did you forget to call %s::Write() ?", boost::core::demangle(typeid(clientPacket).name()));
+        BOOST_ASSERT_MSG_FMT(clientPacket.IsWritten(), "Erorr while sending a structured packet. Did you forget to call %s::Write() ?", boost::core::demangle(typeid(clientPacket).name()).c_str());
 
         SendPacket(clientPacket.GetPacket());
     }

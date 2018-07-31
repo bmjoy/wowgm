@@ -59,4 +59,13 @@ namespace wowgm::protocol::world::packets
 
         std::vector<CharacterInfo> Characters;
     };
+
+    struct UserClientPlayerLogin : public ClientPacket
+    {
+        UserClientPlayerLogin();
+
+        WorldPacket const* Write() override;
+
+        ObjectGuid GUID;
+    };
 }

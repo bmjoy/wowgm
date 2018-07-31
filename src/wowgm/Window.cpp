@@ -263,7 +263,7 @@ void Window::OnUpdateOverlay()
 
         if (ImGui::Begin("Character selection", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
         {
-            auto i = 0;
+            auto i = 0u;
             for (auto&& characterInfo : sClientServices->GetCharacters())
             {
                 if (ImGui::Button(characterInfo.Name.c_str()))

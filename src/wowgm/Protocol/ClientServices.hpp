@@ -3,6 +3,7 @@
 #include "AuthCommand.hpp"
 #include "AuthResult.hpp"
 #include "BigNumber.hpp"
+#include "Socket.hpp"
 
 #include "CharacterPackets.hpp"
 
@@ -71,6 +72,12 @@ namespace wowgm::protocol
         std::uint32_t* GetHostPort();
 
         BigNumber& GetPasswordHash();
+
+        template <typename T>
+        typename std::enable_if<std::is_base_of<Socket<T>, T>::value, T*>::type GetSocket()
+        {
+            return reinterpret_cast<T*>(_socket.get());
+        }
 
     public: /* World */
 

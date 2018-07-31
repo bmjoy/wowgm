@@ -61,7 +61,7 @@ namespace wowgm::protocol::world::packets
 
     bool ClientPacket::IsWritten() const
     {
-        return _worldPacket.empty() || _worldPacket.HasData();
+        return _worldPacket.HasData();
     }
 
     WorldPacket const* ServerPacket::Write()
