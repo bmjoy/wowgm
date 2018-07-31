@@ -1,4 +1,7 @@
 #include "Window.hpp"
+#include "ClientServices.hpp"
+
+#include <imgui.h>
 
 using namespace wowgm;
 
@@ -6,6 +9,11 @@ Window::Window(std::string const& title)
 {
     camera.dolly(-2.5f);
     _title = title;
+
+    memset(_realmAddress, 0, 100);
+    memset(_accountName, 0, 100);
+    memset(_accountPassword, 0, 100);
+    strcpy(_realmAddress, "127.0.0.1");
 }
 
 Window::~Window()
@@ -175,4 +183,33 @@ void Window::SetupDescriptorSet()
         { descriptorSet, 0, 0, 1, vk::DescriptorType::eUniformBuffer, nullptr, &uniformDataVS.descriptor },
     };
     device.updateDescriptorSets(writeDescriptorSets, nullptr);
+}
+
+void Window::OnUpdateOverlay()
+{
+    ImGui::BeginMainMenuBar();
+    ImGui::EndMainMenuBar();
+
+    ImGui::SetNextWindowPos({ 10, 10 }, ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSizeConstraints({ 300.0f, 165.0f }, { 300.0f, 165.0f });
+
+    ImGui::Begin("Connect", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse);
+
+    ImGui::PushItemWidth(125.0f);
+    ImGui::InputText("##RealmHost", _realmAddress, 100);
+    ImGui::PopItemWidth();
+
+    ImGui::SameLine();
+
+    ImGui::PushItemWidth(57.0f);
+    ImGui::InputInt("Realm##RealmPort", reinterpret_cast<std::int32_t*>(sClientServices->GetHostPort()), 0, 0);
+    ImGui::PopItemWidth();
+
+    ImGui::InputText("Account name##GruntAccountName", _accountName, 100);
+    ImGui::InputText("Password##GruntAccountPassword", _accountPassword, 100, ImGuiInputTextFlags_Password);
+
+    if (ImGui::Button("Connect##ConnectionButton"))
+        sClientServices->AsyncConnect(_accountName, _accountPassword, _realmAddress, *sClientServices->GetHostPort());
+
+    ImGui::End();
 }

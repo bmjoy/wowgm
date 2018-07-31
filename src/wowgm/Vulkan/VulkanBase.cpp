@@ -8,6 +8,12 @@
 #include "VulkanBase.hpp"
 
 #include <imgui.h>
+#include <GLFW/glfw3.h>
+#ifdef _WIN32
+#undef APIENTRY
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>   // for glfwGetWin32Window
+#endif
 
 #include "UI.hpp"
 #include "Storage.hpp"
@@ -60,6 +66,39 @@ BaseWindow::~BaseWindow()
 
 void BaseWindow::Run()
 {
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
+    ImGuiIO& io = ImGui::GetIO();
+    io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;         // We can honor GetMouseCursor() values (optional)
+    io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;          // We can honor io.WantSetMousePos requests (optional, rarely used)
+
+                                                                  // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array.
+    io.KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;
+    io.KeyMap[ImGuiKey_LeftArrow] = GLFW_KEY_LEFT;
+    io.KeyMap[ImGuiKey_RightArrow] = GLFW_KEY_RIGHT;
+    io.KeyMap[ImGuiKey_UpArrow] = GLFW_KEY_UP;
+    io.KeyMap[ImGuiKey_DownArrow] = GLFW_KEY_DOWN;
+    io.KeyMap[ImGuiKey_PageUp] = GLFW_KEY_PAGE_UP;
+    io.KeyMap[ImGuiKey_PageDown] = GLFW_KEY_PAGE_DOWN;
+    io.KeyMap[ImGuiKey_Home] = GLFW_KEY_HOME;
+    io.KeyMap[ImGuiKey_End] = GLFW_KEY_END;
+    io.KeyMap[ImGuiKey_Insert] = GLFW_KEY_INSERT;
+    io.KeyMap[ImGuiKey_Delete] = GLFW_KEY_DELETE;
+    io.KeyMap[ImGuiKey_Backspace] = GLFW_KEY_BACKSPACE;
+    io.KeyMap[ImGuiKey_Space] = GLFW_KEY_SPACE;
+    io.KeyMap[ImGuiKey_Enter] = GLFW_KEY_ENTER;
+    io.KeyMap[ImGuiKey_Escape] = GLFW_KEY_ESCAPE;
+    io.KeyMap[ImGuiKey_A] = GLFW_KEY_A;
+    io.KeyMap[ImGuiKey_C] = GLFW_KEY_C;
+    io.KeyMap[ImGuiKey_V] = GLFW_KEY_V;
+    io.KeyMap[ImGuiKey_X] = GLFW_KEY_X;
+    io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
+    io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
+#if defined(_WIN32)
+    io.ImeWindowHandle = (void*)glfwGetWin32Window(_window);
+#endif
+
     // Android initialization is handled in APP_CMD_INIT_WINDOW event
     glfwInit();
     SetupWindow();
@@ -72,6 +111,8 @@ void BaseWindow::Run()
     // Once we exit the render loop, wait for everything to become idle before proceeding to the descructor.
     context.queue.waitIdle();
     context.device.waitIdle();
+
+    ImGui::DestroyContext();
 }
 
 void BaseWindow::GetEnabledFeatures()
@@ -404,9 +445,8 @@ void BaseWindow::SetupFrameBuffer() {
 }
 
 void BaseWindow::SetupRenderPass() {
-    if (renderPass) {
+    if (renderPass)
         device.destroyRenderPass(renderPass);
-    }
 
     std::vector<vk::AttachmentDescription> attachments;
     attachments.resize(2);
@@ -526,6 +566,7 @@ void BaseWindow::Render()
     if (!_prepared)
         return;
 
+    UpdateOverlay();
     Draw();
 }
 
@@ -534,8 +575,6 @@ void BaseWindow::Update(float deltaTime)
     camera.update(deltaTime);
     if (camera.moving())
         viewUpdated = true;
-
-    UpdateOverlay();
 
     // Check gamepad state
     const float deadZone = 0.0015f;
@@ -623,9 +662,7 @@ void BaseWindow::UpdateOverlay()
 
     ImGui::NewFrame();
 
-    ImGui::Begin("WowGM", nullptr);
-    ImGui::Text(context.deviceProperties.deviceName);
-    ImGui::End();
+    ImGui::ShowDemoWindow();
 
     OnUpdateOverlay();
 
@@ -770,6 +807,11 @@ void BaseWindow::SetupWindow()
 
     glfwSetWindowUserPointer(_window, this);
     glfwSetKeyCallback(_window, KeyboardHandler);
+    glfwSetCharCallback(_window, [](GLFWwindow* window, unsigned int c) {
+        ImGuiIO& io = ImGui::GetIO();
+        if (c > 0 && c < 0x10000)
+            io.AddInputCharacter((unsigned short)c);
+    });
     glfwSetMouseButtonCallback(_window, MouseHandler);
     glfwSetCursorPosCallback(_window, MouseMoveHandler);
     glfwSetWindowCloseCallback(_window, CloseHandler);
@@ -797,18 +839,31 @@ void BaseWindow::MouseAction(int button, int action, int mods)
 
 void BaseWindow::KeyboardHandler(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+    ImGuiIO& io = ImGui::GetIO();
+    if (action == GLFW_PRESS)
+        io.KeysDown[key] = true;
+    if (action == GLFW_RELEASE)
+        io.KeysDown[key] = false;
+
+    io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
+    io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
+    io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
+    io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+
     auto example = static_cast<BaseWindow*>(glfwGetWindowUserPointer(window));
-    switch (action) {
-    case GLFW_PRESS:
-        example->KeyPressed(key);
-        break;
+    return;
+    switch (action)
+    {
+        case GLFW_PRESS:
+            example->KeyPressed(key);
+            break;
 
-    case GLFW_RELEASE:
-        example->KeyReleased(key);
-        break;
+        case GLFW_RELEASE:
+            example->KeyReleased(key);
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
 }
 
@@ -826,6 +881,10 @@ void BaseWindow::MouseMoveHandler(GLFWwindow* window, double posx, double posy)
 
 void BaseWindow::MouseScrollHandler(GLFWwindow* window, double xoffset, double yoffset)
 {
+    ImGuiIO& io = ImGui::GetIO();
+    io.MouseWheelH += float(xoffset);
+    io.MouseWheel += float(yoffset);
+
     auto example = static_cast<BaseWindow*>(glfwGetWindowUserPointer(window));
     example->MouseScrolled((float)yoffset);
 }

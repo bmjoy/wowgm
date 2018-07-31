@@ -63,6 +63,13 @@ namespace wowgm
         void SetupDescriptorPool();
 
         void SetupDescriptorSet();
+
+        void OnUpdateOverlay() override;
+
+    private:
+        char _accountName[100];
+        char _accountPassword[100];
+        char _realmAddress[100];
     };
 
 }

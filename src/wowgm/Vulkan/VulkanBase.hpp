@@ -83,7 +83,7 @@ namespace vkx {
             std::string getWindowTitle();
 
         protected:
-            bool enableVsync{ false };
+            bool enableVsync { false };
             // Command buffers used for rendering
             std::vector<vk::CommandBuffer> commandBuffers;
             std::vector<vk::ClearValue> clearValues;
