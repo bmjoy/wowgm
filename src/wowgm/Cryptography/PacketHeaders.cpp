@@ -41,8 +41,8 @@ namespace wowgm::protocol::world
             _receivedFirstByte = true;
 
             _headerBuffer.Write(packet.GetReadPointer(), 1);
-
             authCrypt.DecryptRecv(_headerBuffer.GetReadPointer(), 1);
+
             _isLargePacket = (_headerBuffer.GetReadPointer()[0] & 0x80) != 0;
 
             packet.ReadCompleted(1);
@@ -52,6 +52,7 @@ namespace wowgm::protocol::world
         auto remainderHeaderSize = std::min(packet.GetActiveSize(), size_t(_isLargePacket ? 4 : 3));
         _headerBuffer.Write(packet.GetReadPointer(), remainderHeaderSize);
         authCrypt.DecryptRecv(_headerBuffer.GetReadPointer(), remainderHeaderSize);
+
         _headerBuffer.ReadCompleted(remainderHeaderSize);
         packet.ReadCompleted(remainderHeaderSize);
 

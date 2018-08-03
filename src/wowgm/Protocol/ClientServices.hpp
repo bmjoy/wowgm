@@ -45,7 +45,6 @@ namespace wowgm::protocol
 
         bool IsConnected();
 
-
     public: /* Realms */
         void UpdateIdentificationStatus(AuthCommand authCommand, AuthResult result);
         AuthResult GetAuthentificationResult();
@@ -98,7 +97,6 @@ namespace wowgm::protocol
         boost::optional<std::vector<AuthRealmInfo>> _realmInfos;
 
         std::vector<world::packets::CharacterInfo> _characters;
-        world::packets::CharacterInfo _selectedCharacter;
 
         std::string _username;
         std::string _password;

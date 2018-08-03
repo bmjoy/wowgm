@@ -241,7 +241,7 @@ void Window::OnUpdateOverlay()
                 AuthRealmInfo* realmInfo = sClientServices->GetRealmInfo(i);
 
                 ImGuiIO& io = ImGui::GetIO();
-                ImGui::PushFont(io.Fonts->Fonts[3]);
+                ImGui::PushFont(io.Fonts->Fonts[2]);
                 ImGui::TextColored({ 1.0f, 1.0f, 0.0f, 1.0f }, realmInfo->Name.c_str());
                 ImGui::PopFont();
                 ImGui::SameLine();

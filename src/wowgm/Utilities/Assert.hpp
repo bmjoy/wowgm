@@ -374,7 +374,7 @@ namespace boost
         std::cerr << "Backtrace:\n" << boost::stacktrace::application_stacktrace() << std::endl;
 
         va_end(args);
-
+            
         *((volatile int*)NULL) = 0;
         exit(1);
     }

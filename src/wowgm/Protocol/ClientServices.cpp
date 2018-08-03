@@ -8,6 +8,7 @@
 
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/ip/address.hpp>
+#include <boost/algorithm/string/case_conv.hpp>
 
 namespace ip = boost::asio::ip;
 
@@ -35,20 +36,18 @@ namespace wowgm::protocol
 
     void ClientServices::AsyncConnect(std::string username, std::string password, const std::string& realmAddress, std::int32_t port /* = 3724 */)
     {
-        ip::tcp::endpoint authEndpoint(ip::make_address(realmAddress), port);
-
         if (_socket)
         {
             _socket->CloseSocket();
             _socket.reset();
         }
 
+        SetUsername(username);
+        SetPassword(password);
+
         auto authSocket = _socketUpdater->Create<AuthSocket>(_socketUpdater->GetContext());
-
+        authSocket->Connect(realmAddress, port);
         _socket = authSocket;
-
-        authSocket->Connect(authEndpoint);
-        authSocket->SendAuthChallenge(username, password);
     }
 
     bool ClientServices::IsConnected()
@@ -102,8 +101,10 @@ namespace wowgm::protocol
         LOG_INFO << "Disconnecting from authentification server.";
         LOG_INFO << "Connecting to realm " << realmInfo.Name << " at " << realmInfo.GetEndpoint();
 
-        _socket = _socketUpdater->Create<WorldSocket>(_socketUpdater->GetContext());
-        _socket->Connect(realmInfo.GetEndpoint());
+        auto worldSocket = _socketUpdater->Create<WorldSocket>(_socketUpdater->GetContext());
+        worldSocket->Connect(realmInfo.GetEndpoint());
+
+        _socket = worldSocket;
     }
 
     bool ClientServices::IsInWorld() const
@@ -124,6 +125,9 @@ namespace wowgm::protocol
     void ClientServices::SetUsername(const std::string& username)
     {
         _username = username;
+
+        boost::to_upper(_username);
+
         _passwordHash = boost::none;
     }
 
@@ -135,6 +139,9 @@ namespace wowgm::protocol
     void ClientServices::SetPassword(const std::string& password)
     {
         _password = password;
+
+        boost::to_upper(_password);
+
         _passwordHash = boost::none;
     }
 
@@ -194,8 +201,6 @@ namespace wowgm::protocol
 
     void ClientServices::EnterWorld(world::packets::CharacterInfo const& characterInfo)
     {
-        _selectedCharacter = std::move(characterInfo);
-
         // Cleanup some state
         _characters.clear();
         _realmInfos = boost::none;

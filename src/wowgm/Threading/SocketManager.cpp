@@ -3,12 +3,15 @@
 
 namespace wowgm::threading {
 
-    boost::asio::io_context SocketManager::_context;
+    SocketManager::SocketManager() : _socket(), _context(), _guard(_context.get_executor())
+    {
+        _contextThread = std::thread([&]() {
+            _context.run();
+        });
+    }
 
     void SocketManager::Update(std::uint32_t /* timeInterval */)
     {
-        _context.run();
-
         if (_socket)
             _socket->Update();
     }
@@ -20,10 +23,10 @@ namespace wowgm::threading {
 
     void SocketManager::Destroy()
     {
+        _guard.reset();
+
         if (_socket)
             _socket->AsyncCloseSocket();
-
-        _context.run();
     }
 
 } // wowgm::threading

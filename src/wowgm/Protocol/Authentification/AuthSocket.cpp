@@ -30,26 +30,21 @@ namespace wowgm::protocol::authentification
         _packetHandlers[REALM_LIST] = { sizeof(AuthRealmList), &AuthSocket::HandleRealmList };
     }
 
-    void AuthSocket::OnClose()
+    void AuthSocket::OnRead()
     {
-
-    }
-
-    void AuthSocket::ReadHandler()
-    {
-        while (_readBuffer.GetActiveSize())
+        while (GetReadBuffer().GetActiveSize())
         {
-            AuthCommand command = AuthCommand(_readBuffer.GetReadPointer()[0]);
+            AuthCommand command = AuthCommand(GetReadBuffer().GetReadPointer()[0]);
 
             auto itr = _packetHandlers.find(command);
             if (itr == _packetHandlers.end())
             {
-                _readBuffer.Reset();
+                GetReadBuffer().Reset();
                 break;
             }
 
             // check if available size is enough
-            if (_readBuffer.GetActiveSize() < itr->second.size)
+            if (GetReadBuffer().GetActiveSize() < itr->second.size)
                 break;
 
             if (!(*this.*itr->second.handler)())
@@ -58,21 +53,25 @@ namespace wowgm::protocol::authentification
                 return;
             }
 
-            _readBuffer.ReadCompleted(itr->second.size);
+            GetReadBuffer().ReadCompleted(itr->second.size);
         }
     }
 
-    void AuthSocket::SendAuthChallenge(std::string&& username, std::string&& password, std::string&& platform, std::string&& operatingSystem, std::string&& countryCode, std::string&& gameCode)
+    void AuthSocket::OnConnect()
     {
-        boost::to_upper(username);
-        boost::to_upper(password);
+        SendAuthChallenge();
+    }
 
-        sClientServices->SetUsername(username);
-        sClientServices->SetPassword(password);
+    void AuthSocket::OnClose()
+    {
 
+    }
+
+    void AuthSocket::SendAuthChallenge(std::string&& platform, std::string&& operatingSystem, std::string&& countryCode, std::string&& gameCode)
+    {
         AuthPacket<LogonChallenge> command(this->shared_from_this(), AUTH_LOGON_CHALLENGE);
         command.GetData()->Error = 6;
-        command.GetData()->Size = std::uint16_t(30 + username.length());
+        command.GetData()->Size = std::uint16_t(30 + sClientServices->GetUsername().length());
         command.GetData()->Game = gameCode;
         command.GetData()->Version[0] = 4;
         command.GetData()->Version[1] = 3;
@@ -83,8 +82,8 @@ namespace wowgm::protocol::authentification
         command.GetData()->CountryCode = countryCode;
         command.GetData()->timeZoneBias = 0x3C;
         command.GetData()->IP = *reinterpret_cast<std::uint32_t*>(GetLocalEndpoint().address().to_v4().to_bytes().data());
-        command.GetData()->Name.Length = std::uint8_t(username.length());
-        command += username;
+        command.GetData()->Name.Length = std::uint8_t(sClientServices->GetUsername().length());
+        command += sClientServices->GetUsername();
 
         // Sent when out of scope
     }
@@ -94,7 +93,7 @@ namespace wowgm::protocol::authentification
         BigNumber B, g, N, salt;
 
         { // Scoping the pointers so they get properly deallocated
-            AuthPacket<AuthLogonChallenge> command(_readBuffer);
+            AuthPacket<AuthLogonChallenge> command(GetReadBuffer());
             AuthLogonChallenge* challenge = command.GetData();
             if (challenge->Command != AUTH_LOGON_CHALLENGE)
                 return false;
@@ -230,7 +229,7 @@ namespace wowgm::protocol::authentification
 
     bool AuthSocket::HandleAuthProof()
     {
-        AuthPacket<AuthLogonProof> command(_readBuffer);
+        AuthPacket<AuthLogonProof> command(GetReadBuffer());
         AuthLogonProof* proof = command.GetData();
 
         LOG_INFO << "[S->C] AUTH_LOGON_PROOF.";
@@ -258,45 +257,44 @@ namespace wowgm::protocol::authentification
     {
         LOG_INFO << "[S->C] REALM_LIST.";
 
-        AuthPacket<AuthRealmList> command(_readBuffer);
+        AuthPacket<AuthRealmList> command(GetReadBuffer());
         if (command.GetData()->Count == 0 || command.GetData()->Size == 0)
             return false;
 
         std::vector<AuthRealmInfo> realmList;
         realmList.resize(command.GetData()->Count);
 
-        _readBuffer.ReadCompleted(sizeof(AuthRealmList));
+        GetReadBuffer().ReadCompleted(sizeof(AuthRealmList));
 
         for (std::uint8_t i = 0; i < realmList.size(); ++i)
         {
-            realmList[i].Type = _readBuffer.GetReadPointer()[0];
-            realmList[i].Locked = _readBuffer.GetReadPointer()[1];
-            realmList[i].Flags = _readBuffer.GetReadPointer()[2];
+            realmList[i].Type = GetReadBuffer().GetReadPointer()[0];
+            realmList[i].Locked = GetReadBuffer().GetReadPointer()[1];
+            realmList[i].Flags = GetReadBuffer().GetReadPointer()[2];
 
-            _readBuffer.ReadCompleted(3);
+            GetReadBuffer().ReadCompleted(3);
 
             // These call ReadCompleted!
-            _readBuffer >> realmList[i].Name;
-            _readBuffer >> realmList[i].Address;
+            GetReadBuffer() >> realmList[i].Name;
+            GetReadBuffer() >> realmList[i].Address;
 
-            realmList[i].Population = *reinterpret_cast<float*>(_readBuffer.GetReadPointer());
-            realmList[i].Load = _readBuffer.GetReadPointer()[4];
-            realmList[i].Timezone = _readBuffer.GetReadPointer()[5];
-            _readBuffer.ReadCompleted(4 + 1 + 1 + 4);
+            realmList[i].Population = *reinterpret_cast<float*>(GetReadBuffer().GetReadPointer());
+            realmList[i].Load = GetReadBuffer().GetReadPointer()[4];
+            realmList[i].Timezone = GetReadBuffer().GetReadPointer()[5];
+            realmList[i].ID = GetReadBuffer().GetReadPointer()[6];
+            GetReadBuffer().ReadCompleted(4 + 1 + 1 + 1);
 
             if ((realmList[i].Flags & 0x04) != 0)
             {
-                memcpy(realmList[i].Version, _readBuffer.GetReadPointer(), 3);
-                realmList[i].Build = *reinterpret_cast<std::uint16_t*>(_readBuffer.GetReadPointer() + 3);
+                memcpy(realmList[i].Version, GetReadBuffer().GetReadPointer(), 3);
+                realmList[i].Build = *reinterpret_cast<std::uint16_t*>(GetReadBuffer().GetReadPointer() + 3);
 
-                _readBuffer.ReadCompleted(3 + 2);
+                GetReadBuffer().ReadCompleted(3 + 2);
             }
-
-            _readBuffer.ReadCompleted(2); // two trailing bytes, we don't even really bother
         }
 
         // ReadHandlerInternal does it for us.
-        _readBuffer.ReadCompleted(-std::int32_t(sizeof(AuthRealmList)));
+        GetReadBuffer().ReadCompleted(-std::int32_t(sizeof(AuthRealmList)));
 
         sClientServices->SetRealmInfo(realmList);
 

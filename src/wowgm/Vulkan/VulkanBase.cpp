@@ -5,14 +5,14 @@
 *
 * This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
 */
-#include "VulkanBase.hpp"
-
 #include <imgui.h>
 #include <GLFW/glfw3.h>
 #ifdef _WIN32
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>   // for glfwGetWin32Window
 #endif
+
+#include "VulkanBase.hpp"
 
 #include "UI.hpp"
 #include "Storage.hpp"

@@ -70,10 +70,11 @@ namespace wowgm::protocol::world
 
         z_stream_s* GetDecompressionStream() { return _decompressionStream; }
 
-    protected:
-        void ReadHandler() override;
+    public: /* CRTP */
 
-        void OnClose() override;
+        void OnRead();
+        void OnConnect();
+        void OnClose();
 
     private:
         z_stream_s * _decompressionStream;
@@ -87,6 +88,7 @@ namespace wowgm::protocol::world
 
         WorldPacketCrypt _authCrypt;
 
+        bool _requirePacketBufferResize = true;
         ServerPacketHeader _headerBuffer;
         MessageBuffer _packetBuffer;
         MPSCQueue<EncryptablePacket> _bufferQueue;

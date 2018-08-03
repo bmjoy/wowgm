@@ -36,6 +36,7 @@ namespace wowgm::protocol::authentification
         float Population;
         std::uint8_t Load;
         std::uint8_t Timezone;
+        std::uint8_t ID;
         std::uint8_t Version[3];
         std::uint16_t Build;
         std::uint8_t ExpFlags[2]; // 2.x, 3.x

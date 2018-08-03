@@ -39,7 +39,8 @@ namespace wowgm::protocol
             _rpos = 0;
         }
 
-        void Resize(size_type newSize) {
+        void Resize(size_type newSize)
+        {
             _storage.resize(newSize);
         }
 
@@ -47,10 +48,13 @@ namespace wowgm::protocol
         std::uint8_t* GetReadPointer() { return GetBasePointer() + _rpos; }
         std::uint8_t* GetWritePointer() { return GetBasePointer() + _wpos; }
 
-        void ReadCompleted(size_type size) {
+        void ReadCompleted(size_type size)
+        {
             _rpos += size;
         }
-        void WriteCompleted(size_type size) {
+
+        void WriteCompleted(size_type size)
+        {
             _wpos += size;
         }
 

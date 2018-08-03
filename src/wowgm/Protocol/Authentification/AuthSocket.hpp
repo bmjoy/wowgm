@@ -25,30 +25,28 @@ namespace wowgm::protocol::authentification
 
     class AuthSocket : public Socket<AuthSocket>
     {
-        typedef Socket<AuthSocket> BaseSocket;
+        typedef Socket<AuthSocket> Base;
+
+        AuthSocket() = delete;
+        AuthSocket(const AuthSocket&) = delete;
+        AuthSocket(AuthSocket&&) = delete;
 
     public:
-        AuthSocket(asio::io_context& service);
+        AuthSocket(asio::io_context& context);
 
-        AuthSocket(AuthSocket&&) = delete;
-        AuthSocket(AuthSocket const&) = delete;
-
-        AuthSocket& operator = (AuthSocket const&) = delete;
-
-        inline void SendAuthChallenge(std::string username, std::string password) {
-            SendAuthChallenge(std::forward<std::string>(username), std::forward<std::string>(password), std::string("x86"), std::string("Win"), std::string("enUS"), std::string("WoW"));
+        inline void SendAuthChallenge() {
+            SendAuthChallenge(std::string("x86"), std::string("Win"), std::string("enUS"), std::string("WoW"));
         }
 
-        void SendAuthChallenge(std::string&& username, std::string&& password, std::string&& platform, std::string&& operatingSystem, std::string&& countryCode, std::string&& gameCode);
+        void SendAuthChallenge(std::string&& platform, std::string&& operatingSystem, std::string&& countryCode, std::string&& gameCode);
 
         bool HandleAuthChallenge();
         bool HandleAuthProof();
         bool HandleRealmList();
 
-    protected:
-        void ReadHandler() override;
-
-        void OnClose() override;
+        void OnRead();
+        void OnConnect();
+        void OnClose();
 
     private:
         void InitializeHandlers();
@@ -62,5 +60,4 @@ namespace wowgm::protocol::authentification
 
         BigNumber M2;
     };
-
 } // namespace wowgm

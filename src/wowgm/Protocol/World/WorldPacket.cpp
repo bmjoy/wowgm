@@ -11,7 +11,7 @@ namespace wowgm::protocol::world
 
         Opcode opcode = Opcode(uncompressedOpcode & ~0x8000);
 
-        std::uint32_t decompressedSize = compressBound(*reinterpret_cast<std::uint32_t*>(contents()));
+        std::uint32_t decompressedSize = *reinterpret_cast<std::uint32_t*>(contents());
         std::uint8_t* compressedData = contents();
         std::uint32_t compressedDataSize = size() - 4;
 

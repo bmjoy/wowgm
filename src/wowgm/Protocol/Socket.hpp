@@ -8,7 +8,9 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/buffer.hpp>
 #include <boost/asio/io_context.hpp>
-#include <boost/asio/placeholders.hpp>
+#include <boost/asio/connect.hpp>
+#include <boost/asio/read.hpp>
+#include <boost/asio.hpp>
 #include <boost/system/error_code.hpp>
 
 #include <memory>
@@ -26,84 +28,74 @@ using tcp = asio::ip::tcp;
 
 namespace wowgm::protocol
 {
-
-    template <class T>
-    class Socket : public BaseSocket, public std::enable_shared_from_this<T>
+    template <typename T>
+    class Socket : public std::enable_shared_from_this<T>, public BaseSocket
     {
+        Socket() = delete;
+        Socket(const Socket&) = delete;
+        Socket(Socket&&) = delete;
+
     public:
-        Socket(asio::io_context& ioService) : _ioContext(ioService), _socket(nullptr), _closed(false), _closing(false)
+        Socket(asio::io_context& context) : _context(context), _socket(context), _closed(false), _closing(false)
         {
         }
 
         virtual ~Socket()
         {
-            _closed = true;
-
-            if (IsOpen())
-            {
-                boost::system::error_code error;
-                _socket->shutdown(boost::asio::socket_base::shutdown_both, error);
-                _socket->close(error);
-            }
-            delete _socket;
+            CloseSocket();
         }
 
-        bool Connect(tcp::endpoint const& endpoint) override
+        void Connect(tcp::endpoint const& endpoint) override final
         {
-            _socket = new tcp::socket(_ioContext);
+            auto callback = [&](const boost::system::error_code& errorCode, tcp::endpoint targetEndpoint) -> void {
+                BOOST_ASSERT_MSG_FMT(errorCode == 0,
+                    "Error %u while connecting to %s: %s", errorCode.value(), targetEndpoint.address().to_string().c_str(), errorCode.message().c_str());
+
+                _OnConnect();
+            };
+
+            _socket.async_connect(endpoint, std::bind(callback, std::placeholders::_1, endpoint));
+        }
+
+        void Connect(std::string hostname, std::uint32_t port) override final
+        {
+            boost::asio::ip::tcp::resolver resolver(_context);
 
             boost::system::error_code errorCode;
-           _socket->connect(endpoint, errorCode);
-            BOOST_ASSERT_MSG(errorCode == 0, errorCode.message().c_str());
-            return true;
+            auto results = resolver.resolve(hostname, std::to_string(port), errorCode);
+            BOOST_ASSERT_MSG_FMT(errorCode == 0, "Unable to resolve %s:%u", hostname.c_str(), port);
+
+            auto callback = [&](const boost::system::error_code& error, tcp::resolver::results_type::const_iterator targetEndpointItr) -> void {
+                BOOST_ASSERT_MSG_FMT(error == 0,
+                    "Error %u while connecting to %s: %s", error.value(), targetEndpointItr->endpoint().address().to_string().c_str(), error.message().c_str());
+
+                _OnConnect();
+            };
+
+            boost::asio::async_connect(_socket, results.begin(), results.end(), callback);
         }
 
-        void CloseSocket() override final
+        bool IsOpen() const override final { return _socket.is_open() && !_closed && !_closing; }
+
+        void CloseSocket() override
         {
             if (_closed.exchange(true))
                 return;
 
             boost::system::error_code errorCode;
-            _socket->shutdown(boost::asio::socket_base::shutdown_both, errorCode);
+            _socket.shutdown(boost::asio::socket_base::shutdown_both, errorCode);
+            _socket.close();
 
-            BOOST_ASSERT_MSG(errorCode == 0, errorCode.message().c_str());
-
-            OnClose();
+            BOOST_ASSERT_MSG_FMT(errorCode == 0, "Error %u while closing: %s", errorCode.value(), errorCode.message().c_str());
+            impl().OnClose();
         }
 
-        /// The socket will be closed as soon as the message queue empties
-        void AsyncCloseSocket()
+        void AsyncCloseSocket() override
         {
             _closing = true;
         }
 
-        bool IsOpen() const override final {
-            return _socket != nullptr && _socket->is_open() && !_closed && !_closing;
-        }
-
-        void AsyncRead()
-        {
-            AsyncReadWithCallback(&Socket<T>::ReadHandlerInternal);
-        }
-
-        void AsyncReadWithCallback(void (T::*callback)(const boost::system::error_code& errorCode, std::size_t transferredBytes))
-        {
-            if (!IsOpen())
-                return;
-
-            _readBuffer.Normalize();
-            _readBuffer.EnsureFreeSpace();
-
-            _socket->async_read_some(_readBuffer.AsWriteBuffer(),
-                std::bind(callback, this->shared_from_this(), std::placeholders::_1, std::placeholders::_2));
-        }
-
-        void QueuePacket(MessageBuffer& buffer) override final
-        {
-            _writeQueue.push(std::move(buffer));
-        }
-
-        void Update() override
+        void Update()
         {
             if (!IsOpen())
                 return;
@@ -115,17 +107,36 @@ namespace wowgm::protocol
                     _writeQueue.pop();
             }
 
-            AsyncRead();
-        }
+            _readBuffer.Normalize();
+            _readBuffer.EnsureFreeSpace();
 
-        tcp::endpoint GetLocalEndpoint()
-        {
-            return _socket->local_endpoint();
+            _socket.async_read_some(_readBuffer.AsWriteBuffer(),
+                std::bind(&Socket<T>::InternalReadHandler, this->shared_from_this(), std::placeholders::_1, std::placeholders::_2));
         }
 
         MessageBuffer& GetReadBuffer() { return _readBuffer; }
 
+        boost::asio::ip::tcp::endpoint GetLocalEndpoint() const override final
+        {
+            return _socket.local_endpoint();
+        }
+
+        void QueuePacket(MessageBuffer& buffer) override final
+        {
+            _writeQueue.push(std::move(buffer));
+        }
+
     private:
+
+        void _OnConnect()
+        {
+            BOOST_ASSERT_MSG_FMT(IsOpen(), "Socket not open!");
+
+            impl().OnConnect();
+        }
+
+        T& impl() { return static_cast<T&>(*this); }
+        T const& impl() const { return static_cast<T const&>(*this); }
 
         bool SendMessageInternal(MessageBuffer& buffer)
         {
@@ -133,9 +144,9 @@ namespace wowgm::protocol
                 return false;
 
             boost::system::error_code errorCode;
-            std::size_t bytesSent = _socket->write_some(buffer.AsReadBuffer(), errorCode);
+            std::size_t bytesSent = _socket.write_some(buffer.AsReadBuffer(), errorCode);
 
-            BOOST_ASSERT_MSG(errorCode == 0, errorCode.message().c_str());
+            BOOST_ASSERT_MSG_FMT(errorCode == 0, "Error %u while sending data: %s", errorCode.value(), errorCode.message().c_str());
 
             buffer.ReadCompleted(bytesSent);
 
@@ -150,50 +161,31 @@ namespace wowgm::protocol
             }
         }
 
-    protected:
-        template <typename ConstBufferSequence>
-        bool SendRawPacket(ConstBufferSequence const& buffer)
+        void InternalReadHandler(boost::system::error_code const& errorCode, size_t transferredBytes)
         {
-            // Pretend send was successful for an empty buffer
-            if (buffer.size() == 0)
-                return true;
-
             if (!IsOpen())
-                return false;
-
-            boost::system::error_code errorCode;
-            std::size_t bytesSent = _socket->write_some(buffer, errorCode);
-
-            BOOST_ASSERT_MSG(errorCode == 0, errorCode.message().c_str());
-
-            if (_closing)
-                CloseSocket();
-
-            return true;
-        }
-
-    protected:
-
-        virtual void OnClose() = 0;
-        virtual void ReadHandler() = 0;
-
-    private:
-        void ReadHandlerInternal(const boost::system::error_code& errorCode, size_t transferredBytes)
-        {
-            if (errorCode != 0 && transferredBytes != 0) // TODO: The second check should NOT be needed
-            {
-                CloseSocket();
                 return;
-            }
+
+            BOOST_ASSERT_MSG_FMT(errorCode == 0, "Error %u while reading data: %s", errorCode.value(), errorCode.message().c_str());
+
+            if (transferredBytes == 0)
+                return;
 
             _readBuffer.WriteCompleted(transferredBytes);
-            ReadHandler();
+            impl().OnRead();
         }
 
-    protected:
 
-        boost::asio::io_context& _ioContext;
-        boost::asio::ip::tcp::socket* _socket;
+        boost::system::error_code const& GetErrorCode() const override final
+        {
+            return _errorCode;
+        }
+
+    private:
+        boost::system::error_code _errorCode;
+
+        boost::asio::io_context& _context;
+        boost::asio::ip::tcp::socket _socket;
 
         MessageBuffer _readBuffer;
         std::queue<MessageBuffer> _writeQueue;

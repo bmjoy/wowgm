@@ -5,6 +5,7 @@
 #include <openssl/sha.h>
 
 #include "BigNumber.hpp"
+#include "Assert.hpp"
 
 namespace wowgm::cryptography
 {
@@ -29,6 +30,7 @@ namespace wowgm::cryptography
         template <typename T, typename... Args, typename std::enable_if<std::is_same<T, BigNumber>::value, int>::type = 0>
         void UpdateBigNumbers(T const& bn0, Args&&... args)
         {
+            BOOST_ASSERT(bn0.GetNumBytes() != 0);
             UpdateData(bn0.AsByteArray().get(), bn0.GetNumBytes());
             UpdateBigNumbers(std::forward<Args>(args)...);
         }
@@ -36,6 +38,7 @@ namespace wowgm::cryptography
         template <typename T, typename std::enable_if<std::is_same<T, BigNumber>::value, int>::type = 0>
         void UpdateBigNumbers(T const& bn0)
         {
+            BOOST_ASSERT(bn0.GetNumBytes() != 0);
             UpdateData(bn0.AsByteArray().get(), bn0.GetNumBytes());
         }
 

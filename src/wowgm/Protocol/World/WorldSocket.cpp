@@ -34,39 +34,53 @@ namespace wowgm::protocol::world
         _decompressionStream->avail_in = 0;
         _decompressionStream->next_in = nullptr;
         std::int32_t z_res = inflateInit(_decompressionStream);
-        BOOST_ASSERT_MSG_FMT(z_res == Z_OK, "Can't initialize packet decompression (zlib: inflateInit) Error code: %i (%s)", z_res, zError(z_res));
+        BOOST_ASSERT_MSG_FMT(z_res == Z_OK, "Can't initialize packet decompression. Error code: %i (%s)", z_res, zError(z_res));
     }
 
-    void WorldSocket::ReadHandler()
+    void WorldSocket::OnConnect()
+    {
+
+    }
+
+    void WorldSocket::OnRead()
     {
         if (!IsOpen())
             return;
 
-        MessageBuffer& packet = GetReadBuffer();
+        MessageBuffer& buffer = GetReadBuffer();
 
-        while (packet.GetActiveSize() > 0)
+        while (buffer.GetActiveSize() > 0)
         {
             if (!_headerBuffer.Read(this, _authCrypt, _isInitialized))
             {
-                BOOST_ASSERT_MSG(packet.GetActiveSize() == 0, "Failed to read packet header from network, but there is some data left in the pipe!");
+                BOOST_ASSERT_MSG(buffer.GetActiveSize() == 0, "Failed to read packet header from network, but there is some data left in the pipe!");
                 break;
             }
-            else
+            else if (_requirePacketBufferResize)
+            {
                 _packetBuffer.Resize(_headerBuffer.Size - (!_isInitialized ? 0 : ServerPacketHeader::opcode_size));
+                _requirePacketBufferResize = false;
+
+                std::cout << (_headerBuffer.Command & ~0x8000) << ": allocating " << _packetBuffer.GetBufferSize() << " bytes of data for the packet body\n";
+            }
 
             // Load data payload
             if (_packetBuffer.GetRemainingSpace() > 0)
             {
-                std::size_t readDataSize = std::min(packet.GetActiveSize(), _packetBuffer.GetRemainingSpace());
-                _packetBuffer.Write(packet.GetReadPointer(), readDataSize);
-                packet.ReadCompleted(readDataSize);
+                std::size_t readDataSize = std::min(buffer.GetActiveSize(), _packetBuffer.GetRemainingSpace());
+                _packetBuffer.Write(buffer.GetReadPointer(), readDataSize);
+                buffer.ReadCompleted(readDataSize);
+
+                std::cout << (_headerBuffer.Command & ~0x8000) << ": read " << readDataSize << " of " << _packetBuffer.GetBufferSize() << " bytes\n";
 
                 if (_packetBuffer.GetRemainingSpace() > 0)
                 {
                     // Couldn't receive the whole data this time.
-                    BOOST_ASSERT_MSG(packet.GetActiveSize() == 0, "Error while reading incoming packet payload");
+                    BOOST_ASSERT_MSG(buffer.GetActiveSize() == 0, "Error while reading incoming packet payload");
                     break;
                 }
+
+                std::cout << (_headerBuffer.Command & ~0x8000) << ": fully read\n";
             }
 
             bool successfulRead = ReadDataHandler();
@@ -75,7 +89,9 @@ namespace wowgm::protocol::world
                 CloseSocket();
                 return;
             }
+
             _headerBuffer.Reset();
+            _requirePacketBufferResize = true;
         }
     }
 
@@ -112,6 +128,7 @@ namespace wowgm::protocol::world
             QueuePacket(std::move(clientInitializer));
 
             _packetBuffer.Reset();
+
             return true;
         }
     }
