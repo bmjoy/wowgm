@@ -35,12 +35,13 @@ namespace wowgm::protocol::world
         struct ClientConnectionAuthChallenge;
         struct ClientConnectionAuthResponse;
         struct ClientEnumCharactersResult;
+        struct ClientInitWorldStates;
+        struct ClientUpdateWorldState;
     }
 
-    using namespace wowgm::protocol::world::packets;
+    using namespace packets;
     using namespace wowgm::cryptography;
     using namespace wowgm::utilities;
-
 
     class EncryptablePacket;
 
@@ -58,6 +59,9 @@ namespace wowgm::protocol::world
         bool HandleAuthResponse(ClientConnectionAuthResponse& packet);
         bool HandleAuthChallenge(ClientConnectionAuthChallenge& packet);
         bool HandleEnumerateCharacterResult(ClientEnumCharactersResult& packet);
+
+        bool HandleClientInitWorldStates(ClientInitWorldStates& packet);
+        bool HandleClientUpdateWorldState(ClientUpdateWorldState& packet);
 
     public:
 

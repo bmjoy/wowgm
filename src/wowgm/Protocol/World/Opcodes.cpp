@@ -49,7 +49,11 @@ namespace wowgm::protocol::world
 
         DEFINE_HANDLER(SMSG_AUTH_CHALLENGE,              &WorldSocket::HandleAuthChallenge);
         DEFINE_HANDLER(SMSG_AUTH_RESPONSE,               &WorldSocket::HandleAuthResponse);
+
         DEFINE_HANDLER(SMSG_CHAR_ENUM,                   &WorldSocket::HandleEnumerateCharacterResult);
+
+        DEFINE_HANDLER(SMSG_INIT_WORLD_STATES,           &WorldSocket::HandleClientInitWorldStates);
+        DEFINE_HANDLER(SMSG_UPDATE_WORLD_STATE,          &WorldSocket::HandleClientUpdateWorldState);
 
 #undef DEFINE_HANDLER
     }
