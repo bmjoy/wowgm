@@ -30,7 +30,7 @@ namespace wowgm::protocol::authentification
         _packetHandlers[REALM_LIST] = { sizeof(AuthRealmList), &AuthSocket::HandleRealmList };
     }
 
-    void AuthSocket::OnRead()
+    void AuthSocket::ReadHandler()
     {
         while (GetReadBuffer().GetActiveSize())
         {
@@ -53,11 +53,15 @@ namespace wowgm::protocol::authentification
                 return;
             }
         }
+
+        AsyncRead();
     }
 
     void AuthSocket::OnConnect()
     {
         SendAuthChallenge();
+
+        AsyncRead();
     }
 
     void AuthSocket::OnClose()

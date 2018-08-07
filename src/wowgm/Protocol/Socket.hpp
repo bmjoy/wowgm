@@ -24,35 +24,37 @@ namespace boost {
     }
 }
 
+#ifdef BOOST_ASIO_HAS_IOCP
+#define WOWGM_IOCP
+#endif
+
 namespace asio = boost::asio;
 using tcp = asio::ip::tcp;
 
 namespace wowgm::protocol
 {
     template <typename T>
-    class Socket : public std::enable_shared_from_this<T>, public BaseSocket
+    class Socket : public BaseSocket, public std::enable_shared_from_this<T>
     {
-        Socket() = delete;
-        Socket(const Socket&) = delete;
-        Socket(Socket&&) = delete;
-
     public:
-        Socket(asio::io_context& context) : _context(context), _socket(context), _closed(false), _closing(false)
+        explicit Socket(asio::io_context& context) : _context(context), _socket(context), _closed(false), _closing(false), _isWritingAsync(false), _readBuffer(4096)
         {
         }
 
         virtual ~Socket()
         {
-            CloseSocket();
+            _closed = true;
+            boost::system::error_code error;
+            _socket.close(error);
         }
 
         void Connect(tcp::endpoint const& endpoint) override final
         {
             auto callback = [&](const boost::system::error_code& errorCode, tcp::endpoint targetEndpoint) -> void {
                 BOOST_ASSERT_MSG_FMT(errorCode == 0,
-                    "Error %u while connecting to %s: %s", errorCode.value(), targetEndpoint.address().to_string().c_str(), errorCode.message().c_str());
+                    "Error %u while connecting to %s:%u : %s", errorCode.value(), targetEndpoint.address().to_string().c_str(), targetEndpoint.port(), errorCode.message().c_str());
 
-                _OnConnect();
+                OnConnect();
             };
 
             _socket.async_connect(endpoint, std::bind(callback, std::placeholders::_1, endpoint));
@@ -68,130 +70,205 @@ namespace wowgm::protocol
 
             auto callback = [&](const boost::system::error_code& error, tcp::resolver::results_type::const_iterator targetEndpointItr) -> void {
                 BOOST_ASSERT_MSG_FMT(error == 0,
-                    "Error %u while connecting to %s: %s", error.value(), targetEndpointItr->endpoint().address().to_string().c_str(), error.message().c_str());
+                    "Error %u while connecting to %s:%u : %s", error.value(), targetEndpointItr->endpoint().address().to_string().c_str(), targetEndpointItr->endpoint().port(), error.message().c_str());
 
-                _OnConnect();
+                OnConnect();
             };
 
             boost::asio::async_connect(_socket, results.begin(), results.end(), callback);
         }
 
-        bool IsOpen() const override final { return _socket.is_open() && !_closed; }
+        virtual bool Update()
+        {
+            if (_closed)
+                return false;
 
-        void CloseSocket() override
+#ifndef WOWGM_IOCP
+            if (_isWritingAsync || (_writeQueue.empty() && !_closing))
+                return true;
+
+            for (; HandleQueue();)
+                ;
+#endif
+
+            return true;
+        }
+
+        void AsyncRead()
+        {
+            if (!IsOpen())
+                return;
+
+            _readBuffer.Normalize();
+            _readBuffer.EnsureFreeSpace();
+            _socket.async_read_some(boost::asio::buffer(_readBuffer.GetWritePointer(), _readBuffer.GetRemainingSpace()),
+                std::bind(&Socket<T>::ReadHandlerInternal, this->shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+        }
+
+        void AsyncReadWithCallback(void (T::*callback)(boost::system::error_code, std::size_t))
+        {
+            if (!IsOpen())
+                return;
+
+            _readBuffer.Normalize();
+            _readBuffer.EnsureFreeSpace();
+            _socket.async_read_some(boost::asio::buffer(_readBuffer.GetWritePointer(), _readBuffer.GetRemainingSpace()),
+                std::bind(callback, this->shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+        }
+
+        void QueuePacket(MessageBuffer&& buffer)
+        {
+            _writeQueue.push(std::move(buffer));
+
+#ifdef WOWGM_IOCP
+            AsyncProcessQueue();
+#endif
+        }
+
+        bool IsOpen() const { return !_closed && !_closing; }
+
+        void CloseSocket()
         {
             if (_closed.exchange(true))
                 return;
 
-            boost::system::error_code errorCode;
-            _socket.shutdown(boost::asio::socket_base::shutdown_both, errorCode);
-            _socket.close();
+            boost::system::error_code shutdownError;
+            _socket.shutdown(boost::asio::socket_base::shutdown_send, shutdownError);
+            BOOST_ASSERT_MSG_FMT(shutdownError == 0, "Error %u while shutting down socket: %s", shutdownError.value(), shutdownError.message().c_str());
 
-            BOOST_ASSERT_MSG_FMT(errorCode == 0, "Error %u while closing: %s", errorCode.value(), errorCode.message().c_str());
-            impl().OnClose();
+            _socket.close(shutdownError);
+            BOOST_ASSERT_MSG_FMT(shutdownError == 0, "Error %u while closing socket: %s", shutdownError.value(), shutdownError.message().c_str());
+
+            OnClose();
         }
 
-        void AsyncCloseSocket() override
-        {
-            _closing = true;
-        }
-
-        void Update()
-        {
-            if (!IsOpen())
-                return;
-
-            if (!_writeQueue.empty())
-            {
-                bool success = SendMessageInternal(_writeQueue.front());
-                if (success)
-                    _writeQueue.pop();
-            }
-
-            _readBuffer.Normalize();
-            _readBuffer.EnsureFreeSpace();
-
-            _socket.async_read_some(_readBuffer.AsWriteBuffer(),
-                std::bind(&Socket<T>::InternalReadHandler, this->shared_from_this(), std::placeholders::_1, std::placeholders::_2));
-        }
+        /// Marks the socket for closing after write buffer becomes empty
+        void DelayedCloseSocket() { _closing = true; }
 
         MessageBuffer& GetReadBuffer() { return _readBuffer; }
 
-        boost::asio::ip::tcp::endpoint GetLocalEndpoint() const override final
+        tcp::endpoint GetLocalEndpoint() const override final
         {
             return _socket.local_endpoint();
         }
 
-        void QueuePacket(MessageBuffer& buffer) override final
+    protected:
+        virtual void OnClose() { }
+        virtual void OnConnect() { }
+        virtual void ReadHandler() = 0;
+
+        bool AsyncProcessQueue()
         {
-            _writeQueue.push(std::move(buffer));
-        }
-
-    private:
-
-        void _OnConnect()
-        {
-            BOOST_ASSERT_MSG_FMT(IsOpen(), "Socket not open!");
-
-            impl().OnConnect();
-        }
-
-        T& impl() { return static_cast<T&>(*this); }
-        T const& impl() const { return static_cast<T const&>(*this); }
-
-        bool SendMessageInternal(MessageBuffer& buffer)
-        {
-            if (!IsOpen())
+            if (_isWritingAsync)
                 return false;
 
-            boost::system::error_code errorCode;
-            std::size_t bytesSent = _socket.write_some(buffer.AsReadBuffer(), errorCode);
+            _isWritingAsync = true;
 
-            BOOST_ASSERT_MSG_FMT(errorCode == 0, "Error %u while sending data: %s", errorCode.value(), errorCode.message().c_str());
+#ifdef WOWGM_IOCP
+            MessageBuffer& buffer = _writeQueue.front();
+            _socket.async_write_some(boost::asio::buffer(buffer.GetReadPointer(), buffer.GetActiveSize()), std::bind(&Socket<T>::WriteHandler,
+                this->shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+#else
+            _socket.async_write_some(boost::asio::null_buffers(), std::bind(&Socket<T>::WriteHandlerWrapper,
+                this->shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+#endif
 
-            buffer.ReadCompleted(bytesSent);
-
-            if (buffer.GetActiveSize() != 0)
-                return SendMessageInternal(buffer);
-            else
-            {
-                if (_closing)
-                    CloseSocket();
-
-                return true;
-            }
-        }
-
-        void InternalReadHandler(boost::system::error_code const& errorCode, size_t transferredBytes)
-        {
-            if (!IsOpen())
-                return;
-
-            BOOST_ASSERT_MSG_FMT(errorCode == 0, "Error %u while reading data: %s", errorCode.value(), errorCode.message().c_str());
-
-            if (transferredBytes == 0)
-                return;
-
-            _readBuffer.WriteCompleted(transferredBytes);
-            impl().OnRead();
-        }
-
-        boost::system::error_code const& GetErrorCode() const override final
-        {
-            return _errorCode;
+            return false;
         }
 
     private:
-        boost::system::error_code _errorCode;
+        void ReadHandlerInternal(boost::system::error_code error, size_t transferredBytes)
+        {
+            if (error)
+            {
+                CloseSocket();
+                return;
+            }
 
-        boost::asio::io_context& _context;
-        boost::asio::ip::tcp::socket _socket;
+            _readBuffer.WriteCompleted(transferredBytes);
+            ReadHandler();
+        }
+
+#ifdef WOWGM_IOCP
+        void WriteHandler(boost::system::error_code error, std::size_t transferedBytes)
+        {
+            if (!error)
+            {
+                _isWritingAsync = false;
+                _writeQueue.front().ReadCompleted(transferedBytes);
+                if (!_writeQueue.front().GetActiveSize())
+                    _writeQueue.pop();
+
+                if (!_writeQueue.empty())
+                    AsyncProcessQueue();
+                else if (_closing)
+                    CloseSocket();
+            }
+            else
+                CloseSocket();
+        }
+
+#else
+
+        void WriteHandlerWrapper(boost::system::error_code /*error*/, std::size_t /*transferedBytes*/)
+        {
+            _isWritingAsync = false;
+            HandleQueue();
+        }
+
+        bool HandleQueue()
+        {
+            if (_writeQueue.empty())
+                return false;
+
+            MessageBuffer& queuedMessage = _writeQueue.front();
+
+            std::size_t bytesToSend = queuedMessage.GetActiveSize();
+
+            boost::system::error_code error;
+            std::size_t bytesSent = _socket.write_some(boost::asio::buffer(queuedMessage.GetReadPointer(), bytesToSend), error);
+
+            if (error)
+            {
+                if (error == boost::asio::error::would_block || error == boost::asio::error::try_again)
+                    return AsyncProcessQueue();
+
+                _writeQueue.pop();
+                if (_closing && _writeQueue.empty())
+                    CloseSocket();
+                return false;
+            }
+            else if (bytesSent == 0)
+            {
+                _writeQueue.pop();
+                if (_closing && _writeQueue.empty())
+                    CloseSocket();
+                return false;
+            }
+            else if (bytesSent < bytesToSend) // now n > 0
+            {
+                queuedMessage.ReadCompleted(bytesSent);
+                return AsyncProcessQueue();
+            }
+
+            _writeQueue.pop();
+            if (_closing && _writeQueue.empty())
+                CloseSocket();
+            return !_writeQueue.empty();
+        }
+
+#endif
+
+        asio::io_context& _context;
+        tcp::socket _socket;
 
         MessageBuffer _readBuffer;
         std::queue<MessageBuffer> _writeQueue;
 
         std::atomic<bool> _closed;
         std::atomic<bool> _closing;
+
+        bool _isWritingAsync;
     };
 
 } // wowgm::protocol

@@ -39,10 +39,10 @@ namespace wowgm::protocol::world
 
     void WorldSocket::OnConnect()
     {
-
+        AsyncRead();
     }
 
-    void WorldSocket::OnRead()
+    void WorldSocket::ReadHandler()
     {
         if (!IsOpen())
             return;
@@ -87,6 +87,8 @@ namespace wowgm::protocol::world
             _headerBuffer.Reset();
             _requirePacketBufferResize = true;
         }
+
+        AsyncRead();
     }
 
     bool WorldSocket::ReadDataHandler()
@@ -140,7 +142,7 @@ namespace wowgm::protocol::world
         _bufferQueue.Enqueue(packet);
     }
 
-    void WorldSocket::Update()
+    bool WorldSocket::Update()
     {
         EncryptablePacket* queued;
         MessageBuffer buffer(_sendBufferSize);
@@ -182,7 +184,7 @@ namespace wowgm::protocol::world
         if (buffer.GetActiveSize() > 0)
             QueuePacket(std::move(buffer));
 
-        Socket<WorldSocket>::Update();
+        return Socket<WorldSocket>::Update();
     }
 
     void WorldSocket::OnClose()

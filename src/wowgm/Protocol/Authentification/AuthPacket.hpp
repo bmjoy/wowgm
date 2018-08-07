@@ -49,7 +49,7 @@ namespace wowgm::protocol::authentification
                     buffer.WriteCompleted(_wpos);
                 }
 
-                _socket->QueuePacket(buffer);
+                _socket->QueuePacket(std::move(buffer));
             }
 
             _extraData.resize(0);

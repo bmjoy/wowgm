@@ -26,7 +26,7 @@ namespace wowgm::threading {
         _guard.reset();
 
         if (_socket)
-            _socket->AsyncCloseSocket();
+            _socket->DelayedCloseSocket();
     }
 
 } // wowgm::threading

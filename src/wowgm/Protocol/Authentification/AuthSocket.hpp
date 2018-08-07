@@ -44,9 +44,9 @@ namespace wowgm::protocol::authentification
         bool HandleAuthProof();
         bool HandleRealmList();
 
-        void OnRead();
-        void OnConnect();
-        void OnClose();
+        void ReadHandler() override;
+        void OnConnect() override;
+        void OnClose() override;
 
     private:
         void InitializeHandlers();

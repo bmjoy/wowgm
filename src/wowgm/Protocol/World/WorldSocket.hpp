@@ -66,15 +66,15 @@ namespace wowgm::protocol::world
         void SendPacket(packets::ClientPacket& packet);
         void SendPacket(WorldPacket const* worldPacket);
 
-        void Update() override final;
+        bool Update() override final;
 
         z_stream_s* GetDecompressionStream() { return _decompressionStream; }
 
-    public: /* CRTP */
+    public:
 
-        void OnRead();
-        void OnConnect();
-        void OnClose();
+        void ReadHandler() override;
+        void OnConnect() override;
+        void OnClose() override;
 
     private:
         z_stream_s * _decompressionStream;
