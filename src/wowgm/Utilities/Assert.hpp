@@ -13,7 +13,13 @@
 
 struct tag_stacktrace { };
 
-typedef boost::error_info<tag_stacktrace, boost::stacktrace::stacktrace> traced;
+namespace boost::stacktrace
+{
+    class application_stacktrace;
+}
+
+typedef boost::error_info<tag_stacktrace, boost::stacktrace::application_stacktrace> traced;
+
 
 namespace wowgm::exceptions
 {
@@ -21,7 +27,7 @@ namespace wowgm::exceptions
     inline void throw_with_trace(Args&&... args)
     {
         E ex(std::forward<Args>(args)...);
-        throw boost::enable_error_info(ex) << traced(boost::stacktrace::stacktrace());
+        throw boost::enable_error_info(ex) << traced(boost::stacktrace::application_stacktrace());
     }
 }
 
@@ -374,7 +380,7 @@ namespace boost
         std::cerr << "Backtrace:\n" << boost::stacktrace::application_stacktrace() << std::endl;
 
         va_end(args);
-            
+
         *((volatile int*)NULL) = 0;
         exit(1);
     }

@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
     {
         std::cerr << se.code() << " " << se.what() << std::endl;
 
-        const boost::stacktrace::stacktrace* st = boost::get_error_info<traced>(se);
+        const boost::stacktrace::application_stacktrace* st = boost::get_error_info<traced>(se);
         if (st)
             std::cerr << *st << std::endl;
     }
@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
     {
         std::cerr << e.what() << std::endl;
 
-        const boost::stacktrace::stacktrace* st = boost::get_error_info<traced>(e);
+        const boost::stacktrace::application_stacktrace* st = boost::get_error_info<traced>(e);
         if (st)
             std::cerr << *st << std::endl;
     }
