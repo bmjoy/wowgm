@@ -16,6 +16,7 @@
 #include <memory>
 #include <queue>
 #include <cstdint>
+#include <iostream>
 
 namespace boost {
     namespace system {
@@ -75,7 +76,7 @@ namespace wowgm::protocol
             boost::asio::async_connect(_socket, results.begin(), results.end(), callback);
         }
 
-        bool IsOpen() const override final { return _socket.is_open() && !_closed && !_closing; }
+        bool IsOpen() const override final { return _socket.is_open() && !_closed; }
 
         void CloseSocket() override
         {
@@ -174,7 +175,6 @@ namespace wowgm::protocol
             _readBuffer.WriteCompleted(transferredBytes);
             impl().OnRead();
         }
-
 
         boost::system::error_code const& GetErrorCode() const override final
         {

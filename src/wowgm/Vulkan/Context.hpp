@@ -184,7 +184,7 @@ public:
 
     void createInstance(uint32_t version = VK_MAKE_VERSION(1, 1, 0)) {
         if (enableValidation) {
-            requireExtensions({ (const char*)VK_EXT_DEBUG_REPORT_EXTENSION_NAME });
+            requireExtensions({ VK_EXT_DEBUG_REPORT_EXTENSION_NAME });
         }
 
         // Vulkan instance
@@ -275,21 +275,20 @@ public:
         for (uint32_t i = 0; i < queueCount; ++i) {
             auto currentFlags = queueFamilyProperties[i].queueFlags;
             // Doesn't contain the required flags, skip it
-            if (!(currentFlags & desiredFlags)) {
+            if (!(currentFlags & desiredFlags))
                 continue;
-            }
 
-            if (presentSurface && VK_FALSE == physicalDevice.getSurfaceSupportKHR(i, presentSurface)) {
+            if (presentSurface && VK_FALSE == physicalDevice.getSurfaceSupportKHR(i, presentSurface))
                 continue;
-            }
+
             VkQueueFlags currentExtraFlags = (currentFlags & ~desiredFlags).operator VkQueueFlags();
 
             // If we find an exact match, return immediately
-            if (0 == currentExtraFlags) {
+            if (0 == currentExtraFlags)
                 return i;
-            }
 
-            if (bestMatch == VK_QUEUE_FAMILY_IGNORED || currentExtraFlags < bestMatchExtraFlags) {
+            if (bestMatch == VK_QUEUE_FAMILY_IGNORED || currentExtraFlags < bestMatchExtraFlags)
+            {
                 bestMatch = i;
                 bestMatchExtraFlags = currentExtraFlags;
             }

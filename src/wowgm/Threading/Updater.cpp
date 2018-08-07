@@ -46,12 +46,8 @@ namespace wowgm::threading
             for (auto&& upd : _updatables)
                 upd->Update(static_cast<std::uint32_t>(milliseconds.count()) / 1000);
 
-            // std::cout << float(milliseconds.count()) / 1000.0f << " ms." << std::endl;
-
             lastUpdateTick = hrc::now();
         }
-
-        std::cout << "Updater: exiting." << std::endl;
     }
 
 } // wowgm::threading

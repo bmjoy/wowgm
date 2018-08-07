@@ -31,6 +31,7 @@ namespace wowgm::protocol::authentification
             auto size = std::min(sizeof(T), buffer.GetActiveSize());
 
             memcpy(&_data, buffer.GetReadPointer(), size);
+            buffer.ReadCompleted(size);
         }
 
         ~AuthPacket()

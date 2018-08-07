@@ -39,7 +39,7 @@ namespace wowgm::protocol::authentification
             auto itr = _packetHandlers.find(command);
             if (itr == _packetHandlers.end())
             {
-                GetReadBuffer().Reset();
+                BOOST_ASSERT_MSG(false, "Unable to find an authpacket handler");
                 break;
             }
 
@@ -52,8 +52,6 @@ namespace wowgm::protocol::authentification
                 CloseSocket();
                 return;
             }
-
-            GetReadBuffer().ReadCompleted(itr->second.size);
         }
     }
 
@@ -264,8 +262,6 @@ namespace wowgm::protocol::authentification
         std::vector<AuthRealmInfo> realmList;
         realmList.resize(command.GetData()->Count);
 
-        GetReadBuffer().ReadCompleted(sizeof(AuthRealmList));
-
         for (std::uint8_t i = 0; i < realmList.size(); ++i)
         {
             realmList[i].Type = GetReadBuffer().GetReadPointer()[0];
@@ -292,9 +288,6 @@ namespace wowgm::protocol::authentification
                 GetReadBuffer().ReadCompleted(3 + 2);
             }
         }
-
-        // ReadHandlerInternal does it for us.
-        GetReadBuffer().ReadCompleted(-std::int32_t(sizeof(AuthRealmList)));
 
         sClientServices->SetRealmInfo(realmList);
 

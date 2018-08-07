@@ -60,8 +60,6 @@ namespace wowgm::protocol::world
             {
                 _packetBuffer.Resize(_headerBuffer.Size - (!_isInitialized ? 0 : ServerPacketHeader::opcode_size));
                 _requirePacketBufferResize = false;
-
-                std::cout << (_headerBuffer.Command & ~0x8000) << ": allocating " << _packetBuffer.GetBufferSize() << " bytes of data for the packet body\n";
             }
 
             // Load data payload
@@ -71,16 +69,12 @@ namespace wowgm::protocol::world
                 _packetBuffer.Write(buffer.GetReadPointer(), readDataSize);
                 buffer.ReadCompleted(readDataSize);
 
-                std::cout << (_headerBuffer.Command & ~0x8000) << ": read " << readDataSize << " of " << _packetBuffer.GetBufferSize() << " bytes\n";
-
                 if (_packetBuffer.GetRemainingSpace() > 0)
                 {
                     // Couldn't receive the whole data this time.
                     BOOST_ASSERT_MSG(buffer.GetActiveSize() == 0, "Error while reading incoming packet payload");
                     break;
                 }
-
-                std::cout << (_headerBuffer.Command & ~0x8000) << ": fully read\n";
             }
 
             bool successfulRead = ReadDataHandler();

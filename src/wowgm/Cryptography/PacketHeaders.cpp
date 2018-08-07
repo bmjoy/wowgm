@@ -91,6 +91,7 @@ namespace wowgm::protocol::world
         _isLargePacket = false;
 
         _headerBuffer.Reset();
+        memset(_headerBuffer.GetReadPointer(), 0, _headerBuffer.GetBufferSize());
 
         Size = 0;
         Command = Opcode::NULL_OPCODE;

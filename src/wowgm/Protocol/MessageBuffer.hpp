@@ -12,6 +12,7 @@ namespace wowgm::protocol
     {
         typedef std::vector<std::uint8_t>::size_type size_type;
 
+
     public:
         explicit MessageBuffer(std::size_t initialSize) : _wpos(0), _rpos(0), _storage(initialSize)
         {

@@ -616,6 +616,11 @@ void BaseWindow::WindowResize(const glm::uvec2& newSize)
     if (!_prepared)
         return;
 
+    while (newSize.x == 0 || newSize.y == 0) {
+        glfwGetFramebufferSize(_window, (int*)(&newSize.x), (int*)(&newSize.y));
+        glfwWaitEvents();
+    }
+
     _prepared = false;
 
     queue.waitIdle();
