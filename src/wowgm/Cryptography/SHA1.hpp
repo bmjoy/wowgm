@@ -9,15 +9,6 @@
 
 namespace wowgm::cryptography
 {
-    template <typename...>
-    struct all_bignumber;
-
-    template <>
-    struct all_bignumber<> : std::true_type { };
-
-    template <typename T, typename ...Rest>
-    struct all_bignumber<T, Rest...> : std::bool_constant<std::is_same<T, BigNumber>::value && all_bignumber<Rest...>::value>
-    { };
 
     class SHA1
     {
@@ -53,6 +44,7 @@ namespace wowgm::cryptography
         void UpdateData(char c);
         void UpdateData(const std::string &str);
 
+        void Initialize(const char* label);
         void Initialize();
         void Finalize();
 

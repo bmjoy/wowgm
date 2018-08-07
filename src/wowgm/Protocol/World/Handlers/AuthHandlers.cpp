@@ -51,10 +51,10 @@ namespace wowgm::protocol::world
         authSession.Build = 15595;
         authSession.ClientSeed = clientSeed.AsDword();
         memcpy(authSession.Digest.data(), context.GetDigest(), context.GetLength());
-        authSession.LoginServerType = 0;
-        authSession.RealmID = 0; // FIXME
-        authSession.RegionID = 0; // FIXME
-        authSession.ServerID = 0; // FIXME
+        authSession.LoginServerType = 0; // 1 Bnet, 0 grunt
+        authSession.RealmID = 0; // Used by Bnet only
+        authSession.RegionID = 0; // Used by Bnet only
+        authSession.ServerID = 0; // Used by Bnet only
         authSession.UseIPv6 = false;
         authSession.AccountName = sClientServices->GetUsername();
         authSession.Write();
