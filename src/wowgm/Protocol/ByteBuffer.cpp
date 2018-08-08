@@ -20,6 +20,7 @@
 #include "MessageBuffer.hpp"
 #include "Utils.hpp"
 #include "Assert.hpp"
+#include "ObjectGuid.hpp"
 #include <sstream>
 #include <ctime>
 
@@ -104,5 +105,12 @@ namespace wowgm::protocol
             else
                 _storage[wp] &= ~(1 << (7 - bit));
         }
+    }
+
+    void ByteBuffer::ReadPackedGuid(ObjectGuid& guid)
+    {
+        std::uint64_t uValue = 0;
+        ReadPackedUInt64(uValue);
+        guid.Set(uValue);
     }
 }

@@ -16,12 +16,13 @@
 namespace vks { namespace storage {
 
 
-class ViewStorage : public Storage {
+class ViewStorage : public Storage
+{
 public:
     ViewStorage(const StoragePointer& owner, size_t size, const uint8_t* data)
         : _owner(owner)
         , _size(size)
-        , _data(data) {}
+        , _data(data) { }
     const uint8_t* data() const override { return _data; }
     size_t size() const override { return _size; }
     bool isFast() const override { return _owner->isFast(); }
@@ -32,26 +33,28 @@ private:
     const uint8_t* _data;
 };
 
-StoragePointer Storage::createView(size_t viewSize, size_t offset) const {
+StoragePointer Storage::createView(size_t viewSize, size_t offset) const
+{
     auto selfSize = size();
-    if (0 == viewSize) {
+    if (0 == viewSize)
         viewSize = selfSize;
-    }
-    if ((viewSize + offset) > selfSize) {
+
+    if ((viewSize + offset) > selfSize)
         return StoragePointer();
         //TODO: Disable te exception for now and return an empty storage instead.
         //throw std::runtime_error("Invalid mapping range");
-    }
+
     return std::make_shared<ViewStorage>(shared_from_this(), viewSize, data() + offset);
 }
 
-class MemoryStorage : public Storage {
+class MemoryStorage : public Storage
+{
 public:
-    MemoryStorage(size_t size, const uint8_t* data = nullptr) {
+    MemoryStorage(size_t size, const uint8_t* data = nullptr)
+    {
         _data.resize(size);
-        if (data) {
+        if (data)
             memcpy(_data.data(), data, size);
-        }
     }
     const uint8_t* data() const override { return _data.data(); }
     size_t size() const override { return _data.size(); }
@@ -61,7 +64,8 @@ private:
     std::vector<uint8_t> _data;
 };
 
-class FileStorage : public Storage {
+class FileStorage : public Storage
+{
 public:
     static StoragePointer create(const std::string& filename, size_t size, const uint8_t* data);
     FileStorage(const std::string& filename);
@@ -85,22 +89,22 @@ private:
 #endif
 };
 
-FileStorage::FileStorage(const std::string& filename) {
+FileStorage::FileStorage(const std::string& filename)
+{
 #if (WIN32)
     _file = CreateFileA(filename.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
-    if (_file == INVALID_HANDLE_VALUE) {
+    if (_file == INVALID_HANDLE_VALUE)
         throw std::runtime_error("Failed to open file " + filename);
-    }
-    {
-        DWORD dwFileSizeHigh;
-        _size = GetFileSize(_file, &dwFileSizeHigh);
-        _size += (((size_t)dwFileSizeHigh) << 32);
-    }
+
+    DWORD dwFileSizeHigh;
+    _size = GetFileSize(_file, &dwFileSizeHigh);
+    _size += (((size_t)dwFileSizeHigh) << 32);
+
     _mapFile = CreateFileMappingA(_file, NULL, PAGE_READONLY, 0, 0, NULL);
-    if (_mapFile == INVALID_HANDLE_VALUE) {
+    if (_mapFile == INVALID_HANDLE_VALUE)
         throw std::runtime_error("Failed to create mapping");
-    }
-    _mapped = (uint8_t*)MapViewOfFile(_mapFile, FILE_MAP_READ, 0, 0, 0);
+
+    _mapped = static_cast<uint8_t*>(MapViewOfFile(_mapFile, FILE_MAP_READ, 0, 0, 0));
 #else
     // FIXME move to posix memory mapped files
     // open the file:

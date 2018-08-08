@@ -1,5 +1,6 @@
 #pragma once
 
+#include "WorldPacket.hpp"
 #include "Packet.hpp"
 
 namespace wowgm::protocol::world::packets

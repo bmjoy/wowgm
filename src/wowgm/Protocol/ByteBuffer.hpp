@@ -6,6 +6,11 @@
 
 #include "NetworkingExceptions.hpp"
 
+namespace wowgm::utilities
+{
+    class ObjectGuid;
+}
+
 namespace wowgm::protocol
 {
     using namespace exceptions;
@@ -426,6 +431,8 @@ namespace wowgm::protocol
             guid = 0;
             ReadPackedUInt64(read<std::uint8_t>(), guid);
         }
+
+        void ReadPackedGuid(utilities::ObjectGuid& guid);
 
         void ReadPackedUInt64(std::uint8_t mask, std::uint64_t& value)
         {

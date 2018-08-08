@@ -3,6 +3,7 @@
 
 #include "AuthentificationPackets.hpp"
 #include "CharacterPackets.hpp"
+#include "WorldStatePackets.hpp"
 
 namespace wowgm::protocol::world
 {

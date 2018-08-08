@@ -9,6 +9,8 @@ namespace wowgm::game::entities
 
     struct CGObjectData
     {
+        CGObjectData() { }
+
         Descriptor<ObjectGuid> GUID;
         Descriptor<ObjectGuid> Data;
         Descriptor<std::uint16_t, 2> Type;
@@ -21,13 +23,14 @@ namespace wowgm::game::entities
     class Player;
     class Item;
 
-    class Object
+    class Object : public CGObjectData
     {
     public:
         Object();
         virtual ~Object();
 
         ObjectGuid GetGUID() const;
+        float GetScale() const;
 
         CGObjectData const& GetData() const;
 
@@ -42,8 +45,5 @@ namespace wowgm::game::entities
 
         Item* ToItem();
         Item const* ToItem() const;
-
-    private:
-        CGObjectData _objectData;
     };
 }

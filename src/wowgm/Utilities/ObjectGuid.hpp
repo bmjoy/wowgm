@@ -80,15 +80,15 @@ namespace wowgm::utilities
             ObjectGuid& operator = (ObjectGuid const& r) { _data = r._data; return *this; }
             ObjectGuid& operator = (ObjectGuid&& r) { _data = r._data; return *this; }
 
-            operator std::uint32_t() const { return _data._guid; }
+            operator std::uint64_t() const { return _data._guid; }
             PackedGuidReader ReadAsPacked() { return PackedGuidReader(*this); }
 
-            void Set(std::uint32_t guid) { _data._guid = guid; }
+            void Set(std::uint64_t guid) { _data._guid = guid; }
             void Clear() { _data._guid = 0; }
 
             PackedGuid WriteAsPacked() const;
 
-            std::uint32_t   GetRawValue() const { return _data._guid; }
+            std::uint64_t   GetRawValue() const { return _data._guid; }
             HighGuid GetHigh() const
             {
                 HighGuid temp = static_cast<HighGuid>(std::uint32_t((_data._guid >> 48) & 0x0000FFFF));

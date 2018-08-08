@@ -4,7 +4,7 @@ namespace wowgm::game::entities
 {
     using namespace wowgm::utilities;
 
-    Object::Object()
+    Object::Object() : CGObjectData()
     {
 
     }
@@ -16,11 +16,16 @@ namespace wowgm::game::entities
 
     ObjectGuid Object::GetGUID() const
     {
-        return _objectData.GUID.GetValue();
+        return GUID;
     }
 
     CGObjectData const& Object::GetData() const
     {
-        return _objectData;
+        return *this;
+    }
+
+    float Object::GetScale() const
+    {
+        return Scale;
     }
 }
