@@ -275,8 +275,8 @@ namespace wowgm::protocol::authentification
             GetReadBuffer().ReadCompleted(3);
 
             // These call ReadCompleted!
-            GetReadBuffer() >> realmList[i].Name;
-            GetReadBuffer() >> realmList[i].Address;
+            GetReadBuffer().ReadCString(realmList[i].Name, 0x100);
+            GetReadBuffer().ReadCString(realmList[i].Address, 0x40);
 
             realmList[i].Population = *reinterpret_cast<float*>(GetReadBuffer().GetReadPointer());
             realmList[i].Load = GetReadBuffer().GetReadPointer()[4];

@@ -91,7 +91,9 @@ namespace wowgm::protocol::world::packets
         _worldPacket << std::uint8_t(Digest[18]);
         _worldPacket << std::uint8_t(Digest[12]);
         _worldPacket << std::uint8_t(Digest[5]);
-        _worldPacket << std::uint64_t(0); // Unk
+        _worldPacket << std::uint64_t(2); // authSession.qword40 = __PAIR__(v14, v13); Localhost debugging shows only 2, not sure where that comes from
+                                          // RealmConnection::HandleAuthChallenge, triggered by NETEVENTQUEUE::Poll. I'm confused. Someone with the structure
+                                          // for NETEVENTQUEUE (doubly linked list?) explain
         _worldPacket << std::uint8_t(Digest[15]);
         _worldPacket << std::uint8_t(Digest[9]);
         _worldPacket << std::uint8_t(Digest[19]);

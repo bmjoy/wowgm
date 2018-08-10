@@ -137,15 +137,22 @@ namespace wowgm::protocol
             return boost::asio::buffer(GetReadPointer(), GetActiveSize());
         }
 
-        MessageBuffer& operator >> (std::string& other)
+        std::string ReadCString(std::string& other, size_t maxLength = -1)
         {
             std::uint8_t* data = GetReadPointer();
-            while (*data != '\0')
-                ++data;
-
+            if (maxLength > 0)
+            {
+                while (*data != '\0' && (data - GetReadPointer()) < maxLength)
+                    ++data;
+            }
+            else
+            {
+                while (*data != '\0')
+                    ++data;
+            }
             other.assign(GetReadPointer(), data);
             ReadCompleted(other.size() + 1);
-            return *this;
+            return other;
         }
 
         std::vector<std::uint8_t>&& Move()
