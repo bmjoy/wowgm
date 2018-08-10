@@ -16,17 +16,19 @@ namespace wowgm::game::entities
         static_assert(N >= 1 && N <= 1024, "Descriptor with N out of bounds");
 
         member_type _value;
-
     public:
-        //inline auto operator [] (size_t index) -> typename std::enable_if<N != 1, element_type>::type&
-        //{
-        //    return _value[index];
-        //}
 
-        //inline auto operator[] (size_t index) const -> typename std::enable_if<N != 1, element_type>::type const&
-        //{
-        //    return _value[index];
-        //}
+        inline T& operator [] (size_t index)
+        {
+            static_assert(N != 1);
+            return _value[index];
+        }
+
+        inline const T& operator[] (size_t index) const
+        {
+            static_assert(N != 1);
+            return _value[index];
+        }
 
         inline operator member_type() const
         {
