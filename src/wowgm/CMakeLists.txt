@@ -34,7 +34,10 @@ target_link_libraries(WowGM
   glfw
   Vulkan::Vulkan
   zlib
+  storm
 )
+
+add_dependencies(WowGM storm)
 
 target_include_directories(WowGM
   PUBLIC
@@ -43,7 +46,8 @@ target_include_directories(WowGM
     ${Boost_INCLUDE_DIR}
     ${OPENSSL_INCLUDE_DIR}
     ${glfw_INCLUDE_DIRS}
-    ${IMGUI_INCLUDE_DIR})
+    ${IMGUI_INCLUDE_DIR}
+    ${CMAKE_SOURCE_DIR}/dep/StormLib/src)
 
 add_definitions(-DWIN32_LEAN_AND_MEAN)
 
