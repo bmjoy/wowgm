@@ -201,7 +201,6 @@ void Window::OnUpdateOverlay()
     }
     ImGui::EndMainMenuBar();
 
-
     if (!sClientServices->IsInWorld() && sClientServices->GetCharacterCount() == 0)
     {
         ImGui::SetNextWindowPos({ 10.0f, 35.0f });
@@ -277,6 +276,15 @@ void Window::OnUpdateOverlay()
                 if (++i < sClientServices->GetCharacterCount())
                     ImGui::Separator();
             }
+
+            ImGui::End();
+        }
+    }
+
+    if (sClientServices->IsInWorld())
+    {
+        if (ImGui::Begin("Chat window", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize))
+        {
 
             ImGui::End();
         }
