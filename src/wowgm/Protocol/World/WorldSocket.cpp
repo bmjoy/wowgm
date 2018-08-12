@@ -3,6 +3,8 @@
 #include "Packet.hpp"
 #include "Opcodes.hpp"
 
+#include "MiscPackets.hpp"
+
 #include <boost/asio/buffer.hpp>
 #include <boost/core/demangle.hpp>
 #include <typeinfo>
@@ -89,6 +91,15 @@ namespace wowgm::protocol::world
         }
 
         AsyncRead();
+    }
+
+
+    void WorldSocket::SetNoDelay(bool disableNagle)
+    {
+        BaseSocket::SetNoDelay(disableNagle);
+
+        packets::UserRouterClientEnableNagle enableNagle;
+        SendPacket(enableNagle);
     }
 
     bool WorldSocket::ReadDataHandler()

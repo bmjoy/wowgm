@@ -45,7 +45,7 @@ namespace wowgm::protocol::world
 
     class EncryptablePacket;
 
-    class WorldSocket : public Socket<WorldSocket>
+    class WorldSocket final : public Socket<WorldSocket>
     {
         WorldSocket(WorldSocket&&) = delete;
         WorldSocket(WorldSocket const&) = delete;
@@ -73,6 +73,8 @@ namespace wowgm::protocol::world
         bool Update() override final;
 
         z_stream_s* GetDecompressionStream() { return _decompressionStream; }
+
+        void SetNoDelay(bool disableNagle) override;
 
     public:
 

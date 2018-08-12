@@ -142,6 +142,11 @@ namespace wowgm::protocol
             OnClose();
         }
 
+        virtual void SetNoDelay(bool disableNagle)
+        {
+            _socket.setoption(boost::asio::ip::tcp::nodelay(disableNagle));
+        }
+
         /// Marks the socket for closing after write buffer becomes empty
         void DelayedCloseSocket() { _closing = true; }
 
