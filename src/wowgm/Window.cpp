@@ -145,8 +145,8 @@ void Window::PreparePipelines()
     pipelineBuilder.depthStencilState = { false };
     // Load shaders
     // Shaders are loaded from the SPIR-V format, which can be generated from glsl
-    pipelineBuilder.loadShader(getAssetPath() + "shaders/geometry/vert.spv", vk::ShaderStageFlagBits::eVertex);
-    pipelineBuilder.loadShader(getAssetPath() + "shaders/geometry/frag.spv", vk::ShaderStageFlagBits::eFragment);
+    pipelineBuilder.loadShader("resources/shaders/geometry/vert.spv", vk::ShaderStageFlagBits::eVertex);
+    pipelineBuilder.loadShader("resources/shaders/geometry/frag.spv", vk::ShaderStageFlagBits::eFragment);
     // Create rendering pipeline
     pipeline = pipelineBuilder.create(context.pipelineCache);
 }
@@ -193,14 +193,6 @@ void Window::SetupDescriptorSet()
 
 void Window::OnUpdateOverlay()
 {
-    ImGui::BeginMainMenuBar();
-    if (ImGui::BeginMenu("Options"))
-    {
-        ImGui::MenuItem("Hello");
-        ImGui::EndMenu();
-    }
-    ImGui::EndMainMenuBar();
-
     if (!sClientServices->IsInWorld() && sClientServices->GetCharacterCount() == 0)
     {
         ImGui::SetNextWindowPos({ 10.0f, 35.0f });
@@ -289,4 +281,27 @@ void Window::OnUpdateOverlay()
             ImGui::End();
         }
     }
+
+    // Must be at the end, for modal windows
+    ImGui::BeginMainMenuBar();
+    if (ImGui::BeginMenu("Options"))
+    {
+        _showOptionsWindow = !_showOptionsWindow;
+        ImGui::EndMenu();
+    }
+
+    if (_showOptionsWindow && ImGui::Begin("Options"))
+    {
+        ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[2]);
+        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Game data:");
+        ImGui::PopFont();
+
+        ImGui::PushItemWidth(-1);
+        ImGui::InputText("##GameDataFolder", _gameDataLocation, sizeof(_gameDataLocation), ImGuiInputTextFlags_CharsDecimal);
+        ImGui::PopItemWidth();
+
+        ImGui::End();
+    }
+
+    ImGui::EndMainMenuBar();
 }

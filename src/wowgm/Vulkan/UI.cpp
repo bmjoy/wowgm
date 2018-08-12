@@ -245,8 +245,8 @@ void UIOverlay::preparePipeline()
         pipelineBuilder.shaderStages = createInfo.shaders;
     else
     {
-        pipelineBuilder.loadShader(vkx::getAssetPath() + "shaders/imgui/vert.spv", vk::ShaderStageFlagBits::eVertex);
-        pipelineBuilder.loadShader(vkx::getAssetPath() + "shaders/imgui/frag.spv", vk::ShaderStageFlagBits::eFragment);
+        pipelineBuilder.loadShader("resources/shaders/imgui/vert.spv", vk::ShaderStageFlagBits::eVertex);
+        pipelineBuilder.loadShader("resources/shaders/imgui/frag.spv", vk::ShaderStageFlagBits::eFragment);
     }
 
     // Vertex bindings an attributes based on ImGui vertex definition

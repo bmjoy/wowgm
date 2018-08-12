@@ -98,7 +98,7 @@ namespace wowgm::protocol::world
     {
         BaseSocket::SetNoDelay(disableNagle);
 
-        packets::UserRouterClientEnableNagle enableNagle;
+        packets::UserRouterClientEnableNagle enableNagle(Opcode::CMSG_ENABLE_NAGLE);
         SendPacket(enableNagle);
     }
 

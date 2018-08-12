@@ -10,6 +10,11 @@ namespace wowgm::filesystem
 
     void MpqFileSystem::Initialize(const std::string& rootFolder)
     {
+        for (HANDLE archiveHandle : _archiveHandles)
+            SFileCloseArchive(archiveHandle);
+
+        _archiveHandles.clear();
+
         boost::filesystem::path rootPath = rootFolder;
         auto dataPath = rootPath / "Data" / GetLocaleString();
 

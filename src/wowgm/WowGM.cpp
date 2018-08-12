@@ -9,9 +9,11 @@
 #include "Logger.hpp"
 #include "Updater.hpp"
 #include "BigNumber.hpp"
+#include "FileSystem.hpp"
+
 #include "glfw.hpp"
 
-#include "./Window.hpp"
+#include "Window.hpp"
 
 namespace po = boost::program_options;
 
@@ -23,6 +25,8 @@ int main(int argc, char* argv[])
     seed.SetRand(16 * 8);
 
     wowgm::log::initialize();
+
+    DiskFileSystem::Open()->Initialize(".");
 
     try {
         po::options_description desc("Allowed options");

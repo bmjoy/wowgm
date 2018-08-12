@@ -67,9 +67,12 @@ namespace wowgm
         void OnUpdateOverlay() override;
 
     private:
-        char _accountName[100];
-        char _accountPassword[100];
-        char _realmAddress[100];
+        char _accountName[100] = { 0 };
+        char _accountPassword[100] = { 0 };
+        char _realmAddress[100] = { 0 };
+
+        char _gameDataLocation[256] = { 0 };
+        bool _showOptionsWindow = false;
     };
 
 }
