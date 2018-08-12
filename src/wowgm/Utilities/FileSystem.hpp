@@ -24,6 +24,12 @@ namespace wowgm::filesystem
         Russian
     };
 
+    enum class LoadStrategy
+    {
+        Memory,
+        Mapped
+    };
+
     class MpqFileSystem;
     class DiskFileSystem;
 
@@ -36,47 +42,66 @@ namespace wowgm::filesystem
     public:
         virtual void Close() = 0;
         virtual size_t GetFileSize() const = 0;
+
+        virtual LoadStrategy GetLoadStrategy() const = 0;
+        virtual std::uint8_t const* GetData() = 0;
+        virtual size_t ReadBytes(size_t offset, size_t length, std::uint8_t* buffer, size_t bufferSize) = 0;
     };
 
     class MpqFile : public FileHandle<MpqFile>
     {
         friend class MpqFileSystem;
 
-        explicit MpqFile(HANDLE fileHandle);
+        using BaseFileHandle = FileHandle<MpqFile>;
+
+        MpqFile(HANDLE fileHandle, LoadStrategy loadStrategy);
 
     public:
         ~MpqFile();
 
         void Close() override;
         size_t GetFileSize() const override;
+        LoadStrategy GetLoadStrategy() const override;
+        std::uint8_t const* GetData() override;
+        size_t ReadBytes(size_t offset, size_t length, std::uint8_t* buffer, size_t bufferSize) override;
 
     private:
         HANDLE _fileHandle;
+        LoadStrategy _loadStrategy;
+
+        std::vector<std::uint8_t> _fileData;
     };
 
     class DiskFile : public FileHandle<DiskFile>
     {
         friend class DiskFileSystem;
 
-        DiskFile(const std::string& fileName);
+        DiskFile(const std::string& fileName, LoadStrategy loadStrategy);
 
     public:
         ~DiskFile();
 
         void Close() override;
         size_t GetFileSize() const override;
+        LoadStrategy GetLoadStrategy() const override;
+        std::uint8_t const* GetData() override;
+        size_t ReadBytes(size_t offset, size_t length, std::uint8_t* buffer, size_t bufferSize) override;
+
+    private:
+        void _LoadToMemory(const std::string& fileName);
 
     private:
         size_t _fileSize = 0;
-        uint8_t* _mapped{ nullptr };
+        LoadStrategy _loadStrategy;
+        std::vector<uint8_t> _fileData;
+
 #if PLATFORM == PLATFORM_WINDOWS
         HANDLE _fileHandle = INVALID_HANDLE_VALUE;
         HANDLE _mapFile = INVALID_HANDLE_VALUE;
+        uint8_t* _mapped{ nullptr };
 #elif (PLATFORM == PLATFORM_APPLE) || (PLATFORM == PLATFORM_UNIX)
         int _fileDescriptor;
-        void* _map;
-#else
-        std::vector<uint8_t> _data;
+        void* _mapped;
 #endif
     };
 
@@ -84,11 +109,12 @@ namespace wowgm::filesystem
     class FileSystem
     {
         virtual void Initialize(const std::string& rootFolder) = 0;
-        virtual std::shared_ptr<FileHandle<T>> OpenFile(const std::string& filePath) = 0;
+        virtual std::shared_ptr<FileHandle<T>> OpenFile(const std::string& filePath, LoadStrategy loadStrategy = LoadStrategy::Mapped) = 0;
 
         void SetLocale(Locale clientLocale) { _clientLocale = clientLocale; }
         Locale GetLocale() const { return _clientLocale; }
 
+    protected:
         const char* GetLocaleString() const
         {
             switch (_clientLocale)
@@ -120,7 +146,7 @@ namespace wowgm::filesystem
         ~MpqFileSystem();
 
         void Initialize(const std::string& rootFolder) override;
-        std::shared_ptr<FileHandle<MpqFile>> OpenFile(const std::string& filePath) override;
+        std::shared_ptr<FileHandle<MpqFile>> OpenFile(const std::string& filePath, LoadStrategy loadStrategy) override;
 
     private:
         std::vector<HANDLE> _archiveHandles;
@@ -143,7 +169,7 @@ namespace wowgm::filesystem
         ~DiskFileSystem();
 
         void Initialize(const std::string& rootFolder) override;
-        std::shared_ptr<FileHandle<DiskFile>> OpenFile(const std::string& relFilePath) override;
+        std::shared_ptr<FileHandle<DiskFile>> OpenFile(const std::string& relFilePath, LoadStrategy loadStrategy) override;
 
     private:
         std::string _rootFolder;

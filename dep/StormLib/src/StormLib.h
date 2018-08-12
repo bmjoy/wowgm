@@ -538,7 +538,7 @@ struct TMPQHash
     // The hash of the file path, using method B.
     DWORD dwName2;
 
-#ifdef PLATFORM_LITTLE_ENDIAN
+#ifdef STORM_PLATFORM_LITTLE_ENDIAN
 
     // The language of the file. This is a Windows LANGID data type, and uses the same values.
     // 0 indicates the default language (American English), or that the file is language-neutral.
@@ -961,7 +961,7 @@ int    WINAPI SCompDecompress2(char * pbOutBuffer, int * pcbOutBuffer, char * pb
 //-----------------------------------------------------------------------------
 // Non-Windows support for SetLastError/GetLastError
 
-#ifndef PLATFORM_WINDOWS
+#ifndef STORM_PLATFORM_WINDOWS
 
 void  SetLastError(int err);
 int   GetLastError();

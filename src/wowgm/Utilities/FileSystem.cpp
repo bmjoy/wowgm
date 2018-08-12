@@ -3,6 +3,7 @@
 
 #include <boost/filesystem.hpp>
 
+// TODO: Throw proper exceptions here. Stormlib provides a shim GetlastError/SetLastError even on non-windows systems
 namespace wowgm::filesystem
 {
     using tstring = std::basic_string<TCHAR>;
@@ -37,21 +38,33 @@ namespace wowgm::filesystem
         _archiveHandles.clear();
     }
 
-    std::shared_ptr<FileHandle<MpqFile>> MpqFileSystem::OpenFile(const std::string& filePath)
+    std::shared_ptr<FileHandle<MpqFile>> MpqFileSystem::OpenFile(const std::string& filePath, LoadStrategy loadStrategy)
     {
         for (HANDLE archiveHandle : _archiveHandles)
         {
             HANDLE fileHandle;
             if (SFileOpenFileEx(archiveHandle, filePath.c_str(), SFILE_OPEN_PATCHED_FILE, &fileHandle))
-                return std::shared_ptr<MpqFile>(new MpqFile(fileHandle));
+                return std::shared_ptr<MpqFile>(new MpqFile(fileHandle, loadStrategy));
         }
 
         return { };
     }
 
-    MpqFile::MpqFile(HANDLE fileHandle)
+    MpqFile::MpqFile(HANDLE fileHandle, LoadStrategy loadStrategy) : _loadStrategy(loadStrategy)
     {
         _fileHandle = fileHandle;
+
+        // Don't load to memory if the file is loaded as memory-mapped
+        if (loadStrategy == LoadStrategy::Mapped)
+            return;
+
+        _fileData.resize(GetFileSize());
+        if (!SFileReadFile(_fileHandle, _fileData.data(), GetFileSize()))
+            wowgm::exceptions::throw_with_trace<std::runtime_error>("Unable to read file");
+
+        // Immediately close the handle, but don't call Close() - this would clear the buffer
+        SFileCloseFile(_fileHandle);
+        _fileHandle = nullptr;
     }
 
     MpqFile::~MpqFile()
@@ -61,6 +74,11 @@ namespace wowgm::filesystem
 
     void MpqFile::Close()
     {
+        _fileData.clear();
+
+        if (_fileHandle == nullptr)
+            return;
+
         SFileCloseFile(_fileHandle);
         _fileHandle = nullptr;
     }
@@ -68,6 +86,48 @@ namespace wowgm::filesystem
     size_t MpqFile::GetFileSize() const
     {
         return SFileGetFileSize(_fileHandle);
+    }
+
+    LoadStrategy MpqFile::GetLoadStrategy() const
+    {
+        return _loadStrategy;
+    }
+
+    std::uint8_t const* MpqFile::GetData()
+    {
+        if (GetLoadStrategy() == LoadStrategy::Memory)
+            return _fileData.data();
+
+        // This is lame, but we need this
+        _loadStrategy = LoadStrategy::Memory;
+
+        _fileData.resize(GetFileSize());
+
+        SFileSetFilePointer(_fileHandle, 0, nullptr, FILE_BEGIN);
+        SFileReadFile(_fileHandle, _fileData.data(), GetFileSize());
+        SFileCloseFile(_fileHandle);
+        _fileHandle = nullptr;
+
+        return _fileData.data();
+    }
+
+    size_t MpqFile::ReadBytes(size_t offset, size_t length, std::uint8_t* buffer, size_t bufferSize)
+    {
+        auto availableDataLength = GetFileSize() - offset;
+        if (bufferSize < availableDataLength)
+            availableDataLength = bufferSize;
+
+        if (GetLoadStrategy() == LoadStrategy::Memory)
+        {
+            memcpy(buffer, _fileData.data() + offset, availableDataLength);
+        }
+        else
+        {
+            SFileSetFilePointer(_fileHandle, offset, nullptr, FILE_BEGIN);
+            SFileReadFile(_fileHandle, buffer, availableDataLength);
+        }
+
+        return availableDataLength;
     }
 
     DiskFileSystem::~DiskFileSystem()
@@ -80,16 +140,22 @@ namespace wowgm::filesystem
         _rootFolder = rootFolder;
     }
 
-    std::shared_ptr<FileHandle<DiskFile>> DiskFileSystem::OpenFile(const std::string& relFilePath)
+    std::shared_ptr<FileHandle<DiskFile>> DiskFileSystem::OpenFile(const std::string& relFilePath, LoadStrategy loadStrategy)
     {
         boost::filesystem::path filePath = _rootFolder;
         filePath /= relFilePath;
 
-        return std::shared_ptr<DiskFile>(new DiskFile(filePath.string()));
+        return std::shared_ptr<DiskFile>(new DiskFile(filePath.string(), loadStrategy));
     }
 
-    DiskFile::DiskFile(const std::string& fileName)
+    DiskFile::DiskFile(const std::string& fileName, LoadStrategy loadStrategy) : _loadStrategy(loadStrategy), _mapped(nullptr)
     {
+        if (_loadStrategy == LoadStrategy::Memory)
+        {
+            _LoadToMemory(fileName);
+            return;
+        }
+
 #if PLATFORM == PLATFORM_WINDOWS
         _fileHandle = CreateFileA(fileName.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
         if (_fileHandle == INVALID_HANDLE_VALUE)
@@ -113,19 +179,24 @@ namespace wowgm::filesystem
 
         _fileSize = st.st_size;
 
-        _map = mmap(nullptr, st.st_size, PROT_READ, MAP_PRIVATE | MAP_POPULATE, _fileDescriptor, 0);
+        _mapped = mmap(nullptr, st.st_size, PROT_READ, MAP_PRIVATE | MAP_POPULATE, _fileDescriptor, 0);
         BOOST_ASSERT_MSG(_map != MAP_FAILED, "Failed to map the file to memory");
 #else
+        _LoadToMemory(fileName);
+#endif
+    }
+
+    void DiskFile::_LoadToMemory(const std::string& fileName)
+    {
         std::ifstream fs(fileName, std::ios::binary);
         fs.unsetf(std::ios::skipws);
 
         fs.seekg(0, std::ios::end);
-        _fileSize = file.tellg();
+        _fileSize = fs.tellg();
         fs.seekg(0, std::ios::beg);
 
-        _data.resize(_fileSize);
-        fs.read(&_data[0], fileSize);
-#endif
+        _fileData.resize(_fileSize);
+        fs.read(reinterpret_cast<char*>(&_fileData[0]), _fileSize);
     }
 
     DiskFile::~DiskFile()
@@ -138,12 +209,46 @@ namespace wowgm::filesystem
         return _fileSize;
     }
 
+    size_t DiskFile::ReadBytes(size_t offset, size_t length, std::uint8_t* buffer, size_t bufferSize)
+    {
+        auto availableDataLength = GetFileSize() - offset;
+        if (bufferSize < availableDataLength)
+            availableDataLength = bufferSize;
+
+        if (GetLoadStrategy() == LoadStrategy::Memory)
+            memcpy(buffer, _fileData.data() + offset, availableDataLength);
+        else
+            memcpy(buffer, _mapped, availableDataLength);
+
+        return availableDataLength;
+    }
+
+    LoadStrategy DiskFile::GetLoadStrategy() const
+    {
+        return _loadStrategy;
+    }
+
+    std::uint8_t const* DiskFile::GetData()
+    {
+        if (GetLoadStrategy() == LoadStrategy::Memory)
+            return _fileData.data();
+
+        return reinterpret_cast<std::uint8_t*>(_mapped);
+    }
+
     void DiskFile::Close()
     {
+        _fileData.clear();
+
 #if PLATFORM == PLATFORM_WINDOWS
-        UnmapViewOfFile(_mapped);
-        CloseHandle(_mapFile);
-        CloseHandle(_fileHandle);
+        if (_mapped != nullptr)
+            UnmapViewOfFile(_mapped);
+
+        if (_mapFile != INVALID_HANDLE_VALUE)
+            CloseHandle(_mapFile);
+
+        if (_fileHandle != INVALID_HANDLE_VALUE)
+            CloseHandle(_fileHandle);
 
         _mapped = nullptr;
         _mapFile = INVALID_HANDLE_VALUE;
@@ -151,8 +256,7 @@ namespace wowgm::filesystem
 #elif PLATFORM == PLATFORM_UNIX || PLATFORM == PLATFORM_APPLE
         BOOST_ASSERT_MSG(munmap(_fileDescriptor, _fileSize) == 0, "Failed to unmap file from memory");
         close(_fileDescriptor);
-#else
-        _data.clear();
+        _mapped = nullptr;
 #endif
     }
 }

@@ -33,7 +33,7 @@
 #endif
 
 // Defines for Windows
-#if !defined(PLATFORM_DEFINED) && (defined(WIN32) || defined(WIN64))
+#if !defined(STORM_PLATFORM_DEFINED) && (defined(WIN32) || defined(WIN64))
 
   // In MSVC 8.0, there are some functions declared as deprecated.
   #if _MSC_VER >= 1400
@@ -47,21 +47,21 @@
   #include <stdio.h>
   #include <windows.h>
   #include <wininet.h>
-  #define PLATFORM_LITTLE_ENDIAN
+  #define STORM_PLATFORM_LITTLE_ENDIAN
 
   #ifdef WIN64
-    #define PLATFORM_64BIT
+    #define STORM_PLATFORM_64BIT
   #else
-    #define PLATFORM_32BIT
+    #define STORM_PLATFORM_32BIT
   #endif
 
-  #define PLATFORM_WINDOWS
-  #define PLATFORM_DEFINED                  // The platform is known now
+  #define STORM_PLATFORM_WINDOWS
+  #define STORM_PLATFORM_DEFINED                  // The platform is known now
 
 #endif
 
-// Defines for Mac 
-#if !defined(PLATFORM_DEFINED) && defined(__APPLE__)  // Mac BSD API
+// Defines for Mac
+#if !defined(STORM_PLATFORM_DEFINED) && defined(__APPLE__)  // Mac BSD API
 
   // Macintosh
   #include <sys/types.h>
@@ -71,22 +71,22 @@
   #include <fcntl.h>
   #include <stdlib.h>
   #include <errno.h>
-  
+
   #define    PKEXPORT
   #define    __SYS_ZLIB
   #define    __SYS_BZLIB
 
   #ifndef __BIG_ENDIAN__
-    #define PLATFORM_LITTLE_ENDIAN
+    #define STORM_PLATFORM_LITTLE_ENDIAN
   #endif
 
-  #define PLATFORM_MAC
-  #define PLATFORM_DEFINED                  // The platform is known now
+  #define STORM_PLATFORM_MAC
+  #define STORM_PLATFORM_DEFINED                  // The platform is known now
 
 #endif
 
 // Assumption: we are not on Windows nor Macintosh, so this must be linux *grin*
-#if !defined(PLATFORM_DEFINED)
+#if !defined(STORM_PLATFORM_DEFINED)
 
   #include <sys/types.h>
   #include <sys/stat.h>
@@ -102,18 +102,18 @@
   #include <assert.h>
   #include <errno.h>
 
-  #define PLATFORM_LITTLE_ENDIAN
-  #define PLATFORM_LINUX
-  #define PLATFORM_DEFINED
+  #define STORM_PLATFORM_LITTLE_ENDIAN
+  #define STORM_PLATFORM_LINUX
+  #define STORM_PLATFORM_DEFINED
 
 #endif
 
 // Definition of Windows-specific structures for non-Windows platforms
-#ifndef PLATFORM_WINDOWS
+#ifndef STORM_PLATFORM_WINDOWS
   #if __LP64__
-    #define PLATFORM_64BIT
+    #define STORM_PLATFORM_64BIT
   #else
-    #define PLATFORM_32BIT
+    #define STORM_PLATFORM_32BIT
   #endif
 
   // Typedefs for ANSI C
@@ -134,7 +134,7 @@
   typedef DWORD        * LPDWORD;
   typedef BYTE         * LPBYTE;
 
-  #ifdef PLATFORM_32BIT
+  #ifdef STORM_PLATFORM_32BIT
     #define _LZMA_UINT32_IS_ULONG
   #endif
 
@@ -143,7 +143,7 @@
     #define MAX_PATH 1024
   #endif
 
-  #define WINAPI 
+  #define WINAPI
 
   #define FILE_BEGIN    SEEK_SET
   #define FILE_CURRENT  SEEK_CUR
@@ -165,7 +165,7 @@
 #endif // !WIN32
 
 // 64-bit calls are supplied by "normal" calls on Mac
-#if defined(PLATFORM_MAC)
+#if defined(STORM_PLATFORM_MAC)
   #define stat64  stat
   #define fstat64 fstat
   #define lseek64 lseek
@@ -174,7 +174,7 @@
 #endif
 
 // Platform-specific error codes for UNIX-based platforms
-#if defined(PLATFORM_MAC) || defined(PLATFORM_LINUX)
+#if defined(STORM_PLATFORM_MAC) || defined(STORM_PLATFORM_LINUX)
   #define ERROR_SUCCESS                  0
   #define ERROR_FILE_NOT_FOUND           ENOENT
   #define ERROR_ACCESS_DENIED            EPERM
@@ -192,7 +192,7 @@
   #define ERROR_INSUFFICIENT_BUFFER      ENOBUFS
 #endif
 
-#ifdef PLATFORM_LITTLE_ENDIAN
+#ifdef STORM_PLATFORM_LITTLE_ENDIAN
     #define    BSWAP_INT16_UNSIGNED(a)          (a)
     #define    BSWAP_INT16_SIGNED(a)            (a)
     #define    BSWAP_INT32_UNSIGNED(a)          (a)

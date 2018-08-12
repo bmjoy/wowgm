@@ -142,7 +142,7 @@ namespace wowgm::protocol
             std::uint8_t* data = GetReadPointer();
             if (maxLength > 0)
             {
-                while (*data != '\0' && (data - GetReadPointer()) < maxLength)
+                while (*data != '\0' && size_t(data - GetReadPointer()) < maxLength)
                     ++data;
             }
             else

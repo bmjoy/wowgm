@@ -18,7 +18,9 @@
 
 #include "buffer.hpp"
 #include "image.hpp"
-#include "filesystem.hpp"
+#include "FileSystem.hpp"
+
+using namespace wowgm::filesystem;
 
 namespace vks { namespace texture {
 
@@ -76,9 +78,12 @@ public:
         this->imageLayout = imageLayout;
         descriptor.imageLayout = imageLayout;
         std::shared_ptr<gli::texture2d> tex2Dptr;
-        vks::file::withBinaryFileContents(filename, [&](size_t size, const void* data) {
-            tex2Dptr = std::make_shared<gli::texture2d>(gli::load((const char*)data, size));
-        });
+
+        {
+            auto fileInfo = DiskFileSystem::Open()->OpenFile(filename, LoadStrategy::Mapped);
+            tex2Dptr = std::make_shared<gli::texture2d>(gli::load(reinterpret_cast<const char*>(fileInfo->GetData()), fileInfo->GetFileSize()));
+        }
+
         const auto& tex2D = *tex2Dptr;
         assert(!tex2D.empty());
 
@@ -243,9 +248,11 @@ public:
         descriptor.imageLayout = imageLayout;
 
         std::shared_ptr<gli::texture2d_array> texPtr;
-        vks::file::withBinaryFileContents(filename, [&](size_t size, const void* data) {
-            texPtr = std::make_shared<gli::texture2d_array>(gli::load((const char*)data, size));
-        });
+
+        {
+            auto fileInfo = DiskFileSystem::Open()->OpenFile(filename, LoadStrategy::Mapped);
+            texPtr = std::make_shared<gli::texture2d_array>(gli::load(reinterpret_cast<const char*>(fileInfo->GetData()), fileInfo->GetFileSize()));
+        }
 
         const gli::texture2d_array& tex2DArray = *texPtr;
 
@@ -358,9 +365,12 @@ public:
         descriptor.imageLayout = imageLayout;
 
         std::shared_ptr<const gli::texture_cube> texPtr;
-        vks::file::withBinaryFileContents(filename, [&](size_t size, const void* data) {
-            texPtr = std::make_shared<const gli::texture_cube>(gli::load(static_cast<const char*>(data), size));
-        });
+
+        {
+            auto fileInfo = DiskFileSystem::Open()->OpenFile(filename, LoadStrategy::Mapped);
+            texPtr = std::make_shared<gli::texture_cube>(gli::load(reinterpret_cast<const char*>(fileInfo->GetData()), fileInfo->GetFileSize()));
+        }
+
         const auto& texCube = *texPtr;
         assert(!texCube.empty());
 

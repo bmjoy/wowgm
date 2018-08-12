@@ -15,7 +15,6 @@
 #include "VulkanBase.hpp"
 
 #include "UI.hpp"
-#include "Storage.hpp"
 #include "Filesystem.hpp"
 
 using namespace vkx;

@@ -1,12 +1,14 @@
 #include "shaders.hpp"
-#include "filesystem.hpp"
-#include "storage.hpp"
+#include "FileSystem.hpp"
 
-vk::ShaderModule vks::shaders::loadShaderModule(const vk::Device& device, const std::string& filename) {
+using namespace wowgm::filesystem;
+
+vk::ShaderModule vks::shaders::loadShaderModule(const vk::Device& device, const std::string& fileName)
+{
     vk::ShaderModule result;
     {
-        auto storage = storage::Storage::readFile(filename);
-        result = device.createShaderModule({ {}, storage->size(), (const uint32_t*)storage->data() });
+        auto file = DiskFileSystem::Open()->OpenFile(fileName, LoadStrategy::Memory);
+        result = device.createShaderModule({ {}, file->GetFileSize(), reinterpret_cast<const uint32_t*>(file->GetData()) });
     }
     return result;
 }

@@ -125,6 +125,7 @@ void  InitializeMpqCryptography();
 
 DWORD GetHashTableSizeForFileCount(DWORD dwFileCount);
 
+bool IsPseudoFileName(const char * szFileName, LPDWORD pdwFileIndex);
 ULONGLONG HashStringJenkins(const char * szFileName);
 
 int ConvertMpqHeaderToFormat4(TMPQArchive * ha, ULONGLONG FileSize, DWORD dwFlags);
