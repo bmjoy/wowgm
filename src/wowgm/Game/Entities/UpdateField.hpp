@@ -1,6 +1,8 @@
-#include "WorldStateMgr.hpp"
+#pragma once
 
 #include <type_traits>
+#include <cstdint>
+#include <array>
 
 namespace wowgm::game::entities
 {
@@ -17,6 +19,8 @@ namespace wowgm::game::entities
 
         member_type _value;
     public:
+
+        Descriptor() : _value() { }
 
         inline T& operator [] (size_t index)
         {
@@ -35,25 +39,19 @@ namespace wowgm::game::entities
             return _value;
         }
 
-        Descriptor() : _value()
-        {
-
-        }
-
         Descriptor(Descriptor<T, N>&& other) = delete;
         Descriptor(Descriptor<T, N> const& other) = delete;
 
-        inline Descriptor<T, N>& operator = (member_type const& other)
-        {
-            _value = other;
-            return *this;
-        }
+        Descriptor<T, N>& operator = (Descriptor<T, N> const&) = delete;
+        Descriptor<T, N>& operator = (Descriptor<T, N>&&) = delete;
 
-        inline Descriptor<T, N>& operator = (member_type&& other)
-        {
-            _value = std::move(other);
-            return *this;
-        }
+        Descriptor<T, N>& operator = (member_type const& other) = delete;
+        Descriptor<T, N>& operator = (member_type&& other) = delete;
     };
 
+    static_assert(sizeof(std::array<float, 2>) == 8);
+    static_assert(sizeof(std::array<float, 2>) == sizeof(Descriptor<float, 2>));
+
+    static_assert(sizeof(Descriptor<float>) == sizeof(float), "Descriptor<T> must be of same size than T.");
+    static_assert(sizeof(Descriptor<float, 2>) == sizeof(float) * 2, "Descriptor<T, N> must be of same size than T, N.");
 }
