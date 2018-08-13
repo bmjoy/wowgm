@@ -15,23 +15,32 @@ namespace wowgm::filesystem
 
         _archiveHandles.clear();
 
-        boost::filesystem::path rootPath = rootFolder;
-        auto dataPath = rootPath / "Data" / GetLocaleString();
+        if (rootFolder.length() == 0)
+            return;
 
-        boost::filesystem::directory_iterator end;
-        for (boost::filesystem::directory_iterator itr(dataPath); itr != end; ++itr)
-        {
-            if (!boost::filesystem::is_directory(itr->path()))
-                continue;
+        try {
+            boost::filesystem::path rootPath = rootFolder;
+            auto dataPath = rootPath / "Data" / GetLocaleString();
 
-            if (boost::filesystem::extension(itr->path()) != ".MPQ")
-                continue;
 
-            HANDLE fileHandle;
-            if (SFileOpenArchive(itr->path().string<tstring>().c_str(), 0, MPQ_OPEN_READ_ONLY, &fileHandle))
-                _archiveHandles.push_back(fileHandle);
-            else
-                wowgm::exceptions::throw_with_trace<std::runtime_error>("Error loading archive.");
+            boost::filesystem::directory_iterator end;
+            for (boost::filesystem::directory_iterator itr(dataPath); itr != end; ++itr)
+            {
+                if (!boost::filesystem::is_directory(itr->path()))
+                    continue;
+
+                if (boost::filesystem::extension(itr->path()) != ".MPQ")
+                    continue;
+
+                HANDLE fileHandle;
+                if (SFileOpenArchive(itr->path().string<tstring>().c_str(), 0, MPQ_OPEN_READ_ONLY, &fileHandle))
+                    _archiveHandles.push_back(fileHandle);
+                else
+                    wowgm::exceptions::throw_with_trace<std::runtime_error>("Error loading archive.");
+            }
+        }
+        catch (const std::exception& e) {
+            return; // Check for more specific exceptions layer
         }
     }
 
@@ -53,6 +62,26 @@ namespace wowgm::filesystem
         }
 
         return { };
+    }
+
+    bool MpqFileSystem::FileExists(const std::string& relFilePath) const
+    {
+        for (HANDLE archiveHandle : _archiveHandles)
+        {
+            HANDLE fileHandle;
+            if (SFileOpenFileEx(archiveHandle, relFilePath.c_str(), SFILE_OPEN_PATCHED_FILE, &fileHandle))
+            {
+                SFileCloseFile(archiveHandle);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool MpqFileSystem::FileExists(const std::string& relFilePath, const std::string& root) const
+    {
+        return false;
     }
 
     MpqFile::MpqFile(HANDLE fileHandle, LoadStrategy loadStrategy) : _loadStrategy(loadStrategy)
@@ -150,7 +179,28 @@ namespace wowgm::filesystem
         boost::filesystem::path filePath = _rootFolder;
         filePath /= relFilePath;
 
-        return std::shared_ptr<DiskFile>(new DiskFile(filePath.string(), loadStrategy));
+        return OpenDirectFile(filePath.string(), loadStrategy);
+    }
+
+    std::shared_ptr<FileHandle<DiskFile>> DiskFileSystem::OpenDirectFile(const std::string& filePath, LoadStrategy loadStrategy)
+    {
+        return std::shared_ptr<DiskFile>(new DiskFile(filePath, loadStrategy));
+    }
+
+    bool DiskFileSystem::FileExists(const std::string& relFilePath) const
+    {
+        boost::filesystem::path p = _rootFolder;
+        p /= relFilePath;
+
+        return boost::filesystem::is_regular_file(p);
+    }
+
+    bool DiskFileSystem::FileExists(const std::string& relFilePath, const std::string& root) const
+    {
+        boost::filesystem::path p = root;
+        p /= relFilePath;
+
+        return boost::filesystem::is_regular_file(p);
     }
 
     DiskFile::DiskFile(const std::string& fileName, LoadStrategy loadStrategy) : _loadStrategy(loadStrategy), _mapped(nullptr)

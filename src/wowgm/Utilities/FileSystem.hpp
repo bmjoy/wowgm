@@ -110,9 +110,13 @@ namespace wowgm::filesystem
     {
         virtual void Initialize(const std::string& rootFolder) = 0;
         virtual std::shared_ptr<FileHandle<T>> OpenFile(const std::string& filePath, LoadStrategy loadStrategy = LoadStrategy::Mapped) = 0;
+        virtual std::shared_ptr<FileHandle<T>> OpenDirectFile(const std::string& filePath, LoadStrategy loadStrategy = LoadStrategy::Mapped) = 0;
 
         void SetLocale(Locale clientLocale) { _clientLocale = clientLocale; }
         Locale GetLocale() const { return _clientLocale; }
+
+        virtual bool FileExists(const std::string& relFilePath) const = 0;
+        virtual bool FileExists(const std::string& relFilePath, const std::string& root) const = 0;
 
     protected:
         const char* GetLocaleString() const
@@ -129,16 +133,14 @@ namespace wowgm::filesystem
         Locale _clientLocale = Locale::English;
     };
 
-    class MpqFileSystem : public FileSystem<MpqFile>
+    class MpqFileSystem final : public FileSystem<MpqFile>
     {
     public:
         static std::shared_ptr<MpqFileSystem> Open()
         {
-            static std::shared_ptr<MpqFileSystem> instance;
-            static std::once_flag once;
-            std::call_once(once, []() -> void {
-                instance = std::make_shared<MpqFileSystem>();
-            });
+            static std::shared_ptr<MpqFileSystem> instance = ([]() {
+                return std::make_shared<MpqFileSystem>();
+            })();
 
             return instance;
         }
@@ -147,21 +149,25 @@ namespace wowgm::filesystem
 
         void Initialize(const std::string& rootFolder) override;
         std::shared_ptr<FileHandle<MpqFile>> OpenFile(const std::string& filePath, LoadStrategy loadStrategy) override;
+        std::shared_ptr<FileHandle<MpqFile>> OpenDirectFile(const std::string& filePath, LoadStrategy loadStrategy = LoadStrategy::Mapped) override
+        {
+            return { };
+        }
+        bool FileExists(const std::string& relFilePath, const std::string& root) const override;
+        bool FileExists(const std::string& relFilePath) const override;
 
     private:
         std::vector<HANDLE> _archiveHandles;
     };
 
-    class DiskFileSystem : public FileSystem<DiskFile>
+    class DiskFileSystem final : public FileSystem<DiskFile>
     {
     public:
         static std::shared_ptr<DiskFileSystem> Open()
         {
-            static std::shared_ptr<DiskFileSystem> instance;
-            static std::once_flag once;
-            std::call_once(once, []() -> void {
-                instance = std::make_shared<DiskFileSystem>();
-            });
+            static std::shared_ptr<DiskFileSystem> instance = ([]() {
+                return std::make_shared<DiskFileSystem>();
+            })();
 
             return instance;
         }
@@ -170,6 +176,9 @@ namespace wowgm::filesystem
 
         void Initialize(const std::string& rootFolder) override;
         std::shared_ptr<FileHandle<DiskFile>> OpenFile(const std::string& relFilePath, LoadStrategy loadStrategy) override;
+        std::shared_ptr<FileHandle<DiskFile>> OpenDirectFile(const std::string& filePath, LoadStrategy loadStrategy = LoadStrategy::Mapped) override;
+        bool FileExists(const std::string& relFilePath, const std::string& root) const override;
+        bool FileExists(const std::string& relFilePath) const override;
 
     private:
         std::string _rootFolder;

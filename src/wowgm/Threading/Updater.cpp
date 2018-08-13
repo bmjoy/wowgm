@@ -28,7 +28,7 @@ namespace wowgm::threading
         if (_worker.joinable())
             _worker.join(); // join
 
-        _updatables.resize(0);
+        _updatables.clear();
     }
 
     void Updater::ThreadWorker(std::future<void> startFuture, std::future<void> future)

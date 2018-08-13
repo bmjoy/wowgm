@@ -284,21 +284,43 @@ void Window::OnUpdateOverlay()
 
     // Must be at the end, for modal windows
     ImGui::BeginMainMenuBar();
-    if (ImGui::BeginMenu("Options"))
+    if (ImGui::BeginMenu("File"))
     {
-        _showOptionsWindow = !_showOptionsWindow;
+        ImGui::MenuItem("Options", nullptr, &_showOptionsWindow);
         ImGui::EndMenu();
     }
 
-    if (_showOptionsWindow && ImGui::Begin("Options"))
+    if (_showOptionsWindow && ImGui::Begin("Options", &_showOptionsWindow))
     {
         ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[2]);
         ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Game data:");
         ImGui::PopFont();
 
         ImGui::PushItemWidth(-1);
-        ImGui::InputText("##GameDataFolder", _gameDataLocation, sizeof(_gameDataLocation), ImGuiInputTextFlags_CharsDecimal);
+        ImGui::InputText("##GameDataFolder", _gameDataLocation, sizeof(_gameDataLocation), ImGuiInputTextFlags_CallbackCharFilter, [](ImGuiTextEditCallbackData* callbackData) -> int {
+#if PLATFORM == PLATFORM_WINDOWS
+            switch (callbackData->EventChar)
+            {
+                case '<':
+                case '>':
+                case '"':
+                case '\\':
+                case '|':
+                case '?':
+                case '*':
+                    return 1;
+            }
+#endif
+            return 0;
+        });
         ImGui::PopItemWidth();
+
+        MpqFileSystem::Open()->Initialize(_gameDataLocation);
+        bool binaryFound = DiskFileSystem::Open()->FileExists("/Wow.exe", _gameDataLocation);
+
+        ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[1]);
+        ImGui::TextColored(ImVec4(binaryFound ? 0.0f : 1.0f, binaryFound ? 1.0f : 0.0f, 0.0f, 1.0f), binaryFound ? "Executable located." : "Invalid path");
+        ImGui::PopFont();
 
         ImGui::End();
     }
