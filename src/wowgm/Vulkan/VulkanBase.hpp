@@ -145,9 +145,6 @@ namespace vkx {
     #endif
             } semaphores;
 
-            // Returns the base asset path (for shaders, models, textures) depending on the os
-            const std::string& getAssetPath() { return ::vkx::getAssetPath(); }
-
         protected:
             struct Settings {
                 bool validation = false;
