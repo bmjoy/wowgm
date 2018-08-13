@@ -315,8 +315,8 @@ void Window::OnUpdateOverlay()
         });
         ImGui::PopItemWidth();
 
-        MpqFileSystem::Open()->Initialize(_gameDataLocation);
-        bool binaryFound = DiskFileSystem::Open()->FileExists("/Wow.exe", _gameDataLocation);
+        MpqFileSystem::Instance()->Initialize(_gameDataLocation);
+        bool binaryFound = DiskFileSystem::Instance()->FileExists("/Wow.exe", _gameDataLocation);
 
         ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[1]);
         ImGui::TextColored(ImVec4(binaryFound ? 0.0f : 1.0f, binaryFound ? 1.0f : 0.0f, 0.0f, 1.0f), binaryFound ? "Executable located." : "Invalid path");

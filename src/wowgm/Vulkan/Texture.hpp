@@ -80,7 +80,7 @@ public:
         std::shared_ptr<gli::texture2d> tex2Dptr;
 
         {
-            auto fileInfo = DiskFileSystem::Open()->OpenFile(filename, LoadStrategy::Mapped);
+            auto fileInfo = DiskFileSystem::Instance()->OpenFile(filename, LoadStrategy::Mapped);
             tex2Dptr = std::make_shared<gli::texture2d>(gli::load(reinterpret_cast<const char*>(fileInfo->GetData()), fileInfo->GetFileSize()));
         }
 
@@ -250,7 +250,7 @@ public:
         std::shared_ptr<gli::texture2d_array> texPtr;
 
         {
-            auto fileInfo = DiskFileSystem::Open()->OpenFile(filename, LoadStrategy::Mapped);
+            auto fileInfo = DiskFileSystem::Instance()->OpenFile(filename, LoadStrategy::Mapped);
             texPtr = std::make_shared<gli::texture2d_array>(gli::load(reinterpret_cast<const char*>(fileInfo->GetData()), fileInfo->GetFileSize()));
         }
 
@@ -367,7 +367,7 @@ public:
         std::shared_ptr<const gli::texture_cube> texPtr;
 
         {
-            auto fileInfo = DiskFileSystem::Open()->OpenFile(filename, LoadStrategy::Mapped);
+            auto fileInfo = DiskFileSystem::Instance()->OpenFile(filename, LoadStrategy::Mapped);
             texPtr = std::make_shared<gli::texture_cube>(gli::load(reinterpret_cast<const char*>(fileInfo->GetData()), fileInfo->GetFileSize()));
         }
 

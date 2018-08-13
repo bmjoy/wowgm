@@ -7,7 +7,7 @@ vk::ShaderModule vks::shaders::loadShaderModule(const vk::Device& device, const 
 {
     vk::ShaderModule result;
     {
-        auto file = DiskFileSystem::Open()->OpenFile(fileName, LoadStrategy::Memory);
+        auto file = DiskFileSystem::Instance()->OpenFile(fileName, LoadStrategy::Memory);
         result = device.createShaderModule({ {}, file->GetFileSize(), reinterpret_cast<const uint32_t*>(file->GetData()) });
     }
     return result;

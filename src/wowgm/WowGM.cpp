@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 
     wowgm::log::initialize();
 
-    DiskFileSystem::Open()->Initialize(".");
+    DiskFileSystem::Instance()->Initialize(".");
 
     try {
         po::options_description desc("Allowed options");

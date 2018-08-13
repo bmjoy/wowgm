@@ -136,13 +136,11 @@ namespace wowgm::filesystem
     class MpqFileSystem final : public FileSystem<MpqFile>
     {
     public:
-        static std::shared_ptr<MpqFileSystem> Open()
+        static MpqFileSystem* Instance()
         {
-            static std::shared_ptr<MpqFileSystem> instance = ([]() {
-                return std::make_shared<MpqFileSystem>();
-            })();
+            static MpqFileSystem instance;
 
-            return instance;
+            return &instance;
         }
 
         ~MpqFileSystem();
@@ -163,13 +161,11 @@ namespace wowgm::filesystem
     class DiskFileSystem final : public FileSystem<DiskFile>
     {
     public:
-        static std::shared_ptr<DiskFileSystem> Open()
+        static DiskFileSystem* Instance()
         {
-            static std::shared_ptr<DiskFileSystem> instance = ([]() {
-                return std::make_shared<DiskFileSystem>();
-            })();
+            static DiskFileSystem instance;
 
-            return instance;
+            return &instance;
         }
 
         ~DiskFileSystem();
