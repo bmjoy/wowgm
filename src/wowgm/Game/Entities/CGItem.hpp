@@ -2,7 +2,6 @@
 
 #include "UpdateField.hpp"
 #include "ObjectGuid.hpp"
-
 #include "CGObject.hpp"
 
 #include <cstdint>
@@ -23,6 +22,9 @@ namespace wowgm::game::entities
 
     struct CGItemData
     {
+        CGItemData() { }
+        virtual ~CGItemData() { }
+
         Descriptor<ObjectGuid> Owner;
         Descriptor<ObjectGuid> Contained;
         Descriptor<ObjectGuid> Creator;
@@ -42,7 +44,8 @@ namespace wowgm::game::entities
     class CGItem : public CGItemData, public CGObject
     {
     public:
-        ~CGItem();
+        CGItem(TypeMask typeMask);
+        virtual ~CGItem();
 
         CGItemData const& GetItemData() const;
 

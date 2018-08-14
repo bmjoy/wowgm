@@ -1,5 +1,7 @@
 #include "CGObject.hpp"
 #include "CGItem.hpp"
+#include "CGContainer.hpp"
+#include "CGUnit.hpp"
 
 namespace wowgm::game::entities
 {
@@ -17,7 +19,21 @@ namespace wowgm::game::entities
 
     CGObjectData const& CGObject::GetObjectData() const
     {
-        return *this;
+        return static_cast<CGObjectData const&>(*this);
+    }
+
+    CGUnit* CGObject::ToUnit()
+    {
+        if (_typeMask & TYPEMASK_UNIT)
+            return static_cast<CGUnit*>(this);
+        return nullptr;
+    }
+
+    CGUnit const* CGObject::ToUnit() const
+    {
+        if (_typeMask & TYPEMASK_UNIT)
+            return static_cast<CGUnit const*>(this);
+        return nullptr;
     }
 
     CGItem* CGObject::ToItem()
@@ -31,6 +47,20 @@ namespace wowgm::game::entities
     {
         if (_typeMask & TYPEMASK_ITEM)
             return static_cast<CGItem const*>(this);
+        return nullptr;
+    }
+
+    CGContainer* CGObject::ToContainer()
+    {
+        if (_typeMask & TYPEMASK_CONTAINER)
+            return static_cast<CGContainer*>(this);
+        return nullptr;
+    }
+
+    CGContainer const* CGObject::ToContainer() const
+    {
+        if (_typeMask & TYPEMASK_CONTAINER)
+            return static_cast<CGContainer const*>(this);
         return nullptr;
     }
 }

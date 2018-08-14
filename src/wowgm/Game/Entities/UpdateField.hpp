@@ -39,6 +39,11 @@ namespace wowgm::game::entities
             return _value;
         }
 
+        inline member_type& operator * ()
+        {
+            return *_value;
+        }
+
         Descriptor(Descriptor<T, N>&& other) = delete;
         Descriptor(Descriptor<T, N> const& other) = delete;
 
@@ -48,10 +53,4 @@ namespace wowgm::game::entities
         Descriptor<T, N>& operator = (member_type const& other) = delete;
         Descriptor<T, N>& operator = (member_type&& other) = delete;
     };
-
-    static_assert(sizeof(std::array<float, 2>) == 8);
-    static_assert(sizeof(std::array<float, 2>) == sizeof(Descriptor<float, 2>));
-
-    static_assert(sizeof(Descriptor<float>) == sizeof(float), "Descriptor<T> must be of same size than T.");
-    static_assert(sizeof(Descriptor<float, 2>) == sizeof(float) * 2, "Descriptor<T, N> must be of same size than T, N.");
 }
