@@ -1,8 +1,9 @@
 #pragma once
 
-#include "VulkanBase.hpp"
 #include <string>
 #include <vulkan/vulkan.hpp>
+
+#include "VulkanBase.hpp"
 
 namespace wowgm
 {

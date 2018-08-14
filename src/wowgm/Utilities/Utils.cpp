@@ -1,18 +1,18 @@
 #include "Utils.hpp"
+#include "Defines.hpp"
 
 #include <sstream>
 
-namespace wowgm::utilities
+#if PLATFORM == PLATFORM_WINDOWS
+struct tm* localtime_r(const time_t* time, struct tm *result)
 {
-
-#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__))
-    struct tm* localtime_r(const time_t* time, struct tm *result)
-    {
-        localtime_s(result, time);
-        return result;
-    }
+    localtime_s(result, time);
+    return result;
+}
 #endif
 
+namespace wowgm::utilities
+{
     std::string ByteArrayToHexStr(std::uint8_t const* bytes, std::uint32_t arrayLen, bool reverse)
     {
         std::int32_t init = 0;

@@ -1,11 +1,10 @@
+#include <imgui.h>
+
 #include "Window.hpp"
 #include "ClientServices.hpp"
 #include "AuthResult.hpp"
 #include "RealmList.hpp"
-
 #include "CharacterPackets.hpp"
-
-#include <imgui.h>
 
 using namespace wowgm;
 using namespace wowgm::protocol::authentification;

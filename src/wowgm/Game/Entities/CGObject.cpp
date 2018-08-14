@@ -5,8 +5,6 @@
 
 namespace wowgm::game::entities
 {
-    using namespace wowgm::utilities;
-
     CGObject::CGObject(TypeMask typeMask)
     {
         _typeMask = typeMask;

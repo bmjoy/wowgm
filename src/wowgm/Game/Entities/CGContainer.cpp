@@ -3,8 +3,6 @@
 
 namespace wowgm::game::entities
 {
-    using namespace wowgm::utilities;
-
     CGContainer::CGContainer(TypeMask typeMask) : CGContainerData(), CGItem(typeMask)
     {
 

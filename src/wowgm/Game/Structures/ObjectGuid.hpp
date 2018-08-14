@@ -5,7 +5,7 @@
 
 #include <cstdint>
 
-namespace wowgm::utilities
+namespace wowgm::game::structures
 {
     enum TypeID
     {

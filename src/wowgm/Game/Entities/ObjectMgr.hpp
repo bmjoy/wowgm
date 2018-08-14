@@ -8,7 +8,7 @@
 
 namespace wowgm::game::entities
 {
-    using namespace wowgm::utilities;
+    using namespace wowgm::game::structures;
 
     class ObjectMgr final
     {

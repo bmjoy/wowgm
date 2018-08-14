@@ -6,7 +6,7 @@
 
 #include "NetworkingExceptions.hpp"
 
-namespace wowgm::utilities
+namespace wowgm::game::structures
 {
     class ObjectGuid;
 }
@@ -432,7 +432,7 @@ namespace wowgm::protocol
             ReadPackedUInt64(read<std::uint8_t>(), guid);
         }
 
-        void ReadPackedGuid(utilities::ObjectGuid& guid);
+        void ReadPackedGuid(wowgm::game::structures::ObjectGuid& guid);
 
         void ReadPackedUInt64(std::uint8_t mask, std::uint64_t& value)
         {

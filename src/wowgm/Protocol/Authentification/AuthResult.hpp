@@ -4,7 +4,6 @@
 
 namespace wowgm::protocol::authentification
 {
-
     enum AuthResult : std::uint8_t
     {
         LOGIN_OK                  = 0,

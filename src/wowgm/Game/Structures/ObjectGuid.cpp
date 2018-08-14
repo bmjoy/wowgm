@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace wowgm::utilities
+namespace wowgm::game::structures
 {
     ObjectGuid const ObjectGuid::Empty = ObjectGuid();
 

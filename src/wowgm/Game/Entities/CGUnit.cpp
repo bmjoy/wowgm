@@ -3,8 +3,6 @@
 
 namespace wowgm::game::entities
 {
-    using namespace wowgm::utilities;
-
     CGUnit::CGUnit(TypeMask typeMask) : CGUnitData(), CGObject(typeMask)
     {
 

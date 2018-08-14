@@ -1,18 +1,15 @@
 #pragma once
+#include <string>
+#include <cstdint>
+#include <memory>
+#include <vector>
+#include <boost/optional.hpp>
 
 #include "AuthCommand.hpp"
 #include "AuthResult.hpp"
 #include "BigNumber.hpp"
 #include "Socket.hpp"
-
 #include "CharacterPackets.hpp"
-
-#include <string>
-#include <cstdint>
-#include <memory>
-#include <vector>
-
-#include <boost/optional.hpp>
 
 namespace wowgm {
     namespace threading {

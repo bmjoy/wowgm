@@ -24,7 +24,7 @@
 #include <sstream>
 #include <ctime>
 
-using namespace wowgm::utilities;
+using namespace wowgm::game::structures;
 
 namespace wowgm::protocol
 {

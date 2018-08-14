@@ -9,7 +9,7 @@
 
 namespace wowgm::protocol::world::packets
 {
-    using namespace wowgm::utilities;
+    using namespace wowgm::game::structures;
 
     struct PetInfo
     {
