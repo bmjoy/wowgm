@@ -20,11 +20,9 @@ namespace wowgm::game::entities
 
     class CGPlayer;
 
+#pragma pack(push, 1)
     struct CGItemData
     {
-        CGItemData() { }
-        virtual ~CGItemData() { }
-
         Descriptor<ObjectGuid> Owner;
         Descriptor<ObjectGuid> Contained;
         Descriptor<ObjectGuid> Creator;
@@ -40,6 +38,9 @@ namespace wowgm::game::entities
         Descriptor<std::uint32_t> MaxDurability;
         Descriptor<std::uint32_t> CreatePlayedTime;
     };
+#pragma pack(pop)
+
+    static_assert(sizeof(CGItemData) == sizeof(std::uint32_t) * 66);
 
     class CGItem : public CGItemData, public CGObject
     {

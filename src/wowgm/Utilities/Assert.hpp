@@ -1,35 +1,14 @@
 #ifndef WOWGM_ASSERT_H_
 #define WOWGM_ASSERT_H_
 
+#define BOOST_ENABLE_ASSERT_DEBUG_HANDLER
+
+#include <boost/exception/all.hpp>
+#include <boost/assert.hpp>
+#include <boost/stacktrace.hpp>
 #include <iostream>
 
-#include <boost/stacktrace.hpp>
-#include <boost/exception/all.hpp>
-
-#define BOOST_ENABLE_ASSERT_DEBUG_HANDLER
-#include <boost/assert.hpp>
-
-#include <boost/config/detail/suffix.hpp>
-
 struct tag_stacktrace { };
-
-namespace boost::stacktrace
-{
-    class application_stacktrace;
-}
-
-typedef boost::error_info<tag_stacktrace, boost::stacktrace::application_stacktrace> traced;
-
-
-namespace wowgm::exceptions
-{
-    template <class E, typename... Args>
-    inline void throw_with_trace(Args&&... args)
-    {
-        E ex(std::forward<Args>(args)...);
-        throw boost::enable_error_info(ex) << traced(boost::stacktrace::application_stacktrace());
-    }
-}
 
 namespace boost
 {
@@ -285,13 +264,13 @@ namespace boost
             /// @b Async-Handler-Safety: Safe.
             BOOST_EXPLICIT_OPERATOR_BOOL_NOEXCEPT()
 
-            /// @brief Allows to check that stack trace failed.
-            /// @returns `true` if `this->size() == 0`
-            ///
-            /// @b Complexity: O(1)
-            ///
-            /// @b Async-Handler-Safety: Safe.
-            bool empty() const BOOST_NOEXCEPT { return !size(); }
+                /// @brief Allows to check that stack trace failed.
+                /// @returns `true` if `this->size() == 0`
+                ///
+                /// @b Complexity: O(1)
+                ///
+                /// @b Async-Handler-Safety: Safe.
+                bool empty() const BOOST_NOEXCEPT { return !size(); }
 
             /// @cond
             bool operator!() const BOOST_NOEXCEPT { return !size(); }
@@ -368,33 +347,25 @@ namespace boost
             return os;
         }
     }
+}
 
-    inline void assertion_failed_msg_fmt(char const* expr, char const* msg, char const* function, char const* file, long line, ...)
+typedef boost::error_info<tag_stacktrace, boost::stacktrace::application_stacktrace> traced;
+
+namespace wowgm::exceptions
+{
+    template <class E = std::runtime_error, typename... Args>
+    inline void throw_with_trace(Args&&... args)
     {
-        va_list args;
-        va_start(args, line);
-
-        std::cerr << file << ':' << line << " in " << function << " ASSERTION FAILED \"" << expr << "\" \n";
-        vfprintf(stderr, msg, args);
-        std::cerr << '\n';
-        std::cerr << "Backtrace:\n" << boost::stacktrace::application_stacktrace() << std::endl;
-
-        va_end(args);
-
-        *((volatile int*)NULL) = 0;
-        exit(1);
+        E ex(std::forward<Args>(args)...);
+        throw boost::enable_error_info(ex) << traced(boost::stacktrace::application_stacktrace());
     }
+}
 
-    inline void assertion_failed_msg(char const* expr, char const* msg, char const* function, char const* file, long line) {
+namespace boost
+{
+    void assertion_failed_msg_fmt(char const* expr, char const* msg, char const* function, char const* file, long line, ...);
 
-        std::cerr << file << ':' << line << " in " << function << " ASSERTION FAILED \"" << expr << "\" \n";
-        if (msg != nullptr)
-            std::cerr << msg << '\n';
-
-        std::cerr << "Backtrace:\n" << boost::stacktrace::application_stacktrace() << '\n';
-
-        std::exit(1);
-    }
+    inline void assertion_failed_msg(char const* expr, char const* msg, char const* function, char const* file, long line);
 
     inline void assertion_failed(char const* expr, char const* function, char const* file, long line) {
         ::boost::assertion_failed_msg(expr, 0 /*nullptr*/, function, file, line);

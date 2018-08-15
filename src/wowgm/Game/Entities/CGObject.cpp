@@ -5,9 +5,10 @@
 
 namespace wowgm::game::entities
 {
-    CGObject::CGObject(TypeMask typeMask)
+    using namespace wowgm::game::structures;
+
+    CGObject::CGObject(CClientObjCreate const& createBlock)
     {
-        _typeMask = typeMask;
     }
 
     CGObject::~CGObject()
@@ -18,6 +19,12 @@ namespace wowgm::game::entities
     CGObjectData const& CGObject::GetObjectData() const
     {
         return static_cast<CGObjectData const&>(*this);
+    }
+
+
+    CGObjectData& CGObject::GetObjectData()
+    {
+        return static_cast<CGObjectData&>(*this);
     }
 
     CGUnit* CGObject::ToUnit()
@@ -70,5 +77,17 @@ namespace wowgm::game::entities
     C3Vector const* CGObject::GetPosition() const
     {
         return static_cast<C3Vector const*>(this);
+    }
+
+    void CGObject::UpdateDescriptors(JamCliValuesUpdate const& valuesUpdate)
+    {
+        std::uint8_t* objectDataBase = reinterpret_cast<std::uint8_t*>(&GetObjectData());
+        for (auto&& itr : valuesUpdate.Descriptors)
+        {
+            if (itr.first > sizeof(CGObjectData))
+                continue;
+
+            *reinterpret_cast<std::uint32_t*>(objectDataBase + itr.first * 4) = itr.second;
+        }
     }
 }

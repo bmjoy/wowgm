@@ -1,6 +1,8 @@
 #include "ObjectGuid.hpp"
 #include "Assert.hpp"
 
+#include <sstream>
+#include <iomanip>
 #include <string>
 
 namespace wowgm::game::structures

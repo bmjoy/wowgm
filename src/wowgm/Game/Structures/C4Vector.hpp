@@ -8,6 +8,6 @@ namespace wowgm::game::structures
     {
         C4Vector() : C3Vector() { }
 
-        float O;
+        float O = 0.0f;
     };
 }

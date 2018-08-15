@@ -9,10 +9,10 @@ namespace wowgm::game::structures
     {
         C4Quaternion() { }
 
-        float X;
-        float Y;
-        float Z;
-        float W;
+        float X = 0.0f;
+        float Y = 0.0f;
+        float Z = 0.0f;
+        float W = 0.0f;
 
         inline C4Quaternion& operator = (std::uint64_t packedValue)
         {

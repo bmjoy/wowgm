@@ -1,6 +1,7 @@
 #include "FileSystem.hpp"
 #include "Assert.hpp"
 
+#include <stdexcept>
 #include <boost/filesystem.hpp>
 
 // TODO: Throw proper exceptions here. Stormlib provides a shim GetlastError/SetLastError even on non-windows systems

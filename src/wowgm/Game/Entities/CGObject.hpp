@@ -3,6 +3,8 @@
 #include "UpdateField.hpp"
 #include "ObjectGuid.hpp"
 #include "C3Vector.hpp"
+#include "JamCliValuesUpdate.hpp"
+#include "CClientObjCreate.hpp"
 
 #include <type_traits>
 #include <cstdint>
@@ -11,11 +13,9 @@ namespace wowgm::game::entities
 {
     using namespace wowgm::game::structures;
 
+#pragma pack(push, 1)
     struct CGObjectData
     {
-        CGObjectData() { }
-        virtual ~CGObjectData() { }
-
         Descriptor<ObjectGuid> GUID;
         Descriptor<ObjectGuid> Data;
         Descriptor<std::uint16_t, 2> Type;
@@ -23,6 +23,9 @@ namespace wowgm::game::entities
         Descriptor<float> Scale;
         Descriptor<std::uint32_t> _; // Padding
     };
+#pragma pack(pop)
+
+    static_assert(sizeof(CGObjectData) == sizeof(std::uint32_t) * 8);
 
     class CGUnit;
     class CGGameObject;
@@ -36,10 +39,13 @@ namespace wowgm::game::entities
     class CGObject : public CGObjectData, private C3Vector
     {
     public:
-        explicit CGObject(TypeMask typeMask);
+        explicit CGObject(CClientObjCreate const& typeMask);
         virtual ~CGObject();
 
         CGObjectData const& GetObjectData() const;
+        CGObjectData& GetObjectData();
+
+        virtual void UpdateDescriptors(JamCliValuesUpdate const& valuesUpdate);
 
         virtual CGUnit* ToUnit();
         virtual CGUnit const* ToUnit() const;
@@ -58,8 +64,5 @@ namespace wowgm::game::entities
 
         C3Vector* GetPosition();
         C3Vector const* GetPosition() const;
-
-    private:
-        TypeMask _typeMask;
     };
 }

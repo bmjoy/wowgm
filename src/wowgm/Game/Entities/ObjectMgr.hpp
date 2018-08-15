@@ -3,50 +3,69 @@
 #include "ObjectGuid.hpp"
 #include "CGObject.hpp"
 
-#include <type_traits>
-#include <vector>
+#include <shared_mutex>
+
+// WTF, stop this shit please
+#ifdef GetObject
+#undef GetObject
+#endif
 
 namespace wowgm::game::entities
 {
     using namespace wowgm::game::structures;
 
-    class ObjectMgr final
+    namespace details
     {
         template <TypeID TypeId>
-        struct typeid_trait {
-        };
+        struct typeid_trait { };
 
-        template <> struct typeid_trait<TYPEID_OBJECT>        { using type = CGObject; };
-        template <> struct typeid_trait<TYPEID_ITEM>          { using type = CGItem; };
-        template <> struct typeid_trait<TYPEID_CONTAINER>     { using type = CGContainer; };
-        template <> struct typeid_trait<TYPEID_UNIT>          { using type = CGUnit; };
-        template <> struct typeid_trait<TYPEID_PLAYER>        { using type = CGPlayer; };
-        template <> struct typeid_trait<TYPEID_GAMEOBJECT>    { using type = CGGameObject; };
+        template <> struct typeid_trait<TYPEID_OBJECT> { using type = CGObject; };
+        template <> struct typeid_trait<TYPEID_ITEM> { using type = CGItem; };
+        template <> struct typeid_trait<TYPEID_CONTAINER> { using type = CGContainer; };
+        template <> struct typeid_trait<TYPEID_UNIT> { using type = CGUnit; };
+        template <> struct typeid_trait<TYPEID_PLAYER> { using type = CGPlayer; };
+        template <> struct typeid_trait<TYPEID_GAMEOBJECT> { using type = CGGameObject; };
         template <> struct typeid_trait<TYPEID_DYNAMICOBJECT> { using type = CGDynamicObject; };
-        template <> struct typeid_trait<TYPEID_CORPSE>        { using type = CGCorpse; };
-        template <> struct typeid_trait<TYPEID_AREATRIGGER>   { using type = CGAreaTrigger; };
+        template <> struct typeid_trait<TYPEID_CORPSE> { using type = CGCorpse; };
+        template <> struct typeid_trait<TYPEID_AREATRIGGER> { using type = CGAreaTrigger; };
+    }
+
+    template <typename T>
+    class ObjectHolder final
+    {
+        ObjectHolder() { }
 
     public:
+        using ContainerType = std::unordered_map<ObjectGuid, T*>;
 
-        static ObjectMgr* Instance();
+        static ContainerType& GetContainer();
 
-        template <typename T, typename std::enable_if<std::is_base_of<CGObject, T>::value, int>::type = 0>
-        inline T* GetEntity(ObjectGuid const& guid) const {
-            for (CGObject* itr : _objects)
-                if (itr->GetGUID() == guid)
-                    return static_cast<T*>(itr);
-            return nullptr;
+        static void Insert(T* object);
+        static void Remove(T* object);
+        static void Remove(ObjectGuid guid);
+
+        template <typename... Args>
+        inline static void Emplace(Args&&... args) {
+            Insert(new T(std::forward<Args>(args)...));
+        }
+
+        static T* Find(ObjectGuid guid);
+
+        static std::shared_mutex* GetMutex();
+    };
+
+    namespace ObjectAccessor
+    {
+        template <typename T>
+        static inline T* GetObject(ObjectGuid guid)
+        {
+            return ObjectHolder<T>::Find(guid);
         }
 
         template <TypeID Type>
-        inline auto GetEntity(ObjectGuid const& guid) const -> typename typeid_trait<Type>::type* {
-            return GetEntity<typename typeid_trait<Type>::type>(guid);
+        static inline auto GetObject(ObjectGuid guid) -> typename details::typeid_trait<Type>::type
+        {
+            return ObjectHolder<typename details::typeid_trait<Type>::type>(guid);
         }
-
-        CGPlayer* GetLocalPlayer() { return _localPlayer; }
-
-    private:
-        std::vector<CGObject*> _objects;
-        CGPlayer* _localPlayer;
-    };
+    }
 }

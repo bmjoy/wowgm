@@ -3,6 +3,7 @@
 #include "UpdateField.hpp"
 #include "ObjectGuid.hpp"
 #include "CGObject.hpp"
+#include "CClientObjCreate.hpp"
 
 #include <cstdint>
 
@@ -10,6 +11,7 @@ namespace wowgm::game::entities
 {
     using namespace wowgm::game::structures;
 
+#pragma pack(push, 1)
     struct CGUnitData
     {
         struct UnitBytes0
@@ -49,9 +51,6 @@ namespace wowgm::game::entities
             std::uint32_t NegativeModifier;
             float Multiplier;
         };
-
-        CGUnitData() { }
-        virtual ~CGUnitData() { }
 
         Descriptor<ObjectGuid> Charm;
         Descriptor<ObjectGuid> Summon;
@@ -108,17 +107,23 @@ namespace wowgm::game::entities
         Descriptor<std::uint32_t> MaxItemLevel;
         Descriptor<std::uint32_t> _;
     };
+#pragma pack(pop)
+
+    static_assert(sizeof(CGUnitData) == sizeof(std::uint32_t) * 142);
 
     class CGUnit : public CGUnitData, public CGObject
     {
     public:
-        explicit CGUnit(TypeMask typeMask);
+        explicit CGUnit(CClientObjCreate const& typeMask);
         virtual ~CGUnit();
 
         CGUnitData const& GetUnitData() const;
+        CGUnitData& GetUnitData();
 
         CGUnit* ToUnit() override;
         CGUnit const* ToUnit() const override;
+
+        void UpdateDescriptors(JamCliValuesUpdate const& valuesUpdate) overridel
 
     private:
         TypeMask _typeMask;
