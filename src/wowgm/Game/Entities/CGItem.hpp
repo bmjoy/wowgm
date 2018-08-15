@@ -3,6 +3,7 @@
 #include "UpdateField.hpp"
 #include "ObjectGuid.hpp"
 #include "CGObject.hpp"
+#include "CClientObjCreate.hpp"
 
 #include <cstdint>
 
@@ -45,7 +46,7 @@ namespace wowgm::game::entities
     class CGItem : public CGItemData, public CGObject
     {
     public:
-        CGItem(TypeMask typeMask);
+        explicit CGItem(CClientObjCreate const& objCreate);
         virtual ~CGItem();
 
         CGItemData const& GetItemData() const;

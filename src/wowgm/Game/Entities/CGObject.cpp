@@ -7,7 +7,7 @@ namespace wowgm::game::entities
 {
     using namespace wowgm::game::structures;
 
-    CGObject::CGObject(CClientObjCreate const& createBlock)
+    CGObject::CGObject(CClientObjCreate const& objCreate)
     {
     }
 

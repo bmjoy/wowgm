@@ -39,7 +39,7 @@ namespace wowgm::game::entities
     class CGObject : public CGObjectData, private C3Vector
     {
     public:
-        explicit CGObject(CClientObjCreate const& typeMask);
+        explicit CGObject(CClientObjCreate const& objCreate);
         virtual ~CGObject();
 
         CGObjectData const& GetObjectData() const;

@@ -3,7 +3,9 @@
 
 namespace wowgm::game::entities
 {
-    CGContainer::CGContainer(TypeMask typeMask) : CGContainerData(), CGItem(typeMask)
+    using namespace wowgm::game::structures;
+
+    CGContainer::CGContainer(CClientObjCreate const& objCreate) : CGContainerData(), CGItem(objCreate)
     {
 
     }

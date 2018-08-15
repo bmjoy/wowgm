@@ -2,7 +2,7 @@
 
 #include "UpdateField.hpp"
 #include "ObjectGuid.hpp"
-
+#include "CClientObjCreate.hpp"
 #include "CGObject.hpp"
 #include "CGItem.hpp"
 
@@ -26,7 +26,7 @@ namespace wowgm::game::entities
     class CGContainer : public CGContainerData, public CGItem
     {
     public:
-        CGContainer(TypeMask typeMask);
+        explicit CGContainer(CClientObjCreate const& objCreate);
         virtual ~CGContainer();
 
         CGContainerData const& GetContainerData() const;
