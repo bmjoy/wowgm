@@ -7,7 +7,7 @@
 
 namespace wowgm::game::structures
 {
-    enum TypeID
+    enum TypeID : std::uint8_t
     {
         TYPEID_OBJECT        = 0,
         TYPEID_ITEM          = 1,

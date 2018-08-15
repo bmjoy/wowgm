@@ -13,13 +13,7 @@ namespace wowgm::game::structures
 #pragma pack(push, 1)
     struct CMovementStatus final
     {
-        CMovementStatus() : FallInfo(), Vehicle(), Transport(), Spline()
-        {
-            // This is safe
-            memset(this, 0, sizeof(CMovementStatus));
-        }
-
-        std::uint8_t ObjectType = 0;
+        TypeID ObjectType = TypeID::TYPEID_OBJECT;
 
         std::uint32_t Time = 0;
         std::uint32_t Flags = 0;

@@ -51,7 +51,7 @@ namespace wowgm::game::structures
         str << "GUID Full: 0x" << std::hex << std::setw(16) << std::setfill('0') << _data._guid << std::dec;
         str << " Type: " << GetTypeName();
         if (HasEntry())
-            str << (IsPet() ? " Pet number: " : " Entry: ") << GetEntry() << " ";
+            str << (IsPet() ? " Pet number: " : " Entry: ") << GetEntry();
 
         str << " Low: " << GetCounter();
         return str.str();

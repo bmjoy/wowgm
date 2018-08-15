@@ -9,7 +9,7 @@ namespace wowgm::protocol::world::packets
 {
     using namespace wowgm::utilities;
 
-    template <typename T, typename std::enable_if<is_scoped_enum<T>::value, int>::type = 0>
+    template <typename T, typename std::enable_if<std::is_enum<T>::value, int>::type = 0>
     inline WorldPacket& operator >> (WorldPacket& packet, T& value)
     {
         typedef typename std::underlying_type<T>::type type;

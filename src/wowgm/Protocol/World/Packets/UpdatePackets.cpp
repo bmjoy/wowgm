@@ -1,6 +1,9 @@
 #include "UpdatePackets.hpp"
 #include "PacketUtils.hpp"
 #include "Assert.hpp"
+#if _DEBUG
+#include "Logger.hpp"
+#endif
 
 namespace wowgm::protocol::world::packets
 {
@@ -44,7 +47,7 @@ namespace wowgm::protocol::world::packets
         if (isLiving)
         {
             bool hasMovementFlags = !worldPacket.ReadBit();
-            bool hasOrientation = !worldPacket.ReadBit();
+            hasOrientation = !worldPacket.ReadBit();
 
             movementInfo.GUID[7] = worldPacket.ReadBit();
             movementInfo.GUID[3] = worldPacket.ReadBit();
@@ -342,11 +345,11 @@ namespace wowgm::protocol::world::packets
 
     inline WorldPacket& operator >> (WorldPacket& worldPacket, JamCliValuesUpdate& valuesUpdate)
     {
-        std::uint8_t maskSize;
-        worldPacket >> maskSize;
+        std::uint8_t blockCount;
+        worldPacket >> blockCount;
 
-        std::vector<bool> mask(maskSize * 32);
-        for (std::uint8_t i = 0; i < mask.size(); ++i)
+        std::vector<bool> mask(blockCount * 32);
+        for (std::uint32_t i = 0; i < mask.size(); ++i)
             mask[i] = worldPacket.ReadBit();
 
         std::uint32_t i = 0;
@@ -392,6 +395,10 @@ namespace wowgm::protocol::world::packets
                         ObjectGuid destroyGuid;
                         _worldPacket.ReadPackedGuid(destroyGuid);
                         DestroyObjects.push_back(destroyGuid);
+
+#if _DEBUG
+                        LOG_DEBUG << "Destroying " << destroyGuid.ToString();
+#endif
                     }
 
                     break;
@@ -400,14 +407,19 @@ namespace wowgm::protocol::world::packets
                 case UpdateType::CreateObject2:
                 {
                     _worldPacket.ReadPackedGuid(objCreate.GUID);
+#if _DEBUG
+                    LOG_DEBUG << "Received create block for " << objCreate.GUID.ToString();
+#endif
                     _worldPacket >> objCreate.Movement;
                     _worldPacket >> objCreate.Values;
-
                     break;
                 }
                 case UpdateType::Values:
                 {
                     _worldPacket.ReadPackedGuid(objCreate.GUID);
+#if _DEBUG
+                    LOG_DEBUG << "Received values update for " << objCreate.GUID.ToString();
+#endif
                     _worldPacket >> objCreate.Values;
 
                     break;
