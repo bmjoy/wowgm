@@ -4,6 +4,7 @@
 #include "ObjectGuid.hpp"
 #include "CGObject.hpp"
 #include "CClientObjCreate.hpp"
+#include "JamCliValuesUpdate.hpp"
 
 #include <cstdint>
 
@@ -50,11 +51,14 @@ namespace wowgm::game::entities
         virtual ~CGItem();
 
         CGItemData const& GetItemData() const;
+        CGItemData& GetItemData();
 
         CGPlayer* GetOwner() const;
         CGPlayer* GetCreator() const;
 
         CGItem* ToItem() override;
         CGItem const* ToItem() const override;
+
+        void UpdateDescriptors(JamCliValuesUpdate const& valuesUpdate) override;
     };
 }

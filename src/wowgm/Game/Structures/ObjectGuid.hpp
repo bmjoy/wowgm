@@ -225,3 +225,17 @@ namespace wowgm::game::structures
 
     inline PackedGuid ObjectGuid::WriteAsPacked() const { return PackedGuid(*this); }
 }
+
+namespace std
+{
+    using namespace wowgm::game::structures;
+
+    template <>
+    struct hash<ObjectGuid>
+    {
+        std::size_t operator()(ObjectGuid const& s) const noexcept
+        {
+            return std::hash<std::uint64_t>()(s.GetRawValue());
+        }
+    };
+}

@@ -3,6 +3,7 @@
 #include "UpdateField.hpp"
 #include "ObjectGuid.hpp"
 #include "CClientObjCreate.hpp"
+#include "JamCliValuesUpdate.hpp"
 #include "CGObject.hpp"
 #include "CGItem.hpp"
 
@@ -30,8 +31,11 @@ namespace wowgm::game::entities
         virtual ~CGContainer();
 
         CGContainerData const& GetContainerData() const;
+        CGContainerData& GetContainerData();
 
         CGItem* ToItem() override;
         CGItem const* ToItem() const override;
+
+        void UpdateDescriptors(JamCliValuesUpdate const& valuesUpdate) override;
     };
 }

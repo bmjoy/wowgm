@@ -4,6 +4,7 @@
 #include "CGObject.hpp"
 
 #include <shared_mutex>
+#include <type_traits>
 
 // WTF, stop this shit please
 #ifdef GetObject
@@ -30,7 +31,7 @@ namespace wowgm::game::entities
         template <> struct typeid_trait<TYPEID_AREATRIGGER> { using type = CGAreaTrigger; };
     }
 
-    template <typename T>
+    template <typename T, typename std::enable_if<std::is_base_of<CGObject, T>::value, int>::type = 0>
     class ObjectHolder final
     {
         ObjectHolder() { }
@@ -38,20 +39,54 @@ namespace wowgm::game::entities
     public:
         using ContainerType = std::unordered_map<ObjectGuid, T*>;
 
-        static ContainerType& GetContainer();
-
-        static void Insert(T* object);
-        static void Remove(T* object);
-        static void Remove(ObjectGuid guid);
-
-        template <typename... Args>
-        inline static void Emplace(Args&&... args) {
-            Insert(new T(std::forward<Args>(args)...));
+        static ContainerType& GetContainer()
+        {
+            static ContainerType _objectMap;
+            return _objectMap;
         }
 
-        static T* Find(ObjectGuid guid);
+        static void Insert(T* object)
+        {
+            std::unique_lock<std::shared_mutex> lock(*GetMutex());
 
-        static std::shared_mutex* GetMutex();
+            GetContainer()[object->GUID] = object;
+        }
+
+        static void Remove(T* object)
+        {
+            std::unique_lock<std::shared_mutex> lock(*GetMutex());
+
+            GetContainer().erase(object->GUID);
+        }
+
+        static void Remove(ObjectGuid const& guid)
+        {
+            std::unique_lock<std::shared_mutex> lock(*GetMutex());
+
+            GetContainer().erase(guid);
+        }
+
+        template <typename... Args>
+        inline static T* Emplace(Args&&... args)
+        {
+            T* instance = new T(std::forward<Args>(args)...);
+            Insert(instance);
+            return instance;
+        }
+
+        static T* Find(ObjectGuid guid)
+        {
+            std::shared_lock<std::shared_mutex> lock(*GetMutex());
+
+            typename ContainerType::iterator itr = GetContainer().find(guid);
+            return (itr != GetContainer().end()) ? itr->second : nullptr;
+        }
+
+        static std::shared_mutex* GetMutex()
+        {
+            static std::shared_mutex _lock;
+            return &_lock;
+        }
     };
 
     namespace ObjectAccessor

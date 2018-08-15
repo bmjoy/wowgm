@@ -13,13 +13,14 @@
 namespace wowgm::protocol::world
 {
     using namespace wowgm::game::entities;
+    using namespace wowgm::game::structures;
 
     using namespace packets;
     using namespace wowgm::cryptography;
 
     bool WorldSocket::HandleObjectUpdate(ClientUpdateObject& packet)
     {
-        for (auto&& itr : packet.DestroyObjects)
+        for (ObjectGuid const& itr : packet.DestroyObjects)
         {
             switch (itr.GetTypeId())
             {
@@ -35,7 +36,7 @@ namespace wowgm::protocol::world
             }
         }
 
-        for (auto&& itr : packet.Updates)
+        for (CClientObjCreate const& itr : packet.Updates)
         {
             if (itr.UpdateType == UpdateType::Values)
             {
@@ -60,13 +61,16 @@ namespace wowgm::protocol::world
                 switch (itr.GUID.GetTypeId())
                 {
                     case TYPEID_UNIT:
-                        ObjectHolder<CGUnit>::Emplace(itr);
+                        if (CGUnit* unit = ObjectHolder<CGUnit>::Emplace(itr))
+                            unit->UpdateDescriptors(itr.Values);
                         break;
                     case TYPEID_ITEM:
-                        ObjectHolder<CGItem>::Emplace(itr);
+                        if (CGItem* item = ObjectHolder<CGItem>::Emplace(itr))
+                            item->UpdateDescriptors(itr.Values);
                         break;
                     case TYPEID_CONTAINER:
-                        ObjectHolder<CGContainer>::Emplace(itr);
+                        if (CGContainer* container = ObjectHolder<CGContainer>::Emplace(itr))
+                            container->UpdateDescriptors(itr.Values);
                         break;
                 }
             }

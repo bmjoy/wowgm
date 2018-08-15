@@ -43,13 +43,15 @@ namespace wowgm::game::entities
         std::uint8_t* unitDataBase = reinterpret_cast<std::uint8_t*>(&GetUnitData());
         for (auto&& itr : valuesUpdate.Descriptors)
         {
-            if (itr.first <= sizeof(CGObjectData))
+            auto offset = itr.first * 4;
+            if (offset <= sizeof(CGObjectData))
                 continue;
 
-            if (itr.first > sizeof(CGUnitData))
+            offset -= sizeof(CGObjectData);
+            if (offset > sizeof(CGUnitData))
                 continue;
 
-            *reinterpret_cast<std::uint32_t*>(unitDataBase + itr.first * 4 - sizeof(CGObjectData)) = itr.second;
+            *reinterpret_cast<std::uint32_t*>(unitDataBase + offset) = itr.second;
         }
     }
 }
