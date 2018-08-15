@@ -7,12 +7,14 @@ namespace wowgm::game::structures
 {
     struct C4Quaternion
     {
+        C4Quaternion() { }
+
         float X;
         float Y;
         float Z;
         float W;
 
-        C4Quaternion& operator = (std::uint64_t packedValue)
+        inline C4Quaternion& operator = (std::uint64_t packedValue)
         {
             X = (packedValue >> 42) * (1.0f / 2097152.0f);
             Y = (((packedValue << 22) >> 32) >> 11) * (1.0f / 1048576.0f);
@@ -23,6 +25,8 @@ namespace wowgm::game::structures
                 W = std::sqrt(1.0f - W);
             else
                 W = 0.0f;
+
+            return *this;
         }
     };
 }

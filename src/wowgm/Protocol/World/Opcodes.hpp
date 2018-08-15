@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Utils.hpp"
+
 #include <cstdint>
 #include <ostream>
 #include <unordered_map>
@@ -7,6 +9,8 @@
 
 namespace wowgm::protocol::world
 {
+    using namespace wowgm::utilities;
+
     class WorldSocket;
     class WorldPacket;
 
@@ -1413,9 +1417,6 @@ namespace wowgm::protocol::world
 
         return os;
     }
-
-    template <typename E>
-    using is_scoped_enum = std::integral_constant<bool, std::is_enum<E>::value && !std::is_convertible<E, int>::value>;
 
     template <typename E>
     inline typename std::enable_if<is_scoped_enum<E>::value, E>::type operator & (E enumeration, typename std::underlying_type<E>::type mask)

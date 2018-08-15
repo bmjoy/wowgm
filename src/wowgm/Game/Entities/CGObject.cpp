@@ -61,4 +61,14 @@ namespace wowgm::game::entities
             return static_cast<CGContainer const*>(this);
         return nullptr;
     }
+
+    C3Vector* CGObject::GetPosition()
+    {
+        return static_cast<C3Vector*>(this);
+    }
+
+    C3Vector const* CGObject::GetPosition() const
+    {
+        return static_cast<C3Vector const*>(this);
+    }
 }

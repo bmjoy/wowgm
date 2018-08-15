@@ -4,6 +4,7 @@
 #include "AuthentificationPackets.hpp"
 #include "CharacterPackets.hpp"
 #include "WorldStatePackets.hpp"
+#include "UpdatePackets.hpp"
 
 namespace wowgm::protocol::world
 {
@@ -55,6 +56,7 @@ namespace wowgm::protocol::world
 
         DEFINE_HANDLER(SMSG_INIT_WORLD_STATES,           &WorldSocket::HandleClientInitWorldStates);
         DEFINE_HANDLER(SMSG_UPDATE_WORLD_STATE,          &WorldSocket::HandleClientUpdateWorldState);
+        DEFINE_HANDLER(SMSG_UPDATE_OBJECT,               &WorldSocket::HandleObjectUpdate);
 
 #undef DEFINE_HANDLER
     }

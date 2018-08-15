@@ -27,4 +27,7 @@ namespace wowgm::utilities
 
     template <std::size_t I, typename ...Ts>
     using nth_element = typename decltype(select<I>(indexer<std::index_sequence_for<Ts...>, Ts...>{}))::type;
+
+    template <typename E>
+    using is_scoped_enum = std::integral_constant<bool, std::is_enum<E>::value && !std::is_convertible<E, int>::value>;
 }

@@ -4,9 +4,10 @@
 #include "WorldPacket.hpp"
 #include "ObjectGuid.hpp"
 #include "CMovementStatus.hpp"
+#include "JamCliValuesUpdate.hpp"
 
 #include <cstdint>
-#include <boost/optional.hpp>
+#include <vector>
 
 namespace wowgm::protocol::world::packets
 {
@@ -20,18 +21,24 @@ namespace wowgm::protocol::world::packets
         DestroyObjects = 3
     };
 
+    struct CClientObjCreate
+    {
+        CClientObjCreate() : GUID(), Movement(), Values() { }
+
+        UpdateType UpdateType;
+        ObjectGuid GUID;
+        CMovementStatus Movement;
+        JamCliValuesUpdate Values;
+    };
+
     struct ClientUpdateObject final : public ServerPacket
     {
         ClientUpdateObject(WorldPacket&& packet);
 
         void Read() override;
 
-        ObjectGuid GUID;
-        ObjectGuid TargetGUID;
-        std::vector<std::uint32_t> StopFrames;
-
-        bool InitializeActivePlayerComponent;
-
-        CMovementStatus Movement;
+        std::uint16_t MapID;
+        std::vector<CClientObjCreate> Updates;
+        std::vector<ObjectGuid> DestroyObjects;
     };
 }

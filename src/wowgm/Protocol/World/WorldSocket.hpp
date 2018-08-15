@@ -37,6 +37,7 @@ namespace wowgm::protocol::world
         struct ClientEnumCharactersResult;
         struct ClientInitWorldStates;
         struct ClientUpdateWorldState;
+        struct ClientUpdateObject;
     }
 
     using namespace packets;
@@ -62,6 +63,8 @@ namespace wowgm::protocol::world
 
         bool HandleClientInitWorldStates(ClientInitWorldStates& packet);
         bool HandleClientUpdateWorldState(ClientUpdateWorldState& packet);
+
+        bool HandleObjectUpdate(ClientUpdateObject& packet);
 
     public:
 

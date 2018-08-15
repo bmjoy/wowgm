@@ -2,6 +2,7 @@
 
 #include "UpdateField.hpp"
 #include "ObjectGuid.hpp"
+#include "C3Vector.hpp"
 
 #include <type_traits>
 #include <cstdint>
@@ -32,7 +33,7 @@ namespace wowgm::game::entities
     class CGCorpse;
     class CGAreaTrigger;
 
-    class CGObject : public CGObjectData
+    class CGObject : public CGObjectData, private C3Vector
     {
     public:
         explicit CGObject(TypeMask typeMask);
@@ -54,6 +55,9 @@ namespace wowgm::game::entities
 
         virtual CGContainer* ToContainer();
         virtual CGContainer const* ToContainer() const;
+
+        C3Vector* GetPosition();
+        C3Vector const* GetPosition() const;
 
     private:
         TypeMask _typeMask;

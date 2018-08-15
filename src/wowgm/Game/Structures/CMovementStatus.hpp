@@ -10,8 +10,16 @@
 
 namespace wowgm::game::structures
 {
+#pragma pack(push, 1)
     struct CMovementStatus
     {
+        CMovementStatus() : FallInfo(), Vehicle(), Transport(), Spline() {
+            // This is safe since this type is not supposed to be inherit(ing|ed)
+            memset(this, 0, sizeof(CMovementStatus));
+        }
+
+        std::uint8_t ObjectType;
+
         std::uint32_t Time;
         std::uint32_t Flags;
         std::uint16_t FlagsExtra;
@@ -30,7 +38,7 @@ namespace wowgm::game::structures
             std::uint32_t Time;
         } FallInfo;
 
-        struct {
+        struct _Vehicle {
             float O;
             std::uint32_t ID;
         } Vehicle;
@@ -84,14 +92,24 @@ namespace wowgm::game::structures
 
             C3Vector Endpoint;
 
-            union {
+            struct {
                 ObjectGuid Target;
                 C3Vector Position;
                 float Angle;
             } Facing;
-
         } Spline;
 
         std::array<std::uint32_t, 3> AnimKits;
+
+        bool PlayHoverAnim;
+        bool IsSuppressingGreetings;
+        bool ThisIsYou;
+        bool NoBirthAnim;
+
+        ObjectGuid GUID;
+        ObjectGuid TargetGUID;
+
+        std::vector<std::uint32_t> StopFrames;
     };
+#pragma pack(pop)
 }

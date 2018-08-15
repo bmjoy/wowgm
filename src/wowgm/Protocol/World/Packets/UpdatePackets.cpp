@@ -1,31 +1,30 @@
 #include "UpdatePackets.hpp"
-
-#include <boost/utility/in_place_factory.hpp>
+#include "PacketUtils.hpp"
+#include "Assert.hpp"
 
 namespace wowgm::protocol::world::packets
 {
-    ClientUpdateObject::ClientUpdateObject(WorldPacket&& packet) : ServerPacket(std::move(packet))
-    {
+    using namespace wowgm::game::structures;
 
-    }
-
-    void ClientUpdateObject::Read()
+    inline WorldPacket& operator >> (WorldPacket& worldPacket, CMovementStatus& movementInfo)
     {
-        _worldPacket.ReadBit();
-        _worldPacket.ReadBit();
-        bool hasGameObjectRotation = _worldPacket.ReadBit();
-        bool hasAnimKits = _worldPacket.ReadBit();
-        bool hasAttackingTarget = _worldPacket.ReadBit();
-        bool isSelf = _worldPacket.ReadBit();
-        bool hasVehicleData = _worldPacket.ReadBit();
-        bool isLiving = _worldPacket.ReadBit();
-        StopFrames.resize(_worldPacket.ReadBits(24));
-        InitializeActivePlayerComponent = _worldPacket.ReadBit();
-        bool hasGameObjectPosition = _worldPacket.ReadBit();
-        bool hasStationaryPosition = _worldPacket.ReadBit();
-        bool unkBit456 = _worldPacket.ReadBit();
-        bool someBitRelatedToDoors = _worldPacket.ReadBit(); // Not shitting you. GameObject_Type_Door is the only one to use this - This is absurd.
-        bool hasTransport = _worldPacket.ReadBit();
+        worldPacket >> movementInfo.ObjectType;
+        movementInfo.PlayHoverAnim = worldPacket.ReadBit();
+        movementInfo.IsSuppressingGreetings = worldPacket.ReadBit();
+        bool hasGameObjectRotation = worldPacket.ReadBit();
+        bool hasAnimKits = worldPacket.ReadBit();
+        bool hasAttackingTarget = worldPacket.ReadBit();
+        movementInfo.ThisIsYou = worldPacket.ReadBit();
+        bool hasVehicleData = worldPacket.ReadBit();
+        bool isLiving = worldPacket.ReadBit();
+        movementInfo.StopFrames.resize(worldPacket.ReadBits(24));
+        movementInfo.NoBirthAnim = worldPacket.ReadBit();
+        bool hasGameObjectPosition = worldPacket.ReadBit();
+        bool hasStationaryPosition = worldPacket.ReadBit();
+        bool unkBit456 = worldPacket.ReadBit();
+        bool someBitRelatedToDoors = worldPacket.ReadBit(); // GameObject_Type_Door is the only one to use this.
+                                                            // enablePortals?
+        bool hasTransport = worldPacket.ReadBit();
 
         bool hasOrientation = false;
         bool hasPitch = false;
@@ -44,259 +43,260 @@ namespace wowgm::protocol::world::packets
 
         if (isLiving)
         {
-            bool hasMovementFlags = !_worldPacket.ReadBit();
-            bool hasOrientation = !_worldPacket.ReadBit();
+            bool hasMovementFlags = !worldPacket.ReadBit();
+            bool hasOrientation = !worldPacket.ReadBit();
 
-            GUID[7] = _worldPacket.ReadBit();
-            GUID[3] = _worldPacket.ReadBit();
-            GUID[2] = _worldPacket.ReadBit();
+            movementInfo.GUID[7] = worldPacket.ReadBit();
+            movementInfo.GUID[3] = worldPacket.ReadBit();
+            movementInfo.GUID[2] = worldPacket.ReadBit();
 
             if (hasMovementFlags)
-                Movement.Flags = _worldPacket.ReadBits(30);
+                movementInfo.Flags = worldPacket.ReadBits(30);
 
-            bool hasMovementInfoSpline = _worldPacket.ReadBit();
-            hasPitch = !_worldPacket.ReadBit();
-            hasSplineData = _worldPacket.ReadBit();
-            hasFallData = _worldPacket.ReadBit();
-            hasSplineElevation = !_worldPacket.ReadBit();
+            bool hasMovementInfoSpline = worldPacket.ReadBit();
+            hasPitch = !worldPacket.ReadBit();
+            hasSplineData = worldPacket.ReadBit();
+            hasFallData = worldPacket.ReadBit();
+            hasSplineElevation = !worldPacket.ReadBit();
 
-            GUID[5] = _worldPacket.ReadBit();
+            movementInfo.GUID[5] = worldPacket.ReadBit();
 
-            hasTransportData = _worldPacket.ReadBit();
-            hasTimestamp = _worldPacket.ReadBit();
+            hasTransportData = worldPacket.ReadBit();
+            hasTimestamp = !worldPacket.ReadBit();
 
             if (hasTransportData)
             {
-                Movement.Transport.GUID[1] = _worldPacket.ReadBit();
-                hasTransportTime[0] = _worldPacket.ReadBit();
-                Movement.Transport.GUID[4] = _worldPacket.ReadBit();
-                Movement.Transport.GUID[0] = _worldPacket.ReadBit();
-                Movement.Transport.GUID[6] = _worldPacket.ReadBit();
-                hasTransportTime[1] = _worldPacket.ReadBit();;
-                Movement.Transport.GUID[7] = _worldPacket.ReadBit();
-                Movement.Transport.GUID[5] = _worldPacket.ReadBit();
-                Movement.Transport.GUID[3] = _worldPacket.ReadBit();
-                Movement.Transport.GUID[2] = _worldPacket.ReadBit();
+                movementInfo.Transport.GUID[1] = worldPacket.ReadBit();
+                hasTransportTime[0] = worldPacket.ReadBit();
+                movementInfo.Transport.GUID[4] = worldPacket.ReadBit();
+                movementInfo.Transport.GUID[0] = worldPacket.ReadBit();
+                movementInfo.Transport.GUID[6] = worldPacket.ReadBit();
+                hasTransportTime[1] = worldPacket.ReadBit();;
+                movementInfo.Transport.GUID[7] = worldPacket.ReadBit();
+                movementInfo.Transport.GUID[5] = worldPacket.ReadBit();
+                movementInfo.Transport.GUID[3] = worldPacket.ReadBit();
+                movementInfo.Transport.GUID[2] = worldPacket.ReadBit();
             }
 
-            GUID[4] = _worldPacket.ReadBit();
+            movementInfo.GUID[4] = worldPacket.ReadBit();
 
             if (hasSplineData)
             {
-                hasExtendedSplineData = _worldPacket.ReadBit();
+                hasExtendedSplineData = worldPacket.ReadBit();
                 if (hasExtendedSplineData)
                 {
-                    Movement.Spline.Mode = _worldPacket.ReadBits(2);
-                    hasSplineStartTime = _worldPacket.ReadBit();
-                    Movement.Spline.Points.resize(_worldPacket.ReadBits(22));
-                    Movement.Spline.Type = _worldPacket.ReadBits(2);
+                    movementInfo.Spline.Mode = worldPacket.ReadBits(2);
+                    hasSplineStartTime = worldPacket.ReadBit();
+                    movementInfo.Spline.Points.resize(worldPacket.ReadBits(22));
+                    movementInfo.Spline.Type = worldPacket.ReadBits(2);
 
-                    if (Movement.Spline.Type == 2)
+                    if (movementInfo.Spline.Type == 2)
                     {
-                        Movement.Spline.Facing.Target[4] = _worldPacket.ReadBit();
-                        Movement.Spline.Facing.Target[3] = _worldPacket.ReadBit();
-                        Movement.Spline.Facing.Target[7] = _worldPacket.ReadBit();
-                        Movement.Spline.Facing.Target[2] = _worldPacket.ReadBit();
-                        Movement.Spline.Facing.Target[6] = _worldPacket.ReadBit();
-                        Movement.Spline.Facing.Target[1] = _worldPacket.ReadBit();
-                        Movement.Spline.Facing.Target[0] = _worldPacket.ReadBit();
-                        Movement.Spline.Facing.Target[5] = _worldPacket.ReadBit();
+                        movementInfo.Spline.Facing.Target[4] = worldPacket.ReadBit();
+                        movementInfo.Spline.Facing.Target[3] = worldPacket.ReadBit();
+                        movementInfo.Spline.Facing.Target[7] = worldPacket.ReadBit();
+                        movementInfo.Spline.Facing.Target[2] = worldPacket.ReadBit();
+                        movementInfo.Spline.Facing.Target[6] = worldPacket.ReadBit();
+                        movementInfo.Spline.Facing.Target[1] = worldPacket.ReadBit();
+                        movementInfo.Spline.Facing.Target[0] = worldPacket.ReadBit();
+                        movementInfo.Spline.Facing.Target[5] = worldPacket.ReadBit();
                     }
 
-                    hasSplineVerticalAcceleration = _worldPacket.ReadBit();
-                    Movement.Spline.Flags = _worldPacket.ReadBits(25);
+                    hasSplineVerticalAcceleration = worldPacket.ReadBit();
+                    movementInfo.Spline.Flags = worldPacket.ReadBits(25);
                 }
             }
 
-            GUID[6] = _worldPacket.ReadBit();
+            movementInfo.GUID[6] = worldPacket.ReadBit();
 
             if (hasFallData)
-                hasFallDirection = _worldPacket.ReadBit();
+                hasFallDirection = worldPacket.ReadBit();
 
-            GUID[0] = _worldPacket.ReadBit();
-            GUID[1] = _worldPacket.ReadBit();
-            _worldPacket.ReadBit();
-            if (!_worldPacket.ReadBit())
-                Movement.FlagsExtra = _worldPacket.ReadBits(12);
+            movementInfo.GUID[0] = worldPacket.ReadBit();
+            movementInfo.GUID[1] = worldPacket.ReadBit();
+            worldPacket.ReadBit();
+            if (!worldPacket.ReadBit())
+                movementInfo.FlagsExtra = worldPacket.ReadBits(12);
         }
 
         if (hasGameObjectPosition)
         {
-            Movement.Transport.GameObject.GUID[5] = _worldPacket.ReadBit();
-            hasGameobjectTransportTime[0] = _worldPacket.ReadBit();
-            Movement.Transport.GameObject.GUID[0] = _worldPacket.ReadBit();
-            Movement.Transport.GameObject.GUID[3] = _worldPacket.ReadBit();
-            Movement.Transport.GameObject.GUID[6] = _worldPacket.ReadBit();
-            Movement.Transport.GameObject.GUID[1] = _worldPacket.ReadBit();
-            Movement.Transport.GameObject.GUID[4] = _worldPacket.ReadBit();
-            Movement.Transport.GameObject.GUID[2] = _worldPacket.ReadBit();
-            hasGameobjectTransportTime[1] = _worldPacket.ReadBit();
-            Movement.Transport.GameObject.GUID[7] = _worldPacket.ReadBit();
+            movementInfo.Transport.GameObject.GUID[5] = worldPacket.ReadBit();
+            hasGameobjectTransportTime[0] = worldPacket.ReadBit();
+            movementInfo.Transport.GameObject.GUID[0] = worldPacket.ReadBit();
+            movementInfo.Transport.GameObject.GUID[3] = worldPacket.ReadBit();
+            movementInfo.Transport.GameObject.GUID[6] = worldPacket.ReadBit();
+            movementInfo.Transport.GameObject.GUID[1] = worldPacket.ReadBit();
+            movementInfo.Transport.GameObject.GUID[4] = worldPacket.ReadBit();
+            movementInfo.Transport.GameObject.GUID[2] = worldPacket.ReadBit();
+            hasGameobjectTransportTime[1] = worldPacket.ReadBit();
+            movementInfo.Transport.GameObject.GUID[7] = worldPacket.ReadBit();
         }
 
         if (hasAttackingTarget)
         {
-            TargetGUID[2] = _worldPacket.ReadBit();
-            TargetGUID[7] = _worldPacket.ReadBit();
-            TargetGUID[0] = _worldPacket.ReadBit();
-            TargetGUID[4] = _worldPacket.ReadBit();
-            TargetGUID[5] = _worldPacket.ReadBit();
-            TargetGUID[6] = _worldPacket.ReadBit();
-            TargetGUID[1] = _worldPacket.ReadBit();
-            TargetGUID[3] = _worldPacket.ReadBit();
+            movementInfo.TargetGUID[2] = worldPacket.ReadBit();
+            movementInfo.TargetGUID[7] = worldPacket.ReadBit();
+            movementInfo.TargetGUID[0] = worldPacket.ReadBit();
+            movementInfo.TargetGUID[4] = worldPacket.ReadBit();
+            movementInfo.TargetGUID[5] = worldPacket.ReadBit();
+            movementInfo.TargetGUID[6] = worldPacket.ReadBit();
+            movementInfo.TargetGUID[1] = worldPacket.ReadBit();
+            movementInfo.TargetGUID[3] = worldPacket.ReadBit();
         }
 
         if (hasAnimKits)
         {
-            hasAnimKit[0] = _worldPacket.ReadBit();
-            hasAnimKit[1] = _worldPacket.ReadBit();
-            hasAnimKit[2] = _worldPacket.ReadBit();
+            hasAnimKit[0] = worldPacket.ReadBit();
+            hasAnimKit[1] = worldPacket.ReadBit();
+            hasAnimKit[2] = worldPacket.ReadBit();
         }
 
-        _worldPacket.ResetBitPos();
+        worldPacket.ResetBitPos();
 
-        for (auto&& stopFrame : StopFrames)
-            _worldPacket >> stopFrame;
+        for (std::uint32_t& stopFrame : movementInfo.StopFrames)
+            worldPacket >> stopFrame;
 
         if (isLiving)
         {
-            _worldPacket.ReadByteSeq(GUID[4]);
-            _worldPacket >> Movement.RunBackSpeed;
+            worldPacket.ReadByteSeq(movementInfo.GUID[4]);
+            worldPacket >> movementInfo.RunBackSpeed;
             if (hasFallData)
             {
                 if (hasFallDirection)
-                {
-                    _worldPacket >> Movement.FallInfo.Jump.HorizontalSpeed >> Movement.FallInfo.Jump.Cosinus >> Movement.FallInfo.Jump.Sinus;
-                }
+                    worldPacket >> movementInfo.FallInfo.Jump.HorizontalSpeed >> movementInfo.FallInfo.Jump.Cosinus >> movementInfo.FallInfo.Jump.Sinus;
 
-                _worldPacket >> Movement.FallInfo.Time >> Movement.FallInfo.VerticalSpeed;
+                worldPacket >> movementInfo.FallInfo.Time >> movementInfo.FallInfo.VerticalSpeed;
             }
 
-            _worldPacket >> Movement.SwimBackSpeed;
+            worldPacket >> movementInfo.SwimBackSpeed;
             if (hasSplineElevation)
-                _worldPacket >> Movement.Spline.Elevation;
+                worldPacket >> movementInfo.Spline.Elevation;
 
             if (hasSplineData)
             {
                 if (hasExtendedSplineData)
                 {
                     if (hasSplineVerticalAcceleration)
-                        _worldPacket >> Movement.Spline.VerticalAcceleration;
+                        worldPacket >> movementInfo.Spline.VerticalAcceleration;
 
-                    _worldPacket >> Movement.Spline.ID;
-                    if (Movement.Spline.Type == 0) // Facing Angle
-                        _worldPacket >> Movement.Spline.Facing.Angle;
-                    else if (Movement.Spline.Type == 2) // Facing Target
+                    worldPacket >> movementInfo.Spline.Time;
+                    if (movementInfo.Spline.Type == 0) // Facing Angle
+                        worldPacket >> movementInfo.Spline.Facing.Angle;
+                    else if (movementInfo.Spline.Type == 2) // Facing Target
                     {
-                        _worldPacket.ReadByteSeq(Movement.Spline.Facing.Target[5]);
-                        _worldPacket.ReadByteSeq(Movement.Spline.Facing.Target[3]);
-                        _worldPacket.ReadByteSeq(Movement.Spline.Facing.Target[7]);
-                        _worldPacket.ReadByteSeq(Movement.Spline.Facing.Target[1]);
-                        _worldPacket.ReadByteSeq(Movement.Spline.Facing.Target[6]);
-                        _worldPacket.ReadByteSeq(Movement.Spline.Facing.Target[4]);
-                        _worldPacket.ReadByteSeq(Movement.Spline.Facing.Target[2]);
-                        _worldPacket.ReadByteSeq(Movement.Spline.Facing.Target[0]);
+                        worldPacket.ReadByteSeq(movementInfo.Spline.Facing.Target[5]);
+                        worldPacket.ReadByteSeq(movementInfo.Spline.Facing.Target[3]);
+                        worldPacket.ReadByteSeq(movementInfo.Spline.Facing.Target[7]);
+                        worldPacket.ReadByteSeq(movementInfo.Spline.Facing.Target[1]);
+                        worldPacket.ReadByteSeq(movementInfo.Spline.Facing.Target[6]);
+                        worldPacket.ReadByteSeq(movementInfo.Spline.Facing.Target[4]);
+                        worldPacket.ReadByteSeq(movementInfo.Spline.Facing.Target[2]);
+                        worldPacket.ReadByteSeq(movementInfo.Spline.Facing.Target[0]);
                     }
 
-                    for (auto&& itr : Movement.Spline.Points)
-                        _worldPacket >> itr.Z >> itr.X >> itr.Y;
+                    for (C3Vector& itr : movementInfo.Spline.Points)
+                        worldPacket >> itr.Z >> itr.X >> itr.Y;
 
-                    if (Movement.Spline.Type == 1) // Facing Spot
-                        _worldPacket >> Movement.Spline.Facing.Position.X >> Movement.Spline.Facing.Position.Z >> Movement.Spline.Facing.Position.Y;
+                    if (movementInfo.Spline.Type == 1) // Facing Spot
+                        worldPacket >> movementInfo.Spline.Facing.Position.X >> movementInfo.Spline.Facing.Position.Z >> movementInfo.Spline.Facing.Position.Y;
 
-                    _worldPacket >> Movement.Spline.NextDurationMultiplier;
-                    _worldPacket >> Movement.Spline.Duration;
+                    worldPacket >> movementInfo.Spline.NextDurationMultiplier;
+                    worldPacket >> movementInfo.Spline.Duration;
                     if (hasSplineStartTime)
-                        _worldPacket >> Movement.Spline.StartTime;
-                    _worldPacket >> Movement.Spline.DurationMultiplier;
+                        worldPacket >> movementInfo.Spline.StartTime;
+                    worldPacket >> movementInfo.Spline.DurationMultiplier;
                 }
 
-                _worldPacket >> Movement.Spline.Endpoint.Z >> Movement.Spline.Endpoint.X >> Movement.Spline.Endpoint.Y >> Movement.Spline.ID;
+                worldPacket >> movementInfo.Spline.Endpoint.Z;
+                worldPacket >> movementInfo.Spline.Endpoint.X;
+                worldPacket >> movementInfo.Spline.Endpoint.Y;
+                worldPacket >> movementInfo.Spline.ID;
             }
 
-            _worldPacket >> Movement.Position.Z;
-            _worldPacket.ReadByteSeq(GUID[5]);
+            worldPacket >> movementInfo.Position.Z;
+            worldPacket.ReadByteSeq(movementInfo.GUID[5]);
 
             if (hasTransportData)
             {
-                _worldPacket.ReadByteSeq(Movement.Transport.GUID[5]);
-                _worldPacket.ReadByteSeq(Movement.Transport.GUID[7]);
-                _worldPacket >> Movement.Transport.Times[0];
-                _worldPacket >> Movement.Transport.Offset.O;
+                worldPacket.ReadByteSeq(movementInfo.Transport.GUID[5]);
+                worldPacket.ReadByteSeq(movementInfo.Transport.GUID[7]);
+                worldPacket >> movementInfo.Transport.Times[0];
+                worldPacket >> movementInfo.Transport.Offset.O;
 
                 if (hasTransportTime[0])
-                    _worldPacket >> Movement.Transport.Times[1];
+                    worldPacket >> movementInfo.Transport.Times[1];
 
-                _worldPacket >> Movement.Transport.Offset.Y;
-                _worldPacket >> Movement.Transport.Offset.X;
-                _worldPacket.ReadByteSeq(Movement.Transport.GUID[3]);
-                _worldPacket >> Movement.Transport.Offset.Z;
-                _worldPacket.ReadByteSeq(Movement.Transport.GUID[0]);
+                worldPacket >> movementInfo.Transport.Offset.Y;
+                worldPacket >> movementInfo.Transport.Offset.X;
+                worldPacket.ReadByteSeq(movementInfo.Transport.GUID[3]);
+                worldPacket >> movementInfo.Transport.Offset.Z;
+                worldPacket.ReadByteSeq(movementInfo.Transport.GUID[0]);
 
                 if (hasTransportTime[1])
-                    _worldPacket >> Movement.Transport.Times[2];
+                    worldPacket >> movementInfo.Transport.Times[2];
 
-                _worldPacket >> Movement.Transport.Seat;
-                _worldPacket.ReadByteSeq(Movement.Transport.GUID[1]);
-                _worldPacket.ReadByteSeq(Movement.Transport.GUID[6]);
-                _worldPacket.ReadByteSeq(Movement.Transport.GUID[2]);
-                _worldPacket.ReadByteSeq(Movement.Transport.GUID[4]);
+                worldPacket >> movementInfo.Transport.Seat;
+                worldPacket.ReadByteSeq(movementInfo.Transport.GUID[1]);
+                worldPacket.ReadByteSeq(movementInfo.Transport.GUID[6]);
+                worldPacket.ReadByteSeq(movementInfo.Transport.GUID[2]);
+                worldPacket.ReadByteSeq(movementInfo.Transport.GUID[4]);
             }
 
-            _worldPacket >> Movement.Position.X;
-            _worldPacket >> Movement.PitchSpeed;
-            _worldPacket.ReadByteSeq(GUID[3]);
-            _worldPacket.ReadByteSeq(GUID[0]);
-            _worldPacket >> Movement.SwimSpeed;
-            _worldPacket >> Movement.Position.Y;
-            _worldPacket.ReadByteSeq(GUID[7]);
-            _worldPacket.ReadByteSeq(GUID[1]);
-            _worldPacket.ReadByteSeq(GUID[2]);
-            _worldPacket >> Movement.WalkSpeed;
+            worldPacket >> movementInfo.Position.X;
+            worldPacket >> movementInfo.PitchSpeed;
+            worldPacket.ReadByteSeq(movementInfo.GUID[3]);
+            worldPacket.ReadByteSeq(movementInfo.GUID[0]);
+            worldPacket >> movementInfo.SwimSpeed;
+            worldPacket >> movementInfo.Position.Y;
+            worldPacket.ReadByteSeq(movementInfo.GUID[7]);
+            worldPacket.ReadByteSeq(movementInfo.GUID[1]);
+            worldPacket.ReadByteSeq(movementInfo.GUID[2]);
+            worldPacket >> movementInfo.WalkSpeed;
             if (hasTimestamp)
-                _worldPacket >> Movement.Time;
-            _worldPacket >> Movement.FlyBackSpeed;
-            _worldPacket.ReadByteSeq(GUID[6]);
-            _worldPacket >> Movement.TurnSpeed;
+                worldPacket >> movementInfo.Time;
+            worldPacket >> movementInfo.FlyBackSpeed;
+            worldPacket.ReadByteSeq(movementInfo.GUID[6]);
+            worldPacket >> movementInfo.TurnSpeed;
             if (hasOrientation)
-                _worldPacket >> Movement.Position.O;
-            _worldPacket >> Movement.RunSpeed;
+                worldPacket >> movementInfo.Position.O;
+            worldPacket >> movementInfo.RunSpeed;
             if (hasPitch)
-                _worldPacket >> Movement.Pitch;
-            _worldPacket >> Movement.FlySpeed;
+                worldPacket >> movementInfo.Pitch;
+            worldPacket >> movementInfo.FlySpeed;
         }
 
         if (hasVehicleData)
         {
-            _worldPacket >> Movement.Vehicle.O;
-            _worldPacket >> Movement.Vehicle.ID;
+            worldPacket >> movementInfo.Vehicle.O;
+            worldPacket >> movementInfo.Vehicle.ID;
         }
 
         if (hasGameObjectPosition)
         {
-            _worldPacket.ReadByteSeq(Movement.Transport.GameObject.GUID[0]);
-            _worldPacket.ReadByteSeq(Movement.Transport.GameObject.GUID[5]);
+            worldPacket.ReadByteSeq(movementInfo.Transport.GameObject.GUID[0]);
+            worldPacket.ReadByteSeq(movementInfo.Transport.GameObject.GUID[5]);
             if (hasGameobjectTransportTime[1])
-                _worldPacket >> Movement.Transport.GameObject.Times[2];
-            _worldPacket.ReadByteSeq(Movement.Transport.GameObject.GUID[3]);
-            _worldPacket >> Movement.Transport.GameObject.Offset.X;
-            _worldPacket.ReadByteSeq(Movement.Transport.GameObject.GUID[4]);
-            _worldPacket.ReadByteSeq(Movement.Transport.GameObject.GUID[6]);
-            _worldPacket.ReadByteSeq(Movement.Transport.GameObject.GUID[1]);
-            _worldPacket >> Movement.Transport.GameObject.Times[0];
-            _worldPacket >> Movement.Transport.GameObject.Offset.Y;
-            _worldPacket.ReadByteSeq(Movement.Transport.GameObject.GUID[2]);
-            _worldPacket.ReadByteSeq(Movement.Transport.GameObject.GUID[7]);
-            _worldPacket >> Movement.Transport.GameObject.Offset.Z;
-            _worldPacket >> Movement.Transport.GameObject.Seat;
-            _worldPacket >> Movement.Transport.GameObject.Offset.O;
+                worldPacket >> movementInfo.Transport.GameObject.Times[2];
+            worldPacket.ReadByteSeq(movementInfo.Transport.GameObject.GUID[3]);
+            worldPacket >> movementInfo.Transport.GameObject.Offset.X;
+            worldPacket.ReadByteSeq(movementInfo.Transport.GameObject.GUID[4]);
+            worldPacket.ReadByteSeq(movementInfo.Transport.GameObject.GUID[6]);
+            worldPacket.ReadByteSeq(movementInfo.Transport.GameObject.GUID[1]);
+            worldPacket >> movementInfo.Transport.GameObject.Times[0];
+            worldPacket >> movementInfo.Transport.GameObject.Offset.Y;
+            worldPacket.ReadByteSeq(movementInfo.Transport.GameObject.GUID[2]);
+            worldPacket.ReadByteSeq(movementInfo.Transport.GameObject.GUID[7]);
+            worldPacket >> movementInfo.Transport.GameObject.Offset.Z;
+            worldPacket >> movementInfo.Transport.GameObject.Seat;
+            worldPacket >> movementInfo.Transport.GameObject.Offset.O;
             if (hasGameobjectTransportTime[0])
-                _worldPacket >> Movement.Transport.GameObject.Times[1];
+                worldPacket >> movementInfo.Transport.GameObject.Times[1];
         }
 
         if (hasGameObjectRotation)
         {
-            Movement.Transport.GameObject.Rotation = _worldPacket.read<std::uint64_t>(); // Packed quaternion
+            movementInfo.Transport.GameObject.Rotation = worldPacket.read<std::uint64_t>(); // Packed quaternion
         }
 
         if (unkBit456)
@@ -306,35 +306,121 @@ namespace wowgm::protocol::world::packets
 
         if (hasStationaryPosition)
         {
-            _worldPacket >> Movement.Stationary.O;
-            _worldPacket >> Movement.Stationary.X;
-            _worldPacket >> Movement.Stationary.Y;
-            _worldPacket >> Movement.Stationary.Z;
+            worldPacket >> movementInfo.Stationary.O;
+            worldPacket >> movementInfo.Stationary.X;
+            worldPacket >> movementInfo.Stationary.Y;
+            worldPacket >> movementInfo.Stationary.Z;
         }
 
         if (hasAttackingTarget)
         {
-            _worldPacket.ReadByteSeq(TargetGUID[4]);
-            _worldPacket.ReadByteSeq(TargetGUID[0]);
-            _worldPacket.ReadByteSeq(TargetGUID[3]);
-            _worldPacket.ReadByteSeq(TargetGUID[5]);
-            _worldPacket.ReadByteSeq(TargetGUID[7]);
-            _worldPacket.ReadByteSeq(TargetGUID[6]);
-            _worldPacket.ReadByteSeq(TargetGUID[2]);
-            _worldPacket.ReadByteSeq(TargetGUID[1]);
+            worldPacket.ReadByteSeq(movementInfo.TargetGUID[4]);
+            worldPacket.ReadByteSeq(movementInfo.TargetGUID[0]);
+            worldPacket.ReadByteSeq(movementInfo.TargetGUID[3]);
+            worldPacket.ReadByteSeq(movementInfo.TargetGUID[5]);
+            worldPacket.ReadByteSeq(movementInfo.TargetGUID[7]);
+            worldPacket.ReadByteSeq(movementInfo.TargetGUID[6]);
+            worldPacket.ReadByteSeq(movementInfo.TargetGUID[2]);
+            worldPacket.ReadByteSeq(movementInfo.TargetGUID[1]);
         }
 
         if (hasAnimKits)
         {
             if (hasAnimKit[0])
-                _worldPacket >> Movement.AnimKits[0];
+                worldPacket >> movementInfo.AnimKits[0];
             if (hasAnimKit[1])
-                _worldPacket >> Movement.AnimKits[1];
+                worldPacket >> movementInfo.AnimKits[1];
             if (hasAnimKit[2])
-                _worldPacket >> Movement.AnimKits[2];
+                worldPacket >> movementInfo.AnimKits[2];
         }
 
         if (hasTransport)
-            _worldPacket >> Movement.Transport.PathTimer;
+            worldPacket >> movementInfo.Transport.PathTimer;
+
+        return worldPacket;
     }
+
+    inline WorldPacket& operator >> (WorldPacket& worldPacket, JamCliValuesUpdate& valuesUpdate)
+    {
+        std::uint8_t maskSize;
+        worldPacket >> maskSize;
+
+        std::vector<bool> mask(maskSize * 4 * 8);
+        for (std::uint8_t i = 0; i < maskSize; ++i)
+        {
+            std::uint32_t bucketValue;
+            worldPacket >> bucketValue;
+            for (std::uint8_t b = 0; b < 32; ++b)
+                mask[i * 32 + b] = (bucketValue & (1 << b)) != 0;
+        }
+
+        std::uint32_t i = 0;
+        for (bool currentBit : mask)
+        {
+            if (currentBit)
+            {
+                std::uint32_t updateField;
+                worldPacket >> updateField;
+
+                if (updateField != 0)
+                    valuesUpdate.Descriptors[i] = updateField;
+            }
+
+            ++i;
+        }
+
+        return worldPacket;
+    }
+
+    ClientUpdateObject::ClientUpdateObject(WorldPacket&& packet) : ServerPacket(std::move(packet))
+    {
+
+    }
+
+    void ClientUpdateObject::Read()
+    {
+        _worldPacket >> MapID;
+        Updates.resize(_worldPacket.read<std::uint32_t>());
+
+        for (CClientObjCreate& objCreate : Updates)
+        {
+            _worldPacket >> objCreate.UpdateType;
+
+            switch (objCreate.UpdateType)
+            {
+                case UpdateType::DestroyObjects:
+                {
+                    std::uint32_t objectCount;
+                    _worldPacket >> objectCount;
+                    for (std::uint32_t i = 0; i < objectCount; ++i)
+                    {
+                        ObjectGuid destroyGuid;
+                        _worldPacket.ReadPackedGuid(destroyGuid);
+                        DestroyObjects.push_back(destroyGuid);
+                    }
+                    break;
+                }
+                case UpdateType::CreateObject1:
+                case UpdateType::CreateObject2:
+                {
+                    _worldPacket.ReadPackedGuid(objCreate.GUID);
+                    _worldPacket >> objCreate.Movement;
+                    _worldPacket >> objCreate.Values;
+
+                    break;
+                }
+                case UpdateType::Values:
+                {
+                    _worldPacket.ReadPackedGuid(objCreate.GUID);
+                    _worldPacket >> objCreate.Values;
+
+                    break;
+                }
+                default:
+                    BOOST_ASSERT_MSG_FMT(false, "Unknown update type %u", std::uint32_t(objCreate.UpdateType));
+                    break;
+            }
+        }
+    }
+
 }
