@@ -345,14 +345,9 @@ namespace wowgm::protocol::world::packets
         std::uint8_t maskSize;
         worldPacket >> maskSize;
 
-        std::vector<bool> mask(maskSize * 4 * 8);
-        for (std::uint8_t i = 0; i < maskSize; ++i)
-        {
-            std::uint32_t bucketValue;
-            worldPacket >> bucketValue;
-            for (std::uint8_t b = 0; b < 32; ++b)
-                mask[i * 32 + b] = (bucketValue & (1 << b)) != 0;
-        }
+        std::vector<bool> mask(maskSize * 32);
+        for (std::uint8_t i = 0; i < mask.size(); ++i)
+            mask[i] = worldPacket.ReadBit();
 
         std::uint32_t i = 0;
         for (bool currentBit : mask)
@@ -398,6 +393,7 @@ namespace wowgm::protocol::world::packets
                         _worldPacket.ReadPackedGuid(destroyGuid);
                         DestroyObjects.push_back(destroyGuid);
                     }
+
                     break;
                 }
                 case UpdateType::CreateObject1:

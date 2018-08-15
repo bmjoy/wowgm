@@ -1,11 +1,12 @@
 #pragma once
 
-#include "UpdateField.hpp"
 #include "ObjectGuid.hpp"
 #include "CGObject.hpp"
 #include "CClientObjCreate.hpp"
 
 #include <cstdint>
+#include <array>
+
 
 namespace wowgm::game::entities
 {
@@ -52,60 +53,60 @@ namespace wowgm::game::entities
             float Multiplier;
         };
 
-        Descriptor<ObjectGuid> Charm;
-        Descriptor<ObjectGuid> Summon;
-        Descriptor<ObjectGuid> Critter;
-        Descriptor<ObjectGuid> CharmedBy;
-        Descriptor<ObjectGuid> SummonedBy;
-        Descriptor<ObjectGuid> CreatedBy;
-        Descriptor<ObjectGuid> Target;
-        Descriptor<ObjectGuid> ChannelTarget;
-        Descriptor<std::uint32_t> ChannelSpellID;
-        Descriptor<UnitBytes0> Bytes0;
-        Descriptor<std::uint32_t, 6> Powers;
-        Descriptor<std::uint32_t, 6> MaxPowers;
-        Descriptor<float, 5> PowerRegenModifier;
-        Descriptor<float, 5> InterruptedPowerRegenModifier;
-        Descriptor<std::uint32_t> Level;
-        Descriptor<std::uint32_t> FactionID;
-        Descriptor<std::uint32_t, 3> VirtualItems;
-        Descriptor<std::uint32_t, 2> Flags;
-        Descriptor<std::uint32_t> AuraState;
-        Descriptor<std::uint32_t, 3> AttackTimes;
-        Descriptor<float> BoundingRadius;
-        Descriptor<float> CombatReach;
-        Descriptor<std::uint32_t> DisplayID;
-        Descriptor<std::uint32_t> NativeDisplayID;
-        Descriptor<std::uint32_t> MountDisplayID;
-        Descriptor<DamageInfo, 2> Damage;
-        Descriptor<UnitBytes1> Bytes1;
-        Descriptor<std::uint32_t> PetNumber;
-        Descriptor<std::uint32_t> PetNameTimestamp;
-        Descriptor<std::uint32_t> PetExperience;
-        Descriptor<std::uint32_t> PetNextLevelXP;
-        Descriptor<std::uint32_t> DynamicFlags;
-        Descriptor<float> ModCastSpeed;
-        Descriptor<float> ModCastHaste;
-        Descriptor<std::uint32_t> CreatedBySpell;
-        Descriptor<std::uint32_t> NpcFlags;
-        Descriptor<std::uint32_t> NpcEmoteState;
-        Descriptor<std::uint32_t, 5> Stats;
-        Descriptor<std::uint32_t, 5> PosStats;
-        Descriptor<std::uint32_t, 5> NegStats;
-        Descriptor<std::uint32_t, 7> Resistances;
-        Descriptor<std::uint32_t, 7> ResistancesBuffModPositive;
-        Descriptor<std::uint32_t, 7> ResistancesBuffModNegative;
-        Descriptor<std::uint32_t> BaseMana;
-        Descriptor<std::uint32_t> BaseHealth;
-        Descriptor<UnitBytes2> Bytes2;
-        Descriptor<AttackPowerInfo, 3> AttackPower;
-        Descriptor<DamageInfo> RangedDamage;
-        Descriptor<std::uint32_t, 7> PowerCostModifier;
-        Descriptor<float, 7> PowerCostMultiplier;
-        Descriptor<float> MaxHealthModifier;
-        Descriptor<float> HoverHeight;
-        Descriptor<std::uint32_t> MaxItemLevel;
-        Descriptor<std::uint32_t> _;
+        ObjectGuid Charm;
+        ObjectGuid Summon;
+        ObjectGuid Critter;
+        ObjectGuid CharmedBy;
+        ObjectGuid SummonedBy;
+        ObjectGuid CreatedBy;
+        ObjectGuid Target;
+        ObjectGuid ChannelTarget;
+        std::uint32_t ChannelSpellID;
+        UnitBytes0 Bytes0;
+        std::array<std::uint32_t, 6> Powers;
+        std::array<std::uint32_t, 6> MaxPowers;
+        std::array<float, 5> PowerRegenModifier;
+        std::array<float, 5> InterruptedPowerRegenModifier;
+        std::uint32_t Level;
+        std::uint32_t FactionID;
+        std::array<std::uint32_t, 3> VirtualItems;
+        std::array<std::uint32_t, 2> Flags;
+        std::uint32_t AuraState;
+        std::array<std::uint32_t, 3> AttackTimes;
+        float BoundingRadius;
+        float CombatReach;
+        std::uint32_t DisplayID;
+        std::uint32_t NativeDisplayID;
+        std::uint32_t MountDisplayID;
+        std::array<DamageInfo, 2> Damage;
+        UnitBytes1 Bytes1;
+        std::uint32_t PetNumber;
+        std::uint32_t PetNameTimestamp;
+        std::uint32_t PetExperience;
+        std::uint32_t PetNextLevelXP;
+        std::uint32_t DynamicFlags;
+        float ModCastSpeed;
+        float ModCastHaste;
+        std::uint32_t CreatedBySpell;
+        std::uint32_t NpcFlags;
+        std::uint32_t NpcEmoteState;
+        std::array<std::uint32_t, 5> Stats;
+        std::array<std::uint32_t, 5> PosStats;
+        std::array<std::uint32_t, 5> NegStats;
+        std::array<std::uint32_t, 7> Resistances;
+        std::array<std::uint32_t, 7> ResistancesBuffModPositive;
+        std::array<std::uint32_t, 7> ResistancesBuffModNegative;
+        std::uint32_t BaseMana;
+        std::uint32_t BaseHealth;
+        UnitBytes2 Bytes2;
+        std::array<AttackPowerInfo, 3> AttackPower;
+        DamageInfo RangedDamage;
+        std::array<std::uint32_t, 7> PowerCostModifier;
+        std::array<float, 7> PowerCostMultiplier;
+        float MaxHealthModifier;
+        float HoverHeight;
+        std::uint32_t MaxItemLevel;
+        std::uint32_t _;
     };
 #pragma pack(pop)
 

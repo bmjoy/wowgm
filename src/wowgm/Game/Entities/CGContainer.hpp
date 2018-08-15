@@ -1,6 +1,5 @@
 #pragma once
 
-#include "UpdateField.hpp"
 #include "ObjectGuid.hpp"
 #include "CClientObjCreate.hpp"
 #include "JamCliValuesUpdate.hpp"
@@ -8,6 +7,7 @@
 #include "CGItem.hpp"
 
 #include <cstdint>
+#include <array>
 
 namespace wowgm::game::entities
 {
@@ -16,9 +16,9 @@ namespace wowgm::game::entities
 #pragma pack(push, 1)
     struct CGContainerData
     {
-        Descriptor<std::uint32_t> NumSlots;
-        Descriptor<std::uint8_t, 4> _;
-        Descriptor<ObjectGuid, 36> Contents;
+        std::uint32_t NumSlots;
+        std::array<std::uint8_t, 4> _;
+        std::array<ObjectGuid, 36> Contents;
     };
 #pragma pack(pop)
 

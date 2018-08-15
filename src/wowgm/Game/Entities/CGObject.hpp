@@ -1,6 +1,5 @@
 #pragma once
 
-#include "UpdateField.hpp"
 #include "ObjectGuid.hpp"
 #include "C3Vector.hpp"
 #include "JamCliValuesUpdate.hpp"
@@ -8,6 +7,8 @@
 
 #include <type_traits>
 #include <cstdint>
+#include <array>
+
 
 namespace wowgm::game::entities
 {
@@ -16,12 +17,12 @@ namespace wowgm::game::entities
 #pragma pack(push, 1)
     struct CGObjectData
     {
-        Descriptor<ObjectGuid> GUID;
-        Descriptor<ObjectGuid> Data;
-        Descriptor<std::uint16_t, 2> Type;
-        Descriptor<std::uint32_t> Entry;
-        Descriptor<float> Scale;
-        Descriptor<std::uint32_t> _; // Padding
+        ObjectGuid GUID;
+        ObjectGuid Data;
+        std::array<std::uint16_t, 2> Type;
+        std::uint32_t Entry;
+        float Scale;
+        std::uint32_t _; // Padding
     };
 #pragma pack(pop)
 

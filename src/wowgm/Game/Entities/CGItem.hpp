@@ -1,12 +1,13 @@
 #pragma once
 
-#include "UpdateField.hpp"
 #include "ObjectGuid.hpp"
 #include "CGObject.hpp"
 #include "CClientObjCreate.hpp"
 #include "JamCliValuesUpdate.hpp"
 
 #include <cstdint>
+#include <array>
+
 
 namespace wowgm::game::entities
 {
@@ -25,20 +26,20 @@ namespace wowgm::game::entities
 #pragma pack(push, 1)
     struct CGItemData
     {
-        Descriptor<ObjectGuid> Owner;
-        Descriptor<ObjectGuid> Contained;
-        Descriptor<ObjectGuid> Creator;
-        Descriptor<ObjectGuid> GiftCreator;
-        Descriptor<std::uint32_t> StackCount;
-        Descriptor<std::uint32_t> Duration;
-        Descriptor<std::uint32_t, 5> SpellCharges;
-        Descriptor<std::uint32_t> Flags;
-        Descriptor<ItemEnchantmentInfo, 15> Enchantments;
-        Descriptor<std::uint32_t> PropertySeed;
-        Descriptor<std::uint32_t> RandomPropertiesID;
-        Descriptor<std::uint32_t> Durability;
-        Descriptor<std::uint32_t> MaxDurability;
-        Descriptor<std::uint32_t> CreatePlayedTime;
+        ObjectGuid Owner;
+        ObjectGuid Contained;
+        ObjectGuid Creator;
+        ObjectGuid GiftCreator;
+        std::uint32_t StackCount;
+        std::uint32_t Duration;
+        std::array<std::uint32_t, 5> SpellCharges;
+        std::uint32_t Flags;
+        std::array<ItemEnchantmentInfo, 15> Enchantments;
+        std::uint32_t PropertySeed;
+        std::uint32_t RandomPropertiesID;
+        std::uint32_t Durability;
+        std::uint32_t MaxDurability;
+        std::uint32_t CreatePlayedTime;
     };
 #pragma pack(pop)
 
