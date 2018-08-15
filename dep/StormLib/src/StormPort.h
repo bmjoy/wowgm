@@ -45,6 +45,9 @@
   #include <assert.h>
   #include <ctype.h>
   #include <stdio.h>
+  #ifndef WIN32_LEAN_AND_MEAN
+  #define WIN32_LEAN_AND_MEAN
+  #endif
   #include <windows.h>
   #include <wininet.h>
   #define STORM_PLATFORM_LITTLE_ENDIAN
