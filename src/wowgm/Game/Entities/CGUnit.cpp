@@ -7,8 +7,6 @@ namespace wowgm::game::entities
 
     CGUnit::CGUnit(CClientObjCreate const& createBlock) : CGUnitData(), CGObject(createBlock)
     {
-        //! TODO: This will need to be reworked later on since we don't have CGPlayer yet.
-        UpdateDescriptors(createBlock.Values);
     }
 
     CGUnit::~CGUnit()

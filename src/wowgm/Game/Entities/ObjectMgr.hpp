@@ -92,15 +92,53 @@ namespace wowgm::game::entities
     namespace ObjectAccessor
     {
         template <typename T>
-        static inline T* GetObject(ObjectGuid guid)
+        static inline T* GetObject(ObjectGuid const& guid)
         {
             return ObjectHolder<T>::Find(guid);
         }
 
         template <TypeID Type>
-        static inline auto GetObject(ObjectGuid guid) -> typename details::typeid_trait<Type>::type
+        static inline auto GetObject(ObjectGuid const& guid) -> typename details::typeid_trait<Type>::type
         {
             return ObjectHolder<typename details::typeid_trait<Type>::type>(guid);
+        }
+
+        template <>
+        static inline CGObject* GetObject(ObjectGuid const& guid)
+        {
+            switch (guid.GetTypeId())
+            {
+                case TYPEID_UNIT:
+                    return GetObject<CGUnit>(guid);
+                case TYPEID_ITEM:
+                    return GetObject<CGItem>(guid);
+                case TYPEID_CONTAINER:
+                    return GetObject<CGContainer>(guid);
+            }
+
+            return nullptr;
+        }
+
+        static inline void Destroy(CGObject* object)
+        {
+            if (object != nullptr)
+                Destroy(object->GUID);
+        }
+
+        static inline void Destroy(ObjectGuid const& objectGuid)
+        {
+            switch (objectGuid.GetTypeId())
+            {
+            case TYPEID_UNIT:
+                ObjectHolder<CGUnit>::Remove(objectGuid);
+                break;
+            case TYPEID_ITEM:
+                ObjectHolder<CGItem>::Remove(objectGuid);
+                break;
+            case TYPEID_CONTAINER:
+                ObjectHolder<CGContainer>::Remove(objectGuid);
+                break;
+            }
         }
     }
 }

@@ -21,20 +21,7 @@ namespace wowgm::protocol::world
     bool WorldSocket::HandleObjectUpdate(ClientUpdateObject& packet)
     {
         for (ObjectGuid const& itr : packet.DestroyObjects)
-        {
-            switch (itr.GetTypeId())
-            {
-                case TYPEID_UNIT:
-                    ObjectHolder<CGUnit>::Remove(itr);
-                    break;
-                case TYPEID_ITEM:
-                    ObjectHolder<CGItem>::Remove(itr);
-                    break;
-                case TYPEID_CONTAINER:
-                    ObjectHolder<CGContainer>::Remove(itr);
-                    break;
-            }
-        }
+            ObjectAccessor::Destroy(itr);
 
         for (CClientObjCreate const& itr : packet.Updates)
         {
@@ -43,15 +30,15 @@ namespace wowgm::protocol::world
                 switch (itr.GUID.GetTypeId())
                 {
                     case TYPEID_UNIT:
-                        if (CGUnit* unit = ObjectHolder<CGUnit>::Find(itr.GUID))
+                        if (CGUnit* unit = ObjectAccessor::GetObject<CGUnit>(itr.GUID))
                             unit->UpdateDescriptors(itr.Values);
                         break;
                     case TYPEID_ITEM:
-                        if (CGItem* item = ObjectHolder<CGItem>::Find(itr.GUID))
+                        if (CGItem* item = ObjectAccessor::GetObject<CGItem>(itr.GUID))
                             item->UpdateDescriptors(itr.Values);
                         break;
                     case TYPEID_CONTAINER:
-                        if (CGContainer* container = ObjectHolder<CGContainer>::Find(itr.GUID))
+                        if (CGContainer* container = ObjectAccessor::GetObject<CGContainer>(itr.GUID))
                             container->UpdateDescriptors(itr.Values);
                         break;
                 }
@@ -75,6 +62,20 @@ namespace wowgm::protocol::world
                 }
             }
         }
+
+        return true;
+    }
+
+    bool WorldSocket::HandleDestroyObject(ClientDestroyObject& packet)
+    {
+        CGObject* object = ObjectAccessor::GetObject<CGObject>(packet.GUID);
+        if (object != nullptr)
+            return true;
+
+        // if (packet.OnDeath)
+        //     object->OnDeath();
+
+        ObjectAccessor::Destroy(object);
 
         return true;
     }

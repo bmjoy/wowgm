@@ -38,6 +38,7 @@ namespace wowgm::protocol::world
         struct ClientInitWorldStates;
         struct ClientUpdateWorldState;
         struct ClientUpdateObject;
+        struct ClientDestroyObject;
     }
 
     using namespace packets;
@@ -65,6 +66,7 @@ namespace wowgm::protocol::world
         bool HandleClientUpdateWorldState(ClientUpdateWorldState& packet);
 
         bool HandleObjectUpdate(ClientUpdateObject& packet);
+        bool HandleDestroyObject(ClientDestroyObject& packet);
 
     public:
 

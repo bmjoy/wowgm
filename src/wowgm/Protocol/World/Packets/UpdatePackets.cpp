@@ -431,4 +431,18 @@ namespace wowgm::protocol::world::packets
         }
     }
 
+
+    ClientDestroyObject::ClientDestroyObject(WorldPacket&& packet) : ServerPacket(std::move(packet))
+    {
+
+    }
+
+    void ClientDestroyObject::Read()
+    {
+        std::uint64_t guid;
+        _worldPacket >> guid;
+
+        OnDeath = _worldPacket.read<std::uint8_t>() != 0;
+        GUID = guid;
+    }
 }

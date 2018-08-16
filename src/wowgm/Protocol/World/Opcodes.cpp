@@ -57,6 +57,7 @@ namespace wowgm::protocol::world
         DEFINE_HANDLER(SMSG_INIT_WORLD_STATES,           &WorldSocket::HandleClientInitWorldStates);
         DEFINE_HANDLER(SMSG_UPDATE_WORLD_STATE,          &WorldSocket::HandleClientUpdateWorldState);
         DEFINE_HANDLER(SMSG_UPDATE_OBJECT,               &WorldSocket::HandleObjectUpdate);
+        DEFINE_HANDLER(SMSG_DESTROY_OBJECT,              &WorldSocket::HandleDestroyObject);
 
 #undef DEFINE_HANDLER
     }
