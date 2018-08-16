@@ -70,10 +70,30 @@ namespace wowgm::game::structures
 
             typedef std::uint32_t LowType;
 
-            ObjectGuid() { _data._guid = 0uLL; }
-            explicit ObjectGuid(std::uint64_t guid) { _data._guid = guid; }
-            ObjectGuid(HighGuid hi, std::uint32_t entry, std::uint32_t counter) { _data._guid = counter ? std::uint64_t(counter) | (std::uint64_t(entry) << 32) | (std::uint64_t(hi) << ((hi == HighGuid::Corpse || hi == HighGuid::AreaTrigger) ? 48 : 52)) : 0; }
-            ObjectGuid(HighGuid hi, std::uint32_t counter) { _data._guid = counter ? std::uint64_t(counter) | (std::uint64_t(hi) << ((hi == HighGuid::Corpse || hi == HighGuid::AreaTrigger) ? 48 : 52)) : 0; }
+            ObjectGuid()
+            {
+                _data._guid = 0uLL;
+            }
+
+            explicit ObjectGuid(std::uint64_t guid)
+            {
+                _data._guid = guid;
+            }
+
+            ObjectGuid(HighGuid hi, std::uint32_t entry, std::uint32_t counter)
+            {
+                _data._guid = counter
+                    ? std::uint64_t(counter) | (std::uint64_t(entry) << 32) | (std::uint64_t(hi) << ((hi == HighGuid::Corpse || hi == HighGuid::AreaTrigger) ? 48 : 52))
+                    : 0;
+            }
+
+            ObjectGuid(HighGuid hi, std::uint32_t counter)
+            {
+                _data._guid = counter
+                    ? std::uint64_t(counter) | (std::uint64_t(hi) << ((hi == HighGuid::Corpse || hi == HighGuid::AreaTrigger) ? 48 : 52))
+                    : 0;
+            }
+
             ObjectGuid(ObjectGuid const& r) : _data(r._data) { }
             ObjectGuid(ObjectGuid&& r) : _data(r._data) { }
 

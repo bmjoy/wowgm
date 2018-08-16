@@ -15,7 +15,7 @@ namespace wowgm::game::entities
 {
     using namespace wowgm::game::structures;
 
-    namespace details
+    namespace
     {
         template <TypeID TypeId>
         struct typeid_trait { };
@@ -60,9 +60,8 @@ namespace wowgm::game::entities
         T* GetObject(ObjectGuid const& guid);
 
         template <TypeID Type>
-        inline auto GetObject(ObjectGuid const& guid) -> typename details::typeid_trait<Type>::type
-        {
-            return ObjectHolder<typename details::typeid_trait<Type>::type>(guid);
+        inline auto GetObject(ObjectGuid const& guid) -> typename typeid_trait<Type>::type {
+            return GetObject<typename typeid_trait<Type>::type>(guid);
         }
 
         void Destroy(ObjectGuid const& objectGuid);

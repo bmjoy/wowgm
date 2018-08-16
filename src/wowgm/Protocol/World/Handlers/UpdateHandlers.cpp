@@ -16,7 +16,6 @@ namespace wowgm::protocol::world
     using namespace wowgm::game::structures;
 
     using namespace packets;
-    using namespace wowgm::cryptography;
 
     bool WorldSocket::HandleObjectUpdate(ClientUpdateObject& packet)
     {

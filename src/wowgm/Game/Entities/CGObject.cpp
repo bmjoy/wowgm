@@ -90,4 +90,12 @@ namespace wowgm::game::entities
             *reinterpret_cast<std::uint32_t*>(objectDataBase + itr.first * 4) = itr.second;
         }
     }
+
+    TypeMask CGObject::GetTypeMask() const
+    {
+        if (GUID.GetTypeId() == TYPEID_CONTAINER)
+            return TypeMask::TYPEMASK_CONTAINER;
+
+        return TypeMask(1u << GUID.GetTypeId());
+    }
 }

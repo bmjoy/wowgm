@@ -5,6 +5,7 @@
 #include "CharacterPackets.hpp"
 #include "WorldStatePackets.hpp"
 #include "UpdatePackets.hpp"
+#include "WorldPackets.hpp"
 
 namespace wowgm::protocol::world
 {
@@ -58,6 +59,7 @@ namespace wowgm::protocol::world
         DEFINE_HANDLER(SMSG_UPDATE_WORLD_STATE,          &WorldSocket::HandleClientUpdateWorldState);
         DEFINE_HANDLER(SMSG_UPDATE_OBJECT,               &WorldSocket::HandleObjectUpdate);
         DEFINE_HANDLER(SMSG_DESTROY_OBJECT,              &WorldSocket::HandleDestroyObject);
+        DEFINE_HANDLER(SMSG_NEW_WORLD,                   &WorldSocket::HandleNewWorld);
 
 #undef DEFINE_HANDLER
     }

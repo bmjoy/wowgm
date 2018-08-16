@@ -66,6 +66,6 @@ namespace wowgm::game::entities
         C3Vector* GetPosition();
         C3Vector const* GetPosition() const;
 
-        virtual TypeMask GetTypeMask() const { return TYPEMASK_OBJECT; }
+        TypeMask GetTypeMask() const;
     };
 }

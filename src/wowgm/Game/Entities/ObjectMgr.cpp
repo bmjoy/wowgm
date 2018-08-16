@@ -64,6 +64,8 @@ namespace wowgm::game::entities
         T* GetObject(ObjectGuid const& guid)
         {
             static_assert(std::is_base_of<CGObject, T>::value);
+
+            // Specialized just below.
             static_assert(!std::is_same<CGObject, T>::value);
 
             return ObjectHolder<T>::Find(guid);
