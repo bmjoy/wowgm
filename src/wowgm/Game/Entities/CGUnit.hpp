@@ -112,7 +112,7 @@ namespace wowgm::game::entities
 
     static_assert(sizeof(CGUnitData) == sizeof(std::uint32_t) * 142);
 
-    class CGUnit : public CGUnitData, public CGObject
+    class CGUnit : public CGObject, public CGUnitData
     {
     public:
         explicit CGUnit(CClientObjCreate const& typeMask);

@@ -31,114 +31,42 @@ namespace wowgm::game::entities
         template <> struct typeid_trait<TYPEID_AREATRIGGER> { using type = CGAreaTrigger; };
     }
 
-    template <typename T, typename std::enable_if<std::is_base_of<CGObject, T>::value, int>::type = 0>
+    template <typename T>
     class ObjectHolder final
     {
+        static_assert(std::is_base_of<CGObject, T>::value);
+
         ObjectHolder() { }
 
     public:
         using ContainerType = std::unordered_map<ObjectGuid, T*>;
 
-        static ContainerType& GetContainer()
-        {
-            static ContainerType _objectMap;
-            return _objectMap;
-        }
+        static ContainerType& GetContainer();
 
-        static void Insert(T* object)
-        {
-            std::unique_lock<std::shared_mutex> lock(*GetMutex());
+        static void Insert(T* object);
 
-            GetContainer()[object->GUID] = object;
-        }
+        static void Remove(T* object);
 
-        static void Remove(T* object)
-        {
-            std::unique_lock<std::shared_mutex> lock(*GetMutex());
+        static void Remove(ObjectGuid const& guid);
 
-            GetContainer().erase(object->GUID);
-        }
+        static T* Find(ObjectGuid guid);
 
-        static void Remove(ObjectGuid const& guid)
-        {
-            std::unique_lock<std::shared_mutex> lock(*GetMutex());
-
-            GetContainer().erase(guid);
-        }
-
-        template <typename... Args>
-        inline static T* Emplace(Args&&... args)
-        {
-            T* instance = new T(std::forward<Args>(args)...);
-            Insert(instance);
-            return instance;
-        }
-
-        static T* Find(ObjectGuid guid)
-        {
-            std::shared_lock<std::shared_mutex> lock(*GetMutex());
-
-            typename ContainerType::iterator itr = GetContainer().find(guid);
-            return (itr != GetContainer().end()) ? itr->second : nullptr;
-        }
-
-        static std::shared_mutex* GetMutex()
-        {
-            static std::shared_mutex _lock;
-            return &_lock;
-        }
+        static std::shared_mutex* GetMutex();
     };
 
     namespace ObjectAccessor
     {
         template <typename T>
-        static inline T* GetObject(ObjectGuid const& guid)
-        {
-            return ObjectHolder<T>::Find(guid);
-        }
+        T* GetObject(ObjectGuid const& guid);
 
         template <TypeID Type>
-        static inline auto GetObject(ObjectGuid const& guid) -> typename details::typeid_trait<Type>::type
+        inline auto GetObject(ObjectGuid const& guid) -> typename details::typeid_trait<Type>::type
         {
             return ObjectHolder<typename details::typeid_trait<Type>::type>(guid);
         }
 
-        template <>
-        static inline CGObject* GetObject(ObjectGuid const& guid)
-        {
-            switch (guid.GetTypeId())
-            {
-                case TYPEID_UNIT:
-                    return GetObject<CGUnit>(guid);
-                case TYPEID_ITEM:
-                    return GetObject<CGItem>(guid);
-                case TYPEID_CONTAINER:
-                    return GetObject<CGContainer>(guid);
-            }
+        void Destroy(ObjectGuid const& objectGuid);
 
-            return nullptr;
-        }
-
-        static inline void Destroy(CGObject* object)
-        {
-            if (object != nullptr)
-                Destroy(object->GUID);
-        }
-
-        static inline void Destroy(ObjectGuid const& objectGuid)
-        {
-            switch (objectGuid.GetTypeId())
-            {
-            case TYPEID_UNIT:
-                ObjectHolder<CGUnit>::Remove(objectGuid);
-                break;
-            case TYPEID_ITEM:
-                ObjectHolder<CGItem>::Remove(objectGuid);
-                break;
-            case TYPEID_CONTAINER:
-                ObjectHolder<CGContainer>::Remove(objectGuid);
-                break;
-            }
-        }
+        void Destroy(CGObject* object);
     }
 }

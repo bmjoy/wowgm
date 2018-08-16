@@ -27,38 +27,34 @@ namespace wowgm::protocol::world
         {
             if (itr.UpdateType == UpdateType::Values)
             {
-                switch (itr.GUID.GetTypeId())
-                {
-                    case TYPEID_UNIT:
-                        if (CGUnit* unit = ObjectAccessor::GetObject<CGUnit>(itr.GUID))
-                            unit->UpdateDescriptors(itr.Values);
-                        break;
-                    case TYPEID_ITEM:
-                        if (CGItem* item = ObjectAccessor::GetObject<CGItem>(itr.GUID))
-                            item->UpdateDescriptors(itr.Values);
-                        break;
-                    case TYPEID_CONTAINER:
-                        if (CGContainer* container = ObjectAccessor::GetObject<CGContainer>(itr.GUID))
-                            container->UpdateDescriptors(itr.Values);
-                        break;
-                }
+                if (CGObject* currentUnit = ObjectAccessor::GetObject<CGObject>(itr.GUID))
+                    currentUnit->UpdateDescriptors(itr.Values);
             }
             else
             {
                 switch (itr.GUID.GetTypeId())
                 {
                     case TYPEID_UNIT:
-                        if (CGUnit* unit = ObjectHolder<CGUnit>::Emplace(itr))
-                            unit->UpdateDescriptors(itr.Values);
+                    {
+                        CGUnit* unit = new CGUnit(itr);
+                        ObjectHolder<CGUnit>::Insert(unit);
+                        unit->UpdateDescriptors(itr.Values);
                         break;
+                    }
                     case TYPEID_ITEM:
-                        if (CGItem* item = ObjectHolder<CGItem>::Emplace(itr))
-                            item->UpdateDescriptors(itr.Values);
+                    {
+                        CGItem* item = new CGItem(itr);
+                        ObjectHolder<CGItem>::Insert(item);
+                        item->UpdateDescriptors(itr.Values);
                         break;
+                    }
                     case TYPEID_CONTAINER:
-                        if (CGContainer* container = ObjectHolder<CGContainer>::Emplace(itr))
-                            container->UpdateDescriptors(itr.Values);
+                    {
+                        CGContainer* container = new CGContainer(itr);
+                        ObjectHolder<CGContainer>::Insert(container);
+                        container->UpdateDescriptors(itr.Values);
                         break;
+                    }
                 }
             }
         }

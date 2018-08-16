@@ -443,6 +443,6 @@ namespace wowgm::protocol::world::packets
         _worldPacket >> guid;
 
         OnDeath = _worldPacket.read<std::uint8_t>() != 0;
-        GUID = guid;
+        GUID.Set(guid);
     }
 }
