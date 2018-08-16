@@ -4,6 +4,7 @@
 #include "AuthentificationPackets.hpp"
 #include "CharacterPackets.hpp"
 #include "Packet.hpp"
+#include "RealmList.hpp"
 
 #include "BigNumber.hpp"
 #include "SHA1.hpp"
@@ -16,11 +17,15 @@ namespace wowgm::protocol::world
 {
     using namespace packets;
     using namespace wowgm::cryptography;
+    using namespace wowgm::protocol::authentification;
 
     bool WorldSocket::HandleAuthResponse(ClientConnectionAuthResponse& packet)
     {
         if (packet.AuthResult != ResponseCodes::AUTH_OK)
             return false;
+
+        EmptyClientPacket readyForAccountDataTimes(Opcode::CMSG_READY_FOR_ACCOUNT_DATA_TIMES);
+        SendPacket(readyForAccountDataTimes);
 
         EmptyClientPacket charEnumerate(Opcode::CMSG_CHAR_ENUM);
         SendPacket(charEnumerate);
@@ -97,7 +102,7 @@ namespace wowgm::protocol::world
         authSession.ClientSeed = clientSeed.AsDword();
         memcpy(authSession.Digest.data(), context.GetDigest(), context.GetLength());
         authSession.LoginServerType = 0; // 1 Bnet, 0 grunt
-        authSession.RealmID = 0; // Used by Bnet only
+        authSession.RealmID = sClientServices->GetSelectedRealmInfo().ID; // Used by Bnet only
         authSession.RegionID = 0; // Used by Bnet only
         authSession.ServerID = 0; // Used by Bnet only
         authSession.UseIPv6 = false;
@@ -107,6 +112,8 @@ namespace wowgm::protocol::world
         SendPacket(authSession);
 
         _authCrypt.Init(sClientServices->GetSessionKey());
+
+        SetNoDelay(true);
 
         return true;
     }

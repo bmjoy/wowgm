@@ -104,7 +104,15 @@ namespace wowgm::protocol
         auto worldSocket = _socketUpdater->Create<WorldSocket>(_socketUpdater->GetContext());
         worldSocket->Connect(realmInfo.GetEndpoint());
 
+        _selectedRealm = std::move(realmInfo);
+        _realmInfos = boost::none;
+
         _socket = worldSocket;
+    }
+
+    AuthRealmInfo const& ClientServices::GetSelectedRealmInfo()
+    {
+        return _selectedRealm;
     }
 
     bool ClientServices::IsInWorld() const

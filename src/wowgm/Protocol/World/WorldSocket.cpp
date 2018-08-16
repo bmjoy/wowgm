@@ -2,7 +2,7 @@
 #include "Logger.hpp"
 #include "Packet.hpp"
 #include "Opcodes.hpp"
-
+#include "PacketLogger.hpp"
 #include "MiscPackets.hpp"
 
 #include <boost/asio/buffer.hpp>
@@ -12,6 +12,8 @@
 
 namespace wowgm::protocol::world
 {
+    using namespace wowgm::utilities;
+
     class EncryptablePacket : public WorldPacket
     {
         public:
@@ -98,8 +100,11 @@ namespace wowgm::protocol::world
     {
         BaseSocket::SetNoDelay(disableNagle);
 
-        packets::UserRouterClientEnableNagle enableNagle(Opcode::CMSG_ENABLE_NAGLE);
-        SendPacket(enableNagle);
+        if (!disableNagle)
+        {
+            packets::UserRouterClientEnableNagle enableNagle(Opcode::CMSG_ENABLE_NAGLE);
+            SendPacket(enableNagle);
+        }
     }
 
     bool WorldSocket::ReadDataHandler()
@@ -112,6 +117,8 @@ namespace wowgm::protocol::world
                 worldPacket.Decompress(GetDecompressionStream());
 
             LOG_INFO << "[S->C] " << worldPacket.GetOpcode() << " (0x" << std::hex << std::setw(4) << std::setfill('0') << std::uint32_t(worldPacket.GetOpcode()) << ", " << std::dec << worldPacket.size() << " bytes" << (isCompressed ? ", compressed" : "" ) << ")";
+
+            PacketLogger::WriteServerPacket(&worldPacket);
 
             if (!sOpcodeHandler->HasHandler(worldPacket.GetOpcode()))
                 return true;
@@ -149,6 +156,8 @@ namespace wowgm::protocol::world
 
     void WorldSocket::SendPacket(WorldPacket const* worldPacket)
     {
+        PacketLogger::WriteClientPacket(const_cast<WorldPacket*>(worldPacket));
+
         EncryptablePacket* packet = new EncryptablePacket(*worldPacket, _authCrypt.IsInitialized());
         _bufferQueue.Enqueue(packet);
     }

@@ -5,6 +5,7 @@
 #include <vector>
 #include <boost/optional.hpp>
 
+#include "RealmList.hpp"
 #include "AuthCommand.hpp"
 #include "AuthResult.hpp"
 #include "BigNumber.hpp"
@@ -20,11 +21,6 @@ namespace wowgm {
 namespace wowgm::protocol
 {
     class BaseSocket;
-
-    namespace authentification
-    {
-        struct AuthRealmInfo;
-    }
 
     using namespace wowgm::threading;
     using namespace wowgm::cryptography;
@@ -49,6 +45,7 @@ namespace wowgm::protocol
         void SetRealmInfo(std::vector<AuthRealmInfo> realmInfo);
 
         AuthRealmInfo* GetRealmInfo(std::uint32_t index);
+        AuthRealmInfo const& GetSelectedRealmInfo();
         std::uint32_t GetAvailableRealmCount();
 
         void ConnectToRealm(AuthRealmInfo const& realmInfo);
@@ -92,6 +89,7 @@ namespace wowgm::protocol
         AuthResult _authResult = LOGIN_OK;
 
         boost::optional<std::vector<AuthRealmInfo>> _realmInfos;
+        AuthRealmInfo _selectedRealm;
 
         std::vector<world::packets::CharacterInfo> _characters;
 
