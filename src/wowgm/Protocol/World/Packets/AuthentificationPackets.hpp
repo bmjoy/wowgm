@@ -19,8 +19,9 @@ namespace wowgm::protocol::world::packets
 
         void Read() override;
 
-        std::array<std::uint8_t, 16> Seeds[2] = { };
+        std::array<std::uint32_t, 8> Seeds = { };
         std::uint32_t AuthSeed;
+        std::uint8_t UnkByte;
     };
 
     struct AccountInfo
@@ -65,6 +66,7 @@ namespace wowgm::protocol::world::packets
         std::uint32_t RegionID;
         std::string AccountName;
         std::uint32_t ClientSeed;
+        std::uint64_t DosResponse;
         bool UseIPv6 = false;
     };
 }

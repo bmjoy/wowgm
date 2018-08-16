@@ -15,6 +15,7 @@ namespace wowgm::cryptography
     public:
         typedef std::integral_constant<std::uint32_t, SHA_DIGEST_LENGTH> DigestLength;
 
+        SHA1(SHA1 const& other);
         SHA1();
         ~SHA1();
 

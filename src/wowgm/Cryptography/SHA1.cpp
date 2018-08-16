@@ -5,6 +5,14 @@
 
 namespace wowgm::cryptography
 {
+
+    SHA1::SHA1(SHA1 const& other)
+    {
+        SHA1_Init(&mC);
+        memcpy(&mC, &other.mC, sizeof(SHA_CTX));
+        memcpy(mDigest, other.mDigest, SHA_DIGEST_LENGTH);
+    }
+
     SHA1::SHA1()
     {
         SHA1_Init(&mC);

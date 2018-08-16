@@ -41,14 +41,11 @@ namespace wowgm::protocol::world::packets
 
     void ClientConnectionAuthChallenge::Read()
     {
-        for (std::uint32_t i = 0; i < 2; ++i)
-        {
-            for (std::uint32_t j = 0; j < Seeds[i].size(); ++j)
-                _worldPacket >> Seeds[i][j];
-        }
+        for (std::uint32_t i = 0; i < 8; ++i)
+            _worldPacket >> Seeds[i];
 
         _worldPacket >> AuthSeed;
-        _worldPacket.read_skip<std::uint8_t>();
+        _worldPacket >> UnkByte;
     }
 
     ClientConnectionAuthResponse::ClientConnectionAuthResponse(WorldPacket&& worldPacket) : ServerPacket(std::move(worldPacket))
@@ -91,9 +88,7 @@ namespace wowgm::protocol::world::packets
         _worldPacket << std::uint8_t(Digest[18]);
         _worldPacket << std::uint8_t(Digest[12]);
         _worldPacket << std::uint8_t(Digest[5]);
-        _worldPacket << std::uint64_t(2); // authSession.qword40 = __PAIR__(v14, v13); Localhost debugging shows only 2, not sure where that comes from
-                                          // RealmConnection::HandleAuthChallenge, triggered by NETEVENTQUEUE::Poll. I'm confused. Someone with the structure
-                                          // for NETEVENTQUEUE (doubly linked list?) explain
+        _worldPacket << std::uint64_t(DosResponse);
         _worldPacket << std::uint8_t(Digest[15]);
         _worldPacket << std::uint8_t(Digest[9]);
         _worldPacket << std::uint8_t(Digest[19]);
