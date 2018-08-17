@@ -10,6 +10,7 @@
 #include "SHA1.hpp"
 #include "ClientServices.hpp"
 #include "ResponseCodes.hpp"
+#include "Logger.hpp"
 
 #include <array>
 
@@ -71,7 +72,7 @@ namespace wowgm::protocol::world
                 if (bitIndex >= maxByte)
                     break;
 
-                zero = (zero + 1) >> 32;
+                zero = (zero + 1);
                 if (!zero)
                     return false;
             }
@@ -82,7 +83,12 @@ namespace wowgm::protocol::world
 
         std::uint64_t dosResponse = 0;
         if (!checkInt64(context, packet.UnkByte, &dosResponse))
-            return false;
+        {
+            LOG_DEBUG << "Failed to validate dos response, sending zero instead.";
+            dosResponse = 0;
+        }
+        else
+            LOG_DEBUG << "Dos response calculated as " << dosResponse;
 
         context.Initialize();
         context.UpdateData(username);
@@ -102,7 +108,7 @@ namespace wowgm::protocol::world
         authSession.ClientSeed = clientSeed.AsDword();
         memcpy(authSession.Digest.data(), context.GetDigest(), context.GetLength());
         authSession.LoginServerType = 0; // 1 Bnet, 0 grunt
-        authSession.RealmID = sClientServices->GetSelectedRealmInfo().ID; // Used by Bnet only
+        authSession.RealmID = sClientServices->GetSelectedRealmInfo().ID;
         authSession.RegionID = 0; // Used by Bnet only
         authSession.ServerID = 0; // Used by Bnet only
         authSession.UseIPv6 = false;

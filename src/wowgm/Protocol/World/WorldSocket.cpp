@@ -102,8 +102,8 @@ namespace wowgm::protocol::world
 
         if (!disableNagle)
         {
-            packets::UserRouterClientEnableNagle enableNagle(Opcode::CMSG_ENABLE_NAGLE);
-            SendPacket(enableNagle);
+            packets::UserRouterClientEnableNagle enableServerNagle(Opcode::CMSG_ENABLE_NAGLE);
+            SendPacket(enableServerNagle);
         }
     }
 

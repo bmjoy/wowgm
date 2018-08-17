@@ -124,8 +124,6 @@ namespace wowgm::protocol::authentification
         context.Finalize();
         x.SetBinary(context);
 
-        // LOG_DEBUG << "x = " << x.AsHexStr();
-
         do {
             a.SetRand(19 * 8);
             A = g.ModExp(a, N);
@@ -170,18 +168,30 @@ namespace wowgm::protocol::authentification
         K.SetBinary(keyData, 40);
         sClientServices->SetSessionKey(K);
 
-        std::uint8_t gNHash[20];
+        std::uint8_t gNHash[20] = { };
+        std::uint8_t nHash[20] = { };
+        std::uint8_t gHash[20] = { };
         context.Initialize();
         context.UpdateBigNumbers(N);
         context.Finalize();
-        memcpy(gNHash, context.GetDigest(), context.GetLength());
+        memcpy(nHash, context.GetDigest(), context.GetLength());
+
+        auto to_cout = [](const char* label, std::uint8_t* data, size_t l)
+        {
+            std::cout << label << " : ";
+            for (std::uint32_t i = 0; i < l; ++i)
+                std::cout << "0x" << std::hex << std::setw(2) << std::setfill('0') << std::uint32_t(data[i]) << ", ";
+            std::cout << std::endl;
+        };
+
 
         context.Initialize();
         context.UpdateBigNumbers(g);
         context.Finalize();
+        memcpy(gHash, context.GetDigest(), context.GetLength());
 
-        for (int i = 0; i < 20; ++i)
-            gNHash[i] ^= context.GetDigest()[i];
+        for (std::uint32_t hashItr = 0; hashItr < SHA_DIGEST_LENGTH; ++hashItr)
+            gNHash[hashItr] = nHash[hashItr] ^ gHash[hashItr];
 
         BigNumber t3;
         t3.SetBinary(gNHash, 20);
@@ -208,16 +218,19 @@ namespace wowgm::protocol::authentification
         M2.SetBinary(context);
 
         LOG_INFO << "[C->S] AUTH_LOGON_PROOF.";
-        // LOG_DEBUG << "s = " << salt.AsHexStr();
-        // LOG_DEBUG << "N = " << N.AsHexStr();
-        // LOG_DEBUG << "A = " << A.AsHexStr();
-        // LOG_DEBUG << "u = " << u.AsHexStr();
-        // LOG_DEBUG << "S = " << S.AsHexStr();
-        // LOG_DEBUG << "K = " << K.AsHexStr();
-        // LOG_DEBUG << "M1= " << M1.AsHexStr();
-        // LOG_DEBUG << "M2= " << M2.AsHexStr();
-        // LOG_DEBUG << "Us= " << wowgm::utilities::ByteArrayToHexStr(userHash, 20);
-        // LOG_DEBUG << "T3= " << t3.AsHexStr();
+        LOG_DEBUG << "s = " << salt.AsHexStr();
+        LOG_DEBUG << "N = " << N.AsHexStr();
+        LOG_DEBUG << "A = " << A.AsHexStr();
+        LOG_DEBUG << "a = " << a.AsHexStr();
+        LOG_DEBUG << "B = " << B.AsHexStr();
+        LOG_DEBUG << "u = " << u.AsHexStr();
+        LOG_DEBUG << "S = " << S.AsHexStr();
+        LOG_DEBUG << "K = " << K.AsHexStr();
+        LOG_DEBUG << "Us= " << wowgm::utilities::ByteArrayToHexStr(userHash, 20);
+        LOG_DEBUG << "T3= " << t3.AsHexStr();
+        LOG_DEBUG << "x = " << x.AsHexStr();
+        LOG_DEBUG << "M1= " << M1.AsHexStr();
+        LOG_DEBUG << "M2= " << M2.AsHexStr();
 
         AuthPacket<LogonProof> logonChallenge(this->shared_from_this(), AUTH_LOGON_PROOF);
         memcpy(logonChallenge.GetData()->A, A.AsByteArray(32).get(), 32);
