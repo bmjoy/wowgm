@@ -32,7 +32,8 @@ enum severity_level
     debug,
     trace,
     rendering,
-    max_security
+    performance,
+    max_security,
 };
 
 extern const char* severity_level_str[];
@@ -55,18 +56,18 @@ namespace wowgm::log
 
 } // namespace wowgm::log
 
-#define LOG_SCOPE     BOOST_LOG_NAMED_SCOPE(BOOST_CURRENT_FUNCTION);
+#define LOG_SCOPE       BOOST_LOG_NAMED_SCOPE(BOOST_CURRENT_FUNCTION);
 
-#define LOG_INFO      BOOST_LOG_SEV(severity_logger::get(), info)
-#define LOG_WARNING   BOOST_LOG_SEV(severity_logger::get(), warning)
-#define LOG_ERROR     BOOST_LOG_SEV(severity_logger::get(), error)
-#define LOG_CRITICAL  BOOST_LOG_SEV(severity_logger::get(), critical)
+#define LOG_INFO        BOOST_LOG_SEV(severity_logger::get(), info)
+#define LOG_WARNING     BOOST_LOG_SEV(severity_logger::get(), warning)
+#define LOG_ERROR       BOOST_LOG_SEV(severity_logger::get(), error)
+#define LOG_CRITICAL    BOOST_LOG_SEV(severity_logger::get(), critical)
 
-#define LOG_DEBUG     BOOST_LOG_SEV(severity_logger::get(), debug)
+#define LOG_DEBUG       BOOST_LOG_SEV(severity_logger::get(), debug)
 #if !_DEBUG
 #pragma message("Consider #ifdef'ing LOG_DEBUG calls, as expensive operations may not be optimized out by the compiler.")
 #endif
 
-#define LOG_TRACE     BOOST_LOG_SEV(severity_logger::get(), trace)
-#define LOG_RENDERING BOOST_LOG_SEV(severity_logger::get(), rendering)
-
+#define LOG_TRACE       BOOST_LOG_SEV(severity_logger::get(), trace)
+#define LOG_RENDERING   BOOST_LOG_SEV(severity_logger::get(), rendering)
+#define LOG_PERFORMANCE BOOST_LOG_SEV(severity_logger::get(), performance)

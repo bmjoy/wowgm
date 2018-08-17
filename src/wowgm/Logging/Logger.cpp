@@ -7,7 +7,8 @@ const char* severity_level_str[] = {
     "FATAL",
     "DEBUG",
     "TRACE",
-    "GRAPHICS"
+    "GRAPHICS",
+    "PERFORMANCE"
 };
 
 namespace wowgm::log {

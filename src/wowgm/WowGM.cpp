@@ -1,39 +1,3 @@
-#if 0
-#include <cstring>
-#include <iostream>
-#include <iomanip>
-#include <cstdint>
-
-int main()
-{
-    std::uint8_t N_[] = {
-        0x80, 0x60, 0x57, 0xd3, 0xe5, 0x0d, 0x9d, 0x99, 0x95, 0x26, 0x27, 0x24,
-        0x64, 0xc7, 0x94, 0x77, 0x08, 0x29, 0x65, 0x13
-    };
-    std::uint8_t g_[] = {
-        0x5d, 0x1b, 0xe7, 0xe9, 0xdd, 0xa1, 0xee, 0x88, 0x96, 0xbe, 0x5b, 0x7e,
-        0x34, 0xa8, 0x5e, 0xe1, 0x64, 0x52, 0xa7, 0xb4
-    };
-
-    std::uint8_t gN[20];
-    memcpy(gN, N_, sizeof(N_));
-    for (std::uint8_t i = 0; i < sizeof(N_); ++i)
-        gN[i] ^= g_[i];
-
-    std::uint8_t output[] = {
-        0xdd, 0x7b, 0xb0, 0x3a, 0x38, 0xac, 0x73, 0x11, 0x03, 0x98, 0x7c, 0x5a,
-        0x50, 0x6f, 0xca, 0x96, 0x6c, 0x7b, 0xc2, 0xa7
-    };
-
-    for (std::uint8_t i = 0; i < sizeof(gN); ++i)
-        if (output[i] != gN[i])
-            std::cout << "Mismatch: gN[" << std::dec << i << "] = 0x" << std::hex << std::setw(2) << std::setfill('0') << gN[i]
-                      << " output[" << std::dec << i << "] = 0x" << std::hex << std::setw(2) << std::setfill('0') << output[i];
-
-    return 0;
-}
-
-#else
 #include <boost/program_options.hpp>
 #include <boost/stacktrace/stacktrace.hpp>
 
@@ -135,4 +99,3 @@ int main(int argc, char* argv[])
     }
     return 0;
 }
-#endif

@@ -156,6 +156,7 @@ namespace wowgm::filesystem
 
     private:
         std::vector<HANDLE> _archiveHandles;
+        std::string _currentRootFolder;
     };
 
     class DiskFileSystem final : public FileSystem<DiskFile>

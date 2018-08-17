@@ -1,5 +1,6 @@
 #include "FileSystem.hpp"
 #include "Assert.hpp"
+#include "DBC.hpp"
 
 #include <stdexcept>
 #include <boost/filesystem.hpp>
@@ -11,23 +12,25 @@ namespace wowgm::filesystem
 
     void MpqFileSystem::Initialize(const std::string& rootFolder)
     {
-        for (HANDLE archiveHandle : _archiveHandles)
-            SFileCloseArchive(archiveHandle);
-
-        _archiveHandles.clear();
-
         if (rootFolder.length() == 0)
             return;
+
+        if (rootFolder == _currentRootFolder)
+            return;
+
+        for (HANDLE archiveHandle : _archiveHandles)
+            SFileCloseArchive(archiveHandle);
 
         try {
             boost::filesystem::path rootPath = rootFolder;
             auto dataPath = rootPath / "Data" / GetLocaleString();
 
+            _archiveHandles.clear();
 
             boost::filesystem::directory_iterator end;
             for (boost::filesystem::directory_iterator itr(dataPath); itr != end; ++itr)
             {
-                if (!boost::filesystem::is_directory(itr->path()))
+                if (boost::filesystem::is_directory(itr->path()))
                     continue;
 
                 if (boost::filesystem::extension(itr->path()) != ".MPQ")
@@ -43,6 +46,10 @@ namespace wowgm::filesystem
         catch (const std::exception& e) {
             return; // Check for more specific exceptions layer
         }
+
+        _currentRootFolder = rootFolder;
+
+        wowgm::game::datastores::Initialize();
     }
 
     MpqFileSystem::~MpqFileSystem()

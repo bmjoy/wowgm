@@ -176,15 +176,6 @@ namespace wowgm::protocol::authentification
         context.Finalize();
         memcpy(nHash, context.GetDigest(), context.GetLength());
 
-        auto to_cout = [](const char* label, std::uint8_t* data, size_t l)
-        {
-            std::cout << label << " : ";
-            for (std::uint32_t i = 0; i < l; ++i)
-                std::cout << "0x" << std::hex << std::setw(2) << std::setfill('0') << std::uint32_t(data[i]) << ", ";
-            std::cout << std::endl;
-        };
-
-
         context.Initialize();
         context.UpdateBigNumbers(g);
         context.Finalize();

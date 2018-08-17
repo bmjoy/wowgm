@@ -315,6 +315,7 @@ void Window::OnUpdateOverlay()
         ImGui::PopItemWidth();
 
         MpqFileSystem::Instance()->Initialize(_gameDataLocation);
+
         bool binaryFound = DiskFileSystem::Instance()->FileExists("/Wow.exe", _gameDataLocation);
 
         ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[1]);
