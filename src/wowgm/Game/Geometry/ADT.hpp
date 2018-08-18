@@ -41,6 +41,37 @@ namespace wowgm::game::geometry
         std::uint32_t _;
     };
 
+    struct SMDoodadDef
+    {
+        std::uint32_t Index;
+        std::uint32_t UniqueID;
+        C3Vector Position;
+        C3Vector Rotation; // Degrees.
+        std::uint16_t Scale;
+        std::uint16_t Flags;
+
+        float GetScale() const {
+            return float(Scale) / 1024.0f;
+        }
+    };
+
+    struct SMMapObjDef
+    {
+        std::uint32_t Index;
+        std::uint32_t UniqueID;
+        C3Vector Position;
+        C3Vector Rotation;
+        CAaBox Extents; // Position plus the transformed wmo bounding box. used for defining if they are rendered as well as collision.
+        std::uint16_t Flags;
+        std::uint16_t DoodadSet;
+        std::uint16_t NameSet;
+        std::uint16_t Scale;
+
+        float GetScale() const {
+            return float(Scale) / 1024.0f;
+        }
+    };
+
     class ADT
     {
     public:
@@ -91,6 +122,8 @@ namespace wowgm::game::geometry
             std::vector<std::uint8_t> _worldMapObjectFilenames;
             std::vector<std::uint32_t> _worldMapObjectFilenamesOffset;
 
+            std::vector<SMDoodadDef> _doodadDefinitions;
+            std::vector<SMMapObjDef> _mapObjDefinitions;
         };
 
         ADT(const std::string& directoryName);

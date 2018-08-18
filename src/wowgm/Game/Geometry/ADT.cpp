@@ -4,6 +4,7 @@
 
 #include <sstream>
 #include <cstring>
+#include <string_view>
 
 #ifdef min
 #undef min
@@ -74,33 +75,38 @@ namespace wowgm::game::geometry
             case 'MTEX':
                 _textureFilenames = std::move(content);
                 break;
+            // M2
             case 'MMDX':
                 _modelFilenames = std::move(content);
                 break;
             case 'MMID':
-            {
                 _modelFilenamesOffset.resize(content.size() / 4);
                 std::memmove(_modelFilenamesOffset.data(), content.data(), content.size());
                 break;
-            }
+            case 'MDDF':
+                _doodadDefinitions.resize(content.size() / sizeof(SMDoodadDef));
+                std::memmove(_doodadDefinitions.data(), content.data(), content.size());
+                break;
+            // WMO
             case 'MWMO':
                 _worldMapObjectFilenames = std::move(content);
                 break;
             case 'MWID':
-            {
                 _worldMapObjectFilenamesOffset.resize(content.size() / 4);
                 std::memmove(_worldMapObjectFilenamesOffset.data(), content.data(), content.size());
                 break;
-            }
+            case 'MODF':
+                _mapObjDefinitions.resize(content.size() / sizeof(SMMapObjDef));
+                std::memmove(_mapObjDefinitions.data(), content.data(), content.size());
+                break;
+
             case 'MCNK':
-            {
                 _chunks.push_back(new Chunk(content.data()));
                 break;
-            }
+
             default:
             {
-                char* identifierStr = reinterpret_cast<char*>(&identifier);
-                std::string chunkIdentifier(identifierStr, identifierStr + 4);
+                std::string_view chunkIdentifier(reinterpret_cast<char const*>(&identifier), 4);
                 LOG_INFO << "ADT Loading - Skipped " << chunkIdentifier << " chunk (" << content.size() << " bytes)";
                 break;
             }
