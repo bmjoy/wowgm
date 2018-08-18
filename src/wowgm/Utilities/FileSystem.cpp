@@ -49,7 +49,7 @@ namespace wowgm::filesystem
 
         _currentRootFolder = rootFolder;
 
-        wowgm::game::datastores::Initialize();
+        wowgm::game::datastores::DataStores::Initialize();
     }
 
     MpqFileSystem::~MpqFileSystem()

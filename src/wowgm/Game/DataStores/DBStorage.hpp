@@ -6,6 +6,7 @@
 
 #include "FileSystem.hpp"
 #include "Assert.hpp"
+#include "DBTraits.hpp"
 
 namespace wowgm::game::datastores
 {
@@ -36,42 +37,33 @@ namespace wowgm::game::datastores
         std::uint32_t CopyTableSize;
     };
 
-    template <typename T, typename Meta>
+    template <typename T>
     struct Storage
     {
-        using header_type = typename std::conditional<Meta::sparse_storage, DB2Header, DBCHeader>::type;
+        using meta_t = typename meta_type<T>::type;
+        static_assert(!std::is_same<meta_t, std::nullptr_t>::value, "");
+
+        using header_type = typename std::conditional<meta_t::sparse_storage, DB2Header, DBCHeader>::type;
         using record_type = T;
 
-        using iterator = typename std::vector<T>::iterator;
-        using const_iterator = typename std::vector<T>::const_iterator;
+        static void Initialize();
 
-        constexpr Storage()
-        {
-        }
+        static void LoadRecords(std::uint8_t const* data);
 
-        void Initialize();
-
-        void LoadRecords(std::uint8_t const* data, std::uintptr_t stringPool);
-
-        void LoadSparseRecords(std::uint8_t const* data, std::uintptr_t stringPool)
+        static void LoadSparseRecords(std::uint8_t const* data, std::uintptr_t stringPool)
         {
             BOOST_ASSERT_MSG(false, "Not implemented");
         }
 
-        void CopyToMemory(std::uint32_t index, std::uint8_t const* data, std::uintptr_t stringPool);
+        static void CopyToMemory(std::uint32_t index, std::uint8_t const* data);
 
-        T& operator [] (int index);
-
-        T const& operator [] (int index) const;
-
-        iterator begin() noexcept;
-        const_iterator begin() const noexcept;
+        static T* GetRecord(std::uint32_t index);
 
     private:
-        header_type _header;
+        static header_type& get_header();
+        static std::unordered_map<std::uint32_t, T>& get_storage();
 
-        std::vector<T> _storage;
-        std::vector<std::uint8_t> _stringTable;
+        static std::vector<std::uint8_t>& get_string_table();
     };
 
 }
