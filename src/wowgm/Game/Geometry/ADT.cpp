@@ -1,7 +1,9 @@
 #include "ADT.hpp"
 #include "Assert.hpp"
 #include "Logger.hpp"
-#include <Sstream>
+
+#include <sstream>
+#include <cstring>
 
 #ifdef min
 #undef min
@@ -66,12 +68,28 @@ namespace wowgm::game::geometry
     void ADT::MapChunk::HandleTerrainChunk(std::uint32_t identifier, std::vector<std::uint8_t> const& content)
     {
         switch (identifier)
-        {
-            default:
             {
-                char* identifierStr = reinterpret_cast<char*>(&identifier);
-                std::string chunkIdentifier(identifierStr, identifierStr + 4);
-                LOG_INFO << "ADT Loading - Skipped " << chunkIdentifier << " chunk (" << content.size() << " bytes)";
+            case 'MVER':
+                break;
+            case 'MTEX':
+                _textureFilenames = std::move(content);
+                break;
+            case 'MMDX':
+                _modelFilenames = std::move(content);
+                break;
+            case 'MMID':
+            {
+                _modelFilenamesOffset.resize(content.size() / 4);
+                std::memmove(_modelFilenamesOffset.data(), content.data(), content.size());
+                break;
+            }
+            case 'MWMO':
+                _worldMapObjectFilenames = std::move(content);
+                break;
+            case 'MWID':
+            {
+                _worldMapObjectFilenamesOffset.resize(content.size() / 4);
+                std::memmove(_worldMapObjectFilenamesOffset.data(), content.data(), content.size());
                 break;
             }
             case 'MCNK':
@@ -79,7 +97,32 @@ namespace wowgm::game::geometry
                 _chunks.push_back(new Chunk(content.data()));
                 break;
             }
+            default:
+            {
+                char* identifierStr = reinterpret_cast<char*>(&identifier);
+                std::string chunkIdentifier(identifierStr, identifierStr + 4);
+                LOG_INFO << "ADT Loading - Skipped " << chunkIdentifier << " chunk (" << content.size() << " bytes)";
+                break;
+            }
         }
+    }
+
+    const char* ADT::MapChunk::GetModelFilename(std::uint32_t index) const
+    {
+        if (index >= _modelFilenamesOffset.size())
+            return nullptr;
+
+        auto strOffset = _modelFilenamesOffset[index];
+        return reinterpret_cast<const char*>(_modelFilenames.data() + strOffset);
+    }
+
+    const char* ADT::MapChunk::GetWorldModelFilename(std::uint32_t index) const
+    {
+        if (index >= _worldMapObjectFilenamesOffset.size())
+            return nullptr;
+
+        auto strOffset = _worldMapObjectFilenamesOffset[index];
+        return reinterpret_cast<const char*>(_worldMapObjectFilenames.data() + strOffset);
     }
 
     CAaBox const& ADT::MapChunk::GetBoundingBox() const

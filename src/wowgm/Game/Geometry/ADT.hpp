@@ -74,9 +74,23 @@ namespace wowgm::game::geometry
 
             void HandleTerrainChunk(std::uint32_t identifier, std::vector<std::uint8_t> const& content);
 
+            /// Return the name of an M2 model, given the provided index (usually from MDDF)
+            const char* GetModelFilename(std::uint32_t index) const;
+            /// Return the name of a WMO model, given the provided index (usually from MODF)
+            const char* GetWorldModelFilename(std::uint32_t index) const;
+
         private:
             CAaBox _boundingBox;
             std::vector<Chunk*> _chunks;
+
+            std::vector<std::uint8_t> _textureFilenames;
+
+            std::vector<std::uint8_t> _modelFilenames;
+            std::vector<std::uint32_t> _modelFilenamesOffset;
+
+            std::vector<std::uint8_t> _worldMapObjectFilenames;
+            std::vector<std::uint32_t> _worldMapObjectFilenamesOffset;
+
         };
 
         ADT(const std::string& directoryName);
