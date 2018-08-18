@@ -14,7 +14,6 @@
 // See contrib/dbmeta.py
 namespace wowgm::game::datastores
 {
-
     namespace DataStores
     {
         void Initialize()
