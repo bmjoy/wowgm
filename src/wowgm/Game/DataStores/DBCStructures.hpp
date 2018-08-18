@@ -642,24 +642,23 @@ namespace wowgm::game::datastores
 #pragma pack(push, 1)
     struct ChrRacesEntry {
         std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        const char* UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        const char* UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
-        const char* UnkMember14;
-        const char* UnkMember15;
-        const char* UnkMember16;
-        const char* UnkMember17[2];
-        const char* UnkMember18;
+        std::uint32_t Flags;
+        std::uint32_t FactionID;
+        std::uint32_t ExplorationSoundID;
+        std::uint32_t MaleDisplayID;
+        std::uint32_t FemaleDisplayID;
+        const char* ClientPrefix;
+        std::uint32_t BaseLanguageID;
+        std::uint32_t CreatureType;
+        std::uint32_t ResSicknessSpellID;
+        std::uint32_t SplashSoundID;
+        const char* ClientFileString;
+        std::uint32_t CinematicSequenceID;
+        std::uint32_t Alliance;
+        const char* Name;
+        const char* GenderNames[2];
+        const char* FacialHairCustomization[2];
+        const char* HairCustomization;
         std::uint32_t UnkMember19;
         std::uint32_t UnkMember20;
         std::uint32_t UnkMember21;
@@ -670,19 +669,18 @@ namespace wowgm::game::datastores
 #pragma pack(push, 1)
     struct ChrClassesEntry {
         std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        const char* UnkMember2;
-        const char* UnkMember3;
-        const char* UnkMember4;
-        const char* UnkMember5;
-        const char* UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
+        std::uint32_t PowerDisplayID;
+        const char* PetNameIdentifier;
+        const char* Name;
+        const char* GenderNames[2];
+        const char* FileName;
+        std::uint32_t SpellClassSet;
+        std::uint32_t Flags;
+        std::uint32_t CinematicSequence;
+        std::uint32_t Expansion;
+        std::uint32_t AttackPowerPerStrength;
+        std::uint32_t AttackPowerPerAgility;
+        std::uint32_t RangedAttackPowerPerAgility;
     };
 #pragma pack(pop)
 

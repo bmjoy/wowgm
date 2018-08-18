@@ -69,8 +69,8 @@ namespace wowgm::game::datastores
             // Storage<FileDataEntry>::Initialize();
             // Storage<FactionTemplateEntry>::Initialize();
             // Storage<FactionGroupEntry>::Initialize();
-            // Storage<ChrRacesEntry>::Initialize();
-            // Storage<ChrClassesEntry>::Initialize();
+            Storage<ChrRacesEntry>::Initialize();
+            Storage<ChrClassesEntry>::Initialize();
             // Storage<ChatProfanityEntry>::Initialize();
             // Storage<CharacterFacialHairStylesEntry>::Initialize();
             // Storage<CharSectionsEntry>::Initialize();
