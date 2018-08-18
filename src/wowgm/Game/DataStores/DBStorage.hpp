@@ -50,11 +50,6 @@ namespace wowgm::game::datastores
 
         static void LoadRecords(std::uint8_t const* data);
 
-        static void LoadSparseRecords(std::uint8_t const* data, std::uintptr_t stringPool)
-        {
-            BOOST_ASSERT_MSG(false, "Not implemented");
-        }
-
         static void CopyToMemory(std::uint32_t index, std::uint8_t const* data);
 
         static T* GetRecord(std::uint32_t index);

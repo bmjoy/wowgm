@@ -23,7 +23,7 @@ namespace wowgm::game::datastores
             auto start = hrc::now();
 
             // Storage<Startup_StringsEntry>::Initialize();
-            // Storage<ItemSparseEntry>::Initialize();
+            Storage<ItemSparseEntry>::Initialize();
             // Storage<ItemEntry>::Initialize();
             // Storage<SpellVisualKitEntry>::Initialize();
             // Storage<SpellVisualEffectNameEntry>::Initialize();

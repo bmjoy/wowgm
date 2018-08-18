@@ -38,10 +38,8 @@ namespace wowgm::game::datastores
 
         get_string_table().assign(stringTableData, stringTableData + get_header().StringBlockSize);
 
-        if constexpr (!meta_t::sparse_storage)
-            LoadRecords(recordData);
-        else
-            LoadSparseRecords(data, 0);
+        // sparse tables can be loaded just like non-sparse if they don't have strings
+        LoadRecords(recordData);
     }
 
     template <typename T>
@@ -85,8 +83,6 @@ namespace wowgm::game::datastores
                 case 'b':
                     memory_size_item = 1u;
                     break;
-                default:
-                    BOOST_ASSERT(false);
             }
 
             array_size /= memory_size_item;
@@ -95,9 +91,19 @@ namespace wowgm::game::datastores
             {
                 for (std::uint32_t i = 0; i < array_size; ++i)
                 {
-                    auto stringTableOffset = *reinterpret_cast<std::uint32_t const*>(data + meta_t::field_offsets[j] + 4u * i);
-                    const char* stringValue = reinterpret_cast<const char*>(&get_string_table()[stringTableOffset]);
-                    *reinterpret_cast<std::uintptr_t*>(memberTarget) = reinterpret_cast<std::uintptr_t>(stringValue);
+                    if constexpr (true) // (!meta_t::sparse_storage) // WDB2 still has a string table
+                    {
+                        auto stringTableOffset = *reinterpret_cast<std::uint32_t const*>(data + meta_t::field_offsets[j] + 4u * i);
+                        const char* stringValue = reinterpret_cast<const char*>(&get_string_table()[stringTableOffset]);
+                        *reinterpret_cast<std::uintptr_t*>(memberTarget) = reinterpret_cast<std::uintptr_t>(stringValue);
+                    }
+                    else
+                    {
+                        std::uint8_t const* recordMember = data + meta_t::field_offsets[j] + 4u * i;
+                        size_t stringLength = strlen(reinterpret_cast<const char*>(recordMember));
+                        auto itr = &*get_string_table().insert(get_string_table().end(), recordMember, recordMember + stringLength);
+                        *reinterpret_cast<std::uintptr_t*>(memberTarget) = *reinterpret_cast<std::uintptr_t*>(*itr);
+                    }
 
                     memoryOffset += sizeof(std::uintptr_t); // // Advance to the next member ...
                     memberTarget += sizeof(std::uintptr_t); // ... But also advance our own pointer in case we are an array.
@@ -148,5 +154,6 @@ namespace wowgm::game::datastores
     }
 
     template struct Storage<MapEntry>;
+    template struct Storage<ItemSparseEntry>;
     template struct Storage<SpellEntry>;
 }
