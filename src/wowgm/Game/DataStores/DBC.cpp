@@ -151,7 +151,7 @@ namespace wowgm::game::datastores
             // Storage<SpellDispelTypeEntry>::Initialize();
             // Storage<SpellDifficultyEntry>::Initialize();
             // Storage<SpellDescriptionVariablesEntry>::Initialize();
-            // Storage<SpellEntry>::Initialize();
+            Storage<SpellEntry>::Initialize();
             // Storage<SpellCooldownsEntry>::Initialize();
             // Storage<SpellClassOptionsEntry>::Initialize();
             // Storage<SpellChainEffectsEntry>::Initialize();

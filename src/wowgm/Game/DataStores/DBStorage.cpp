@@ -148,4 +148,5 @@ namespace wowgm::game::datastores
     }
 
     template struct Storage<MapEntry>;
+    template struct Storage<SpellEntry>;
 }
