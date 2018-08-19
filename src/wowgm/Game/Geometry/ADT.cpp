@@ -69,7 +69,7 @@ namespace wowgm::game::geometry
     void ADT::MapChunk::HandleTerrainChunk(std::uint32_t identifier, std::vector<std::uint8_t> const& content)
     {
         switch (identifier)
-            {
+        {
             case 'MVER':
                 break;
             case 'MTEX':
@@ -101,7 +101,7 @@ namespace wowgm::game::geometry
                 break;
 
             case 'MCNK':
-                _chunks.push_back(new Chunk(content.data()));
+                _chunks.push_back(new Chunk(content.data(), content.size()));
                 break;
 
             default:
@@ -141,9 +141,56 @@ namespace wowgm::game::geometry
         return _boundingBox.Minimum.Z != std::numeric_limits<float>::min();
     }
 
-    ADT::MapChunk::Chunk::Chunk(std::uint8_t const* data)
+    ADT::MapChunk::Chunk::Chunk(std::uint8_t const* data, size_t length)
     {
         memcpy(&_header, data, sizeof(SMChunk));
+        std::uint8_t const* start = data + sizeof(SMChunk);
+        std::uint8_t const* position = start;
+
+        while ((position - start) < length)
+        {
+            std::uint32_t chunkIdentifier = *reinterpret_cast<std::uint32_t const*>(position);
+            std::uint32_t chunkSize = *reinterpret_cast<std::uint32_t const*>(position + 4);
+
+            std::vector<std::uint8_t> chunkData(position + 8, position + 8 + chunkSize);
+            HandleTerrainChunk(chunkIdentifier, chunkData);
+
+            position += 8 + chunkSize;
+        }
+    }
+
+    void ADT::MapChunk::Chunk::Chunk::HandleTerrainChunk(std::uint32_t identifier, std::vector<std::uint8_t> const& content)
+    {
+        switch (identifier)
+        {
+            case 'MCVT':
+                _vertices.resize(9 * 9 + 8 * 8);
+                std::memmove(_vertices.data(), content.data(), content.size());
+                break;
+            case 'MCLV':
+                _mclv.resize(9 * 9 + 8 * 8);
+                std::memmove(_mclv.data(), content.data(), content.size());
+                break;
+            case 'MCCV':
+                break;
+            case 'MCNR':
+            {
+                _normals.resize(9 * 9 + 8 * 8);
+
+                std::uint8_t const* normalData = content.data();
+                std::uint8_t const* position = normalData;
+
+                std::uint32_t itr;
+                while ((position - normalData) < content.size())
+                {
+                    _normals[itr].X = float(std::int8_t(position[0])) / 127.0f;
+                    _normals[itr].Y = float(std::int8_t(position[1])) / 127.0f;
+                    _normals[itr].Z = float(std::int8_t(position[2])) / 127.0f;
+                    position += 3;
+                }
+                break;
+            }
+        }
     }
 
     ADT::ADT(const std::string& directoryName)

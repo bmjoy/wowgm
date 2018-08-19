@@ -69,40 +69,40 @@ namespace wowgm::game::structures
         } Transport;
 
         struct {
-            std::uint32_t ID;
-            std::uint32_t Time;
-            std::uint32_t Flags;
-            std::uint32_t Duration;
-            std::uint32_t StartTime;
+            std::uint32_t ID = 0;
+            std::uint32_t Time = 0;
+            std::uint32_t Flags = 0;
+            std::uint32_t Duration = 0;
+            std::uint32_t StartTime = 0;
 
-            std::uint8_t Mode;
-            std::uint8_t Type;
+            std::uint8_t Mode = 0;
+            std::uint8_t Type = 0;
 
-            float Elevation;
-            float VerticalAcceleration;
-            float NextDurationMultiplier;
-            float DurationMultiplier;
+            float Elevation = 0.0f;
+            float VerticalAcceleration = 0.0f;
+            float NextDurationMultiplier = 0.0f;
+            float DurationMultiplier = 0.0f;
 
             std::vector<C3Vector> Points;
 
             C3Vector Endpoint;
 
             struct {
-                ObjectGuid Target;
+                ObjectGuid Target = = ObjectGuid::Empty;
                 C3Vector Position;
-                float Angle;
+                float Angle = 0.0f;
             } Facing;
         } Spline;
 
         std::array<std::uint32_t, 3> AnimKits;
 
-        bool PlayHoverAnim;
-        bool IsSuppressingGreetings;
-        bool ThisIsYou;
-        bool NoBirthAnim;
+        bool PlayHoverAnim = false;
+        bool IsSuppressingGreetings = false;
+        bool ThisIsYou = false;
+        bool NoBirthAnim = false;
 
-        ObjectGuid GUID;
-        ObjectGuid TargetGUID;
+        ObjectGuid GUID = ObjectGuid::Empty;
+        ObjectGuid TargetGUID = ObjectGuid::Empty;
 
         std::vector<std::uint32_t> StopFrames;
     };

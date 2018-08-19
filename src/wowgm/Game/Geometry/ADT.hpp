@@ -3,6 +3,7 @@
 #include "FileSystem.hpp"
 #include "C3Vector.hpp"
 #include "CAaBox.hpp"
+#include "CArgb.hpp"
 
 #include <cstdint>
 #include <string>
@@ -81,12 +82,19 @@ namespace wowgm::game::geometry
             class Chunk
             {
             public:
-                explicit Chunk(std::uint8_t const* data);
+                Chunk(std::uint8_t const* data, size_t length);
                 Chunk(Chunk&&) = delete;
                 Chunk(const Chunk&) = delete;
 
             private:
+                void HandleTerrainChunk(std::uint32_t identifier, std::vector<std::uint8_t> const& content);
+
+            private:
                 SMChunk _header;
+
+                std::vector<float> _vertices;
+                std::vector<CArgb> _mclv;
+                std::vector<C3Vector> _normals;
             };
 
             MapChunk(std::uint32_t x, std::uint32_t y, const std::string& directoryName);
