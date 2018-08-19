@@ -2,6 +2,7 @@
 #include "CGItem.hpp"
 #include "CGContainer.hpp"
 #include "CGUnit.hpp"
+#include "CGPlayer.hpp"
 
 namespace wowgm::game::entities
 {
@@ -38,6 +39,20 @@ namespace wowgm::game::entities
     {
         if (GetTypeMask() & TYPEMASK_UNIT)
             return static_cast<CGUnit const*>(this);
+        return nullptr;
+    }
+
+    CGPlayer* CGObject::ToPlayer()
+    {
+        if (GetTypeMask() & TYPEMASK_PLAYER)
+            return static_cast<CGPlayer*>(this);
+        return nullptr;
+    }
+
+    CGPlayer const* CGObject::ToPlayer() const
+    {
+        if (GetTypeMask() & TYPEMASK_PLAYER)
+            return static_cast<CGPlayer const*>(this);
         return nullptr;
     }
 

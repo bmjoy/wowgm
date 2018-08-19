@@ -9,6 +9,7 @@
 #include "CGUnit.hpp"
 #include "CGItem.hpp"
 #include "CGContainer.hpp"
+#include "CGPlayer.hpp"
 
 namespace wowgm::protocol::world
 {
@@ -52,6 +53,17 @@ namespace wowgm::protocol::world
                         CGContainer* container = new CGContainer(itr);
                         ObjectHolder<CGContainer>::Insert(container);
                         container->UpdateDescriptors(itr.Values);
+                        break;
+                    }
+                    case TYPEID_PLAYER:
+                    {
+                        CGPlayer* player = new CGPlayer(itr);
+                        ObjectHolder<CGPlayer>::Insert(player);
+                        player->UpdateDescriptors(itr.Values);
+
+                        if (itr.Movement.ThisIsYou)
+                            ObjectAccessor::s_localPlayer = itr.GUID;
+
                         break;
                     }
                 }

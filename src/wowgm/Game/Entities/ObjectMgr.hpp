@@ -15,6 +15,8 @@ namespace wowgm::game::entities
 {
     using namespace wowgm::game::structures;
 
+    class CGPlayer;
+
     namespace
     {
         template <TypeID TypeId>
@@ -67,5 +69,8 @@ namespace wowgm::game::entities
         void Destroy(ObjectGuid const& objectGuid);
 
         void Destroy(CGObject* object);
+
+        CGPlayer* GetLocalPlayer();
+        static ObjectGuid s_localPlayer;
     }
 }

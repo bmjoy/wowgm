@@ -7,7 +7,6 @@
 #include <cstdint>
 #include <array>
 
-
 namespace wowgm::game::entities
 {
     using namespace wowgm::game::structures;
@@ -41,8 +40,8 @@ namespace wowgm::game::entities
 
         struct DamageInfo
         {
-            std::uint32_t Minimum;
-            std::uint32_t Maximum;
+            float Minimum;
+            float Maximum;
         };
 
         struct AttackPowerInfo
@@ -62,7 +61,7 @@ namespace wowgm::game::entities
         ObjectGuid Target;
         ObjectGuid ChannelTarget;
         std::uint32_t ChannelSpellID;
-        UnitBytes0 Bytes0;
+        UnitBytes0 UnitBytes0;
         std::array<std::uint32_t, 6> Powers;
         std::array<std::uint32_t, 6> MaxPowers;
         std::array<float, 5> PowerRegenModifier;
@@ -70,7 +69,7 @@ namespace wowgm::game::entities
         std::uint32_t Level;
         std::uint32_t FactionID;
         std::array<std::uint32_t, 3> VirtualItems;
-        std::array<std::uint32_t, 2> Flags;
+        std::array<std::uint32_t, 2> UnitFlags;
         std::uint32_t AuraState;
         std::array<std::uint32_t, 3> AttackTimes;
         float BoundingRadius;
@@ -79,7 +78,7 @@ namespace wowgm::game::entities
         std::uint32_t NativeDisplayID;
         std::uint32_t MountDisplayID;
         std::array<DamageInfo, 2> Damage;
-        UnitBytes1 Bytes1;
+        UnitBytes1 UnitBytes1;
         std::uint32_t PetNumber;
         std::uint32_t PetNameTimestamp;
         std::uint32_t PetExperience;
@@ -98,8 +97,8 @@ namespace wowgm::game::entities
         std::array<std::uint32_t, 7> ResistancesBuffModNegative;
         std::uint32_t BaseMana;
         std::uint32_t BaseHealth;
-        UnitBytes2 Bytes2;
-        std::array<AttackPowerInfo, 3> AttackPower;
+        UnitBytes2 UnitBytes2;
+        std::array<AttackPowerInfo, 2> AttackPower;
         DamageInfo RangedDamage;
         std::array<std::uint32_t, 7> PowerCostModifier;
         std::array<float, 7> PowerCostMultiplier;
@@ -110,12 +109,12 @@ namespace wowgm::game::entities
     };
 #pragma pack(pop)
 
-    static_assert(sizeof(CGUnitData) == sizeof(std::uint32_t) * 142);
+    static_assert(sizeof(CGUnitData) == sizeof(std::uint32_t) * 0x008A);
 
     class CGUnit : public CGObject, public CGUnitData
     {
     public:
-        explicit CGUnit(CClientObjCreate const& typeMask);
+        explicit CGUnit(CClientObjCreate const& createBlock);
         virtual ~CGUnit();
 
         CGUnitData const& GetUnitData() const;

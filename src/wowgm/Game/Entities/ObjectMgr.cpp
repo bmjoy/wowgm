@@ -4,6 +4,7 @@
 #include "CGUnit.hpp"
 #include "CGItem.hpp"
 #include "CGContainer.hpp"
+#include "CGPlayer.hpp"
 
 namespace wowgm::game::entities
 {
@@ -54,9 +55,10 @@ namespace wowgm::game::entities
         return _objectMap;
     }
 
-    template class ObjectHolder<CGUnit>;
     template class ObjectHolder<CGItem>;
     template class ObjectHolder<CGContainer>;
+    template class ObjectHolder<CGUnit>;
+    template class ObjectHolder<CGPlayer>;
 
     namespace ObjectAccessor
     {
@@ -82,6 +84,8 @@ namespace wowgm::game::entities
                     return GetObject<CGItem>(guid);
                 case TYPEID_CONTAINER:
                     return GetObject<CGContainer>(guid);
+                case TYPEID_PLAYER:
+                    return GetObject<CGPlayer>(guid);
             }
 
             return nullptr;
@@ -100,6 +104,9 @@ namespace wowgm::game::entities
                 case TYPEID_CONTAINER:
                     ObjectHolder<CGContainer>::Remove(objectGuid);
                     break;
+                case TYPEID_PLAYER:
+                    ObjectHolder<CGPlayer>::Remove(objectGuid);
+                    break;
             }
         }
 
@@ -109,5 +116,9 @@ namespace wowgm::game::entities
                 Destroy(object->GUID);
         }
 
+        CGPlayer* GetLocalPlayer()
+        {
+            return GetObject<CGPlayer>(s_localPlayer);
+        }
     }
 }

@@ -51,8 +51,8 @@ namespace wowgm::game::entities
         virtual CGUnit* ToUnit();
         virtual CGUnit const* ToUnit() const;
 
-        // virtual CGPlayer* ToPlayer();
-        // virtual CGPlayer const* ToPlayer() const;
+        virtual CGPlayer* ToPlayer();
+        virtual CGPlayer const* ToPlayer() const;
 
         // virtual CGGameObject* ToGameObject();
         // virtual CGGameObject const* ToGameObject() const;
