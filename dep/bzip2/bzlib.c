@@ -114,7 +114,7 @@ void default_bzfree ( void* opaque, void* addr )
 
 /*---------------------------------------------------*/
 static
-void prepare_new_block ( EState* s )
+void Prepare_new_block ( EState* s )
 {
    Int32 i;
    s->nblock = 0;
@@ -206,7 +206,7 @@ int BZ_API(BZ2_bzCompressInit)
    strm->total_out_lo32 = 0;
    strm->total_out_hi32 = 0;
    init_RL ( s );
-   prepare_new_block ( s );
+   Prepare_new_block ( s );
    return BZ_OK;
 }
 
@@ -372,7 +372,7 @@ Bool handle_compress ( bz_stream* strm )
          if (s->mode == BZ_M_FINISHING && 
              s->avail_in_expect == 0 &&
              isempty_RL(s)) break;
-         prepare_new_block ( s );
+         Prepare_new_block ( s );
          s->state = BZ_S_INPUT;
          if (s->mode == BZ_M_FLUSHING && 
              s->avail_in_expect == 0 &&

@@ -2411,7 +2411,7 @@ int SaveMPQTables(TMPQArchive * ha)
     // Find the space where the MPQ tables will be saved
     FindFreeMpqSpace(ha, &TablePos);
 
-    // If the MPQ has HET table, we prepare a ready-to-save version
+    // If the MPQ has HET table, we Prepare a ready-to-save version
     if(nError == ERROR_SUCCESS && ha->pHetTable != NULL)
     {
         pHetTable = TranslateHetTable(ha->pHetTable, &HetTableSize64);

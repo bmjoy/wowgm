@@ -63,8 +63,8 @@ namespace wowgm::game::entities
         virtual CGContainer* ToContainer();
         virtual CGContainer const* ToContainer() const;
 
-        C3Vector* GetPosition();
-        C3Vector const* GetPosition() const;
+        C3Vector& GetPosition();
+        C3Vector const& GetPosition() const;
 
         TypeMask GetTypeMask() const;
     };

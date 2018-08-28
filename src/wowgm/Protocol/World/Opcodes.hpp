@@ -1417,12 +1417,4 @@ namespace wowgm::protocol::world
 
         return os;
     }
-
-    template <typename E>
-    inline typename std::enable_if<is_scoped_enum<E>::value, E>::type operator & (E enumeration, typename std::underlying_type<E>::type mask)
-    {
-        typedef typename std::underlying_type<E>::type enum_underlying_type;
-
-        return static_cast<E>(static_cast<enum_underlying_type>(enumeration) & mask);
-    }
 }

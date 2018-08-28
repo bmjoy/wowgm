@@ -187,7 +187,7 @@ static void CalculateArchiveRange(
     }
 
     // Get the MPQ data end. This is stored in our MPQ header,
-    // and it's been already prepared by SFileOpenArchive,
+    // and it's been already Prepared by SFileOpenArchive,
     pSI->EndMpqData = ha->MpqPos + ha->pHeader->ArchiveSize64;
 
     // Get the size of the entire file

@@ -88,7 +88,7 @@ namespace wowgm::game::structures
             C3Vector Endpoint;
 
             struct {
-                ObjectGuid Target = = ObjectGuid::Empty;
+                ObjectGuid Target = ObjectGuid::Empty;
                 C3Vector Position;
                 float Angle = 0.0f;
             } Facing;

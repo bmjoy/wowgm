@@ -10,6 +10,8 @@ namespace wowgm::game::entities
 
     CGObject::CGObject(CClientObjCreate const& objCreate)
     {
+        C3Vector& position = GetPosition();
+        position = objCreate.Movement.Position;
     }
 
     CGObject::~CGObject()
@@ -84,14 +86,14 @@ namespace wowgm::game::entities
         return nullptr;
     }
 
-    C3Vector* CGObject::GetPosition()
+    C3Vector& CGObject::GetPosition()
     {
-        return static_cast<C3Vector*>(this);
+        return static_cast<C3Vector&>(*this);
     }
 
-    C3Vector const* CGObject::GetPosition() const
+    C3Vector const& CGObject::GetPosition() const
     {
-        return static_cast<C3Vector const*>(this);
+        return static_cast<C3Vector const&>(*this);
     }
 
     void CGObject::UpdateDescriptors(JamCliValuesUpdate const& valuesUpdate)

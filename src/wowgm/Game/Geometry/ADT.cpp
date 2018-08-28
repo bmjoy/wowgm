@@ -14,7 +14,13 @@ namespace wowgm::game::geometry
 {
     using namespace wowgm::filesystem;
 
-    ADT::MapChunk::MapChunk(std::uint32_t x, std::uint32_t y, const std::string& directoryName)
+    constexpr static const float TILE_SIZE  = 1600.0f / 3.0f;
+    constexpr static const float MAX_XY     = 32.0f * TILE_SIZE;
+    constexpr static const float CHUNK_SIZE = TILE_SIZE / 16.0f;
+    constexpr static const float UNIT_SIZE  = CHUNK_SIZE / 8.0f;
+
+    /*  --------------------------------- ADT TILE --------------------------------- */
+    MapChunk::MapChunk(std::uint32_t x, std::uint32_t y, const std::string& directoryName)
     {
         auto manager = MpqFileSystem::Instance();
 
@@ -41,7 +47,7 @@ namespace wowgm::game::geometry
         ParseFile(texFile);
     }
 
-    ADT::MapChunk::~MapChunk()
+    MapChunk::~MapChunk()
     {
         for (Chunk* itr : _chunks)
             delete itr;
@@ -49,7 +55,7 @@ namespace wowgm::game::geometry
         _chunks.clear();
     }
 
-    void ADT::MapChunk::ParseFile(std::shared_ptr<FileHandle<MpqFile>> const& fileHandle)
+    void MapChunk::ParseFile(std::shared_ptr<FileHandle<MpqFile>> const& fileHandle)
     {
         std::uint8_t const* rootData = fileHandle->GetData();
         std::uint8_t const* position = rootData;
@@ -66,7 +72,7 @@ namespace wowgm::game::geometry
         }
     }
 
-    void ADT::MapChunk::HandleTerrainChunk(std::uint32_t identifier, std::vector<std::uint8_t> const& content)
+    void MapChunk::HandleTerrainChunk(std::uint32_t identifier, std::vector<std::uint8_t> const& content)
     {
         switch (identifier)
         {
@@ -113,7 +119,7 @@ namespace wowgm::game::geometry
         }
     }
 
-    const char* ADT::MapChunk::GetModelFilename(std::uint32_t index) const
+    const char* MapChunk::GetModelFilename(std::uint32_t index) const
     {
         if (index >= _modelFilenamesOffset.size())
             return nullptr;
@@ -122,7 +128,7 @@ namespace wowgm::game::geometry
         return reinterpret_cast<const char*>(_modelFilenames.data() + strOffset);
     }
 
-    const char* ADT::MapChunk::GetWorldModelFilename(std::uint32_t index) const
+    const char* MapChunk::GetWorldModelFilename(std::uint32_t index) const
     {
         if (index >= _worldMapObjectFilenamesOffset.size())
             return nullptr;
@@ -131,17 +137,29 @@ namespace wowgm::game::geometry
         return reinterpret_cast<const char*>(_worldMapObjectFilenames.data() + strOffset);
     }
 
-    CAaBox const& ADT::MapChunk::GetBoundingBox() const
+    CAaBox const& MapChunk::GetBoundingBox() const
     {
         return _boundingBox;
     }
 
-    bool ADT::MapChunk::IsValid() const
+    void MapChunk::Render() const
     {
-        return _boundingBox.Minimum.Z != std::numeric_limits<float>::min();
+        for (Chunk* chunk : _chunks)
+            chunk->Render();
     }
 
-    ADT::MapChunk::Chunk::Chunk(std::uint8_t const* data, size_t length)
+    bool MapChunk::HasGeometry() const
+    {
+        for (Chunk* chunk : _chunks)
+            if (chunk->HasGeometry())
+                return true;
+
+        return false;
+    }
+
+    /*  --------------------------------- ADT TILE MCNK --------------------------------- */
+
+    Chunk::Chunk(std::uint8_t const* data, size_t length)
     {
         memcpy(&_header, data, sizeof(SMChunk));
         std::uint8_t const* start = data + sizeof(SMChunk);
@@ -159,39 +177,79 @@ namespace wowgm::game::geometry
         }
     }
 
-    void ADT::MapChunk::Chunk::Chunk::HandleTerrainChunk(std::uint32_t identifier, std::vector<std::uint8_t> const& content)
+    void Chunk::HandleTerrainChunk(std::uint32_t identifier, std::vector<std::uint8_t> const& content)
     {
         switch (identifier)
         {
             case 'MCVT':
-                _vertices.resize(9 * 9 + 8 * 8);
-                std::memmove(_vertices.data(), content.data(), content.size());
+            {
+                _hasGeometry = true;
+
+                std::uint32_t i = 0;
+                const float* heightData = reinterpret_cast<float const*>(content.data());
+                for (std::uint32_t x = 0; x < 17; ++x)
+                {
+                    std::uint32_t yMax = ((x & 1) != 0) ? 8 : 9;
+                    for (std::uint32_t y = 0; y < yMax; ++y)
+                    {
+                        VertexData& itr = _vertexData[i];
+
+                        itr.vertice.X = _header.position.X - x * UNIT_SIZE * 0.5f;
+                        itr.vertice.Y = _header.position.Y - y * UNIT_SIZE;
+                        itr.vertice.Z = heightData[i];
+                        if ((i & 1) != 0)
+                            itr.vertice.Y -= 0.5f * UNIT_SIZE;
+
+                        ++i;
+
+                        for (std::uint32_t k = 0; k < 3; ++k)
+                        {
+                            if (itr.vertice[k] > _boundingBox.Maximum[k])
+                                _boundingBox.Maximum[k] = itr.vertice[k];
+
+                            if (itr.vertice[k] < _boundingBox.Minimum[k])
+                                _boundingBox.Minimum.Z = itr.vertice[k];
+                        }
+                    }
+                }
+
+                _hasGeometry = std::abs(_boundingBox.height() - 1.0f) > 1.0e-5f;
                 break;
-            case 'MCLV':
-                _mclv.resize(9 * 9 + 8 * 8);
-                std::memmove(_mclv.data(), content.data(), content.size());
-                break;
-            case 'MCCV':
-                break;
+            }
             case 'MCNR':
             {
-                _normals.resize(9 * 9 + 8 * 8);
-
-                std::uint8_t const* normalData = content.data();
-                std::uint8_t const* position = normalData;
-
-                std::uint32_t itr;
-                while ((position - normalData) < content.size())
+                std::uint32_t i = 0;
+                for (VertexData& itr : _vertexData)
                 {
-                    _normals[itr].X = float(std::int8_t(position[0])) / 127.0f;
-                    _normals[itr].Y = float(std::int8_t(position[1])) / 127.0f;
-                    _normals[itr].Z = float(std::int8_t(position[2])) / 127.0f;
-                    position += 3;
+                    itr.normal.X = float(std::int8_t(content[i + 0])) / 127.0f;
+                    itr.normal.Y = float(std::int8_t(content[i + 1])) / 127.0f;
+                    itr.normal.Z = float(std::int8_t(content[i + 2])) / 127.0f;
+                    // if (std::abs(itr.normal.lengthSquared() - 2.0f) < 1.0e-8f) // (l^2 + 1 - 2l) < stddev^2. assume l is close enough to 1 that 2l ~= 2
+                    //     itr.normal.normalize();
+
+                    i += 3;
                 }
+                break;
+            }
+            default:
+            {
+                std::string_view chunkIdentifier(reinterpret_cast<char const*>(&identifier), 4);
+                LOG_INFO << "ADT [MCNK] Skipped " << chunkIdentifier << " chunk (" << content.size() << " bytes)";
                 break;
             }
         }
     }
+
+    void Chunk::Render()
+    {
+    }
+
+    bool Chunk::HasGeometry() const
+    {
+        return _hasGeometry;
+    }
+
+    /*  --------------------------------- ADT MAP --------------------------------- */
 
     ADT::ADT(const std::string& directoryName)
     {
@@ -200,7 +258,7 @@ namespace wowgm::game::geometry
             for (std::uint32_t y = 0; y < 64; ++y)
             {
                 MapChunk* newChunk = new MapChunk(x, y, directoryName);
-                if (newChunk->IsValid())
+                if (newChunk->HasGeometry())
                     _chunks.push_back(newChunk);
                 else
                     delete newChunk;

@@ -9,5 +9,9 @@ namespace wowgm::game::structures
     {
         C3Vector Minimum;
         C3Vector Maximum;
+
+        float height() const {
+            return Maximum.Z - Minimum.Z;
+        }
     };
 }

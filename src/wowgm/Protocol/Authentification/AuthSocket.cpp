@@ -264,11 +264,12 @@ namespace wowgm::protocol::authentification
         LOG_INFO << "[S->C] REALM_LIST.";
 
         AuthPacket<AuthRealmList> command(GetReadBuffer());
-        if (command.GetData()->Count == 0 || command.GetData()->Size == 0)
+        AuthRealmList* authData = command.GetData();
+        if (authData->Count == 0 || authData->Size == 0)
             return false;
 
         std::vector<AuthRealmInfo> realmList;
-        realmList.resize(command.GetData()->Count);
+        realmList.resize(authData->Count);
 
         for (std::uint8_t i = 0; i < realmList.size(); ++i)
         {

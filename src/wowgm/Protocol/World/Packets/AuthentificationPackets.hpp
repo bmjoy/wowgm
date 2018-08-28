@@ -19,18 +19,18 @@ namespace wowgm::protocol::world::packets
 
         void Read() override;
 
-        std::array<std::uint32_t, 8> Seeds = { };
         std::uint32_t AuthSeed;
+        std::array<std::uint32_t, 8> Seeds = {};
         std::uint8_t UnkByte;
     };
 
     struct AccountInfo
     {
         std::uint32_t BillingTimeRemaining;
-        std::uint8_t PlayerExpansion;
         std::uint32_t UnkAccountInfo;
-        std::uint8_t AccountExpansion;
         std::uint32_t BillingTimeRested;
+        std::uint8_t PlayerExpansion;
+        std::uint8_t AccountExpansion;
         std::uint8_t BillingFlags;
     };
 

@@ -11,8 +11,11 @@
 #include "CGContainer.hpp"
 #include "CGPlayer.hpp"
 
+#include "WorldRenderer.hpp"
+
 namespace wowgm::protocol::world
 {
+    using namespace wowgm::game::geometry;
     using namespace wowgm::game::entities;
     using namespace wowgm::game::structures;
 
@@ -62,8 +65,13 @@ namespace wowgm::protocol::world
                         player->UpdateDescriptors(itr.Values);
 
                         if (itr.Movement.ThisIsYou)
-                            ObjectAccessor::s_localPlayer = itr.GUID;
+                        {
+                            WorldRenderer::SetCoordinates(itr.Movement.Position);
+                            WorldRenderer::SetMapID(packet.MapID);
+                            WorldRenderer::LoadGeometry(GeometryLoadFlags::Terrain | GeometryLoadFlags::Mmaps | GeometryLoadFlags::Vmaps);
 
+                            ObjectAccessor::s_localPlayer = itr.GUID;
+                        }
                         break;
                     }
                 }

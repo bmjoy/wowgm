@@ -33,7 +33,7 @@ namespace wowgm::utilities
         Write<std::uint32_t>(15595);
         WriteData("enUS", 4);
         std::unique_ptr<std::uint8_t[]> sessionKey = sClientServices->GetSessionKey().AsByteArray(40);
-        WriteData(reinterpret_cast<const char*>(sessionKey.get()), 40);
+        WriteData(reinterpret_cast<const char*>(*sessionKey.get()), 40);
         Write<std::uint32_t>(std::time(nullptr));
         Write<std::uint32_t>(duration_cast<milliseconds>(steady_clock::now() - start_time).count());
         Write<std::uint32_t>(0);

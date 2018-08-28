@@ -61,7 +61,7 @@ namespace wowgm::game::datastores
         static_assert(alignof(T) == 1, "Structures passed to Storage<T, ...> must be aligned to 1 byte. Use #pragma pack(push, 1)!");
 
         std::uint32_t memoryOffset = 0;
-        std::uint8_t* structure_ptr = reinterpret_cast<std::uint8_t*>(&get_storage()[index]);
+        std::uint8_t* structure_ptr = reinterpret_cast<std::uint8_t*>(&get_storage()[*reinterpret_cast<std::uint32_t const*>(data)]); // fixme find indexof n
         for (std::uint32_t j = 0; j < meta_t::field_count; ++j)
         {
             std::uint8_t* memberTarget = structure_ptr + memoryOffset;
