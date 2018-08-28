@@ -18,7 +18,7 @@ Window::Window(std::string const& title)
     memset(_realmAddress, 0, 100);
     memset(_accountName, 0, 100);
     memset(_accountPassword, 0, 100);
-    strcpy(_realmAddress, "127.0.0.1");
+    strcpy(_realmAddress, "127.0.0.1:3724");
 }
 
 Window::~Window()
@@ -44,7 +44,7 @@ void Window::Prepare()
 
     // Update the drawCmdBuffers with the required drawing commands
     BuildCommandBuffers();
-    _prepared = true;
+    _Prepared = true;
 }
 
 void Window::UpdateDrawCommandBuffer(const vk::CommandBuffer& cmdBuffer)
@@ -58,7 +58,8 @@ void Window::UpdateDrawCommandBuffer(const vk::CommandBuffer& cmdBuffer)
     cmdBuffer.drawIndexed(indexCount, 1, 0, 0, 1);
 }
 
-void Window::PrepareVertices() {
+void Window::PrepareVertices()
+{
     // Setup vertices
     std::vector<Vertex> vertexBuffer{
         // XYZ Position           RGB Color
@@ -82,7 +83,8 @@ void Window::PrepareUniformBuffers()
     uniformDataVS = context.createUniformBuffer(uniformBufferObject);
 }
 
-void Window::SetupDescriptorSetLayout() {
+void Window::SetupDescriptorSetLayout()
+{
     // Setup layout of descriptors used in this example
     // Basically connects the different shader stages to descriptors
     // for binding uniform buffers, image samplers, etc.
@@ -192,32 +194,125 @@ void Window::SetupDescriptorSet()
 
 void Window::OnUpdateOverlay()
 {
-    if (!sClientServices->IsInWorld() && sClientServices->GetCharacterCount() == 0)
+    if (_state == WindowState::WelcomeScreen)
     {
-        ImGui::SetNextWindowPos({ 10.0f, 35.0f });
+        auto size = ImGui::GetIO().DisplaySize;
 
-        if (ImGui::Begin("Connect", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse))
+        ImGui::SetNextWindowPos({ 0, 0 });
+        ImGui::SetNextWindowSize({ float(size.x), float(size.y) });
+        ImGui::Begin("##WelcomeScreen", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize);
+
+        static const char* APPLICATION_NAME = "WowGM";
+
+        auto position_x = 0;
+        auto position_y = (size.y - 380) / 2;
+        auto content_width = 0;
+
+        ImGui::SetCursorPosY(position_y);
+        ImGui::PushFont(ui.GetFont(4));
+        auto logo_size = ImGui::CalcTextSize(APPLICATION_NAME);
+
+        position_x = (size.x - logo_size.x) / 2;
+        position_y += logo_size.y;
+        content_width = logo_size.x;
+
+        ImGui::SetCursorPosX(position_x);
+        ImGui::Text(APPLICATION_NAME);
+        ImGui::PopFont();
+
+#if _DEBUG
+        static const char* DEBUG_LABEL = "DEVELOPMENT BUILD - FOR DEBUGGING ONLY";
+
+        position_y += 5.0f; // 5.0f pixel margin between logo and debug label
+        ImGui::SetCursorPosY(position_y);
+        ImGui::PushFont(ui.GetFont(5));
+        auto label_size = ImGui::CalcTextSize(DEBUG_LABEL);
+        ImGui::SetCursorPosX((size.x - label_size.x) / 2);
+        ImGui::Text(DEBUG_LABEL);
+        ImGui::PopFont();
+        position_y += label_size.y;
+#endif
+
+        position_y += 15.0f;
+
+        ImGui::SetCursorPosX(position_x);
+        ImGui::SetCursorPosY(position_y);
+        ImGui::PushFont(ui.GetFont(2));
+        ImGui::TextColored({ 1.0f, 1.0f, 0.0f, 1.0f }, "Game installation path");
+        ImGui::PopFont();
+        ImGui::PushItemWidth(content_width);
+        ImGui::SetCursorPosX(position_x);
+        ImGui::InputText("##GameDataFolder", _gameDataLocation, sizeof(_gameDataLocation), ImGuiInputTextFlags_CallbackCharFilter, [](ImGuiTextEditCallbackData* callbackData) -> int {
+#if PLATFORM == PLATFORM_WINDOWS
+            switch (callbackData->EventChar)
+            {
+            case '<':
+            case '>':
+            case '"':
+            case '\\':
+            case '|':
+            case '?':
+            case '*':
+                return 1;
+            }
+#endif
+            return 0;
+        });
+
+        MpqFileSystem::Instance()->Initialize(_gameDataLocation);
+
         {
-            ImGui::PushItemWidth(125.0f);
-            ImGui::InputText("##RealmHost", _realmAddress, 100);
-            ImGui::PopItemWidth();
+            bool binaryFound = DiskFileSystem::Instance()->FileExists("/Wow.exe", _gameDataLocation);
 
-            ImGui::SameLine();
+            ImGui::SetCursorPosX(position_x);
+            ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[1]);
+            ImGui::TextColored(ImVec4(binaryFound ? 0.0f : 1.0f, binaryFound ? 1.0f : 0.0f, 0.0f, 1.0f), binaryFound ? "Executable located." : "Invalid path");
+            ImGui::PopFont();
 
-            ImGui::PushItemWidth(57.0f);
-            ImGui::InputInt("Realm##RealmPort", reinterpret_cast<std::int32_t*>(sClientServices->GetHostPort()), 0, 0);
-            ImGui::PopItemWidth();
-
-            ImGui::PushItemWidth(196.0f);
-            ImGui::InputText("Account name##GruntAccountName", _accountName, 100);
-            ImGui::InputText("Password##GruntAccountPassword", _accountPassword, 100, ImGuiInputTextFlags_Password);
-            ImGui::PopItemWidth();
-
-            if (ImGui::Button("Connect##ConnectionButton"))
-                sClientServices->AsyncConnect(_accountName, _accountPassword, _realmAddress, *sClientServices->GetHostPort());
-
-            ImGui::End();
+            position_y += 15.0f;
         }
+
+        position_y += 70.0f;
+        ImGui::SetCursorPosY(position_y);
+        ImGui::SetCursorPosX(position_x);
+        ImGui::PushFont(ui.GetFont(2));
+        ImGui::TextColored({ 1.0f, 1.0f, 0.0f, 1.0f }, "Realm informations");
+        ImGui::PopFont();
+        ImGui::SetCursorPosX(position_x);
+
+        auto realm_label_size = ImGui::CalcTextSize("Realm address");
+
+        ImGui::PushItemWidth(content_width - realm_label_size.x - ImGui::GetStyle().ItemInnerSpacing.x * 2);
+        ImGui::InputText("Realm address##RealmAddress", _realmAddress, sizeof(_realmAddress));
+
+        position_y += 70.0f;
+
+        ImGui::SetCursorPosY(position_y);
+        ImGui::SetCursorPosX(position_x);
+        ImGui::PushFont(ui.GetFont(2));
+        ImGui::TextColored({ 1.0f, 1.0f, 0.0f, 1.0f }, "Credentials");
+        ImGui::PopFont();
+
+        auto account_name_label_size = ImGui::CalcTextSize("Account name");
+        ImGui::SetCursorPosX(position_x);
+        ImGui::PushItemWidth(content_width - account_name_label_size.x - ImGui::GetStyle().ItemInnerSpacing.x * 2);
+        ImGui::InputText("Account name##AccountName", _accountName, sizeof(_accountName));
+
+        ImGui::SetCursorPosX(position_x);
+        ImGui::PushItemWidth(content_width - account_name_label_size.x - ImGui::GetStyle().ItemInnerSpacing.x * 2);
+        ImGui::InputText("Password##AccountPassword", _accountPassword, sizeof(_accountPassword), ImGuiInputTextFlags_Password);
+
+        position_y += 100.0f;
+        auto submit_button_size = ImGui::CalcTextSize("Connect");
+        ImGui::SetCursorPosY(position_y);
+        ImGui::SetCursorPosX((size.x - (submit_button_size.x + ImGui::GetStyle().ItemInnerSpacing.x * 2)) / 2);
+        if (ImGui::Button("Connect##GruntConnect"))
+        {
+            sClientServices->AsyncConnect(_accountName, _accountPassword, _realmAddress, *sClientServices->GetHostPort());
+            _state = WindowState::RealmSelection;
+        }
+
+        ImGui::End();
     }
 
     if (sClientServices->GetAvailableRealmCount() > 1)

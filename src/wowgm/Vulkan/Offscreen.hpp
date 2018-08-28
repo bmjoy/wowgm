@@ -44,22 +44,22 @@ struct OffscreenRenderer {
         device.destroySemaphore(semaphores.renderStart);
     }
 
-    void prepare() {
+    void Prepare() {
         cmdPool = context.getCommandPool();
         semaphores.renderComplete = device.createSemaphore(vk::SemaphoreCreateInfo());
         semaphores.renderStart = device.createSemaphore(vk::SemaphoreCreateInfo());
-        prepareRenderPass();
-        prepareFramebuffer();
-        prepareSampler();
+        PrepareRenderPass();
+        PrepareFramebuffer();
+        PrepareSampler();
     }
 
-    void prepareFramebuffer() {
+    void PrepareFramebuffer() {
         assert(framebufferSize != glm::uvec2());
         depthFormat = context.getSupportedDepthFormat();
         framebuffer.create(context, framebufferSize, colorFormats, depthFormat, renderPass, attachmentUsage);
     }
 
-    void prepareSampler() {
+    void PrepareSampler() {
         // Create sampler
         vk::SamplerCreateInfo sampler;
         sampler.magFilter = vk::Filter::eLinear;
@@ -79,7 +79,7 @@ struct OffscreenRenderer {
         }
     }
 
-    void prepareRenderPass() {
+    void PrepareRenderPass() {
         std::vector<vk::AttachmentDescription> attachments;
         std::vector<vk::AttachmentReference> colorAttachmentReferences;
         attachments.resize(colorFormats.size());

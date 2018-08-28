@@ -6,7 +6,7 @@
 * This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
 */
 
-#include "UI.hpp"
+#include "GUI.hpp"
 
 #include <imgui.h>
 
@@ -17,9 +17,9 @@
 using namespace vkx;
 using namespace vkx::ui;
 
-void UIOverlay::create(const UIOverlayCreateInfo& createInfo)
+void GUI::Create(const GUICreateInfo& createInfo)
 {
-    this->createInfo = createInfo;
+    _createInfo = std::move(createInfo);
 
     // Init ImGui
     // Color scheme
@@ -87,43 +87,65 @@ void UIOverlay::create(const UIOverlayCreateInfo& createInfo)
     io.Fonts->AddFontFromFileTTF("./resources/fonts/Ruda-Bold.ttf", 18.2f);
     io.Fonts->AddFontFromFileTTF("./resources/fonts/Ruda-Bold.ttf", 23.4f);
 
-    io.DisplaySize = ImVec2((float)createInfo.size.width, (float)createInfo.size.height);
-    io.FontGlobalScale = scale;
+    io.Fonts->AddFontFromFileTTF("./resources/fonts/Ubuntu-Bold.ttf", 110.0f);
+    io.Fonts->AddFontFromFileTTF("./resources/fonts/04B_03__.ttf", 8.0f);
 
-    prepareResources();
-    if (createInfo.renderPass)
-        renderPass = createInfo.renderPass;
+
+    io.DisplaySize = ImVec2(float(_createInfo.size.width), float(_createInfo.size.height));
+    io.FontGlobalScale = _scale;
+
+    PrepareResources();
+    if (_createInfo.renderPass)
+        _renderPass = _createInfo.renderPass;
     else
-        prepareRenderPass();
-    preparePipeline();
+        PrepareRenderPass();
+    PreparePipeline();
+}
+
+GUI::GUI(const vks::Context& context) : _context(context), _visible(true)
+{
 }
 
 /** Free up all Vulkan resources acquired by the UI overlay */
-UIOverlay::~UIOverlay()
+GUI::~GUI()
 {
 }
 
-void UIOverlay::destroy()
+void GUI::SelectFont(std::uint32_t index)
 {
-    if (commandPool)
+    ImGui::PushFont(GetFont(index));
+}
+
+ImFont* GUI::GetFont(std::uint32_t index)
+{
+    return ImGui::GetIO().Fonts->Fonts[index];
+}
+
+void GUI::destroy()
+{
+    if (_commandPool)
     {
-        vertexBuffer.destroy();
-        indexBuffer.destroy();
-        font.destroy();
-        context.device.destroyDescriptorSetLayout(descriptorSetLayout);
-        context.device.destroyDescriptorPool(descriptorPool);
-        context.device.destroyPipelineLayout(pipelineLayout);
-        context.device.destroyPipeline(pipeline);
-        if (!createInfo.renderPass)
-            context.device.destroyRenderPass(renderPass);
-        context.device.freeCommandBuffers(commandPool, cmdBuffers);
-        context.device.destroyCommandPool(commandPool);
-        context.device.destroyFence(fence);
+        _vertexBuffer.destroy();
+        _indexBuffer.destroy();
+
+        _font.destroy();
+
+        _context.device.destroyDescriptorSetLayout(_descriptorSetLayout);
+        _context.device.destroyDescriptorPool(_descriptorPool);
+        _context.device.destroyPipelineLayout(_pipelineLayout);
+        _context.device.destroyPipeline(_pipeline);
+
+        if (!_renderPass)
+            _context.device.destroyRenderPass(_renderPass);
+
+        _context.device.freeCommandBuffers(_commandPool, cmdBuffers);
+        _context.device.destroyCommandPool(_commandPool);
+        _context.device.destroyFence(_fence);
     }
 }
 
 /** Prepare all vulkan resources required to render the UI overlay */
-void UIOverlay::prepareResources()
+void GUI::PrepareResources()
 {
     ImGuiIO& io = ImGui::GetIO();
 
@@ -149,17 +171,17 @@ void UIOverlay::prepareResources()
     imageInfo.arrayLayers = 1;
     imageInfo.usage = vk::ImageUsageFlagBits::eSampled;
 
-    font = context.stageToDeviceImage(imageInfo, fontData);
+    _font = _context.stageToDeviceImage(imageInfo, fontData);
 
     // Image view
     vk::ImageViewCreateInfo viewInfo;
-    viewInfo.image = font.image;
+    viewInfo.image = _font.image;
     viewInfo.viewType = vk::ImageViewType::e2D;
     viewInfo.format = vk::Format::eR8G8B8A8Unorm;
     viewInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
     viewInfo.subresourceRange.levelCount = 1;
     viewInfo.subresourceRange.layerCount = 1;
-    font.view = context.device.createImageView(viewInfo);
+    _font.view = _context.device.createImageView(viewInfo);
 
     // Font texture Sampler
     vk::SamplerCreateInfo samplerInfo;
@@ -170,65 +192,65 @@ void UIOverlay::prepareResources()
     samplerInfo.addressModeV = vk::SamplerAddressMode::eClampToEdge;
     samplerInfo.addressModeW = vk::SamplerAddressMode::eClampToEdge;
     samplerInfo.borderColor = vk::BorderColor::eFloatOpaqueWhite;
-    font.sampler = context.device.createSampler(samplerInfo);
+    _font.sampler = _context.device.createSampler(samplerInfo);
 
     // Command buffer
 
     vk::CommandPoolCreateInfo cmdPoolInfo;
-    cmdPoolInfo.queueFamilyIndex = context.queueIndices.graphics;
+    cmdPoolInfo.queueFamilyIndex = _context.queueIndices.graphics;
     cmdPoolInfo.flags = vk::CommandPoolCreateFlagBits::eResetCommandBuffer;
-    commandPool = context.device.createCommandPool(cmdPoolInfo);
+    _commandPool = _context.device.createCommandPool(cmdPoolInfo);
 
     // Descriptor pool
     vk::DescriptorPoolSize poolSize;
     poolSize.type = vk::DescriptorType::eCombinedImageSampler;
     poolSize.descriptorCount = 1;
-    descriptorPool = context.device.createDescriptorPool({ {}, 2, 1, &poolSize });
+    _descriptorPool = _context.device.createDescriptorPool({ {}, 2, 1, &poolSize });
 
     // Descriptor set layout
     vk::DescriptorSetLayoutBinding setLayoutBinding{ 0, vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eFragment };
 
-    descriptorSetLayout = context.device.createDescriptorSetLayout({ {}, 1, &setLayoutBinding });
+    _descriptorSetLayout = _context.device.createDescriptorSetLayout({ {}, 1, &setLayoutBinding });
 
     // Descriptor set
     vk::DescriptorSetAllocateInfo allocInfo;
-    allocInfo.descriptorPool = descriptorPool;
-    allocInfo.pSetLayouts = &descriptorSetLayout;
+    allocInfo.descriptorPool = _descriptorPool;
+    allocInfo.pSetLayouts = &_descriptorSetLayout;
     allocInfo.descriptorSetCount = 1;
-    descriptorSet = context.device.allocateDescriptorSets(allocInfo)[0];
+    _descriptorSet = _context.device.allocateDescriptorSets(allocInfo)[0];
 
     vk::DescriptorImageInfo fontDescriptor;
-    fontDescriptor.imageView = font.view;
-    fontDescriptor.sampler = font.sampler;
+    fontDescriptor.imageView = _font.view;
+    fontDescriptor.sampler = _font.sampler;
     fontDescriptor.imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
     vk::WriteDescriptorSet writeDescriptorSet;
     writeDescriptorSet.descriptorType = vk::DescriptorType::eCombinedImageSampler;
     writeDescriptorSet.pImageInfo = &fontDescriptor;
     writeDescriptorSet.descriptorCount = 1;
-    writeDescriptorSet.dstSet = descriptorSet;
-    context.device.updateDescriptorSets(writeDescriptorSet, {});
+    writeDescriptorSet.dstSet = _descriptorSet;
+    _context.device.updateDescriptorSets(writeDescriptorSet, {});
 
     // Pipeline layout
     // Push constants for UI rendering parameters
     vk::PushConstantRange pushConstantRange{ vk::ShaderStageFlagBits::eVertex, 0, sizeof(PushConstBlock) };
-    vk::PipelineLayoutCreateInfo pipelineLayoutCreateInfo{ {}, 1, &descriptorSetLayout, 1, &pushConstantRange };
-    pipelineLayout = context.device.createPipelineLayout(pipelineLayoutCreateInfo);
+    vk::PipelineLayoutCreateInfo _pipelineLayoutCreateInfo{ {}, 1, &_descriptorSetLayout, 1, &pushConstantRange };
+    _pipelineLayout = _context.device.createPipelineLayout(_pipelineLayoutCreateInfo);
 
     // Command buffer execution fence
-    fence = context.device.createFence(vk::FenceCreateInfo{});
+    _fence = _context.device.createFence(vk::FenceCreateInfo{});
 }
 
 /** Prepare a separate pipeline for the UI overlay rendering decoupled from the main application */
-void UIOverlay::preparePipeline()
+void GUI::PreparePipeline()
 {
     // Setup graphics pipeline for UI rendering
-    vks::pipelines::GraphicsPipelineBuilder pipelineBuilder(context.device, pipelineLayout, renderPass);
+    vks::pipelines::GraphicsPipelineBuilder pipelineBuilder(_context.device, _pipelineLayout, _renderPass);
     pipelineBuilder.depthStencilState = { false };
     pipelineBuilder.rasterizationState.cullMode = vk::CullModeFlagBits::eNone;
 
     // Enable blending
-    pipelineBuilder.colorBlendState.blendAttachmentStates.resize(createInfo.attachmentCount);
-    for (uint32_t i = 0; i < createInfo.attachmentCount; i++)
+    pipelineBuilder.colorBlendState.blendAttachmentStates.resize(_createInfo.attachmentCount);
+    for (uint32_t i = 0; i < _createInfo.attachmentCount; i++)
     {
         auto& blendAttachmentState = pipelineBuilder.colorBlendState.blendAttachmentStates[i];
         blendAttachmentState.blendEnable = VK_TRUE;
@@ -238,16 +260,10 @@ void UIOverlay::preparePipeline()
         blendAttachmentState.dstAlphaBlendFactor = vk::BlendFactor::eZero;
     }
 
-    pipelineBuilder.multisampleState.rasterizationSamples = createInfo.rasterizationSamples;
+    pipelineBuilder.multisampleState.rasterizationSamples = _createInfo.rasterizationSamples;
 
-    // Load default shaders if not specified by example
-    if (!createInfo.shaders.empty())
-        pipelineBuilder.shaderStages = createInfo.shaders;
-    else
-    {
-        pipelineBuilder.loadShader("resources/shaders/imgui/vert.spv", vk::ShaderStageFlagBits::eVertex);
-        pipelineBuilder.loadShader("resources/shaders/imgui/frag.spv", vk::ShaderStageFlagBits::eFragment);
-    }
+    pipelineBuilder.loadShader("resources/shaders/imgui/vert.spv", vk::ShaderStageFlagBits::eVertex);
+    pipelineBuilder.loadShader("resources/shaders/imgui/frag.spv", vk::ShaderStageFlagBits::eFragment);
 
     // Vertex bindings an attributes based on ImGui vertex definition
     pipelineBuilder.vertexInputState.bindingDescriptions = { { 0, sizeof(ImDrawVert), vk::VertexInputRate::eVertex } };
@@ -256,23 +272,23 @@ void UIOverlay::preparePipeline()
         { 1, 0, vk::Format::eR32G32Sfloat, offsetof(ImDrawVert, uv) },    // Location 1: UV
         { 2, 0, vk::Format::eR8G8B8A8Unorm, offsetof(ImDrawVert, col) },  // Location 2: Color
     };
-    pipeline = pipelineBuilder.create(context.pipelineCache);
+    _pipeline = pipelineBuilder.create(_context.pipelineCache);
 }
 
 /** Prepare a separate render pass for rendering the UI as an overlay */
-void UIOverlay::prepareRenderPass()
+void GUI::PrepareRenderPass()
 {
     vk::AttachmentDescription attachments[2] = {};
 
     // Color attachment
-    attachments[0].format = createInfo.colorformat;
+    attachments[0].format = _createInfo.colorformat;
     attachments[0].stencilLoadOp = vk::AttachmentLoadOp::eDontCare;
     attachments[0].stencilStoreOp = vk::AttachmentStoreOp::eDontCare;
     attachments[0].initialLayout = vk::ImageLayout::ePresentSrcKHR;
     attachments[0].finalLayout = vk::ImageLayout::ePresentSrcKHR;
 
     // Depth attachment
-    attachments[1].format = createInfo.depthformat;
+    attachments[1].format = _createInfo.depthformat;
     attachments[1].loadOp = vk::AttachmentLoadOp::eDontCare;
     attachments[1].storeOp = vk::AttachmentStoreOp::eDontCare;
     attachments[1].stencilLoadOp = vk::AttachmentLoadOp::eDontCare;
@@ -314,55 +330,55 @@ void UIOverlay::prepareRenderPass()
     renderPassInfo.dependencyCount = 2;
     renderPassInfo.pDependencies = subpassDependencies;
 
-    renderPass = context.device.createRenderPass(renderPassInfo);
+    _renderPass = _context.device.createRenderPass(renderPassInfo);
 }
 
 /** Update the command buffers to reflect UI changes */
-void UIOverlay::updateCommandBuffers()
+void GUI::UpdateCommandBuffers()
 {
-    // TODO: Make this eOneTimeSubmit, causes validation errors on exit if we do
     vk::CommandBufferBeginInfo cmdBufInfo{ vk::CommandBufferUsageFlagBits::eSimultaneousUse };
 
     vk::RenderPassBeginInfo renderPassBeginInfo;
-    renderPassBeginInfo.renderPass = renderPass;
-    renderPassBeginInfo.renderArea.extent = createInfo.size;
-    renderPassBeginInfo.clearValueCount = static_cast<uint32_t>(createInfo.clearValues.size());
-    renderPassBeginInfo.pClearValues = createInfo.clearValues.data();
+    renderPassBeginInfo.renderPass = _renderPass;
+    renderPassBeginInfo.renderArea.extent = _createInfo.size;
+    renderPassBeginInfo.clearValueCount = static_cast<uint32_t>(_createInfo.clearValues.size());
+    renderPassBeginInfo.pClearValues = _createInfo.clearValues.data();
 
     ImGuiIO& io = ImGui::GetIO();
 
     const vk::Viewport viewport{ 0.0f, 0.0f, io.DisplaySize.x, io.DisplaySize.y, 0.0f, 1.0f };
     const vk::Rect2D scissor{ {}, vk::Extent2D{ (uint32_t)io.DisplaySize.x, (uint32_t)io.DisplaySize.y } };
     // UI scale and translate via push constants
-    pushConstBlock.scale = glm::vec2(2.0f / io.DisplaySize.x, 2.0f / io.DisplaySize.y);
-    pushConstBlock.translate = glm::vec2(-1.0f);
+    _pushConstBlock.scale = glm::vec2(2.0f / io.DisplaySize.x, 2.0f / io.DisplaySize.y);
+    _pushConstBlock.translate = glm::vec2(-1.0f);
 
     if (cmdBuffers.size())
     {
         // this is probably where the validation error happens
-        context.trashAll<vk::CommandBuffer>(cmdBuffers,
-                                            [&](const std::vector<vk::CommandBuffer>& buffers) { context.device.freeCommandBuffers(commandPool, buffers); });
+        _context.trashAll<vk::CommandBuffer>(cmdBuffers, [&](const std::vector<vk::CommandBuffer>& buffers) {
+            _context.device.freeCommandBuffers(_commandPool, buffers);
+        });
         cmdBuffers.clear();
     }
 
-    cmdBuffers = context.device.allocateCommandBuffers({ commandPool, vk::CommandBufferLevel::ePrimary, (uint32_t)createInfo.framebuffers.size() });
+    cmdBuffers = _context.device.allocateCommandBuffers({ _commandPool, vk::CommandBufferLevel::ePrimary, (uint32_t)_createInfo.framebuffers.size() });
 
     for (size_t i = 0; i < cmdBuffers.size(); ++i)
     {
-        renderPassBeginInfo.framebuffer = createInfo.framebuffers[i];
+        renderPassBeginInfo.framebuffer = _createInfo.framebuffers[i];
 
         const auto& cmdBuffer = cmdBuffers[i];
         cmdBuffer.begin(cmdBufInfo);
 
         cmdBuffer.beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
-        cmdBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline);
-        cmdBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, descriptorSet, {});
-        cmdBuffer.bindVertexBuffers(0, vertexBuffer.buffer, { 0 });
-        cmdBuffer.bindIndexBuffer(indexBuffer.buffer, 0, vk::IndexType::eUint16);
+        cmdBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, _pipeline);
+        cmdBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, _pipelineLayout, 0, _descriptorSet, {});
+        cmdBuffer.bindVertexBuffers(0, _vertexBuffer.buffer, { 0 });
+        cmdBuffer.bindIndexBuffer(_indexBuffer.buffer, 0, vk::IndexType::eUint16);
         cmdBuffer.setViewport(0, viewport);
         cmdBuffer.setScissor(0, scissor);
 
-        cmdBuffer.pushConstants(pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, vk::ArrayProxy<const PushConstBlock>{ pushConstBlock });
+        cmdBuffer.pushConstants(_pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, vk::ArrayProxy<const PushConstBlock>{ _pushConstBlock });
 
         // Render commands
         ImDrawData* imDrawData = ImGui::GetDrawData();
@@ -389,9 +405,8 @@ void UIOverlay::updateCommandBuffers()
         }
 
         // Add empty subpasses if requested
-        if (createInfo.subpassCount > 1)
-            for (uint32_t j = 1; j < createInfo.subpassCount; j++)
-                cmdBuffer.nextSubpass(vk::SubpassContents::eInline);
+        for (uint32_t j = 1; j < _createInfo.subpassCount; j++)
+            cmdBuffer.nextSubpass(vk::SubpassContents::eInline);
 
         cmdBuffer.endRenderPass();
 
@@ -400,52 +415,52 @@ void UIOverlay::updateCommandBuffers()
 }
 
 /** Update vertex and index buffer containing the imGui elements when required */
-void UIOverlay::update()
+void GUI::update()
 {
     ImDrawData* imDrawData = ImGui::GetDrawData();
-    bool updateCmdBuffers = true;
+    bool updateCmdBuffers = false;
 
     if (!imDrawData)
         return;
 
     // Note: Alignment is done inside buffer creation
-    vk::DeviceSize vertexBufferSize = imDrawData->TotalVtxCount * sizeof(ImDrawVert);
-    vk::DeviceSize indexBufferSize = imDrawData->TotalIdxCount * sizeof(ImDrawIdx);
+    vk::DeviceSize _vertexBufferSize = imDrawData->TotalVtxCount * sizeof(ImDrawVert);
+    vk::DeviceSize _indexBufferSize = imDrawData->TotalIdxCount * sizeof(ImDrawIdx);
     // Update buffers only if vertex or index count has been changed compared to current buffer size
 
     // Vertex buffer
-    if (!vertexBuffer || (vertexCount != imDrawData->TotalVtxCount))
+    if (!_vertexBuffer || (_vertexCount != imDrawData->TotalVtxCount))
     {
-        vertexCount = imDrawData->TotalVtxCount;
-        if (vertexBuffer)
+        _vertexCount = imDrawData->TotalVtxCount;
+        if (_vertexBuffer)
         {
-            vertexBuffer.unmap();
-            context.trash<vks::Buffer>(vertexBuffer);
-            vertexBuffer = vks::Buffer();
+            _vertexBuffer.unmap();
+            _context.trash<vks::Buffer>(_vertexBuffer);
+            _vertexBuffer = vks::Buffer();
         }
-        vertexBuffer = context.createBuffer(vk::BufferUsageFlagBits::eVertexBuffer, vk::MemoryPropertyFlagBits::eHostVisible, vertexBufferSize);
-        vertexBuffer.map();
+        _vertexBuffer = _context.createBuffer(vk::BufferUsageFlagBits::eVertexBuffer, vk::MemoryPropertyFlagBits::eHostVisible, _vertexBufferSize);
+        _vertexBuffer.map();
         updateCmdBuffers = true;
     }
 
     // Index buffer
     vk::DeviceSize indexSize = imDrawData->TotalIdxCount * sizeof(ImDrawIdx);
-    if (!indexBuffer || (indexCount < imDrawData->TotalIdxCount))
+    if (!_indexBuffer || (_indexCount < imDrawData->TotalIdxCount))
     {
-        indexCount = imDrawData->TotalIdxCount;
-        if (indexBuffer)
+        _indexCount = imDrawData->TotalIdxCount;
+        if (_indexBuffer)
         {
-            indexBuffer.unmap();
-            indexBuffer.destroy();
+            _indexBuffer.unmap();
+            _indexBuffer.destroy();
         }
-        indexBuffer = context.createBuffer(vk::BufferUsageFlagBits::eIndexBuffer, vk::MemoryPropertyFlagBits::eHostVisible, indexBufferSize);
-        indexBuffer.map();
+        _indexBuffer = _context.createBuffer(vk::BufferUsageFlagBits::eIndexBuffer, vk::MemoryPropertyFlagBits::eHostVisible, _indexBufferSize);
+        _indexBuffer.map();
         updateCmdBuffers = true;
     }
 
     // Upload data
-    ImDrawVert* vtxDst = (ImDrawVert*)vertexBuffer.mapped;
-    ImDrawIdx* idxDst = (ImDrawIdx*)indexBuffer.mapped;
+    ImDrawVert* vtxDst = (ImDrawVert*)_vertexBuffer.mapped;
+    ImDrawIdx* idxDst = (ImDrawIdx*)_indexBuffer.mapped;
 
     for (int n = 0; n < imDrawData->CmdListsCount; n++)
     {
@@ -457,91 +472,89 @@ void UIOverlay::update()
     }
 
     // Flush to make writes visible to GPU
-    vertexBuffer.flush();
-    indexBuffer.flush();
+    _vertexBuffer.flush();
+    _indexBuffer.flush();
 
     if (updateCmdBuffers)
-        updateCommandBuffers();
+        UpdateCommandBuffers();
 }
 
-void UIOverlay::resize(const vk::Extent2D& size, const std::vector<vk::Framebuffer>& framebuffers)
+void GUI::resize(const vk::Extent2D& size, const std::vector<vk::Framebuffer>& framebuffers)
 {
     ImGuiIO& io = ImGui::GetIO();
     io.DisplaySize = ImVec2((float)(size.width), (float)(size.height));
-    createInfo.size = size;
-    createInfo.framebuffers = framebuffers;
-    updateCommandBuffers();
+
+    _createInfo.size = size;
+    _createInfo.framebuffers = framebuffers;
+    UpdateCommandBuffers();
 }
 
 /** Submit the overlay command buffers to a queue */
-void UIOverlay::submit(const vk::Queue& queue, uint32_t bufferindex, vk::SubmitInfo submitInfo) const
+void GUI::submit(const vk::Queue& queue, uint32_t bufferindex, vk::SubmitInfo submitInfo) const
 {
-    if (!visible)
+    if (!_visible)
         return;
 
     submitInfo.pCommandBuffers = &cmdBuffers[bufferindex];
     submitInfo.commandBufferCount = 1;
 
-    queue.submit(submitInfo, fence);
-    context.device.waitForFences(fence, VK_TRUE, UINT64_MAX);
-    context.device.resetFences(fence);
+    queue.submit(submitInfo, _fence);
+    _context.device.waitForFences(_fence, VK_TRUE, UINT64_MAX);
+    _context.device.resetFences(_fence);
 }
 
-bool UIOverlay::header(const char* caption) const
+
+bool GUI::IsVisible() const
 {
-    return ImGui::CollapsingHeader(caption, ImGuiTreeNodeFlags_DefaultOpen);
+    return _visible;
 }
 
-bool UIOverlay::checkBox(const char* caption, bool* value) const
+void GUI::ToggleVisibility()
 {
-    return ImGui::Checkbox(caption, value);
+    _visible ^= true;
 }
 
-bool UIOverlay::checkBox(const char* caption, int32_t* value) const
+void GUI::PrepareTextElement(std::string_view characterSequence)
 {
-    bool val = (*value == 1);
-    bool res = ImGui::Checkbox(caption, &val);
-    *value = val;
-    return res;
+    _FinalizeCurrentInterfaceElement();
+
+    _interfaceElementCreateInfo.Finalized = false;
+    _interfaceElementCreateInfo.Label = std::move(characterSequence);
 }
 
-bool UIOverlay::inputFloat(const char* caption, float* value, float step, uint32_t precision) const {
-    return ImGui::InputFloat(caption, value, step, step * 10.0f, precision);
-}
-
-bool UIOverlay::sliderFloat(const char* caption, float* value, float min, float max) const
+void GUI::SetTextColor(std::array<float, 4>&& values)
 {
-    return ImGui::SliderFloat(caption, value, min, max);
+    _interfaceElementCreateInfo.TextColor = values;
 }
 
-bool UIOverlay::sliderInt(const char* caption, int32_t* value, int32_t min, int32_t max) const
+void GUI::FinalizeTextElement()
 {
-    return ImGui::SliderInt(caption, value, min, max);
+    _interfaceElementCreateInfo.Callback = [](_InterfaceElementCreateInfo const& args) -> void {
+        if (args.TextColor.is_initialized())
+        {
+            ImVec4 colVector;
+            colVector.x = (*args.TextColor)[0];
+            colVector.y = (*args.TextColor)[1];
+            colVector.z = (*args.TextColor)[2];
+            colVector.w = (*args.TextColor)[3];
+            ImGui::PushStyleColor(ImGuiCol_Text, colVector);
+        }
+
+        ImGui::Text(args.Label.data());
+
+        if (args.TextColor.is_initialized())
+            ImGui::PopStyleColor();
+    };
+
+    _FinalizeCurrentInterfaceElement();
 }
 
-bool UIOverlay::comboBox(const char* caption, int32_t* itemindex, const std::vector<std::string>& items) const
+void GUI::_FinalizeCurrentInterfaceElement()
 {
-    if (items.empty())
-        return false;
+    if (_interfaceElementCreateInfo.Finalized)
+        return;
 
-    std::vector<const char*> charitems;
-    charitems.reserve(items.size());
-    for (size_t i = 0; i < items.size(); i++)
-        charitems.push_back(items[i].c_str());
-
-    uint32_t itemCount = static_cast<uint32_t>(charitems.size());
-    return ImGui::Combo(caption, itemindex, &charitems[0], itemCount, itemCount);
-}
-
-bool UIOverlay::button(const char* caption) const
-{
-    return ImGui::Button(caption);
-}
-
-void UIOverlay::text(const char* formatstr, ...) const
-{
-    va_list args;
-    va_start(args, formatstr);
-    ImGui::TextV(formatstr, args);
-    va_end(args);
+    _interfaceElementCreateInfo.Callback(_interfaceElementCreateInfo);
+    _interfaceElementCreateInfo.Finalized = true;
+    _interfaceElementCreateInfo.TextColor = boost::none;
 }

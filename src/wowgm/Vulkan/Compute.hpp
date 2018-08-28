@@ -17,7 +17,7 @@ struct Compute {
         vk::Semaphore complete;
     } semaphores;
 
-    virtual void prepare() {
+    virtual void Prepare() {
         // Create a compute capable device queue
         queue = context.device.getQueue(context.queueIndices.compute, 0);
         semaphores.ready = device.createSemaphore({});

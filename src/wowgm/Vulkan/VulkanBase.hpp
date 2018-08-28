@@ -18,7 +18,7 @@
 #include "Pipelines.hpp"
 #include "Texture.hpp"
 
-#include "UI.hpp"
+#include "GUI.hpp"
 #include "Utils.hpp"
 #include "Camera.hpp"
 #include "Compute.hpp"
@@ -83,7 +83,7 @@ namespace vkx {
             std::string getWindowTitle();
 
         protected:
-            bool enableVsync { true };
+            bool enableVsync { false };
             // Command buffers used for rendering
             std::vector<vk::CommandBuffer> commandBuffers;
             std::vector<vk::ClearValue> clearValues;
@@ -126,7 +126,7 @@ namespace vkx {
             const vk::Queue& queue{ context.queue };
             const vk::PhysicalDeviceFeatures& deviceFeatures{ context.deviceFeatures };
             vk::PhysicalDeviceFeatures& enabledFeatures{ context.enabledFeatures };
-            vkx::ui::UIOverlay ui{ context };
+            vkx::ui::GUI ui{ context };
 
             vk::SurfaceKHR surface;
             // Wraps the swap chain to present images (framebuffers) to the windowing system
@@ -166,7 +166,7 @@ namespace vkx {
             // Command buffer pool
             vk::CommandPool cmdPool;
 
-            bool        _prepared    = false;
+            bool        _Prepared    = false;
             uint32_t    _version     = VK_MAKE_VERSION(1, 1, 0);
             vk::Extent2D _size       { 1280, 720 };
             uint32_t&    _width      { _size.width };
@@ -206,7 +206,7 @@ namespace vkx {
             void UpdateOverlay();
 
             virtual void OnUpdateOverlay() { }
-            virtual void OnSetupInterface(vkx::ui::UIOverlayCreateInfo& uiCreateInfo) { }
+            virtual void OnSetupInterface(vkx::ui::GUICreateInfo& uiCreateInfo) { }
 
             virtual void InitVulkan();
             virtual void SetupSwapchain();

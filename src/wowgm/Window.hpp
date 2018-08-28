@@ -7,6 +7,14 @@
 
 namespace wowgm
 {
+    enum WindowState
+    {
+        WelcomeScreen,
+        RealmSelection,
+        CharacterSelection,
+        World
+    };
+
     class Window : public vkx::BaseWindow
     {
     public:
@@ -68,6 +76,8 @@ namespace wowgm
         void OnUpdateOverlay() override;
 
     private:
+        WindowState _state = WindowState::WelcomeScreen;
+
         char _accountName[100] = { 0 };
         char _accountPassword[100] = { 0 };
         char _realmAddress[100] = { 0 };

@@ -14,13 +14,13 @@
 
 #include "VulkanBase.hpp"
 
-#include "UI.hpp"
+#include "GUI.hpp"
 #include "Filesystem.hpp"
 
 using namespace vkx;
 
 // Avoid doing work in the ctor as it can't make use of overridden virtual functions
-// Instead, use the `prepare` and `run` methods
+// Instead, use the `Prepare` and `run` methods
 BaseWindow::BaseWindow()
 {
     camera.setPerspective(60.0f, _size, 0.1f, 256.0f);
@@ -121,18 +121,18 @@ void BaseWindow::InitVulkan()
 {
     // TODO make this less stupid
     context.setDeviceFeaturesPicker([this](const vk::PhysicalDevice& device, vk::PhysicalDeviceFeatures2& features) {
-        if (deviceFeatures.textureCompressionBC) {
+        if (deviceFeatures.textureCompressionBC)
             enabledFeatures.textureCompressionBC = VK_TRUE;
-        }
-        else if (context.deviceFeatures.textureCompressionASTC_LDR) {
+
+        else if (context.deviceFeatures.textureCompressionASTC_LDR)
             enabledFeatures.textureCompressionASTC_LDR = VK_TRUE;
-        }
-        else if (context.deviceFeatures.textureCompressionETC2) {
+
+        else if (context.deviceFeatures.textureCompressionETC2)
             enabledFeatures.textureCompressionETC2 = VK_TRUE;
-        }
-        if (deviceFeatures.samplerAnisotropy) {
+
+        if (deviceFeatures.samplerAnisotropy)
             enabledFeatures.samplerAnisotropy = VK_TRUE;
-        }
+
         GetEnabledFeatures();
     });
 
@@ -241,7 +241,7 @@ void BaseWindow::RenderLoop()
         tStart = tEnd;
 
         // Render frame
-        if (_prepared)
+        if (_Prepared)
         {
             Render();
 
@@ -261,7 +261,7 @@ void BaseWindow::SetupInterface()
     if (!_settings.overlay)
         return;
 
-    struct vkx::ui::UIOverlayCreateInfo overlayCreateInfo;
+    vkx::ui::GUICreateInfo overlayCreateInfo;
     // Setup default overlay creation info
     overlayCreateInfo.copyQueue = queue;
     overlayCreateInfo.framebuffers = framebuffers;
@@ -271,7 +271,7 @@ void BaseWindow::SetupInterface()
 
     // Virtual function call for example to customize overlay creation
     OnSetupInterface(overlayCreateInfo);
-    ui.create(overlayCreateInfo);
+    ui.Create(overlayCreateInfo);
 
     for (auto& shader : overlayCreateInfo.shaders)
     {
@@ -370,7 +370,7 @@ void BaseWindow::PrepareFrame()
 
 void BaseWindow::SubmitFrame()
 {
-    bool submitOverlay = _settings.overlay && ui.visible;
+    bool submitOverlay = _settings.overlay && ui.IsVisible();
     if (submitOverlay)
     {
         vk::SubmitInfo submitInfo;
@@ -562,10 +562,10 @@ void BaseWindow::Draw() {
 
 void BaseWindow::Render()
 {
-    if (!_prepared)
+    if (!_Prepared)
         return;
 
-    UpdateOverlay();
+    // UpdateOverlay();
     Draw();
 }
 
@@ -574,6 +574,8 @@ void BaseWindow::Update(float deltaTime)
     camera.update(deltaTime);
     if (camera.moving())
         viewUpdated = true;
+
+    UpdateOverlay();
 
     // Check gamepad state
     const float deadZone = 0.0015f;
@@ -612,7 +614,7 @@ void BaseWindow::Update(float deltaTime)
 
 void BaseWindow::WindowResize(const glm::uvec2& newSize)
 {
-    if (!_prepared)
+    if (!_Prepared)
         return;
 
     while (newSize.x == 0 || newSize.y == 0) {
@@ -620,7 +622,7 @@ void BaseWindow::WindowResize(const glm::uvec2& newSize)
         glfwWaitEvents();
     }
 
-    _prepared = false;
+    _Prepared = false;
 
     queue.waitIdle();
     device.waitIdle();
@@ -648,7 +650,7 @@ void BaseWindow::WindowResize(const glm::uvec2& newSize)
 
     ViewChanged();
 
-    _prepared = true;
+    _Prepared = true;
 }
 
 void BaseWindow::UpdateOverlay()
@@ -665,8 +667,6 @@ void BaseWindow::UpdateOverlay()
     io.MouseDown[1] = _mouseButtons.right;
 
     ImGui::NewFrame();
-
-    ImGui::ShowDemoWindow();
 
     OnUpdateOverlay();
 
@@ -751,7 +751,7 @@ void BaseWindow::KeyPressed(uint32_t key)
             break;
 
         case GLFW_KEY_F1:
-            ui.visible = !ui.visible;
+            ui.ToggleVisibility();;
             break;
 
         case GLFW_KEY_ESCAPE:
@@ -787,25 +787,18 @@ void BaseWindow::KeyReleased(uint32_t key)
 
 void BaseWindow::SetupWindow()
 {
-    bool fullscreen = false;
-
-    // Check command line arguments
-    for (int32_t i = 0; i < __argc; i++)
-        if (__argv[i] == std::string("-fullscreen"))
-            fullscreen = true;
-
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     auto monitor = glfwGetPrimaryMonitor();
     auto mode = glfwGetVideoMode(monitor);
     _size.width = mode->width;
     _size.height = mode->height;
 
-    if (fullscreen)
+    /*if (fullscreen)
         _window = glfwCreateWindow(_size.width, _size.height, "WowGM", monitor, nullptr);
-    else
+    else*/
     {
-        _size.width /= 2;
-        _size.height /= 2;
+        _size.width *= 0.95;
+        _size.height *= 0.95;
         _window = glfwCreateWindow(_size.width, _size.height, "WowGM", nullptr, nullptr);
     }
 
@@ -896,7 +889,7 @@ void BaseWindow::MouseScrollHandler(GLFWwindow* window, double xoffset, double y
 void BaseWindow::CloseHandler(GLFWwindow* window)
 {
     auto example = static_cast<BaseWindow*>(glfwGetWindowUserPointer(window));
-    example->_prepared = false;
+    example->_Prepared = false;
     glfwSetWindowShouldClose(window, 1);
 }
 

@@ -243,7 +243,7 @@ public:
                       vk::Format format,
                       vk::ImageUsageFlags imageUsageFlags = vk::ImageUsageFlagBits::eSampled,
                       vk::ImageLayout imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal) {
-        this->device = device;
+        this->device = context.device;
         this->imageLayout = imageLayout;
         descriptor.imageLayout = imageLayout;
 
