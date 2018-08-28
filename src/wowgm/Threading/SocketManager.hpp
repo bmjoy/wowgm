@@ -19,6 +19,7 @@ namespace wowgm::threading
     {
     public:
         SocketManager();
+        ~SocketManager();
 
         template <typename T, typename... Args, typename std::enable_if<std::is_base_of<BaseSocket, T>::value, int>::type = 0>
         std::shared_ptr<T> Create(Args&&... args)

@@ -14,11 +14,6 @@ namespace wowgm::threading {
     {
         Updater();
     public:
-        ~Updater()
-        {
-            Stop();
-        }
-
         static Updater* instance();
 
     public:

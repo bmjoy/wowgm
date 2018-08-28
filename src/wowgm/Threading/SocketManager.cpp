@@ -21,9 +21,16 @@ namespace wowgm::threading {
         return _socket;
     }
 
+    SocketManager::~SocketManager()
+    {
+    }
+
     void SocketManager::Destroy()
     {
         _guard.reset();
+
+        _context.stop();
+        _contextThread.join();
 
         if (_socket)
             _socket->DelayedCloseSocket();

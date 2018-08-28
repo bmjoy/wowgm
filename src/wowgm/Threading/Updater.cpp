@@ -24,9 +24,14 @@ namespace wowgm::threading
 
     void Updater::Stop()
     {
-        _promise.set_value(); // signal
+        // Signal
+        _promise.set_value();
+
         if (_worker.joinable())
             _worker.join(); // join
+
+        for (auto&& upd : _updatables)
+            upd->Destroy();
 
         _updatables.clear();
     }

@@ -80,6 +80,8 @@ int main(int argc, char* argv[])
 
         wowgm::Window window("WowGM");
         window.Run();
+
+        sUpdater->Stop();
     }
     catch (const boost::system::system_error& se)
     {
