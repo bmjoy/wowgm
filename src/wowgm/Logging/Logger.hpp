@@ -25,15 +25,15 @@ namespace expr = boost::log::expressions;
 // We define our own severity levels
 enum severity_level
 {
-    info,
-    warning,
-    error,
-    critical,
-    debug,
-    trace,
-    rendering,
-    performance,
-    max_security,
+    e_info,
+    e_warning,
+    e_error,
+    e_critical,
+    e_debug,
+    e_trace,
+    e_rendering,
+    e_performance,
+    e_max_security,
 };
 
 extern const char* severity_level_str[];
@@ -41,7 +41,7 @@ extern const char* severity_level_str[];
 template <typename CharT, typename TraitsT>
 std::basic_ostream<CharT, TraitsT>& operator << (std::basic_ostream< CharT, TraitsT >& strm, severity_level lvl)
 {
-    if (lvl < static_cast<int>(max_security))
+    if (lvl < static_cast<int>(e_max_security))
         strm << severity_level_str[lvl];
     else
         strm << static_cast<int>(lvl);
@@ -58,16 +58,16 @@ namespace wowgm::log
 
 #define LOG_SCOPE       BOOST_LOG_NAMED_SCOPE(BOOST_CURRENT_FUNCTION);
 
-#define LOG_INFO        BOOST_LOG_SEV(severity_logger::get(), info)
-#define LOG_WARNING     BOOST_LOG_SEV(severity_logger::get(), warning)
-#define LOG_ERROR       BOOST_LOG_SEV(severity_logger::get(), error)
-#define LOG_CRITICAL    BOOST_LOG_SEV(severity_logger::get(), critical)
+#define LOG_INFO        BOOST_LOG_SEV(severity_logger::get(), e_info)
+#define LOG_WARNING     BOOST_LOG_SEV(severity_logger::get(), e_warning)
+#define LOG_ERROR       BOOST_LOG_SEV(severity_logger::get(), e_error)
+#define LOG_CRITICAL    BOOST_LOG_SEV(severity_logger::get(), e_critical)
 
-#define LOG_DEBUG       BOOST_LOG_SEV(severity_logger::get(), debug)
+#define LOG_DEBUG       BOOST_LOG_SEV(severity_logger::get(), e_debug)
 #if !_DEBUG
 #pragma message("Consider #ifdef'ing LOG_DEBUG calls, as expensive operations may not be optimized out by the compiler.")
 #endif
 
-#define LOG_TRACE       BOOST_LOG_SEV(severity_logger::get(), trace)
-#define LOG_RENDERING   BOOST_LOG_SEV(severity_logger::get(), rendering)
-#define LOG_PERFORMANCE BOOST_LOG_SEV(severity_logger::get(), performance)
+#define LOG_TRACE       BOOST_LOG_SEV(severity_logger::get(), e_trace)
+#define LOG_RENDERING   BOOST_LOG_SEV(severity_logger::get(), e_rendering)
+#define LOG_PERFORMANCE BOOST_LOG_SEV(severity_logger::get(), e_performance)

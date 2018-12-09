@@ -39,6 +39,8 @@ namespace vez
         RenderPass(Device* device);
         ~RenderPass();
 
+        uint32_t GetSubpassCount() const { return _subpasses.size(); }
+
         VkRenderPass GetHandle();
 
         /**
@@ -70,7 +72,7 @@ namespace vez
 
         VkRenderPass _handle = VK_NULL_HANDLE;
 
-        std::unordered_map<AttachmentType, std::unordered_set<VkAttachmentDescription>> _attachments;
+        std::unordered_map<AttachmentType, std::vector<VkAttachmentDescription>> _attachments;
         std::vector<VkSubpassDescription> _subpasses;
         std::unordered_map<AttachmentType, std::vector<VkAttachmentReference>> _attachmentReferences;
     };

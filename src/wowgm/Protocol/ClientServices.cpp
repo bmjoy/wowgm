@@ -29,12 +29,7 @@ namespace wowgm::protocol
     {
     }
 
-    void ClientServices::AsyncConnect(std::string username, std::string password)
-    {
-        AsyncConnect(username, password, GetHostname(), *GetHostPort());
-    }
-
-    void ClientServices::AsyncConnect(std::string username, std::string password, const std::string& realmAddress, std::int32_t port /* = 3724 */)
+    void ClientServices::AsyncConnect(std::string_view username, std::string_view password, std::string_view realmAddress, std::int32_t port /* = 3724 */)
     {
         if (_socket)
         {
@@ -42,8 +37,8 @@ namespace wowgm::protocol
             _socket.reset();
         }
 
-        SetUsername(username);
-        SetPassword(password);
+        SetUsername(std::string(username));
+        SetPassword(std::string(password));
 
         auto authSocket = _socketUpdater->Create<AuthSocket>(_socketUpdater->GetContext());
         authSocket->Connect(realmAddress, port);
@@ -55,14 +50,20 @@ namespace wowgm::protocol
         return _socket->IsOpen();
     }
 
-    void ClientServices::UpdateIdentificationStatus(AuthCommand /* authCommand */, AuthResult result)
+    void ClientServices::UpdateIdentificationStatus(AuthCommand authCommand, AuthResult result)
     {
         _authResult = result;
+        _authCommand = authCommand;
     }
 
     AuthResult ClientServices::GetAuthentificationResult()
     {
         return _authResult;
+    }
+
+    AuthCommand ClientServices::GetAuthentificationStatus()
+    {
+        return _authCommand;
     }
 
     void ClientServices::SetRealmInfo(std::vector<AuthRealmInfo> realmInfo)
@@ -166,11 +167,6 @@ namespace wowgm::protocol
     std::string const& ClientServices::GetHostname() const
     {
         return _hostname;
-    }
-
-    std::uint32_t* ClientServices::GetHostPort()
-    {
-        return &_hostPort;
     }
 
     BigNumber& ClientServices::GetPasswordHash()

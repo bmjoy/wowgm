@@ -18,6 +18,8 @@ namespace wowgm::filesystem
         if (rootFolder == _currentRootFolder)
             return;
 
+        _currentRootFolder = rootFolder;
+
         for (HANDLE archiveHandle : _archiveHandles)
             SFileCloseArchive(archiveHandle);
 
@@ -46,8 +48,6 @@ namespace wowgm::filesystem
         catch (const std::exception& e) {
             return; // Check for more specific exceptions layer
         }
-
-        _currentRootFolder = rootFolder;
 
         wowgm::game::datastores::DataStores::Initialize();
     }

@@ -18,7 +18,12 @@ namespace wowgm::protocol::authentification
         LOGIN_PARENTAL_CONTROL    = 15,
         LOGIN_LOCKED_ENFORCED     = 16,
         LOGIN_CONVERSION_REQUIRED = 32,
+
+        // Custom values
+        LOGIN_NOT_STARTED         = 253, // User hasn't started connecting
         LOGIN_INVALID_SRP6        = 254, // Custom value
+
+
         LOGIN_DISCONNECTED        = 255
     };
 

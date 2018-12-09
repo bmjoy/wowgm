@@ -71,6 +71,8 @@ namespace wowgm::protocol::authentification
 
     void AuthSocket::SendAuthChallenge(std::string&& platform, std::string&& operatingSystem, std::string&& countryCode, std::string&& gameCode)
     {
+        sClientServices->UpdateIdentificationStatus(AUTH_LOGON_CHALLENGE, LOGIN_OK);
+
         AuthPacket<LogonChallenge> command(this->shared_from_this(), AUTH_LOGON_CHALLENGE);
         command.GetData()->Error = 6;
         command.GetData()->Size = std::uint16_t(30 + sClientServices->GetUsername().length());
@@ -100,11 +102,10 @@ namespace wowgm::protocol::authentification
             if (challenge->Command != AUTH_LOGON_CHALLENGE)
                 return false;
 
+            sClientServices->UpdateIdentificationStatus(AUTH_LOGON_CHALLENGE, AuthResult(challenge->Error));
+
             if (challenge->Error != LOGIN_OK)
-            {
-                sClientServices->UpdateIdentificationStatus(AUTH_LOGON_CHALLENGE, AuthResult(challenge->Error));
                 return false;
-            }
 
             B.SetBinary(challenge->B, sizeof(AuthLogonChallenge::B));
             g.SetBinary(challenge->g, challenge->g_length);
@@ -223,6 +224,8 @@ namespace wowgm::protocol::authentification
         LOG_DEBUG << "M1= " << M1.AsHexStr();
         LOG_DEBUG << "M2= " << M2.AsHexStr();
 
+        sClientServices->UpdateIdentificationStatus(AUTH_LOGON_PROOF, LOGIN_OK);
+
         AuthPacket<LogonProof> logonChallenge(this->shared_from_this(), AUTH_LOGON_PROOF);
         memcpy(logonChallenge.GetData()->A, A.AsByteArray(32).get(), 32);
         memcpy(logonChallenge.GetData()->M1, M1.AsByteArray(20).get(), 20);
@@ -240,17 +243,18 @@ namespace wowgm::protocol::authentification
 
         LOG_INFO << "[S->C] AUTH_LOGON_PROOF.";
 
+        sClientServices->UpdateIdentificationStatus(AUTH_LOGON_PROOF, AuthResult(proof->Error));
+
         if (proof->Error != LOGIN_OK)
-        {
-            sClientServices->UpdateIdentificationStatus(AUTH_LOGON_PROOF, AuthResult(proof->Error));
             return false;
-        }
 
         if (memcmp(proof->M2, M2.AsByteArray().get(), sizeof(proof->M2)) == 0)
         {
             sClientServices->UpdateIdentificationStatus(AUTH_LOGON_PROOF, LOGIN_INVALID_SRP6);
             return false;
         }
+
+        sClientServices->UpdateIdentificationStatus(REALM_LIST, LOGIN_OK);
 
         // Request realm list
         LOG_INFO << "[C->S] REALM_LIST.";

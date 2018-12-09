@@ -60,15 +60,19 @@ namespace wowgm::protocol
             _socket.async_connect(endpoint, std::bind(callback, std::placeholders::_1, endpoint));
         }
 
-        void Connect(std::string hostname, std::uint32_t port) override final
+        void Connect(std::string_view hostname, std::uint32_t port) override final
         {
             boost::asio::ip::tcp::resolver resolver(_context);
 
             boost::system::error_code errorCode;
             auto results = resolver.resolve(hostname, std::to_string(port), errorCode);
-            BOOST_ASSERT_MSG_FMT(errorCode == 0, "Unable to resolve %s:%u", hostname.c_str(), port);
+            BOOST_ASSERT_MSG_FMT(errorCode == 0, "Unable to resolve %s:%u", hostname.data(), port);
 
             auto callback = [&](const boost::system::error_code& error, tcp::resolver::results_type::const_iterator targetEndpointItr) -> void {
+                tcp::resolver::results_type::const_iterator end;
+                if (targetEndpointItr == end)
+                    BOOST_ASSERT_MSG_FMT(error == 0, "Error %u while connecting to auth server: %s", error.value(), error.message().c_str());
+
                 BOOST_ASSERT_MSG_FMT(error == 0,
                     "Error %u while connecting to %s:%u : %s", error.value(), targetEndpointItr->endpoint().address().to_string().c_str(), targetEndpointItr->endpoint().port(), error.message().c_str());
 

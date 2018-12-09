@@ -1,5 +1,6 @@
 #include "Framebuffer.hpp"
 #include "ImageView.hpp"
+#include "RenderPass.hpp"
 #include "Device.hpp"
 
 #include <boost/iterator/transform_iterator.hpp>
@@ -8,21 +9,20 @@ namespace vez
 {
     VkResult Framebuffer::Create(Device* pDevice, const FramebufferCreateInfo* pCreateInfo, Framebuffer** ppFramebuffer)
     {
-        std::vector<ImageView*> attachmentsModels(pCreateInfo->ppAttachments[0], pCreateInfo->ppAttachments[pCreateInfo->attachmentCount]);
-
-        auto mutator = [](ImageView* imageView) -> VkImageView { return imageView->GetHandle(); };
-        auto begin = boost::make_transform_iterator(attachmentsModels.begin(), mutator);
-        auto end = boost::make_transform_iterator(attachmentsModels.end(), mutator);
-
-        std::vector<VkImageView> attachments(begin, end);
-
+        std::vector<ImageView*> attachmentObjects(pCreateInfo->attachmentCount);
+        std::vector<VkImageView> attachments(pCreateInfo->attachmentCount);
+        for (uint32_t i = 0; i < pCreateInfo->attachmentCount; ++i)
+        {
+            attachments.push_back(pCreateInfo->ppAttachments[i]->GetHandle());
+            attachmentObjects.push_back(const_cast<ImageView*>(pCreateInfo->ppAttachments[i]));
+        }
         // Create a Framebuffer class instance.
         Framebuffer* framebuffer = new Framebuffer;
         framebuffer->_device = pDevice;
         framebuffer->_width = pCreateInfo->width;
         framebuffer->_height = pCreateInfo->height;
         framebuffer->_layers = pCreateInfo->layers;
-        framebuffer->_attachments = std::move(attachmentsModels);
+        framebuffer->_attachments = std::move(attachmentObjects);
 
         VkFramebufferCreateInfo createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;

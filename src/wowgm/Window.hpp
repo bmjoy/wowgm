@@ -3,8 +3,6 @@
 #include <string>
 #include <vulkan/vulkan.hpp>
 
-#include "VulkanBase.hpp"
-
 namespace wowgm
 {
     enum WindowState

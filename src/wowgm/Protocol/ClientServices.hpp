@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <string_view>
 #include <cstdint>
 #include <memory>
 #include <vector>
@@ -33,14 +34,14 @@ namespace wowgm::protocol
     public:
         static ClientServices* instance();
 
-        void AsyncConnect(std::string username, std::string password);
-        void AsyncConnect(std::string username, std::string password, const std::string& realmAddress, std::int32_t port = 3724);
+        void AsyncConnect(std::string_view username, std::string_view password, std::string_view realmAddress, std::int32_t port = 3724);
 
         bool IsConnected();
 
     public: /* Realms */
         void UpdateIdentificationStatus(AuthCommand authCommand, AuthResult result);
         AuthResult GetAuthentificationResult();
+        AuthCommand GetAuthentificationStatus();
 
         void SetRealmInfo(std::vector<AuthRealmInfo> realmInfo);
 
@@ -61,8 +62,6 @@ namespace wowgm::protocol
 
         void SetHostname(const std::string& hostname);
         std::string const& GetHostname() const;
-
-        std::uint32_t* GetHostPort();
 
         BigNumber& GetPasswordHash();
 
@@ -86,7 +85,8 @@ namespace wowgm::protocol
         std::shared_ptr<SocketManager> _socketUpdater;
         std::shared_ptr<BaseSocket> _socket;
 
-        AuthResult _authResult = LOGIN_OK;
+        AuthResult _authResult = LOGIN_NOT_STARTED;
+        AuthCommand _authCommand = AuthCommand(-1);
 
         boost::optional<std::vector<AuthRealmInfo>> _realmInfos;
         AuthRealmInfo _selectedRealm;
@@ -96,7 +96,6 @@ namespace wowgm::protocol
         std::string _username;
         std::string _password;
         std::string _hostname;
-        std::uint32_t _hostPort = 3724;
 
         BigNumber _sessionKey;
         boost::optional<BigNumber> _passwordHash;
