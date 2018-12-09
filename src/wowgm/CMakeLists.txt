@@ -1,12 +1,3 @@
-# Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
-#
-# This file is free software; as a special exception the author gives
-# unlimited permission to copy and/or distribute it, with or without
-# modifications, as long as this notice is preserved.
-#
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 CollectSourceFiles(
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -29,12 +20,19 @@ add_executable(WowGM
 
 set_target_properties(WowGM PROPERTIES LINK_FLAGS "${worldserver_LINK_FLAGS}")
 target_link_libraries(WowGM
-  ${OPENSSL_LIBRARIES}
-  boost
-  glfw
-  Vulkan::Vulkan
-  zlib
-  storm
+  PUBLIC ${OPENSSL_LIBRARIES}
+  PUBLIC Vulkan::Vulkan
+  PRIVATE boost
+  PRIVATE glfw
+  PRIVATE zlib
+  PRIVATE storm
+  PRIVATE glslang
+  PRIVATE OGLCompiler
+  PRIVATE OSDependent
+  PRIVATE SPIRV
+  PRIVATE SPVRemapper
+  PRIVATE spirv-cross-core
+  PRIVATE spirv-cross-glsl
 )
 
 add_dependencies(WowGM storm)
@@ -47,7 +45,10 @@ target_include_directories(WowGM
     ${OPENSSL_INCLUDE_DIR}
     ${glfw_INCLUDE_DIRS}
     ${IMGUI_INCLUDE_DIR}
-    ${CMAKE_SOURCE_DIR}/dep/StormLib/src)
+    ${CMAKE_SOURCE_DIR}/dep/StormLib/src
+    ${CMAKE_SOURCE_DIR}/dep/vma
+    ${CMAKE_SOURCE_DIR}/dep/spirv-compiler/glslang
+    ${CMAKE_SOURCE_DIR}/dep/spirv-compiler/SPIRV-cross)
 
 add_definitions(-DWIN32_LEAN_AND_MEAN)
 
