@@ -270,3 +270,8 @@ endif()
 if(WIN32)
     set_target_properties(storm PROPERTIES OUTPUT_NAME StormLib)
 endif()
+
+set_target_properties(storm
+PROPERTIES
+  FOLDER
+	"dep")

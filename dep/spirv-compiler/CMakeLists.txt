@@ -1,0 +1,10 @@
+include(SPIRV-Cross.cmake)
+set_target_properties(spirv-cross-core PROPERTIES FOLDER dep/SPIRV-Cross)
+set_target_properties(spirv-cross-glsl PROPERTIES FOLDER dep/SPIRV-Cross)
+
+include(glslang.cmake)
+set_target_properties(glslang PROPERTIES FOLDER dep/glslang)
+set_target_properties(OGLCompiler PROPERTIES FOLDER dep/glslang)
+set_target_properties(OSDependent PROPERTIES FOLDER dep/glslang)
+set_target_properties(SPIRV PROPERTIES FOLDER dep/glslang)
+set_target_properties(SPVRemapper PROPERTIES FOLDER dep/glslang)
