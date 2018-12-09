@@ -6905,6 +6905,20 @@ void ImGui::PushAllowKeyboardFocus(bool allow_keyboard_focus)
     PushItemFlag(ImGuiItemFlags_AllowKeyboardFocus, allow_keyboard_focus);
 }
 
+void ImGui::PushDisabled(bool alpha)
+{
+    ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+    if (alpha)
+        ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+}
+
+void ImGui::PopDisabled(bool alpha)
+{
+    ImGui::PopItemFlag();
+    if (alpha)
+        ImGui::PopStyleVar();
+}
+
 void ImGui::PopAllowKeyboardFocus()
 {
     PopItemFlag();

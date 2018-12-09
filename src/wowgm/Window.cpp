@@ -308,7 +308,7 @@ void Window::OnUpdateOverlay()
         ImGui::SetCursorPosX((size.x - (submit_button_size.x + ImGui::GetStyle().ItemInnerSpacing.x * 2)) / 2);
         if (ImGui::Button("Connect##GruntConnect"))
         {
-            sClientServices->AsyncConnect(_accountName, _accountPassword, _realmAddress, *sClientServices->GetHostPort());
+            ///sClientServices->AsyncConnect(_accountName, _accountPassword, _realmAddress, *sClientServices->GetHostPort());
             _state = WindowState::RealmSelection;
         }
 

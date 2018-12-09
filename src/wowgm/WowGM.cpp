@@ -14,6 +14,7 @@
 #include "glfw.hpp"
 
 #include "Window.hpp"
+#include "GameWindow.hpp"
 
 #include <boost/exception/get_error_info.hpp>
 
@@ -77,9 +78,19 @@ int main(int argc, char* argv[])
 
         auto authserver = mapped_values["server"].as<std::string>();
         sUpdater->Start();
-
+#if 0
         wowgm::Window window("WowGM");
         window.Run();
+#else
+        GameWindow window("WowGM");
+        window.InitializeWindow(false);
+        window.InitializeVulkan();
+        window.InitializeInterface();
+
+        window.Run();
+
+        window.PrepareForRelease();
+#endif
 
         sUpdater->Stop();
     }
