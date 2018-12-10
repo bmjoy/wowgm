@@ -84,7 +84,7 @@ class spirvbin_t : public spirvbin_base_t
 public:
     spirvbin_t(int /*verbose = 0*/) { }
 
-    void remap(std::vector<std::uint32_t>& /*spv*/, unsigned int /*opts = 0*/)
+    void remap(std::vector<uint32_t>& /*spv*/, unsigned int /*opts = 0*/)
     {
         printf("Tool not compiled for C++11, which is required for SPIR-V remapping.\n");
         exit(5);
@@ -118,7 +118,7 @@ public:
    virtual ~spirvbin_t() { }
 
    // remap on an existing binary in memory
-   void remap(std::vector<std::uint32_t>& spv, std::uint32_t opts = DO_EVERYTHING);
+   void remap(std::vector<uint32_t>& spv, uint32_t opts = DO_EVERYTHING);
 
    // Type for error/log handler functions
    typedef std::function<void(const std::string&)> errorfn_t;
@@ -138,12 +138,12 @@ private:
    typedef std::unordered_set<spv::Id>          idset_t;
    typedef std::unordered_map<spv::Id, int>     blockmap_t;
 
-   void remap(std::uint32_t opts = DO_EVERYTHING);
+   void remap(uint32_t opts = DO_EVERYTHING);
 
    // Map of names to IDs
    typedef std::unordered_map<std::string, spv::Id> namemap_t;
 
-   typedef std::uint32_t spirword_t;
+   typedef uint32_t spirword_t;
 
    typedef std::pair<unsigned, unsigned> range_t;
    typedef std::function<void(spv::Id&)>                idfn_t;
@@ -183,7 +183,7 @@ private:
    spv::Id&        asId(unsigned word)                { return spv[word]; }
    const spv::Id&  asId(unsigned word)          const { return spv[word]; }
    spv::Op         asOpCode(unsigned word)      const { return opOpCode(spv[word]); }
-   std::uint32_t   asOpCodeHash(unsigned word);
+   uint32_t   asOpCodeHash(unsigned word);
    spv::Decoration asDecoration(unsigned word)  const { return spv::Decoration(spv[word]); }
    unsigned        asWordCount(unsigned word)   const { return opWordCount(spv[word]); }
    spv::Id         asTypeConstId(unsigned word) const { return asId(word + (isTypeOp(asOpCode(word)) ? 1 : 2)); }
@@ -224,7 +224,7 @@ private:
 
    // bool    matchType(const globaltypes_t& globalTypes, spv::Id lt, spv::Id gt) const;
    // spv::Id findType(const globaltypes_t& globalTypes, spv::Id lt) const;
-   std::uint32_t hashType(unsigned typeStart) const;
+   uint32_t hashType(unsigned typeStart) const;
 
    spirvbin_t& process(instfn_t, idfn_t, unsigned begin = 0, unsigned end = 0);
    int         processInstruction(unsigned word, instfn_t, idfn_t);
@@ -253,7 +253,7 @@ private:
 
    // Since we want to also do binary ops, we can't use std::vector<bool>.  we could use
    // boost::dynamic_bitset, but we're trying to avoid a boost dependency.
-   typedef std::uint64_t bits_t;
+   typedef uint64_t bits_t;
    std::vector<bits_t> mapped; // which new IDs have been mapped
    static const int mBits = sizeof(bits_t) * 4;
 
@@ -286,7 +286,7 @@ private:
    std::vector<range_t> stripRange;
 
    // processing options:
-   std::uint32_t options;
+   uint32_t options;
    int           verbose;     // verbosity level
 
    // Error latch: this is set if the error handler is ever executed.  It would be better to

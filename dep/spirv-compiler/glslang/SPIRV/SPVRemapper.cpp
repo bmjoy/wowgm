@@ -59,11 +59,11 @@ namespace spv {
     }
 
     // hash opcode, with special handling for OpExtInst
-    std::uint32_t spirvbin_t::asOpCodeHash(unsigned word)
+    uint32_t spirvbin_t::asOpCodeHash(unsigned word)
     {
         const spv::Op opCode = asOpCode(word);
 
-        std::uint32_t offset = 0;
+        uint32_t offset = 0;
 
         switch (opCode) {
         case spv::OpExtInst:
@@ -696,11 +696,11 @@ namespace spv {
     // Apply global name mapping to a single module
     void spirvbin_t::mapNames()
     {
-        static const std::uint32_t softTypeIdLimit = 3011;  // small prime.  TODO: get from options
-        static const std::uint32_t firstMappedID   = 3019;  // offset into ID space
+        static const uint32_t softTypeIdLimit = 3011;  // small prime.  TODO: get from options
+        static const uint32_t firstMappedID   = 3019;  // offset into ID space
 
         for (const auto& name : nameMap) {
-            std::uint32_t hashval = 1911;
+            uint32_t hashval = 1911;
             for (const char c : name.first)
                 hashval = hashval * 1009 + c;
 
@@ -715,8 +715,8 @@ namespace spv {
     // Map fn contents to IDs of similar functions in other modules
     void spirvbin_t::mapFnBodies()
     {
-        static const std::uint32_t softTypeIdLimit = 19071;  // small prime.  TODO: get from options
-        static const std::uint32_t firstMappedID   =  6203;  // offset into ID space
+        static const uint32_t softTypeIdLimit = 19071;  // small prime.  TODO: get from options
+        static const uint32_t firstMappedID   =  6203;  // offset into ID space
 
         // Initial approach: go through some high priority opcodes first and assign them
         // hash values.
@@ -754,7 +754,7 @@ namespace spv {
                 if (spv::InstructionDesc[opCode].hasResult()) {
                     const unsigned word    = start + (spv::InstructionDesc[opCode].hasType() ? 2 : 1);
                     const spv::Id  resId   = asId(word);
-                    std::uint32_t  hashval = fnId * 17; // small prime
+                    uint32_t  hashval = fnId * 17; // small prime
 
                     for (unsigned i = entry-1; i >= entry-windowSize; --i) {
                         if (asOpCode(instPos[i]) == spv::OpFunction)
@@ -827,7 +827,7 @@ namespace spv {
             [&](spv::Id& id) {
                 if (thisOpCode != spv::OpNop) {
                     ++idCounter;
-                    const std::uint32_t hashval = opCounter[thisOpCode] * thisOpCode * 50047 + idCounter + fnId * 117;
+                    const uint32_t hashval = opCounter[thisOpCode] * thisOpCode * 50047 + idCounter + fnId * 117;
 
                     if (isOldIdUnmapped(id))
                         localId(id, nextUnusedId(hashval % softTypeIdLimit + firstMappedID));
@@ -1274,7 +1274,7 @@ namespace spv {
 
     // Hash types to canonical values.  This can return ID collisions (it's a bit
     // inevitable): it's up to the caller to handle that gracefully.
-    std::uint32_t spirvbin_t::hashType(unsigned typeStart) const
+    uint32_t spirvbin_t::hashType(unsigned typeStart) const
     {
         const unsigned wordCount   = asWordCount(typeStart);
         const spv::Op  opCode      = asOpCode(typeStart);
@@ -1305,7 +1305,7 @@ namespace spv {
             return 5000  + hashType(idPos(spv[typeStart+2]));
         case spv::OpTypeStruct:
             {
-                std::uint32_t hash = 10000;
+                uint32_t hash = 10000;
                 for (unsigned w=2; w < wordCount; ++w)
                     hash += w * hashType(idPos(spv[typeStart+w]));
                 return hash;
@@ -1315,7 +1315,7 @@ namespace spv {
         case spv::OpTypePointer:        return 100000  + hashType(idPos(spv[typeStart+3]));
         case spv::OpTypeFunction:
             {
-                std::uint32_t hash = 200000;
+                uint32_t hash = 200000;
                 for (unsigned w=2; w < wordCount; ++w)
                     hash += w * hashType(idPos(spv[typeStart+w]));
                 return hash;
@@ -1330,26 +1330,26 @@ namespace spv {
         case spv::OpConstantFalse:       return 300008;
         case spv::OpConstantComposite:
             {
-                std::uint32_t hash = 300011 + hashType(idPos(spv[typeStart+1]));
+                uint32_t hash = 300011 + hashType(idPos(spv[typeStart+1]));
                 for (unsigned w=3; w < wordCount; ++w)
                     hash += w * hashType(idPos(spv[typeStart+w]));
                 return hash;
             }
         case spv::OpConstant:
             {
-                std::uint32_t hash = 400011 + hashType(idPos(spv[typeStart+1]));
+                uint32_t hash = 400011 + hashType(idPos(spv[typeStart+1]));
                 for (unsigned w=3; w < wordCount; ++w)
                     hash += w * spv[typeStart+w];
                 return hash;
             }
         case spv::OpConstantNull:
             {
-                std::uint32_t hash = 500009 + hashType(idPos(spv[typeStart+1]));
+                uint32_t hash = 500009 + hashType(idPos(spv[typeStart+1]));
                 return hash;
             }
         case spv::OpConstantSampler:
             {
-                std::uint32_t hash = 600011 + hashType(idPos(spv[typeStart+1]));
+                uint32_t hash = 600011 + hashType(idPos(spv[typeStart+1]));
                 for (unsigned w=3; w < wordCount; ++w)
                     hash += w * spv[typeStart+w];
                 return hash;
@@ -1367,12 +1367,12 @@ namespace spv {
 
         msg(3, 2, std::string("Remapping Consts & Types: "));
 
-        static const std::uint32_t softTypeIdLimit = 3011; // small prime.  TODO: get from options
-        static const std::uint32_t firstMappedID   = 8;    // offset into ID space
+        static const uint32_t softTypeIdLimit = 3011; // small prime.  TODO: get from options
+        static const uint32_t firstMappedID   = 8;    // offset into ID space
 
         for (auto& typeStart : typeConstPos) {
             const spv::Id       resId     = asTypeConstId(typeStart);
-            const std::uint32_t hashval   = hashType(typeStart);
+            const uint32_t hashval   = hashType(typeStart);
 
             if (errorLatch)
                 return;
@@ -1414,7 +1414,7 @@ namespace spv {
     }
 
     // Strip a single binary by removing ranges given in stripRange
-    void spirvbin_t::remap(std::uint32_t opts)
+    void spirvbin_t::remap(uint32_t opts)
     {
         options = opts;
 
@@ -1474,7 +1474,7 @@ namespace spv {
     }
 
     // remap from a memory image
-    void spirvbin_t::remap(std::vector<std::uint32_t>& in_spv, std::uint32_t opts)
+    void spirvbin_t::remap(std::vector<uint32_t>& in_spv, uint32_t opts)
     {
         spv.swap(in_spv);
         remap(opts);
