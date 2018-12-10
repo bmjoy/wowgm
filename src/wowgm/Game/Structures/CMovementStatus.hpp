@@ -15,9 +15,9 @@ namespace wowgm::game::structures
     {
         TypeID ObjectType = TypeID::TYPEID_OBJECT;
 
-        std::uint32_t Time = 0;
-        std::uint32_t Flags = 0;
-        std::uint16_t FlagsExtra = 0;
+        uint32_t Time = 0;
+        uint32_t Flags = 0;
+        uint16_t FlagsExtra = 0;
 
         C4Vector Stationary;
         C4Vector Position;
@@ -30,12 +30,12 @@ namespace wowgm::game::structures
             } Jump;
 
             float VerticalSpeed = 0.0f;
-            std::uint32_t Time = 0;
+            uint32_t Time = 0;
         } FallInfo;
 
         struct _Vehicle {
             float O = 0.0f;
-            std::uint32_t ID = 0;
+            uint32_t ID = 0;
         } Vehicle;
 
         float RunSpeed = 0;
@@ -52,31 +52,31 @@ namespace wowgm::game::structures
 
         struct {
             struct {
-                std::array<std::uint32_t, 3> Times;
+                std::array<uint32_t, 3> Times;
                 C4Vector Offset;
                 C4Quaternion Rotation;
                 ObjectGuid GUID = ObjectGuid::Empty;
 
-                std::uint8_t Seat = 0xFF;
+                uint8_t Seat = 0xFF;
             } GameObject;
 
-            std::uint32_t PathTimer = 0;
-            std::array<std::uint32_t, 3> Times;
+            uint32_t PathTimer = 0;
+            std::array<uint32_t, 3> Times;
             ObjectGuid GUID = ObjectGuid::Empty;
             C4Vector Offset;
 
-            std::uint8_t Seat = 0xFF;
+            uint8_t Seat = 0xFF;
         } Transport;
 
         struct {
-            std::uint32_t ID = 0;
-            std::uint32_t Time = 0;
-            std::uint32_t Flags = 0;
-            std::uint32_t Duration = 0;
-            std::uint32_t StartTime = 0;
+            uint32_t ID = 0;
+            uint32_t Time = 0;
+            uint32_t Flags = 0;
+            uint32_t Duration = 0;
+            uint32_t StartTime = 0;
 
-            std::uint8_t Mode = 0;
-            std::uint8_t Type = 0;
+            uint8_t Mode = 0;
+            uint8_t Type = 0;
 
             float Elevation = 0.0f;
             float VerticalAcceleration = 0.0f;
@@ -94,7 +94,7 @@ namespace wowgm::game::structures
             } Facing;
         } Spline;
 
-        std::array<std::uint32_t, 3> AnimKits;
+        std::array<uint32_t, 3> AnimKits;
 
         bool PlayHoverAnim = false;
         bool IsSuppressingGreetings = false;
@@ -104,7 +104,7 @@ namespace wowgm::game::structures
         ObjectGuid GUID = ObjectGuid::Empty;
         ObjectGuid TargetGUID = ObjectGuid::Empty;
 
-        std::vector<std::uint32_t> StopFrames;
+        std::vector<uint32_t> StopFrames;
     };
 #pragma pack(pop)
 }

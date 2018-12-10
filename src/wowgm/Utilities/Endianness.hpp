@@ -15,8 +15,8 @@ namespace wowgm
                 UINT byteswap(UINT const a);
 
                 template<>
-                constexpr std::uint16_t byteswap(uint16_t const a) {
-                    constexpr std::uint8_t b[] = { 8 * (2 - 1) };
+                constexpr uint16_t byteswap(uint16_t const a) {
+                    constexpr uint8_t b[] = { 8 * (2 - 1) };
 
                     auto const x =
                         (0x00ffULL & a) << b[0] |
@@ -27,8 +27,8 @@ namespace wowgm
                 }
 
                 template<>
-                constexpr std::uint32_t byteswap(uint32_t const a) {
-                    constexpr std::uint8_t b[] = {
+                constexpr uint32_t byteswap(uint32_t const a) {
+                    constexpr uint8_t b[] = {
                         8 * (2 - 1),
                         8 * (4 - 1)
                     };
@@ -44,8 +44,8 @@ namespace wowgm
                 }
 
                 template<>
-                constexpr std::uint64_t byteswap(uint64_t const a) {
-                    constexpr std::uint8_t b[] = {
+                constexpr uint64_t byteswap(uint64_t const a) {
+                    constexpr uint8_t b[] = {
                         8 * (2 - 1),
                         8 * (4 - 1),
                         8 * (6 - 1),
@@ -69,8 +69,8 @@ namespace wowgm
                 // ==============================
 
                 class is_big_endian {
-                    constexpr static std::uint32_t u4 = 1;
-                    constexpr static std::uint8_t  u1 = (const std::uint8_t &)u4;
+                    constexpr static uint32_t u4 = 1;
+                    constexpr static uint8_t  u1 = (const uint8_t &)u4;
                 public:
                     constexpr static bool value = u1 == 0;
                 };
@@ -92,28 +92,28 @@ namespace wowgm
             } // namespace myendian_impl_
 
             /// Swaps only if platform needs it
-            constexpr std::uint16_t platform_swap(std::uint16_t a) {
+            constexpr uint16_t platform_swap(uint16_t a) {
                 return detail::htobe(a, std::bool_constant<detail::is_big_endian::value>{});
             }
 
-            constexpr std::uint32_t platform_swap(std::uint32_t a) {
+            constexpr uint32_t platform_swap(uint32_t a) {
                 return detail::htobe(a, std::bool_constant<detail::is_big_endian::value>{});
             }
 
-            constexpr std::uint64_t platform_swap(std::uint64_t a) {
+            constexpr uint64_t platform_swap(uint64_t a) {
                 return detail::htobe(a, std::bool_constant<detail::is_big_endian::value>{});
             }
 
-            constexpr std::int16_t swap(std::int16_t a) {
-                return (std::int16_t)detail::htobe(std::uint16_t(a), std::false_type{});
+            constexpr int16_t swap(int16_t a) {
+                return (int16_t)detail::htobe(uint16_t(a), std::false_type{});
             }
 
-            constexpr std::int32_t swap(std::int32_t a) {
-                return (std::int32_t)detail::htobe(std::uint32_t(a), std::false_type{});
+            constexpr int32_t swap(int32_t a) {
+                return (int32_t)detail::htobe(uint32_t(a), std::false_type{});
             }
 
-            constexpr std::int64_t swap(std::int64_t a) {
-                return (std::int64_t)detail::htobe(std::uint64_t(a), std::false_type{});
+            constexpr int64_t swap(int64_t a) {
+                return (int64_t)detail::htobe(uint64_t(a), std::false_type{});
             }
         }
     }

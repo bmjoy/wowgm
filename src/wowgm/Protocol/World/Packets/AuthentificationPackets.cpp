@@ -41,7 +41,7 @@ namespace wowgm::protocol::world::packets
 
     void ClientConnectionAuthChallenge::Read()
     {
-        for (std::uint32_t i = 0; i < 8; ++i)
+        for (uint32_t i = 0; i < 8; ++i)
             _worldPacket >> Seeds[i];
 
         _worldPacket >> AuthSeed;
@@ -81,37 +81,37 @@ namespace wowgm::protocol::world::packets
 
     WorldPacket const* UserRouterClientAuthSession::Write()
     {
-        _worldPacket << std::uint32_t(ServerID);
-        _worldPacket << std::uint32_t(BattlegroupID);
-        _worldPacket << std::uint8_t(LoginServerType);
-        _worldPacket << std::uint8_t(Digest[10]);
-        _worldPacket << std::uint8_t(Digest[18]);
-        _worldPacket << std::uint8_t(Digest[12]);
-        _worldPacket << std::uint8_t(Digest[5]);
-        _worldPacket << std::uint64_t(DosResponse);
-        _worldPacket << std::uint8_t(Digest[15]);
-        _worldPacket << std::uint8_t(Digest[9]);
-        _worldPacket << std::uint8_t(Digest[19]);
-        _worldPacket << std::uint8_t(Digest[4]);
-        _worldPacket << std::uint8_t(Digest[7]);
-        _worldPacket << std::uint8_t(Digest[16]);
-        _worldPacket << std::uint8_t(Digest[3]);
-        _worldPacket << std::uint16_t(Build);
-        _worldPacket << std::uint8_t(Digest[8]);
-        _worldPacket << std::uint32_t(RealmID);
-        _worldPacket << std::uint8_t(1); // Hardcoded
-        _worldPacket << std::uint8_t(Digest[17]);
-        _worldPacket << std::uint8_t(Digest[6]);
-        _worldPacket << std::uint8_t(Digest[0]);
-        _worldPacket << std::uint8_t(Digest[1]);
-        _worldPacket << std::uint8_t(Digest[11]);
-        _worldPacket << std::uint32_t(ClientSeed); // LocalChallenge
-        _worldPacket << std::uint8_t(Digest[2]);
-        _worldPacket << std::uint32_t(RegionID);
-        _worldPacket << std::uint8_t(Digest[14]);
-        _worldPacket << std::uint8_t(Digest[13]);
+        _worldPacket << uint32_t(ServerID);
+        _worldPacket << uint32_t(BattlegroupID);
+        _worldPacket << uint8_t(LoginServerType);
+        _worldPacket << uint8_t(Digest[10]);
+        _worldPacket << uint8_t(Digest[18]);
+        _worldPacket << uint8_t(Digest[12]);
+        _worldPacket << uint8_t(Digest[5]);
+        _worldPacket << uint64_t(DosResponse);
+        _worldPacket << uint8_t(Digest[15]);
+        _worldPacket << uint8_t(Digest[9]);
+        _worldPacket << uint8_t(Digest[19]);
+        _worldPacket << uint8_t(Digest[4]);
+        _worldPacket << uint8_t(Digest[7]);
+        _worldPacket << uint8_t(Digest[16]);
+        _worldPacket << uint8_t(Digest[3]);
+        _worldPacket << uint16_t(Build);
+        _worldPacket << uint8_t(Digest[8]);
+        _worldPacket << uint32_t(RealmID);
+        _worldPacket << uint8_t(1); // Hardcoded
+        _worldPacket << uint8_t(Digest[17]);
+        _worldPacket << uint8_t(Digest[6]);
+        _worldPacket << uint8_t(Digest[0]);
+        _worldPacket << uint8_t(Digest[1]);
+        _worldPacket << uint8_t(Digest[11]);
+        _worldPacket << uint32_t(ClientSeed); // LocalChallenge
+        _worldPacket << uint8_t(Digest[2]);
+        _worldPacket << uint32_t(RegionID);
+        _worldPacket << uint8_t(Digest[14]);
+        _worldPacket << uint8_t(Digest[13]);
 
-        static std::uint8_t AddonData[] = {
+        static uint8_t AddonData[] = {
             36, 4, 0, 0, 120, 156, 117, 210, 75, 110, 131, 64, 12, 0, 80, 122, 143, 238, 122, 146, 124, 26,
             148, 54, 72, 81, 32, 217, 86, 102, 198, 1, 139, 193, 70, 102, 160, 77, 212, 227, 244, 160, 37,
             187, 86, 242, 172, 159, 199, 227, 223, 75, 150, 101, 235, 64, 247, 59, 168, 255, 88, 185, 150,
@@ -129,7 +129,7 @@ namespace wowgm::protocol::world::packets
             69, 151, 63, 255, 250, 247, 207, 246, 253, 23, 190, 137, 67, 50
         };
 
-        _worldPacket << std::uint32_t(sizeof(AddonData)); // Addon size
+        _worldPacket << uint32_t(sizeof(AddonData)); // Addon size
         _worldPacket.append(AddonData, sizeof(AddonData));
 
         _worldPacket.WriteBit(UseIPv6);

@@ -13,7 +13,7 @@ namespace wowgm::game::structures
         float Y = 0.0f;
         float Z = 0.0f;
 
-        inline C3Vector& operator = (std::uint32_t packedValue)
+        inline C3Vector& operator = (uint32_t packedValue)
         {
             X = ((packedValue & 0x7FF) << 21 >> 21) * 0.25f;
             Y = ((((packedValue >> 11) & 0x7FF) << 21) >> 21) * 0.25f;
@@ -49,7 +49,7 @@ namespace wowgm::game::structures
         float distanceSquared(C3Vector const& other) const
         {
             float distance = 0.0f;
-            for (std::uint32_t i = 0; i < 3; ++i)
+            for (uint32_t i = 0; i < 3; ++i)
                 distance += (other[i] - (*this)[i]) * (other[i] - (*this)[i]);
             return distance;
         }

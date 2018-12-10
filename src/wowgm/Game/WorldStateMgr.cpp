@@ -18,12 +18,12 @@ namespace wowgm::game
 
     }
 
-    void WorldStateMgr::UpdateWorldState(std::uint32_t worldStateID, std::uint32_t value)
+    void WorldStateMgr::UpdateWorldState(uint32_t worldStateID, uint32_t value)
     {
         _worldStates[worldStateID] = value;
     }
 
-    void WorldStateMgr::InitWorldState(std::uint32_t mapID, std::uint32_t areaID, std::uint32_t zoneID)
+    void WorldStateMgr::InitWorldState(uint32_t mapID, uint32_t areaID, uint32_t zoneID)
     {
         _mapID = mapID;
         _areaID = areaID;

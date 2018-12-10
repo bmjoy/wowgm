@@ -157,7 +157,7 @@ namespace wowgm::protocol::world::packets
 
         worldPacket.ResetBitPos();
 
-        for (std::uint32_t& stopFrame : movementInfo.StopFrames)
+        for (uint32_t& stopFrame : movementInfo.StopFrames)
             worldPacket >> stopFrame;
 
         if (isLiving)
@@ -299,7 +299,7 @@ namespace wowgm::protocol::world::packets
 
         if (hasGameObjectRotation)
         {
-            movementInfo.Transport.GameObject.Rotation = worldPacket.read<std::uint64_t>(); // Packed quaternion
+            movementInfo.Transport.GameObject.Rotation = worldPacket.read<uint64_t>(); // Packed quaternion
         }
 
         if (unkBit456)
@@ -345,19 +345,19 @@ namespace wowgm::protocol::world::packets
 
     inline WorldPacket& operator >> (WorldPacket& worldPacket, JamCliValuesUpdate& valuesUpdate)
     {
-        std::uint8_t blockCount;
+        uint8_t blockCount;
         worldPacket >> blockCount;
 
         std::vector<bool> mask(blockCount * 32);
-        for (std::uint32_t i = 0; i < mask.size(); ++i)
+        for (uint32_t i = 0; i < mask.size(); ++i)
             mask[i] = worldPacket.ReadBit();
 
-        std::uint32_t i = 0;
+        uint32_t i = 0;
         for (bool currentBit : mask)
         {
             if (currentBit)
             {
-                std::uint32_t updateField;
+                uint32_t updateField;
                 worldPacket >> updateField;
 
                 if (updateField != 0)
@@ -378,7 +378,7 @@ namespace wowgm::protocol::world::packets
     void ClientUpdateObject::Read()
     {
         _worldPacket >> MapID;
-        Updates.resize(_worldPacket.read<std::uint32_t>());
+        Updates.resize(_worldPacket.read<uint32_t>());
 
         for (CClientObjCreate& objCreate : Updates)
         {
@@ -388,9 +388,9 @@ namespace wowgm::protocol::world::packets
             {
                 case UpdateType::DestroyObjects:
                 {
-                    std::uint32_t objectCount;
+                    uint32_t objectCount;
                     _worldPacket >> objectCount;
-                    for (std::uint32_t i = 0; i < objectCount; ++i)
+                    for (uint32_t i = 0; i < objectCount; ++i)
                     {
                         ObjectGuid destroyGuid;
                         _worldPacket.ReadPackedGuid(destroyGuid);
@@ -425,7 +425,7 @@ namespace wowgm::protocol::world::packets
                     break;
                 }
                 default:
-                    BOOST_ASSERT_MSG_FMT(false, "Unknown update type %u", std::uint32_t(objCreate.UpdateType));
+                    BOOST_ASSERT_MSG_FMT(false, "Unknown update type %u", uint32_t(objCreate.UpdateType));
                     break;
             }
         }
@@ -439,10 +439,10 @@ namespace wowgm::protocol::world::packets
 
     void ClientDestroyObject::Read()
     {
-        std::uint64_t guid;
+        uint64_t guid;
         _worldPacket >> guid;
 
-        OnDeath = _worldPacket.read<std::uint8_t>() != 0;
+        OnDeath = _worldPacket.read<uint8_t>() != 0;
         GUID.Set(guid);
     }
 }

@@ -14,7 +14,7 @@ namespace wowgm::protocol::world
     class WorldSocket;
     class WorldPacket;
 
-    enum class Opcode : std::uint32_t
+    enum class Opcode : uint32_t
     {
         NULL_OPCODE                                         = 0x0000,
 

@@ -11,43 +11,43 @@ namespace wowgm::protocol::authentification
     #pragma pack(push, 1)
     struct RealmList
     {
-        std::uint32_t Data;
+        uint32_t Data;
     };
     #pragma pack(pop)
 
     #pragma pack(push, 1)
     struct AuthRealmList
     {
-        std::uint8_t Command;
-        std::uint16_t Size;
-        std::uint32_t Unk0;
-        std::uint16_t Count; // < WoTLK: this is 32 bits.
+        uint8_t Command;
+        uint16_t Size;
+        uint32_t Unk0;
+        uint16_t Count; // < WoTLK: this is 32 bits.
     };
     #pragma pack(pop)
 
     struct AuthRealmInfo
     {
-        std::uint8_t Type;
-        std::uint8_t Locked;
-        std::uint8_t Flags;
+        uint8_t Type;
+        uint8_t Locked;
+        uint8_t Flags;
         std::string Name;
         std::string Address;
         float Population;
-        std::uint8_t Load;
-        std::uint8_t Timezone;
-        std::uint8_t ID;
-        std::uint8_t Version[3];
-        std::uint16_t Build;
-        std::uint8_t ExpFlags[2]; // 2.x, 3.x
+        uint8_t Load;
+        uint8_t Timezone;
+        uint8_t ID;
+        uint8_t Version[3];
+        uint16_t Build;
+        uint8_t ExpFlags[2]; // 2.x, 3.x
                                   // 1.12.1 1.12.2 have different values.
 
-        std::uint32_t GetPort() const
+        uint32_t GetPort() const
         {
             auto pos = Address.find(':');
             if (pos == std::string::npos)
                 return 3724u;
 
-            std::uint32_t port;
+            uint32_t port;
             std::from_chars(Address.data() + pos + 1, Address.data() + Address.size(), port);
             return port;
         }

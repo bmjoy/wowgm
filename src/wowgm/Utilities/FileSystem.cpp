@@ -135,7 +135,7 @@ namespace wowgm::filesystem
         return _loadStrategy;
     }
 
-    std::uint8_t const* MpqFile::GetData()
+    uint8_t const* MpqFile::GetData()
     {
         if (GetLoadStrategy() == LoadStrategy::Memory)
             return _fileData.data();
@@ -153,7 +153,7 @@ namespace wowgm::filesystem
         return _fileData.data();
     }
 
-    size_t MpqFile::ReadBytes(size_t offset, size_t length, std::uint8_t* buffer, size_t bufferSize)
+    size_t MpqFile::ReadBytes(size_t offset, size_t length, uint8_t* buffer, size_t bufferSize)
     {
         auto availableDataLength = GetFileSize() - offset;
         if (bufferSize < availableDataLength)
@@ -272,7 +272,7 @@ namespace wowgm::filesystem
         return _fileSize;
     }
 
-    size_t DiskFile::ReadBytes(size_t offset, size_t length, std::uint8_t* buffer, size_t bufferSize)
+    size_t DiskFile::ReadBytes(size_t offset, size_t length, uint8_t* buffer, size_t bufferSize)
     {
         auto availableDataLength = GetFileSize() - offset;
         if (bufferSize < availableDataLength)
@@ -291,12 +291,12 @@ namespace wowgm::filesystem
         return _loadStrategy;
     }
 
-    std::uint8_t const* DiskFile::GetData()
+    uint8_t const* DiskFile::GetData()
     {
         if (GetLoadStrategy() == LoadStrategy::Memory)
             return _fileData.data();
 
-        return reinterpret_cast<std::uint8_t*>(_mapped);
+        return reinterpret_cast<uint8_t*>(_mapped);
     }
 
     void DiskFile::Close()

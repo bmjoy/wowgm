@@ -33,7 +33,7 @@ namespace vez
         instance->_handle = instanceHandle;
 
         // Get all the physical devices
-        std::uint32_t physicalDeviceCount = 0;
+        uint32_t physicalDeviceCount = 0;
         result = vkEnumeratePhysicalDevices(instanceHandle, &physicalDeviceCount, nullptr);
         if (result != VK_SUCCESS)
             return result;
@@ -47,7 +47,7 @@ namespace vez
             return result;
 
         instance->_physicalDevices.resize(physicalDeviceCount);
-        for (std::uint32_t i = 0; i < physicalDeviceCount; ++i)
+        for (uint32_t i = 0; i < physicalDeviceCount; ++i)
             instance->_physicalDevices[i] = new PhysicalDevice(instance, physicalDevices[i]);
 
         // Create a thread pool with an unique worker thread for now.

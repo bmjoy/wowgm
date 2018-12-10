@@ -13,9 +13,9 @@ namespace wowgm::protocol::world::packets
 
     struct PetInfo
     {
-        std::uint32_t DisplayID;
-        std::uint32_t Family;
-        std::uint32_t Level;
+        uint32_t DisplayID;
+        uint32_t Family;
+        uint32_t Level;
     };
 
     struct CharacterInfo
@@ -26,26 +26,26 @@ namespace wowgm::protocol::world::packets
 
         PetInfo Pet;
 
-        std::uint8_t Order;
-        std::int32_t MapID;
+        uint8_t Order;
+        int32_t MapID;
         float X, Y, Z; // C3Vector
 
-        std::uint8_t Gender;
+        uint8_t Gender;
 
-        std::uint8_t Race;
-        std::uint8_t Class;
-        std::uint32_t ZoneID;
+        uint8_t Race;
+        uint8_t Class;
+        uint32_t ZoneID;
 
-        std::uint32_t Flags;
-        std::uint32_t CustomizationFlags;
+        uint32_t Flags;
+        uint32_t CustomizationFlags;
 
-        std::uint8_t SkinID;
-        std::uint8_t FacialHairID;
-        std::uint8_t HairColorID;
-        std::uint8_t HairStyleID;
-        std::uint8_t FaceID;
+        uint8_t SkinID;
+        uint8_t FacialHairID;
+        uint8_t HairColorID;
+        uint8_t HairStyleID;
+        uint8_t FaceID;
 
-        std::uint8_t Level;
+        uint8_t Level;
 
         bool HasPet() const;
         bool IsInGuild() const;

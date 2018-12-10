@@ -13,11 +13,11 @@ struct tm* localtime_r(const time_t* time, struct tm *result)
 
 namespace wowgm::utilities
 {
-    std::string ByteArrayToHexStr(std::uint8_t const* bytes, std::uint32_t arrayLen, bool reverse)
+    std::string ByteArrayToHexStr(uint8_t const* bytes, uint32_t arrayLen, bool reverse)
     {
-        std::int32_t init = 0;
-        std::int32_t end = arrayLen;
-        std::int8_t op = 1;
+        int32_t init = 0;
+        int32_t end = arrayLen;
+        int8_t op = 1;
 
         if (reverse)
         {
@@ -27,7 +27,7 @@ namespace wowgm::utilities
         }
 
         std::ostringstream ss;
-        for (std::int32_t i = init; i != end; i += op)
+        for (int32_t i = init; i != end; i += op)
         {
             char buffer[4];
             sprintf(buffer, "%02X", bytes[i]);

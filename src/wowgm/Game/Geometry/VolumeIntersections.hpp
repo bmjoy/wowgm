@@ -21,7 +21,7 @@ namespace wowgm::game::geometry
 
         static bool boxContainsPoint(CAaBox const& box, C3Vector const& position)
         {
-            for (std::uint32_t i = 0; i < 3; ++i)
+            for (uint32_t i = 0; i < 3; ++i)
             {
                 if (box.Maximum[i] < position[i])
                     return false;
@@ -77,8 +77,8 @@ namespace wowgm::game::geometry
         /// This only checks for intersections, not inclusions!
         static bool boxIntersectsSphere(CAaBox const& box, C3Vector const& sphereCenter, double sphereRadius)
         {
-            std::uint32_t cornersInside = 0;
-            std::uint32_t cornersOutside = 0;
+            uint32_t cornersInside = 0;
+            uint32_t cornersOutside = 0;
             for (C3Vector const& corner : getCorners(box))
             {
                 if (sphereContainsPoint(sphereCenter, sphereRadius, corner))

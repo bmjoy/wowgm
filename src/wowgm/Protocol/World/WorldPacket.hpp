@@ -3,7 +3,7 @@
 #include "ByteBuffer.hpp"
 #include "Opcodes.hpp"
 
-#include <cstdint>         // for std::uint32_t
+#include <cstdint>         // for uint32_t
 #include <type_traits>     // for move
 #include <vector>          // for vector
 
@@ -19,7 +19,7 @@ namespace wowgm::protocol::world
         {
         }
 
-        WorldPacket(Opcode opcode, size_t res = 200, std::uint32_t connection = 0) : ByteBuffer(res),
+        WorldPacket(Opcode opcode, size_t res = 200, uint32_t connection = 0) : ByteBuffer(res),
             _opcode(opcode), _connection(connection) { }
 
         WorldPacket(WorldPacket&& packet) : ByteBuffer(std::move(packet)),
@@ -56,10 +56,10 @@ namespace wowgm::protocol::world
             return *this;
         }
 
-        WorldPacket(Opcode opcode, MessageBuffer&& buffer, std::uint32_t connection = 0) : ByteBuffer(std::move(buffer)),
+        WorldPacket(Opcode opcode, MessageBuffer&& buffer, uint32_t connection = 0) : ByteBuffer(std::move(buffer)),
             _opcode(opcode), _connection(connection) { }
 
-        void Initialize(Opcode opcode, size_t newres = 200, std::uint32_t connection = 0)
+        void Initialize(Opcode opcode, size_t newres = 200, uint32_t connection = 0)
         {
             clear();
 
@@ -71,13 +71,13 @@ namespace wowgm::protocol::world
         Opcode GetOpcode() const { return _opcode; }
         void SetOpcode(Opcode opcode) { _opcode = opcode; }
 
-        std::uint32_t GetConnection() const { return _connection; }
+        uint32_t GetConnection() const { return _connection; }
 
 
-        bool IsCompressed() const { return (std::uint32_t(GetOpcode()) & 0x8000) != 0; }
+        bool IsCompressed() const { return (uint32_t(GetOpcode()) & 0x8000) != 0; }
 
         void Decompress(z_stream* decompressionStream);
-        void Decompress(std::uint8_t* dst, std::uint32_t* dst_size, std::uint8_t* src, std::uint32_t src_size);
+        void Decompress(uint8_t* dst, uint32_t* dst_size, uint8_t* src, uint32_t src_size);
 
     private:
         z_stream * _decompressionStream;
@@ -85,7 +85,7 @@ namespace wowgm::protocol::world
     protected:
 
         Opcode _opcode;
-        std::uint32_t _connection;
+        uint32_t _connection;
     };
 
 } // wowgm::protocol

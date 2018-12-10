@@ -34,9 +34,9 @@ namespace vez
         return _device->GetInstance();
     }
 
-    VkResult Buffer::WriteBytes(VkDeviceSize offset, const std::uint8_t* data, VkDeviceSize dataSize)
+    VkResult Buffer::WriteBytes(VkDeviceSize offset, const uint8_t* data, VkDeviceSize dataSize)
     {
-        std::uint8_t* mappedData = nullptr;
+        uint8_t* mappedData = nullptr;
         VkResult mapResult = Map((void**)&mappedData);
         if (mapResult == VK_SUCCESS)
         {

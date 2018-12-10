@@ -32,7 +32,7 @@ namespace vez
         VkResult SetObjectName(Device* device, T* object, std::string_view objectName)
         {
 #if _DEBUG
-            std::uint64_t objectHandleValue = reinterpret_cast<std::uintptr_t>(object->GetHandle());
+            uint64_t objectHandleValue = reinterpret_cast<uintptr_t>(object->GetHandle());
 
             if (vkSetDebugUtilsObjectNameEXT != nullptr)
             {

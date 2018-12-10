@@ -14,9 +14,9 @@ private:
 
     struct data_node
     {
-        std::uint32_t count;
-        std::int64_t max;
-        std::int64_t min;
+        uint32_t count;
+        int64_t max;
+        int64_t min;
         float avg;
     };
 

@@ -10,7 +10,7 @@ namespace wowgm::protocol
 {
     class MessageBuffer
     {
-        typedef std::vector<std::uint8_t>::size_type size_type;
+        typedef std::vector<uint8_t>::size_type size_type;
 
 
     public:
@@ -45,9 +45,9 @@ namespace wowgm::protocol
             _storage.resize(newSize);
         }
 
-        std::uint8_t* GetBasePointer() { return _storage.data(); }
-        std::uint8_t* GetReadPointer() { return GetBasePointer() + _rpos; }
-        std::uint8_t* GetWritePointer() { return GetBasePointer() + _wpos; }
+        uint8_t* GetBasePointer() { return _storage.data(); }
+        uint8_t* GetReadPointer() { return GetBasePointer() + _rpos; }
+        uint8_t* GetWritePointer() { return GetBasePointer() + _wpos; }
 
         void ReadCompleted(size_type size)
         {
@@ -139,7 +139,7 @@ namespace wowgm::protocol
 
         std::string ReadCString(std::string& other, size_t maxLength = -1)
         {
-            std::uint8_t* data = GetReadPointer();
+            uint8_t* data = GetReadPointer();
             if (maxLength > 0)
             {
                 while (*data != '\0' && size_t(data - GetReadPointer()) < maxLength)
@@ -155,7 +155,7 @@ namespace wowgm::protocol
             return other;
         }
 
-        std::vector<std::uint8_t>&& Move()
+        std::vector<uint8_t>&& Move()
         {
             _wpos = 0;
             _rpos = 0;
@@ -165,7 +165,7 @@ namespace wowgm::protocol
     private:
         size_type _wpos;
         size_type _rpos;
-        std::vector<std::uint8_t> _storage;
+        std::vector<uint8_t> _storage;
     };
 
 } // wowgm::protocol

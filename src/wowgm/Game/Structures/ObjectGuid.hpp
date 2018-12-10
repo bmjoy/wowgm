@@ -7,7 +7,7 @@
 
 namespace wowgm::game::structures
 {
-    enum TypeID : std::uint8_t
+    enum TypeID : uint8_t
     {
         TYPEID_OBJECT        = 0,
         TYPEID_ITEM          = 1,
@@ -68,29 +68,29 @@ namespace wowgm::game::structures
         public:
             static ObjectGuid const Empty;
 
-            typedef std::uint32_t LowType;
+            typedef uint32_t LowType;
 
             ObjectGuid()
             {
                 _data._guid = 0uLL;
             }
 
-            explicit ObjectGuid(std::uint64_t guid)
+            explicit ObjectGuid(uint64_t guid)
             {
                 _data._guid = guid;
             }
 
-            ObjectGuid(HighGuid hi, std::uint32_t entry, std::uint32_t counter)
+            ObjectGuid(HighGuid hi, uint32_t entry, uint32_t counter)
             {
                 _data._guid = counter
-                    ? std::uint64_t(counter) | (std::uint64_t(entry) << 32) | (std::uint64_t(hi) << ((hi == HighGuid::Corpse || hi == HighGuid::AreaTrigger) ? 48 : 52))
+                    ? uint64_t(counter) | (uint64_t(entry) << 32) | (uint64_t(hi) << ((hi == HighGuid::Corpse || hi == HighGuid::AreaTrigger) ? 48 : 52))
                     : 0;
             }
 
-            ObjectGuid(HighGuid hi, std::uint32_t counter)
+            ObjectGuid(HighGuid hi, uint32_t counter)
             {
                 _data._guid = counter
-                    ? std::uint64_t(counter) | (std::uint64_t(hi) << ((hi == HighGuid::Corpse || hi == HighGuid::AreaTrigger) ? 48 : 52))
+                    ? uint64_t(counter) | (uint64_t(hi) << ((hi == HighGuid::Corpse || hi == HighGuid::AreaTrigger) ? 48 : 52))
                     : 0;
             }
 
@@ -100,24 +100,24 @@ namespace wowgm::game::structures
             ObjectGuid& operator = (ObjectGuid const& r) { _data = r._data; return *this; }
             ObjectGuid& operator = (ObjectGuid&& r) { _data = r._data; return *this; }
 
-            operator std::uint64_t() const { return _data._guid; }
+            operator uint64_t() const { return _data._guid; }
             PackedGuidReader ReadAsPacked() { return PackedGuidReader(*this); }
 
-            void Set(std::uint64_t guid) { _data._guid = guid; }
+            void Set(uint64_t guid) { _data._guid = guid; }
             void Clear() { _data._guid = 0; }
 
             PackedGuid WriteAsPacked() const;
 
-            std::uint64_t   GetRawValue() const { return _data._guid; }
+            uint64_t   GetRawValue() const { return _data._guid; }
             HighGuid GetHigh() const
             {
-                HighGuid temp = static_cast<HighGuid>(std::uint32_t((_data._guid >> 48) & 0x0000FFFF));
-                return HighGuid((temp == HighGuid::Corpse || temp == HighGuid::AreaTrigger) ? temp : HighGuid(((std::uint32_t)temp >> 4) & 0x00000FFF));
+                HighGuid temp = static_cast<HighGuid>(uint32_t((_data._guid >> 48) & 0x0000FFFF));
+                return HighGuid((temp == HighGuid::Corpse || temp == HighGuid::AreaTrigger) ? temp : HighGuid(((uint32_t)temp >> 4) & 0x00000FFF));
             }
-            std::uint32_t   GetEntry() const { return HasEntry() ? std::uint64_t((_data._guid >> 32) & 0x00000000000FFFFFuLL) : 0; }
-            std::uint32_t   GetCounter()  const
+            uint32_t   GetEntry() const { return HasEntry() ? uint64_t((_data._guid >> 32) & 0x00000000000FFFFFuLL) : 0; }
+            uint32_t   GetCounter()  const
             {
-                return std::uint32_t(_data._guid & 0x00000000FFFFFFFFuLL);
+                return uint32_t(_data._guid & 0x00000000FFFFFFFFuLL);
             }
 
             static LowType GetMaxCounter(HighGuid /*high*/)
@@ -127,8 +127,8 @@ namespace wowgm::game::structures
 
             ObjectGuid::LowType GetMaxCounter() const { return GetMaxCounter(GetHigh()); }
 
-            std::uint8_t& operator [] (std::uint32_t index);
-            std::uint8_t const& operator [] (std::uint32_t index) const;
+            uint8_t& operator [] (uint32_t index);
+            uint8_t const& operator [] (uint32_t index) const;
 
             bool IsEmpty()             const { return _data._guid == 0; }
             bool IsCreature()          const { return GetHigh() == HighGuid::Unit; }
@@ -212,12 +212,12 @@ namespace wowgm::game::structures
 
             bool HasEntry() const { return HasEntry(GetHigh()); }
 
-            explicit ObjectGuid(std::uint32_t const&) = delete;
+            explicit ObjectGuid(uint32_t const&) = delete;
 
             union
             {
-                std::uint64_t _guid;
-                std::uint8_t _bytes[sizeof(std::uint64_t)];
+                uint64_t _guid;
+                uint8_t _bytes[sizeof(uint64_t)];
             } _data;
     };
 
@@ -231,10 +231,10 @@ namespace wowgm::game::structures
 
         public:
             explicit PackedGuid() : _packedGuid(PACKED_GUID_MIN_BUFFER_SIZE) { _packedGuid.appendPackGUID(0); }
-            explicit PackedGuid(std::uint64_t guid) : _packedGuid(PACKED_GUID_MIN_BUFFER_SIZE) { _packedGuid.appendPackGUID(guid); }
+            explicit PackedGuid(uint64_t guid) : _packedGuid(PACKED_GUID_MIN_BUFFER_SIZE) { _packedGuid.appendPackGUID(guid); }
             explicit PackedGuid(ObjectGuid guid) : _packedGuid(PACKED_GUID_MIN_BUFFER_SIZE) { _packedGuid.appendPackGUID(guid.GetRawValue()); }
 
-            void Set(std::uint64_t guid) { _packedGuid.wpos(0); _packedGuid.appendPackGUID(guid); }
+            void Set(uint64_t guid) { _packedGuid.wpos(0); _packedGuid.appendPackGUID(guid); }
             void Set(ObjectGuid guid) { _packedGuid.wpos(0); _packedGuid.appendPackGUID(guid.GetRawValue()); }
 
             std::size_t size() const { return _packedGuid.size(); }
@@ -255,7 +255,7 @@ namespace std
     {
         std::size_t operator()(ObjectGuid const& s) const noexcept
         {
-            return std::hash<std::uint64_t>()(s.GetRawValue());
+            return std::hash<uint64_t>()(s.GetRawValue());
         }
     };
 }

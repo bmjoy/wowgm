@@ -68,9 +68,9 @@ namespace vez
     {
         const char*                                   pApplicationName;
         const char*                                   pEngineName;
-        std::uint32_t                                 applicationVersion;
-        std::uint32_t                                 engineVersion;
-        std::uint32_t                                 apiVersion;
+        uint32_t                                 applicationVersion;
+        uint32_t                                 engineVersion;
+        uint32_t                                 apiVersion;
     };
 
     struct InstanceCreateInfo
@@ -78,8 +78,8 @@ namespace vez
         const ApplicationInfo*                        pApplicationInfo;
         const char* const*                            ppEnabledLayerNames;
         const char* const*                            ppEnabledExtensionNames;
-        std::uint32_t                                 enabledLayerCount;
-        std::uint32_t                                 enabledExtensionCount;
+        uint32_t                                 enabledLayerCount;
+        uint32_t                                 enabledExtensionCount;
         VkInstanceCreateFlags                         flags;
         struct {
             VkDebugUtilsMessageSeverityFlagsEXT       messageSeverity;
@@ -98,8 +98,8 @@ namespace vez
         PhysicalDevice*                               physicalDevice = nullptr;
         const char* const*                            ppEnabledLayerNames = nullptr;
         const char* const*                            ppEnabledExtensionNames = nullptr;
-        std::uint32_t                                 enabledLayerCount = 0;
-        std::uint32_t                                 enabledExtensionCount = 0;
+        uint32_t                                 enabledLayerCount = 0;
+        uint32_t                                 enabledExtensionCount = 0;
     };
 
     struct BufferCreateInfo

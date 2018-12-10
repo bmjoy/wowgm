@@ -10,7 +10,7 @@ namespace wowgm::threading {
         });
     }
 
-    void SocketManager::Update(std::uint32_t /* timeInterval */)
+    void SocketManager::Update(uint32_t /* timeInterval */)
     {
         if (_socket)
             _socket->Update();

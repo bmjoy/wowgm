@@ -34,7 +34,7 @@ namespace wowgm::protocol
     public:
         static ClientServices* instance();
 
-        void AsyncConnect(std::string_view username, std::string_view password, std::string_view realmAddress, std::int32_t port = 3724);
+        void AsyncConnect(std::string_view username, std::string_view password, std::string_view realmAddress, int32_t port = 3724);
 
         bool IsConnected();
 
@@ -45,9 +45,9 @@ namespace wowgm::protocol
 
         void SetRealmInfo(std::vector<AuthRealmInfo> realmInfo);
 
-        AuthRealmInfo* GetRealmInfo(std::uint32_t index);
+        AuthRealmInfo* GetRealmInfo(uint32_t index);
         AuthRealmInfo const& GetSelectedRealmInfo();
-        std::uint32_t GetAvailableRealmCount();
+        uint32_t GetAvailableRealmCount();
 
         void ConnectToRealm(AuthRealmInfo const& realmInfo);
 
@@ -73,7 +73,7 @@ namespace wowgm::protocol
 
     public: /* World */
 
-        std::uint32_t GetCharacterCount() const;
+        uint32_t GetCharacterCount() const;
         std::vector<world::packets::CharacterInfo> const& GetCharacters() const;
         void SetCharacters(std::vector<world::packets::CharacterInfo> const& characters);
 

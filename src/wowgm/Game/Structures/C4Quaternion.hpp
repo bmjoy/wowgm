@@ -14,7 +14,7 @@ namespace wowgm::game::structures
         float Z = 0.0f;
         float W = 0.0f;
 
-        inline C4Quaternion& operator = (std::uint64_t packedValue)
+        inline C4Quaternion& operator = (uint64_t packedValue)
         {
             X = (packedValue >> 42) * (1.0f / 2097152.0f);
             Y = (((packedValue << 22) >> 32) >> 11) * (1.0f / 1048576.0f);

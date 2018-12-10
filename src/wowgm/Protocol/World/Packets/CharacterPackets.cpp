@@ -9,13 +9,13 @@ namespace wowgm::protocol::world::packets
 
     void ClientEnumCharactersResult::Read()
     {
-        std::uint32_t unkCounter = _worldPacket.ReadBits(23);
+        uint32_t unkCounter = _worldPacket.ReadBits(23);
         bool unkBit = _worldPacket.ReadBit();
 
         Characters.resize(_worldPacket.ReadBits(17));
         std::vector<uint8_t> nameLengths(Characters.size());
 
-        std::uint8_t i = 0;
+        uint8_t i = 0;
         for (CharacterInfo& charInfo : Characters)
         {
             charInfo.GUID[3] = _worldPacket.ReadBit();

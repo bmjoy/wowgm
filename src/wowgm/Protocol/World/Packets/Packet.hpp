@@ -22,7 +22,7 @@ namespace wowgm::protocol::world::packets
 
             WorldPacket const* GetPacket() const;
             size_t GetSize() const;
-            std::uint32_t GetConnectionId() const;
+            uint32_t GetConnectionId() const;
             Opcode GetOpcode() const;
 
         protected:
@@ -44,7 +44,7 @@ namespace wowgm::protocol::world::packets
     class ClientPacket : public Packet
     {
         public:
-            ClientPacket(Opcode opcode, size_t initialSize = 200, std::uint32_t connectionId = 0);
+            ClientPacket(Opcode opcode, size_t initialSize = 200, uint32_t connectionId = 0);
             ~ClientPacket();
 
             void Read() override final;

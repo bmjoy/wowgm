@@ -12,12 +12,12 @@ namespace wowgm::protocol
     class PacketCrypt
     {
     public:
-        PacketCrypt(std::uint32_t digestLength);
+        PacketCrypt(uint32_t digestLength);
         virtual ~PacketCrypt() { }
 
         virtual void Init(const BigNumber& K) = 0;
-        void DecryptRecv(std::uint8_t* data, size_t length);
-        void EncryptSend(std::uint8_t* data, size_t length);
+        void DecryptRecv(uint8_t* data, size_t length);
+        void EncryptSend(uint8_t* data, size_t length);
 
         bool IsInitialized() const { return _initialized; }
 

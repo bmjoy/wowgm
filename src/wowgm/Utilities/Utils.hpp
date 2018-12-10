@@ -9,7 +9,7 @@ struct tm* localtime_r(const time_t* time, struct tm *result);
 
 namespace wowgm::utilities
 {
-    std::string ByteArrayToHexStr(std::uint8_t const* bytes, std::uint32_t arrayLen, bool reverse = false);
+    std::string ByteArrayToHexStr(uint8_t const* bytes, uint32_t arrayLen, bool reverse = false);
 
     // https://ldionne.com/2015/11/29/efficient-parameter-pack-indexing/
     // http://talesofcpp.fusionfenix.com/post-22/true-story-efficient-packing

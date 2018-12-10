@@ -6,7 +6,7 @@
 
 namespace wowgm::game::structures
 {
-    enum class UpdateType : std::uint8_t
+    enum class UpdateType : uint8_t
     {
         Values = 0,
         CreateObject1 = 1,

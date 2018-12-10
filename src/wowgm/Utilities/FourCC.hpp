@@ -17,13 +17,13 @@ namespace wowgm
         public:
             FourCC(MessageBuffer& buffer)
             {
-                Data.Integer = *reinterpret_cast<std::uint32_t*>(buffer.GetReadPointer());
+                Data.Integer = *reinterpret_cast<uint32_t*>(buffer.GetReadPointer());
             }
 
             FourCC() { Data.Integer = 0; }
 
             union {
-                std::uint32_t Integer;
+                uint32_t Integer;
                 char Bytes[4];
             } Data;
 
@@ -32,16 +32,16 @@ namespace wowgm
                 return std::string_view(Data.Bytes, std::size(Data.Bytes));
             }
 
-            operator std::uint32_t() const { return Data.Integer; }
+            operator uint32_t() const { return Data.Integer; }
 
             FourCC& operator = (const char* data)
             {
                 memcpy(Data.Bytes, data, std::min(std::size_t(4), strlen(data)));
-                Data.Integer = utils::endianness::swap(std::int32_t(Data.Integer));
+                Data.Integer = utils::endianness::swap(int32_t(Data.Integer));
                 return *this;
             }
 
-            FourCC& operator = (std::uint32_t value)
+            FourCC& operator = (uint32_t value)
             {
                 Data.Integer = value;
                 return *this;
@@ -51,7 +51,7 @@ namespace wowgm
             {
                 Data.Integer = 0;
                 memcpy(Data.Bytes, value.c_str(), std::min(std::size_t(4), value.size()));
-                Data.Integer = utils::endianness::swap(std::int32_t(Data.Integer));
+                Data.Integer = utils::endianness::swap(int32_t(Data.Integer));
                 return *this;
             }
         };

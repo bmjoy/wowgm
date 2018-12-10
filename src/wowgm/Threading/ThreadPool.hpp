@@ -32,6 +32,12 @@ private:
     std::atomic_bool _stop;
 };
 
+ThreadPool::~ThreadPool()
+{
+    _stop.exchange(true);
+    _condition.notify_all();
+}
+
 inline ThreadPool::ThreadPool(size_t threads) : _stop(false)
 {
     for (size_t i = 0; i<threads; ++i)
@@ -74,7 +80,7 @@ auto ThreadPool::Submit(F&& function, Args&&... args) -> std::future<typename st
         });
     }
 
-    condition.notify_one();
+    _condition.notify_one();
     return future;
 }
 
@@ -95,5 +101,5 @@ void ThreadPool::Launch(Callback&& callback, F&& function, Args&&... args)
         });
     }
 
-    condition.notify_one();
+    _condition.notify_one();
 }

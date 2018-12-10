@@ -37,7 +37,7 @@ namespace vez
         std::vector<PipelineResource> _resources;
 
         std::string _entryPoint;
-        std::vector<std::uint32_t> _spirv;
+        std::vector<uint32_t> _spirv;
 
         ShaderModuleCreateInfo _createInfo;
     };

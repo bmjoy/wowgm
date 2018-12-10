@@ -29,7 +29,7 @@ namespace wowgm::threading
             return ptr;
         }
 
-        void Update(std::uint32_t timeInterval) override final;
+        void Update(uint32_t timeInterval) override final;
         void Destroy() override final;
 
         std::shared_ptr<BaseSocket> GetSocket();

@@ -60,7 +60,7 @@ namespace wowgm::protocol
             _socket.async_connect(endpoint, std::bind(callback, std::placeholders::_1, endpoint));
         }
 
-        void Connect(std::string_view hostname, std::uint32_t port) override final
+        void Connect(std::string_view hostname, uint32_t port) override final
         {
             boost::asio::ip::tcp::resolver resolver(_context);
 

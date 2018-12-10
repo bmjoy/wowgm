@@ -13,7 +13,7 @@ namespace wowgm::protocol::world::packets
         _worldPacket >> ZoneID;
         _worldPacket >> AreaID;
 
-        std::uint16_t updateCount;
+        uint16_t updateCount;
         _worldPacket >> updateCount;
 
         Worldstates.resize(updateCount);

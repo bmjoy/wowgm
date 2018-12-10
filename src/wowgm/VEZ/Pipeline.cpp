@@ -46,7 +46,7 @@ namespace vez
         pipelineCreateInfo.stageCount = pCreateInfo->stageCount;
 
         std::vector<VkPipelineShaderStageCreateInfo> shaderStages(pCreateInfo->stageCount);
-        for (std::uint32_t i = 0; i < pCreateInfo->stageCount; ++i)
+        for (uint32_t i = 0; i < pCreateInfo->stageCount; ++i)
         {
             VkPipelineShaderStageCreateInfo& stageInfo = shaderStages[i];
             stageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;

@@ -37,9 +37,9 @@ void GameWindow::DrawLoadingScreen()
 
     constexpr static const char APPLICATION_NAME[] = "WoWGM";
 
-    std::uint32_t positionX = 0;
-    std::uint32_t positionY = 10;
-    std::uint32_t contentWidth = 0;
+    uint32_t positionX = 0;
+    uint32_t positionY = 10;
+    uint32_t contentWidth = 0;
 
     ImGui::PushFont(io.Fonts->Fonts[4]); // Ubuntu-Bold.TTF
     auto applicationLogoSize = ImGui::CalcTextSize(APPLICATION_NAME);
@@ -155,7 +155,7 @@ void GameWindow::DrawLoadingScreen()
     if (ImGui::Button("Connect##RealmConnectButton"))
     {
         // async connect, and then display connect feedback
-        std::uint32_t port = 3724;
+        uint32_t port = 3724;
         std::string_view realmList = gui::gamedata::realmlist;
         const char* portDelimiterPos = strchr(realmList.data(), ':');
         if (portDelimiterPos != nullptr)

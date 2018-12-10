@@ -13,24 +13,24 @@ namespace wowgm::cryptography
 
     typedef EVP_MD const* (*HashCreateFn)();
 
-    template<HashCreateFn HashCreator, std::uint32_t DigestLength>
+    template<HashCreateFn HashCreator, uint32_t DigestLength>
     class HmacHash
     {
     public:
-        HmacHash(std::uint32_t len, std::uint8_t const* seed);
+        HmacHash(uint32_t len, uint8_t const* seed);
         ~HmacHash();
 
         void UpdateData(std::string const& str);
-        void UpdateData(std::uint8_t const* data, size_t len);
+        void UpdateData(uint8_t const* data, size_t len);
         void Finalize();
 
-        std::uint8_t* ComputeHash(BigNumber const& bn);
-        std::uint8_t* GetDigest() { return _digest; }
-        std::uint32_t GetLength() const { return DigestLength; }
+        uint8_t* ComputeHash(BigNumber const& bn);
+        uint8_t* GetDigest() { return _digest; }
+        uint32_t GetLength() const { return DigestLength; }
 
     private:
         HMAC_CTX* _ctx;
-        std::uint8_t _digest[DigestLength];
+        uint8_t _digest[DigestLength];
     };
 
     typedef HmacHash<EVP_sha1, SHA_DIGEST_LENGTH> HmacSha1;

@@ -17,40 +17,40 @@ namespace wowgm::game::geometry
 
     struct SMChunk
     {
-        std::uint32_t X;
-        std::uint32_t Y;
+        uint32_t X;
+        uint32_t Y;
         float radius; // If version < ?
-        std::uint32_t nLayers;
-        std::uint32_t nDoodadRefs;
-        std::uint32_t ofsHeight;
-        std::uint32_t ofsNormal;
-        std::uint32_t ofsLayer;
-        std::uint32_t ofsRefs;
-        std::uint32_t ofsAlpha;
-        std::uint32_t sizeAlpha;
-        std::uint32_t AreaID;
-        std::uint32_t nMapObjRefs;
-        std::uint16_t LowResolutionHoles;
-        std::uint16_t ReallyLowQualityTextureingMap[8];
-        std::uint64_t noEffectDoodad;
-        std::uint32_t ofsSoundEmitters;
-        std::uint32_t nSoundEmitters;
-        std::uint32_t ofsLiquid;
-        std::uint32_t sizeLiquid;
+        uint32_t nLayers;
+        uint32_t nDoodadRefs;
+        uint32_t ofsHeight;
+        uint32_t ofsNormal;
+        uint32_t ofsLayer;
+        uint32_t ofsRefs;
+        uint32_t ofsAlpha;
+        uint32_t sizeAlpha;
+        uint32_t AreaID;
+        uint32_t nMapObjRefs;
+        uint16_t LowResolutionHoles;
+        uint16_t ReallyLowQualityTextureingMap[8];
+        uint64_t noEffectDoodad;
+        uint32_t ofsSoundEmitters;
+        uint32_t nSoundEmitters;
+        uint32_t ofsLiquid;
+        uint32_t sizeLiquid;
         C3Vector position;
-        std::uint32_t ofsMCCV;
-        std::uint32_t ofsMCLV;
-        std::uint32_t _;
+        uint32_t ofsMCCV;
+        uint32_t ofsMCLV;
+        uint32_t _;
     };
 
     struct SMDoodadDef
     {
-        std::uint32_t Index;
-        std::uint32_t UniqueID;
+        uint32_t Index;
+        uint32_t UniqueID;
         C3Vector Position;
         C3Vector Rotation; // Degrees.
-        std::uint16_t Scale;
-        std::uint16_t Flags;
+        uint16_t Scale;
+        uint16_t Flags;
 
         float GetScale() const {
             return float(Scale) / 1024.0f;
@@ -59,15 +59,15 @@ namespace wowgm::game::geometry
 
     struct SMMapObjDef
     {
-        std::uint32_t Index;
-        std::uint32_t UniqueID;
+        uint32_t Index;
+        uint32_t UniqueID;
         C3Vector Position;
         C3Vector Rotation;
         CAaBox Extents; // Position plus the transformed wmo bounding box. used for defining if they are rendered as well as collision.
-        std::uint16_t Flags;
-        std::uint16_t DoodadSet;
-        std::uint16_t NameSet;
-        std::uint16_t Scale;
+        uint16_t Flags;
+        uint16_t DoodadSet;
+        uint16_t NameSet;
+        uint16_t Scale;
 
         float GetScale() const {
             return float(Scale) / 1024.0f;
@@ -84,7 +84,7 @@ namespace wowgm::game::geometry
         };
 
     public:
-        Chunk(std::uint8_t const* data, size_t length);
+        Chunk(uint8_t const* data, size_t length);
         Chunk(Chunk&&) = delete;
         Chunk(const Chunk&) = delete;
 
@@ -94,7 +94,7 @@ namespace wowgm::game::geometry
         bool HasGeometry() const;
 
     private:
-        void HandleTerrainChunk(std::uint32_t identifier, std::vector<std::uint8_t> const& content);
+        void HandleTerrainChunk(uint32_t identifier, std::vector<uint8_t> const& content);
 
     private:
         SMChunk _header;
@@ -109,7 +109,7 @@ namespace wowgm::game::geometry
     {
     public:
 
-        MapChunk(std::uint32_t x, std::uint32_t y, const std::string& directoryName);
+        MapChunk(uint32_t x, uint32_t y, const std::string& directoryName);
         ~MapChunk();
 
         MapChunk(MapChunk&&) = delete;
@@ -125,24 +125,24 @@ namespace wowgm::game::geometry
     private:
         void ParseFile(std::shared_ptr<FileHandle<MpqFile>> const& fileHandle);
 
-        void HandleTerrainChunk(std::uint32_t identifier, std::vector<std::uint8_t> const& content);
+        void HandleTerrainChunk(uint32_t identifier, std::vector<uint8_t> const& content);
 
         /// Return the name of an M2 model, given the provided index (usually from MDDF)
-        const char* GetModelFilename(std::uint32_t index) const;
+        const char* GetModelFilename(uint32_t index) const;
         /// Return the name of a WMO model, given the provided index (usually from MODF)
-        const char* GetWorldModelFilename(std::uint32_t index) const;
+        const char* GetWorldModelFilename(uint32_t index) const;
 
     private:
         CAaBox _boundingBox;
         std::vector<Chunk*> _chunks;
 
-        std::vector<std::uint8_t> _textureFilenames;
+        std::vector<uint8_t> _textureFilenames;
 
-        std::vector<std::uint8_t> _modelFilenames;
-        std::vector<std::uint32_t> _modelFilenamesOffset;
+        std::vector<uint8_t> _modelFilenames;
+        std::vector<uint32_t> _modelFilenamesOffset;
 
-        std::vector<std::uint8_t> _worldMapObjectFilenames;
-        std::vector<std::uint32_t> _worldMapObjectFilenamesOffset;
+        std::vector<uint8_t> _worldMapObjectFilenames;
+        std::vector<uint32_t> _worldMapObjectFilenamesOffset;
 
         std::vector<SMDoodadDef> _doodadDefinitions;
         std::vector<SMMapObjDef> _mapObjDefinitions;

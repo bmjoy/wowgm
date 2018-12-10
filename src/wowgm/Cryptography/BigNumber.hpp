@@ -15,16 +15,16 @@ namespace wowgm::cryptography
         BigNumber();
         BigNumber(BigNumber const& bn);
         BigNumber(BigNumber&& bn);
-        BigNumber(std::uint32_t value);
+        BigNumber(uint32_t value);
         ~BigNumber();
 
-        void SetDword(std::uint32_t value);
-        void SetQword(std::uint64_t value);
-        void SetBinary(std::uint8_t const* bytes, std::int32_t len);
+        void SetDword(uint32_t value);
+        void SetQword(uint64_t value);
+        void SetBinary(uint8_t const* bytes, int32_t len);
         void SetBinary(SHA1 const& sha1);
         void SetHexStr(char const* str);
 
-        void SetRand(std::int32_t numbits);
+        void SetRand(int32_t numbits);
 
         BigNumber& operator=(BigNumber const& bn);
 
@@ -69,13 +69,13 @@ namespace wowgm::cryptography
         BigNumber ModExp(BigNumber const& bn1, BigNumber const& bn2);
         BigNumber Exp(BigNumber const&);
 
-        std::int32_t GetNumBytes(void) const;
+        int32_t GetNumBytes(void) const;
 
         struct bignum_st *BN() { return _bn; }
 
-        std::uint32_t AsDword() const;
+        uint32_t AsDword() const;
 
-        std::unique_ptr<std::uint8_t[]> AsByteArray(std::int32_t minSize = 0, bool littleEndian = true) const;
+        std::unique_ptr<uint8_t[]> AsByteArray(int32_t minSize = 0, bool littleEndian = true) const;
 
         std::string AsHexStr() const;
         std::string AsDecStr() const;

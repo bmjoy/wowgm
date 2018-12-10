@@ -37,7 +37,7 @@ namespace wowgm::protocol::world
         _decompressionStream->opaque = (voidpf)nullptr;
         _decompressionStream->avail_in = 0;
         _decompressionStream->next_in = nullptr;
-        std::int32_t z_res = inflateInit(_decompressionStream);
+        int32_t z_res = inflateInit(_decompressionStream);
         BOOST_ASSERT_MSG_FMT(z_res == Z_OK, "Can't initialize packet decompression. Error code: %i (%s)", z_res, zError(z_res));
     }
 
@@ -116,7 +116,7 @@ namespace wowgm::protocol::world
             if (isCompressed)
                 worldPacket.Decompress(GetDecompressionStream());
 
-            LOG_INFO << "[S->C] " << worldPacket.GetOpcode() << " (0x" << std::hex << std::setw(4) << std::setfill('0') << std::uint32_t(worldPacket.GetOpcode()) << ", " << std::dec << worldPacket.size() << " bytes" << (isCompressed ? ", compressed" : "" ) << ")";
+            LOG_INFO << "[S->C] " << worldPacket.GetOpcode() << " (0x" << std::hex << std::setw(4) << std::setfill('0') << uint32_t(worldPacket.GetOpcode()) << ", " << std::dec << worldPacket.size() << " bytes" << (isCompressed ? ", compressed" : "" ) << ")";
 
             PacketLogger::WriteServerPacket(&worldPacket);
 
@@ -168,10 +168,10 @@ namespace wowgm::protocol::world
         MessageBuffer buffer(_sendBufferSize);
         while (_bufferQueue.Dequeue(queued))
         {
-            std::uint32_t packetSize = queued->size();
-            ClientPacketHeader packetHeader(std::uint16_t(queued->size() + ClientPacketHeader::opcode_size), queued->GetOpcode());
+            uint32_t packetSize = queued->size();
+            ClientPacketHeader packetHeader(uint16_t(queued->size() + ClientPacketHeader::opcode_size), queued->GetOpcode());
 
-            LOG_INFO << "[C->S] " << packetHeader.Command << " (0x" << std::hex << std::setw(4) << std::setfill('0') << std::uint32_t(packetHeader.Command) << ", " << std::dec << queued->size() << " bytes)";
+            LOG_INFO << "[C->S] " << packetHeader.Command << " (0x" << std::hex << std::setw(4) << std::setfill('0') << uint32_t(packetHeader.Command) << ", " << std::dec << queued->size() << " bytes)";
 
             if (queued->NeedsEncryption())
                 _authCrypt.EncryptSend(packetHeader.Data, ClientPacketHeader::data_size);

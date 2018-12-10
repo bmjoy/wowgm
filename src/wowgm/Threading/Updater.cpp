@@ -49,7 +49,7 @@ namespace wowgm::threading
         {
             auto milliseconds = chrono::duration_cast<chrono::microseconds>(hrc::now() - lastUpdateTick);
             for (auto&& upd : _updatables)
-                upd->Update(static_cast<std::uint32_t>(milliseconds.count()) / 1000);
+                upd->Update(static_cast<uint32_t>(milliseconds.count()) / 1000);
 
             lastUpdateTick = hrc::now();
         }

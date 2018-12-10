@@ -18,7 +18,7 @@ namespace wowgm::protocol::world::packets
         return _worldPacket.size();
     }
 
-    std::uint32_t Packet::GetConnectionId() const
+    uint32_t Packet::GetConnectionId() const
     {
         return _worldPacket.GetConnection();
     }
@@ -48,7 +48,7 @@ namespace wowgm::protocol::world::packets
 
     }
 
-    ClientPacket::ClientPacket(Opcode opcode, size_t initialSize, std::uint32_t connectionId)
+    ClientPacket::ClientPacket(Opcode opcode, size_t initialSize, uint32_t connectionId)
         : Packet(WorldPacket(opcode, initialSize, connectionId))
     {
 

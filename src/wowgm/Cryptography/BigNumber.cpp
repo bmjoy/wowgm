@@ -23,7 +23,7 @@ namespace wowgm::cryptography
         BN_zero(bn._bn);
     }
 
-    BigNumber::BigNumber(std::uint32_t val)
+    BigNumber::BigNumber(uint32_t val)
         : _bn(BN_new())
     {
         BN_set_word(_bn, val);
@@ -34,16 +34,16 @@ namespace wowgm::cryptography
         BN_free(_bn);
     }
 
-    void BigNumber::SetDword(std::uint32_t val)
+    void BigNumber::SetDword(uint32_t val)
     {
         BN_set_word(_bn, val);
     }
 
-    void BigNumber::SetQword(std::uint64_t val)
+    void BigNumber::SetQword(uint64_t val)
     {
-        BN_set_word(_bn, std::uint32_t(val >> 32));
+        BN_set_word(_bn, uint32_t(val >> 32));
         BN_lshift(_bn, _bn, 32);
-        BN_add_word(_bn, std::uint32_t(val & 0xFFFFFFFF));
+        BN_add_word(_bn, uint32_t(val & 0xFFFFFFFF));
     }
 
     void BigNumber::SetBinary(SHA1 const& sha1)
@@ -51,9 +51,9 @@ namespace wowgm::cryptography
         SetBinary(sha1.GetDigest(), sha1.GetLength());
     }
 
-    void BigNumber::SetBinary(std::uint8_t const* bytes, int32_t len)
+    void BigNumber::SetBinary(uint8_t const* bytes, int32_t len)
     {
-        std::uint8_t* array = new std::uint8_t[len];
+        uint8_t* array = new uint8_t[len];
 
         for (int i = 0; i < len; i++)
             array[i] = bytes[len - 1 - i];
@@ -156,9 +156,9 @@ namespace wowgm::cryptography
         return BN_num_bytes(_bn);
     }
 
-    std::uint32_t BigNumber::AsDword() const
+    uint32_t BigNumber::AsDword() const
     {
-        return (std::uint32_t)BN_get_word(_bn);
+        return (uint32_t)BN_get_word(_bn);
     }
 
     bool BigNumber::IsZero() const
@@ -171,12 +171,12 @@ namespace wowgm::cryptography
         return BN_is_negative(_bn);
     }
 
-    std::unique_ptr<std::uint8_t[]> BigNumber::AsByteArray(int32_t minSize, bool littleEndian) const
+    std::unique_ptr<uint8_t[]> BigNumber::AsByteArray(int32_t minSize, bool littleEndian) const
     {
         int numBytes = GetNumBytes();
         int length = (minSize >= numBytes) ? minSize : numBytes;
 
-        std::uint8_t* array = new std::uint8_t[length];
+        uint8_t* array = new uint8_t[length];
 
         // If we need more bytes than length of BigNumber set the rest to 0
         if (length > numBytes)
@@ -188,7 +188,7 @@ namespace wowgm::cryptography
         if (littleEndian)
             std::reverse(array, array + numBytes);
 
-        std::unique_ptr<std::uint8_t[]> ret(array);
+        std::unique_ptr<uint8_t[]> ret(array);
         return ret;
     }
 

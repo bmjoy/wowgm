@@ -98,13 +98,13 @@ namespace wowgm::game::entities
 
     void CGObject::UpdateDescriptors(JamCliValuesUpdate const& valuesUpdate)
     {
-        std::uint8_t* objectDataBase = reinterpret_cast<std::uint8_t*>(&GetObjectData());
+        uint8_t* objectDataBase = reinterpret_cast<uint8_t*>(&GetObjectData());
         for (auto&& itr : valuesUpdate.Descriptors)
         {
             if (itr.first * 4 > sizeof(CGObjectData))
                 continue;
 
-            *reinterpret_cast<std::uint32_t*>(objectDataBase + itr.first * 4) = itr.second;
+            *reinterpret_cast<uint32_t*>(objectDataBase + itr.first * 4) = itr.second;
         }
     }
 

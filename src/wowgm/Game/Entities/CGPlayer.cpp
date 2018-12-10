@@ -38,7 +38,7 @@ namespace wowgm::game::entities
     {
         CGUnit::UpdateDescriptors(valuesUpdate);
 
-        std::uint8_t* unitDataBase = reinterpret_cast<std::uint8_t*>(&GetPlayerData());
+        uint8_t* unitDataBase = reinterpret_cast<uint8_t*>(&GetPlayerData());
         for (auto&& itr : valuesUpdate.Descriptors)
         {
             auto offset = itr.first * 4;
@@ -49,7 +49,7 @@ namespace wowgm::game::entities
             if (offset > sizeof(CGPlayerData))
                 continue;
 
-            *reinterpret_cast<std::uint32_t*>(unitDataBase + offset) = itr.second;
+            *reinterpret_cast<uint32_t*>(unitDataBase + offset) = itr.second;
         }
     }
 }

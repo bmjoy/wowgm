@@ -8,7 +8,11 @@
 
 namespace vez
 {
-    Queue::Queue(Device* device, VkQueue queue, std::uint32_t familyIndex, std::uint32_t index, const VkQueueFamilyProperties& properties)
+    PFN_vkQueueEndDebugUtilsLabelEXT Queue::_vkQueueEndDebugUtilsLabelEXT;
+    PFN_vkQueueBeginDebugUtilsLabelEXT Queue::_vkQueueBeginDebugUtilsLabelEXT;
+    PFN_vkQueueInsertDebugUtilsLabelEXT Queue::_vkQueueInsertDebugUtilsLabelEXT;
+
+    Queue::Queue(Device* device, VkQueue queue, uint32_t familyIndex, uint32_t index, const VkQueueFamilyProperties& properties)
     {
         _device = device;
         _queue = queue;
@@ -31,7 +35,7 @@ namespace vez
             _vkQueueInsertDebugUtilsLabelEXT = PFN_vkQueueInsertDebugUtilsLabelEXT(vkGetInstanceProcAddr(instance, "vkQueueInsertDebugUtilsLabelEXT"));
         }, _device->GetPhysicalDevice()->GetInstance()->GetHandle());
 
-        if (vkQueueEndDebugUtilsLabelEXT == nullptr)
+        if (_vkQueueEndDebugUtilsLabelEXT == nullptr)
             return VK_ERROR_LAYER_NOT_PRESENT;
 
         return VK_SUCCESS;

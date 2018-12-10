@@ -56,7 +56,7 @@ namespace wowgm::protocol::authentification
             bool (AuthSocket::*handler)();
         };
 
-        std::unordered_map<std::uint8_t, AuthHandler> _packetHandlers;
+        std::unordered_map<uint8_t, AuthHandler> _packetHandlers;
 
         BigNumber M2;
     };

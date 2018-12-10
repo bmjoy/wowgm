@@ -13,7 +13,7 @@ namespace wowgm::cryptography
     class SHA1
     {
     public:
-        typedef std::integral_constant<std::uint32_t, SHA_DIGEST_LENGTH> DigestLength;
+        typedef std::integral_constant<uint32_t, SHA_DIGEST_LENGTH> DigestLength;
 
         SHA1(SHA1 const& other);
         SHA1();
@@ -38,10 +38,10 @@ namespace wowgm::cryptography
         void UpdateData(std::array<T, N>& arr)
         {
             static_assert(std::is_standard_layout<T>::value, "T must be a simple data type");
-            UpdateData(reinterpret_cast<std::uint8_t*>(arr.data()), arr.size() * sizeof(T));
+            UpdateData(reinterpret_cast<uint8_t*>(arr.data()), arr.size() * sizeof(T));
         }
 
-        void UpdateData(const std::uint8_t *dta, int len);
+        void UpdateData(const uint8_t *dta, int len);
         void UpdateData(char c);
         void UpdateData(const std::string &str);
 
@@ -49,12 +49,12 @@ namespace wowgm::cryptography
         void Initialize();
         void Finalize();
 
-        std::uint8_t* GetDigest() const { return (std::uint8_t*)mDigest; }
+        uint8_t* GetDigest() const { return (uint8_t*)mDigest; }
         int GetLength() const { return SHA_DIGEST_LENGTH; }
 
     private:
         SHA_CTX mC;
-        std::uint8_t mDigest[SHA_DIGEST_LENGTH];
+        uint8_t mDigest[SHA_DIGEST_LENGTH];
     };
 } // wowgm::cryptography
 

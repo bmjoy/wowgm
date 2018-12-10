@@ -356,7 +356,7 @@ namespace wowgm::game::datastores
             LOG_PERFORMANCE << "DBCs loaded in " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0f << " milliseconds";
         }
 
-        template <typename T> T const* GetRecord(std::uint32_t index)
+        template <typename T> T const* GetRecord(uint32_t index)
         {
             return Storage<T>::GetRecord(index);
         }

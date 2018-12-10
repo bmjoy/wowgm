@@ -145,7 +145,7 @@ namespace debug
         if (callbackData->objectCount > 0)
         {
             ss << '\n' << indent << "Objects - " << callbackData->objectCount << " total\n";
-            for (std::uint32_t i = 0; i < callbackData->objectCount; ++i)
+            for (uint32_t i = 0; i < callbackData->objectCount; ++i)
             {
                 ss << indent << indent << "Object #" << i
                     << ": Type " << ObjectTypeToString(callbackData->pObjects[i].objectType)
@@ -159,14 +159,14 @@ namespace debug
         if (callbackData->cmdBufLabelCount > 0)
         {
             ss << '\n' << indent << "Command buffer labels - " << callbackData->cmdBufLabelCount << " total\n";
-            for (std::uint32_t i = 0; i < callbackData->cmdBufLabelCount; ++i)
+            for (uint32_t i = 0; i < callbackData->cmdBufLabelCount; ++i)
                 ss << indent << indent << "Command buffer label #" << i << ": Name \"" << callbackData->pCmdBufLabels[i].pLabelName << "\"\n";
         }
 
         if (callbackData->queueLabelCount > 0)
         {
             ss << '\n' << indent << "Queue labels - " << callbackData->queueLabelCount << " total\n";
-            for (std::uint32_t i = 0; i < callbackData->queueLabelCount; ++i)
+            for (uint32_t i = 0; i < callbackData->queueLabelCount; ++i)
                 ss << indent << indent << "Queue label #" << i << ": Name \"" << callbackData->pQueueLabels[i].pLabelName << "\"\n";
         }
 
@@ -177,7 +177,7 @@ namespace debug
     }
 }
 
-GameWindow::GameWindow(std::string_view title, std::uint32_t width, std::uint32_t height) :
+GameWindow::GameWindow(std::string_view title, uint32_t width, uint32_t height) :
     _mpqSystemInitialized(false), _frameDrawTimes(1000, 0.0f)
 {
     _title = std::move(title);
@@ -559,7 +559,7 @@ VkResult GameWindow::_InitializeVulkanInstance()
     appInfo.pEngineName = _engineName.data();
     appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
 
-    std::uint32_t instanceExtensionCount = 0;
+    uint32_t instanceExtensionCount = 0;
     const char** instanceExtensions = glfwGetRequiredInstanceExtensions(&instanceExtensionCount);
 
     vez::InstanceCreateInfo instanceCreateInfo{};
@@ -748,7 +748,7 @@ VkResult GameWindow::_InitializeInterfacePipeline()
     vez::ShaderModuleCreateInfo shaderModuleCreateInfo{};
     shaderModuleCreateInfo.pEntryPoint = "main";
     shaderModuleCreateInfo.codeSize = vertexShaderFileHandle->GetFileSize();
-    shaderModuleCreateInfo.pCode = reinterpret_cast<const std::uint32_t*>(vertexShaderFileHandle->GetData()); // Not sure this works still now (because mem-mapped)
+    shaderModuleCreateInfo.pCode = reinterpret_cast<const uint32_t*>(vertexShaderFileHandle->GetData()); // Not sure this works still now (because mem-mapped)
     shaderModuleCreateInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
     VkResult result = vez::Shader::Create(_device, &shaderModuleCreateInfo, &_interfacePipeline.Shaders[0]);
     if (result != VK_SUCCESS)
@@ -757,7 +757,7 @@ VkResult GameWindow::_InitializeInterfacePipeline()
     _interfacePipeline.Shaders[0]->SetName("Shaders/Interface.vtx");
 
     shaderModuleCreateInfo.codeSize = fragmentShaderFileHandle->GetFileSize();
-    shaderModuleCreateInfo.pCode = reinterpret_cast<const std::uint32_t*>(fragmentShaderFileHandle->GetData()); // Not sure this works still now (because mem-mapped)
+    shaderModuleCreateInfo.pCode = reinterpret_cast<const uint32_t*>(fragmentShaderFileHandle->GetData()); // Not sure this works still now (because mem-mapped)
     shaderModuleCreateInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
     result = vez::Shader::Create(_device, &shaderModuleCreateInfo, &_interfacePipeline.Shaders[1]);
     if (result != VK_SUCCESS)
@@ -995,17 +995,17 @@ void GameWindow::_UpdateInterfaceCommandBuffers()
     currentCommandBuffer->BindIndexBuffer(_interfaceIndexBuffer, offset, VK_INDEX_TYPE_UINT16);
 
     // Issue draw commands
-    std::int32_t vertexOffset = 0;
-    std::int32_t indexOffset = 0;
-    for (std::int32_t commandList = 0; commandList < drawData->CmdListsCount; ++commandList)
+    int32_t vertexOffset = 0;
+    int32_t indexOffset = 0;
+    for (int32_t commandList = 0; commandList < drawData->CmdListsCount; ++commandList)
     {
         const ImDrawList* drawList = drawData->CmdLists[commandList];
-        for (std::int32_t commandIndex = 0; commandIndex < drawList->CmdBuffer.Size; ++commandIndex)
+        for (int32_t commandIndex = 0; commandIndex < drawList->CmdBuffer.Size; ++commandIndex)
         {
             const ImDrawCmd* drawCommand = &drawList->CmdBuffer[commandIndex];
             VkRect2D drawCommandScissors{
-                { static_cast<std::int32_t>(std::max(drawCommand->ClipRect.x, 0.0f)), static_cast<std::int32_t>(std::max(drawCommand->ClipRect.y, 0.0f)) },
-                { std::uint32_t(drawCommand->ClipRect.z - drawCommand->ClipRect.x), std::uint32_t(drawCommand->ClipRect.w - drawCommand->ClipRect.y) }
+                { static_cast<int32_t>(std::max(drawCommand->ClipRect.x, 0.0f)), static_cast<int32_t>(std::max(drawCommand->ClipRect.y, 0.0f)) },
+                { uint32_t(drawCommand->ClipRect.z - drawCommand->ClipRect.x), uint32_t(drawCommand->ClipRect.w - drawCommand->ClipRect.y) }
             };
             currentCommandBuffer->SetScissor(0, 1, &drawCommandScissors);
             currentCommandBuffer->DrawIndexed(drawCommand->ElemCount, 1, indexOffset, vertexOffset, 0);
@@ -1037,10 +1037,12 @@ void GameWindow::UpdateGeometryBuffers()
 
 void GameWindow::_UpdateInterfaceGeometryBuffers()
 {
+    // Abort if there is no geometry to render.
     ImDrawData* imDrawData = ImGui::GetDrawData();
     if (imDrawData == nullptr || imDrawData->TotalIdxCount == 0 || imDrawData->TotalVtxCount == 0)
         return;
 
+    // Update buffers as needed
     bool updateVertexBuffer = false;
     bool updateIndexBuffer = false;
     if (imDrawData->TotalVtxCount != _interfaceVertexCount)
@@ -1092,35 +1094,39 @@ void GameWindow::_UpdateInterfaceGeometryBuffers()
     if (!updateIndexBuffer && !updateVertexBuffer)
         return;
 
-    std::uint32_t vertexCount = 0;
-    std::uint32_t indexCount = 0;
-    std::accumulate(imDrawData->CmdLists, imDrawData->CmdLists + imDrawData->CmdListsCount, 0,
-        [&](auto init, const ImDrawList* drawList) {
-        indexCount += drawList->IdxBuffer.Size;
-        vertexCount += drawList->VtxBuffer.Size;
-        return 0;
-    });
+    uint32_t vertexCount = 0;
+    uint32_t indexCount = 0;
+
+    for (int32_t i = 0; i < imDrawData->CmdListsCount; ++i)
+    {
+        indexCount += imDrawData->CmdLists[i]->IdxBuffer.Size;
+        vertexCount += imDrawData->CmdLists[i]->VtxBuffer.Size;
+    }
 
     std::vector<ImDrawVert> vertices(vertexCount);
     std::vector<ImDrawIdx> indices(indexCount);
-    std::uint32_t vertexOffset = 0;
-    std::uint32_t indexOffset = 0;
+    uint32_t vertexOffset = 0;
+    uint32_t indexOffset = 0;
 
-    for (std::int32_t i = 0; i < imDrawData->CmdListsCount; ++i)
+    for (int32_t i = 0; i < imDrawData->CmdListsCount; ++i)
     {
         const ImDrawList* drawList = imDrawData->CmdLists[i];
-        memcpy(vertices.data() + vertexOffset, drawList->VtxBuffer.Data, drawList->VtxBuffer.Size * sizeof(ImDrawVert));
-        memcpy(indices.data() + indexOffset, drawList->IdxBuffer.Data, drawList->IdxBuffer.Size * sizeof(ImDrawIdx));
+
+        if (updateVertexBuffer)
+            memcpy(vertices.data() + vertexOffset, drawList->VtxBuffer.Data, drawList->VtxBuffer.Size * sizeof(ImDrawVert));
+
+        if (updateIndexBuffer)
+            memcpy(indices.data() + indexOffset, drawList->IdxBuffer.Data, drawList->IdxBuffer.Size * sizeof(ImDrawIdx));
 
         indexOffset += drawList->IdxBuffer.Size;
         vertexOffset += drawList->VtxBuffer.Size;
     }
 
     if (updateIndexBuffer)
-        _device->BufferSubData(_interfaceIndexBuffer, 0, indexCount * sizeof(ImDrawIdx), indices.data());
+        _interfaceIndexBuffer->WriteMemory(0, indices.data(), indices.size());
 
     if (updateVertexBuffer)
-        _device->BufferSubData(_device, _interfaceVertexBuffer, 0, vertexCount * sizeof(ImDrawVert), vertices.data());
+        _interfaceVertexBuffer->WriteMemory(0, vertices.data(), vertices.size());
 }
 
 void GameWindow::OnKeyUp(int key, int mods)
@@ -1147,13 +1153,9 @@ void GameWindow::OnMouseUp(int button, float x, float y)
     switch (button)
     {
         case GLFW_MOUSE_BUTTON_LEFT:
-            io.MouseDown[0] = false;
-            break;
         case GLFW_MOUSE_BUTTON_RIGHT:
-            io.MouseDown[1] = false;
-            break;
         case GLFW_MOUSE_BUTTON_MIDDLE:
-            io.MouseDown[2] = false;
+            io.MouseDown[button] = false;
             break;
     }
 }
@@ -1168,13 +1170,9 @@ void GameWindow::OnMouseDown(int button, float x, float y)
     switch (button)
     {
         case GLFW_MOUSE_BUTTON_LEFT:
-            io.MouseDown[0] = true;
-            break;
         case GLFW_MOUSE_BUTTON_RIGHT:
-            io.MouseDown[1] = true;
-            break;
         case GLFW_MOUSE_BUTTON_MIDDLE:
-            io.MouseDown[2] = true;
+            io.MouseDown[button] = true;
             break;
     }
 }
@@ -1191,7 +1189,7 @@ void GameWindow::PrepareForRelease()
     // Clean up and stop rendering
 }
 
-void GameWindow::OnResize(std::uint32_t width, std::uint32_t height)
+void GameWindow::OnResize(uint32_t width, uint32_t height)
 {
     _width = width;
     _height = height;
@@ -1215,12 +1213,12 @@ void GameWindow::ToggleVSync()
     // _device->WaitIdle();
 }
 
-void GameWindow::ToggleFullscreen(std::int32_t selectedMonitor /* = -1 */)
+void GameWindow::ToggleFullscreen(int32_t selectedMonitor /* = -1 */)
 {
     GLFWmonitor* monitor = glfwGetWindowMonitor(_window);
     if (monitor == nullptr)
     {
-        std::int32_t monitorCount = 0;
+        int32_t monitorCount = 0;
         GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
         monitor = monitors[0]; // Default to the first monitor available.
         if (selectedMonitor >= 0 && selectedMonitor < monitorCount)

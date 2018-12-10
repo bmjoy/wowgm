@@ -15,7 +15,7 @@ namespace wowgm::game::structures
         static_assert(!std::is_same<T, std::nullptr_t>::value, "");
 
     private:
-        std::uint32_t Value;
+        uint32_t Value;
 
     public:
         T const* operator -> ()

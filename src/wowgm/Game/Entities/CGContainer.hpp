@@ -16,13 +16,13 @@ namespace wowgm::game::entities
 #pragma pack(push, 1)
     struct CGContainerData
     {
-        std::uint32_t NumSlots;
-        std::array<std::uint8_t, 4> _;
+        uint32_t NumSlots;
+        std::array<uint8_t, 4> _;
         std::array<ObjectGuid, 36> Contents;
     };
 #pragma pack(pop)
 
-    static_assert(sizeof(CGContainerData) == sizeof(std::uint32_t) * 74);
+    static_assert(sizeof(CGContainerData) == sizeof(uint32_t) * 74);
 
     class CGContainer : public CGContainerData, public CGItem
     {

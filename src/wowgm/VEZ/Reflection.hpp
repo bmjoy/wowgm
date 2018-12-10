@@ -10,6 +10,6 @@ namespace vez
 
     namespace SPIRV
     {
-        bool ReflectResources(std::vector<std::uint32_t> const& spirvCode, VkShaderStageFlagBits shaderStage, std::vector<PipelineResource>& resourceContainer);
+        bool ReflectResources(std::vector<uint32_t> const& spirvCode, VkShaderStageFlagBits shaderStage, std::vector<PipelineResource>& resourceContainer);
     }
 }

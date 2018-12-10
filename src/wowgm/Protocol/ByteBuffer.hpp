@@ -21,7 +21,7 @@ namespace wowgm::protocol
     {
     public:
         static size_t const DEFAULT_SIZE = 0x1000;
-        static std::uint8_t const InitialBitPos = 8;
+        static uint8_t const InitialBitPos = 8;
 
         // constructor
         ByteBuffer() : _rpos(0), _wpos(0), _bitpos(InitialBitPos), _curbitval(0)
@@ -42,7 +42,7 @@ namespace wowgm::protocol
 
         ByteBuffer(MessageBuffer&& buffer);
 
-        std::vector<std::uint8_t>&& Move() noexcept
+        std::vector<uint8_t>&& Move() noexcept
         {
             _rpos = 0;
             _wpos = 0;
@@ -94,7 +94,7 @@ namespace wowgm::protocol
         {
             static_assert(std::is_fundamental<T>::value, "append(compound)");
             // EndianConvert(value);
-            append((std::uint8_t *)&value, sizeof(value));
+            append((uint8_t *)&value, sizeof(value));
         }
 
         void FlushBits()
@@ -104,7 +104,7 @@ namespace wowgm::protocol
 
             _bitpos = 8;
 
-            append((std::uint8_t *)&_curbitval, sizeof(std::uint8_t));
+            append((uint8_t *)&_curbitval, sizeof(uint8_t));
             _curbitval = 0;
         }
 
@@ -126,7 +126,7 @@ namespace wowgm::protocol
             if (_bitpos == 0)
             {
                 _bitpos = 8;
-                append((std::uint8_t *)&_curbitval, sizeof(_curbitval));
+                append((uint8_t *)&_curbitval, sizeof(_curbitval));
                 _curbitval = 0;
             }
 
@@ -138,23 +138,23 @@ namespace wowgm::protocol
             ++_bitpos;
             if (_bitpos > 7)
             {
-                _curbitval = read<std::uint8_t>();
+                _curbitval = read<uint8_t>();
                 _bitpos = 0;
             }
 
             return ((_curbitval >> (7 - _bitpos))&  1) != 0;
         }
 
-        void WriteBits(std::size_t value, std::int32_t bits)
+        void WriteBits(std::size_t value, int32_t bits)
         {
-            for (std::int32_t i = bits - 1; i >= 0; --i)
+            for (int32_t i = bits - 1; i >= 0; --i)
                 WriteBit((value >> i)&  1);
         }
 
-        std::uint32_t ReadBits(std::int32_t bits)
+        uint32_t ReadBits(int32_t bits)
         {
-            std::uint32_t value = 0;
-            for (std::int32_t i = bits - 1; i >= 0; --i)
+            uint32_t value = 0;
+            for (int32_t i = bits - 1; i >= 0; --i)
                 if (ReadBit())
                     value |= (1 << (i));
 
@@ -162,16 +162,16 @@ namespace wowgm::protocol
         }
 
         // Reads a byte (if needed) in-place
-        void ReadByteSeq(std::uint8_t& b)
+        void ReadByteSeq(uint8_t& b)
         {
             if (b != 0)
-                b ^= read<std::uint8_t>();
+                b ^= read<uint8_t>();
         }
 
-        void WriteByteSeq(std::uint8_t b)
+        void WriteByteSeq(uint8_t b)
         {
             if (b != 0)
-                append<std::uint8_t>(b ^ 1);
+                append<uint8_t>(b ^ 1);
         }
 
         template <typename T>
@@ -179,7 +179,7 @@ namespace wowgm::protocol
         {
             static_assert(std::is_fundamental<T>::value, "append(compound)");
             // EndianConvert(value);
-            put(pos, (std::uint8_t *)&value, sizeof(value));
+            put(pos, (uint8_t *)&value, sizeof(value));
         }
 
         /**
@@ -192,53 +192,53 @@ namespace wowgm::protocol
         * @param  value Data to write.
         * @param  bitCount Number of bits to store the value on.
         */
-        void PutBits(std::size_t pos, std::size_t value, std::uint32_t bitCount);
+        void PutBits(std::size_t pos, std::size_t value, uint32_t bitCount);
 
-        ByteBuffer& operator<<(std::uint8_t value)
+        ByteBuffer& operator<<(uint8_t value)
         {
-            append<std::uint8_t>(value);
+            append<uint8_t>(value);
             return *this;
         }
 
-        ByteBuffer& operator<<(std::uint16_t value)
+        ByteBuffer& operator<<(uint16_t value)
         {
-            append<std::uint16_t>(value);
+            append<uint16_t>(value);
             return *this;
         }
 
-        ByteBuffer& operator<<(std::uint32_t value)
+        ByteBuffer& operator<<(uint32_t value)
         {
-            append<std::uint32_t>(value);
+            append<uint32_t>(value);
             return *this;
         }
 
-        ByteBuffer& operator<<(std::uint64_t value)
+        ByteBuffer& operator<<(uint64_t value)
         {
-            append<std::uint64_t>(value);
+            append<uint64_t>(value);
             return *this;
         }
 
-        ByteBuffer& operator<<(std::int8_t value)
+        ByteBuffer& operator<<(int8_t value)
         {
-            append<std::int8_t>(value);
+            append<int8_t>(value);
             return *this;
         }
 
-        ByteBuffer& operator<<(std::int16_t value)
+        ByteBuffer& operator<<(int16_t value)
         {
-            append<std::int16_t>(value);
+            append<int16_t>(value);
             return *this;
         }
 
-        ByteBuffer& operator<<(std::int32_t value)
+        ByteBuffer& operator<<(int32_t value)
         {
-            append<std::int32_t>(value);
+            append<int32_t>(value);
             return *this;
         }
 
-        ByteBuffer& operator<<(std::int64_t value)
+        ByteBuffer& operator<<(int64_t value)
         {
-            append<std::int64_t>(value);
+            append<int64_t>(value);
             return *this;
         }
 
@@ -258,16 +258,16 @@ namespace wowgm::protocol
         ByteBuffer& operator<<(const std::string& value)
         {
             if (size_t len = value.length())
-                append((std::uint8_t const*)value.c_str(), len);
-            append<std::uint8_t>(0);
+                append((uint8_t const*)value.c_str(), len);
+            append<uint8_t>(0);
             return *this;
         }
 
         ByteBuffer& operator<<(const char *str)
         {
             if (size_t len = (str ? strlen(str) : 0))
-                append((std::uint8_t const*)str, len);
-            append<std::uint8_t>(0);
+                append((uint8_t const*)str, len);
+            append<uint8_t>(0);
             return *this;
         }
 
@@ -277,52 +277,52 @@ namespace wowgm::protocol
             return *this;
         }
 
-        ByteBuffer& operator>>(std::uint8_t& value)
+        ByteBuffer& operator>>(uint8_t& value)
         {
-            value = read<std::uint8_t>();
+            value = read<uint8_t>();
             return *this;
         }
 
-        ByteBuffer& operator>>(std::uint16_t& value)
+        ByteBuffer& operator>>(uint16_t& value)
         {
-            value = read<std::uint16_t>();
+            value = read<uint16_t>();
             return *this;
         }
 
-        ByteBuffer& operator>>(std::uint32_t& value)
+        ByteBuffer& operator>>(uint32_t& value)
         {
-            value = read<std::uint32_t>();
+            value = read<uint32_t>();
             return *this;
         }
 
-        ByteBuffer& operator>>(std::uint64_t& value)
+        ByteBuffer& operator>>(uint64_t& value)
         {
-            value = read<std::uint64_t>();
+            value = read<uint64_t>();
             return *this;
         }
 
         //signed as in 2e complement
-        ByteBuffer& operator>>(std::int8_t& value)
+        ByteBuffer& operator>>(int8_t& value)
         {
-            value = read<std::int8_t>();
+            value = read<int8_t>();
             return *this;
         }
 
-        ByteBuffer& operator>>(std::int16_t& value)
+        ByteBuffer& operator>>(int16_t& value)
         {
-            value = read<std::int16_t>();
+            value = read<int16_t>();
             return *this;
         }
 
-        ByteBuffer& operator>>(std::int32_t& value)
+        ByteBuffer& operator>>(int32_t& value)
         {
-            value = read<std::int32_t>();
+            value = read<int32_t>();
             return *this;
         }
 
-        ByteBuffer& operator>>(std::int64_t& value)
+        ByteBuffer& operator>>(int64_t& value)
         {
-            value = read<std::int64_t>();
+            value = read<int64_t>();
             return *this;
         }
 
@@ -342,14 +342,14 @@ namespace wowgm::protocol
             return *this;
         }
 
-        std::uint8_t& operator[](size_t const pos)
+        uint8_t& operator[](size_t const pos)
         {
             if (pos >= size())
                 throw ByteBufferPositionException(pos, 1, size());
             return _storage[pos];
         }
 
-        std::uint8_t const& operator[](size_t const pos) const
+        uint8_t const& operator[](size_t const pos) const
         {
             if (pos >= size())
                 throw ByteBufferPositionException(pos, 1, size());
@@ -416,7 +416,7 @@ namespace wowgm::protocol
             return val;
         }
 
-        void read(std::uint8_t *dest, size_t len)
+        void read(uint8_t *dest, size_t len)
         {
             if (_rpos + len > size())
                 throw ByteBufferPositionException(_rpos, len, size());
@@ -426,22 +426,22 @@ namespace wowgm::protocol
             _rpos += len;
         }
 
-        void ReadPackedUInt64(std::uint64_t& guid)
+        void ReadPackedUInt64(uint64_t& guid)
         {
             guid = 0;
-            ReadPackedUInt64(read<std::uint8_t>(), guid);
+            ReadPackedUInt64(read<uint8_t>(), guid);
         }
 
         void ReadPackedGuid(wowgm::game::structures::ObjectGuid& guid);
 
-        void ReadPackedUInt64(std::uint8_t mask, std::uint64_t& value)
+        void ReadPackedUInt64(uint8_t mask, uint64_t& value)
         {
-            for (std::uint32_t i = 0; i < 8; ++i)
-                if (mask&  (std::uint8_t(1) << i))
-                    value |= (std::uint64_t(read<std::uint8_t>()) << (i * 8));
+            for (uint32_t i = 0; i < 8; ++i)
+                if (mask&  (uint8_t(1) << i))
+                    value |= (uint64_t(read<uint8_t>()) << (i * 8));
         }
 
-        std::string ReadString(std::uint32_t length)
+        std::string ReadString(uint32_t length)
         {
             if (_rpos + length > size())
                 throw ByteBufferPositionException(_rpos, length, size());
@@ -469,16 +469,16 @@ namespace wowgm::protocol
                 append(str, len);
         }
 
-        std::uint32_t ReadPackedTime();
+        uint32_t ReadPackedTime();
 
-        std::uint8_t* contents()
+        uint8_t* contents()
         {
             if (_storage.empty())
                 throw ByteBufferException();
             return _storage.data();
         }
 
-        std::uint8_t const* contents() const
+        uint8_t const* contents() const
         {
             if (_storage.empty())
                 throw ByteBufferException();
@@ -511,15 +511,15 @@ namespace wowgm::protocol
 
         void append(const char *src, size_t cnt)
         {
-            return append((const std::uint8_t *)src, cnt);
+            return append((const uint8_t *)src, cnt);
         }
 
         template<class T> void append(const T *src, size_t cnt)
         {
-            return append((const std::uint8_t *)src, cnt * sizeof(T));
+            return append((const uint8_t *)src, cnt * sizeof(T));
         }
 
-        void append(const std::uint8_t *src, size_t cnt);
+        void append(const uint8_t *src, size_t cnt);
 
         void append(const ByteBuffer& buffer)
         {
@@ -530,24 +530,24 @@ namespace wowgm::protocol
         // can be used in SMSG_MONSTER_MOVE opcode
         void appendPackXYZ(float x, float y, float z)
         {
-            std::uint32_t packed = 0;
+            uint32_t packed = 0;
             packed |= ((int)(x / 0.25f)&  0x7FF);
             packed |= ((int)(y / 0.25f)&  0x7FF) << 11;
             packed |= ((int)(z / 0.25f)&  0x3FF) << 22;
             *this << packed;
         }
 
-        void appendPackGUID(std::uint64_t guid)
+        void appendPackGUID(uint64_t guid)
         {
-            std::uint8_t packGUID[8 + 1];
+            uint8_t packGUID[8 + 1];
             packGUID[0] = 0;
             size_t size = 1;
-            for (std::uint8_t i = 0; guid != 0; ++i)
+            for (uint8_t i = 0; guid != 0; ++i)
             {
                 if (guid & 0xFF)
                 {
-                    packGUID[0] |= std::uint8_t(1 << i);
-                    packGUID[size] = std::uint8_t(guid & 0xFF);
+                    packGUID[0] |= uint8_t(1 << i);
+                    packGUID[size] = uint8_t(guid & 0xFF);
                     ++size;
                 }
 
@@ -556,31 +556,31 @@ namespace wowgm::protocol
             append(packGUID, size);
         }
 
-        void AppendPackedUInt64(std::uint64_t guid)
+        void AppendPackedUInt64(uint64_t guid)
         {
-            std::uint8_t mask = 0;
+            uint8_t mask = 0;
             size_t pos = wpos();
-            *this << std::uint8_t(mask);
+            *this << uint8_t(mask);
 
-            std::uint8_t packed[8];
+            uint8_t packed[8];
             if (size_t packedSize = PackUInt64(guid,& mask, packed))
                 append(packed, packedSize);
 
-            put<std::uint8_t>(pos, mask);
+            put<uint8_t>(pos, mask);
         }
 
-        static size_t PackUInt64(std::uint64_t value, std::uint8_t* mask, std::uint8_t* result)
+        static size_t PackUInt64(uint64_t value, uint8_t* mask, uint8_t* result)
         {
             size_t resultSize = 0;
             *mask = 0;
             memset(result, 0, 8);
 
-            for (std::uint8_t i = 0; value != 0; ++i)
+            for (uint8_t i = 0; value != 0; ++i)
             {
                 if (value&  0xFF)
                 {
-                    *mask |= std::uint8_t(1 << i);
-                    result[resultSize++] = std::uint8_t(value&  0xFF);
+                    *mask |= uint8_t(1 << i);
+                    result[resultSize++] = uint8_t(value&  0xFF);
                 }
 
                 value >>= 8;
@@ -591,12 +591,12 @@ namespace wowgm::protocol
 
         void AppendPackedTime(time_t time);
 
-        void put(size_t pos, const std::uint8_t *src, size_t cnt);
+        void put(size_t pos, const uint8_t *src, size_t cnt);
 
     protected:
         size_t _rpos, _wpos, _bitpos;
-        std::uint8_t _curbitval;
-        std::vector<std::uint8_t> _storage;
+        uint8_t _curbitval;
+        std::vector<uint8_t> _storage;
     };
 
     /// @todo Make a ByteBuffer.cpp and move all this inlining to it.

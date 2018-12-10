@@ -29,7 +29,7 @@ namespace wowgm::protocol
     {
     }
 
-    void ClientServices::AsyncConnect(std::string_view username, std::string_view password, std::string_view realmAddress, std::int32_t port /* = 3724 */)
+    void ClientServices::AsyncConnect(std::string_view username, std::string_view password, std::string_view realmAddress, int32_t port /* = 3724 */)
     {
         if (_socket)
         {
@@ -77,7 +77,7 @@ namespace wowgm::protocol
             ConnectToRealm(realmInfo[0]);
     }
 
-    AuthRealmInfo* ClientServices::GetRealmInfo(std::uint32_t index)
+    AuthRealmInfo* ClientServices::GetRealmInfo(uint32_t index)
     {
         if (_realmInfos.is_initialized())
             return &(_realmInfos.get()[index]);
@@ -85,7 +85,7 @@ namespace wowgm::protocol
         return nullptr;
     }
 
-    std::uint32_t ClientServices::GetAvailableRealmCount()
+    uint32_t ClientServices::GetAvailableRealmCount()
     {
         if (_realmInfos.is_initialized())
             return _realmInfos->size();
@@ -188,7 +188,7 @@ namespace wowgm::protocol
         return _passwordHash.get();
     }
 
-    std::uint32_t ClientServices::GetCharacterCount() const
+    uint32_t ClientServices::GetCharacterCount() const
     {
         return _characters.size();
     }

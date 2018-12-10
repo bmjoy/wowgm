@@ -20,7 +20,7 @@ namespace wowgm::game::geometry
     constexpr static const float UNIT_SIZE  = CHUNK_SIZE / 8.0f;
 
     /*  --------------------------------- ADT TILE --------------------------------- */
-    MapChunk::MapChunk(std::uint32_t x, std::uint32_t y, const std::string& directoryName)
+    MapChunk::MapChunk(uint32_t x, uint32_t y, const std::string& directoryName)
     {
         auto manager = MpqFileSystem::Instance();
 
@@ -57,22 +57,22 @@ namespace wowgm::game::geometry
 
     void MapChunk::ParseFile(std::shared_ptr<FileHandle<MpqFile>> const& fileHandle)
     {
-        std::uint8_t const* rootData = fileHandle->GetData();
-        std::uint8_t const* position = rootData;
+        uint8_t const* rootData = fileHandle->GetData();
+        uint8_t const* position = rootData;
 
         while ((position - rootData) < fileHandle->GetFileSize())
         {
-            std::uint32_t chunkIdentifier = *reinterpret_cast<std::uint32_t const*>(position);
-            std::uint32_t chunkSize = *reinterpret_cast<std::uint32_t const*>(position + 4);
+            uint32_t chunkIdentifier = *reinterpret_cast<uint32_t const*>(position);
+            uint32_t chunkSize = *reinterpret_cast<uint32_t const*>(position + 4);
 
-            std::vector<std::uint8_t> chunkData(position + 8, position + 8 + chunkSize);
+            std::vector<uint8_t> chunkData(position + 8, position + 8 + chunkSize);
             HandleTerrainChunk(chunkIdentifier, chunkData);
 
             position += 8 + chunkSize;
         }
     }
 
-    void MapChunk::HandleTerrainChunk(std::uint32_t identifier, std::vector<std::uint8_t> const& content)
+    void MapChunk::HandleTerrainChunk(uint32_t identifier, std::vector<uint8_t> const& content)
     {
         switch (identifier)
         {
@@ -119,7 +119,7 @@ namespace wowgm::game::geometry
         }
     }
 
-    const char* MapChunk::GetModelFilename(std::uint32_t index) const
+    const char* MapChunk::GetModelFilename(uint32_t index) const
     {
         if (index >= _modelFilenamesOffset.size())
             return nullptr;
@@ -128,7 +128,7 @@ namespace wowgm::game::geometry
         return reinterpret_cast<const char*>(_modelFilenames.data() + strOffset);
     }
 
-    const char* MapChunk::GetWorldModelFilename(std::uint32_t index) const
+    const char* MapChunk::GetWorldModelFilename(uint32_t index) const
     {
         if (index >= _worldMapObjectFilenamesOffset.size())
             return nullptr;
@@ -159,25 +159,25 @@ namespace wowgm::game::geometry
 
     /*  --------------------------------- ADT TILE MCNK --------------------------------- */
 
-    Chunk::Chunk(std::uint8_t const* data, size_t length)
+    Chunk::Chunk(uint8_t const* data, size_t length)
     {
         memcpy(&_header, data, sizeof(SMChunk));
-        std::uint8_t const* start = data + sizeof(SMChunk);
-        std::uint8_t const* position = start;
+        uint8_t const* start = data + sizeof(SMChunk);
+        uint8_t const* position = start;
 
         while ((position - start) < length)
         {
-            std::uint32_t chunkIdentifier = *reinterpret_cast<std::uint32_t const*>(position);
-            std::uint32_t chunkSize = *reinterpret_cast<std::uint32_t const*>(position + 4);
+            uint32_t chunkIdentifier = *reinterpret_cast<uint32_t const*>(position);
+            uint32_t chunkSize = *reinterpret_cast<uint32_t const*>(position + 4);
 
-            std::vector<std::uint8_t> chunkData(position + 8, position + 8 + chunkSize);
+            std::vector<uint8_t> chunkData(position + 8, position + 8 + chunkSize);
             HandleTerrainChunk(chunkIdentifier, chunkData);
 
             position += 8 + chunkSize;
         }
     }
 
-    void Chunk::HandleTerrainChunk(std::uint32_t identifier, std::vector<std::uint8_t> const& content)
+    void Chunk::HandleTerrainChunk(uint32_t identifier, std::vector<uint8_t> const& content)
     {
         switch (identifier)
         {
@@ -185,12 +185,12 @@ namespace wowgm::game::geometry
             {
                 _hasGeometry = true;
 
-                std::uint32_t i = 0;
+                uint32_t i = 0;
                 const float* heightData = reinterpret_cast<float const*>(content.data());
-                for (std::uint32_t x = 0; x < 17; ++x)
+                for (uint32_t x = 0; x < 17; ++x)
                 {
-                    std::uint32_t yMax = ((x & 1) != 0) ? 8 : 9;
-                    for (std::uint32_t y = 0; y < yMax; ++y)
+                    uint32_t yMax = ((x & 1) != 0) ? 8 : 9;
+                    for (uint32_t y = 0; y < yMax; ++y)
                     {
                         VertexData& itr = _vertexData[i];
 
@@ -202,7 +202,7 @@ namespace wowgm::game::geometry
 
                         ++i;
 
-                        for (std::uint32_t k = 0; k < 3; ++k)
+                        for (uint32_t k = 0; k < 3; ++k)
                         {
                             if (itr.vertice[k] > _boundingBox.Maximum[k])
                                 _boundingBox.Maximum[k] = itr.vertice[k];
@@ -218,12 +218,12 @@ namespace wowgm::game::geometry
             }
             case 'MCNR':
             {
-                std::uint32_t i = 0;
+                uint32_t i = 0;
                 for (VertexData& itr : _vertexData)
                 {
-                    itr.normal.X = float(std::int8_t(content[i + 0])) / 127.0f;
-                    itr.normal.Y = float(std::int8_t(content[i + 1])) / 127.0f;
-                    itr.normal.Z = float(std::int8_t(content[i + 2])) / 127.0f;
+                    itr.normal.X = float(int8_t(content[i + 0])) / 127.0f;
+                    itr.normal.Y = float(int8_t(content[i + 1])) / 127.0f;
+                    itr.normal.Z = float(int8_t(content[i + 2])) / 127.0f;
                     // if (std::abs(itr.normal.lengthSquared() - 2.0f) < 1.0e-8f) // (l^2 + 1 - 2l) < stddev^2. assume l is close enough to 1 that 2l ~= 2
                     //     itr.normal.normalize();
 
@@ -253,9 +253,9 @@ namespace wowgm::game::geometry
 
     ADT::ADT(const std::string& directoryName)
     {
-        for (std::uint32_t x = 0; x < 64; ++x)
+        for (uint32_t x = 0; x < 64; ++x)
         {
-            for (std::uint32_t y = 0; y < 64; ++y)
+            for (uint32_t y = 0; y < 64; ++y)
             {
                 MapChunk* newChunk = new MapChunk(x, y, directoryName);
                 if (newChunk->HasGeometry())

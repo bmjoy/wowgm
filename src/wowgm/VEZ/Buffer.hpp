@@ -25,15 +25,10 @@ namespace vez
 
         template <typename T>
         inline VkResult WriteMemory(VkDeviceSize offset, const T* data, VkDeviceSize dataSize) {
-            return WriteBytes(offset, reinterpret_cast<const std::uint8_t*>(data), dataSize * sizeof(T));
+            return WriteBytes(offset, reinterpret_cast<const uint8_t*>(data), dataSize * sizeof(T));
         }
 
-        template <typename T, typename std::enable_if<std::is_data_container<T>::value, int>::type = 0>
-        inline VkResult WriteMemory(VkDeviceSize offset, T const& container) {
-            WriteMemory<typename T::element_type>(offset, container.data(), container.size() * sizeof(T));
-        }
-
-        VkResult WriteBytes(VkDeviceSize offset, const std::uint8_t* data, VkDeviceSize dataSize);
+        VkResult WriteBytes(VkDeviceSize offset, const uint8_t* data, VkDeviceSize dataSize);
 
     private:
         VkBuffer _handle = VK_NULL_HANDLE;

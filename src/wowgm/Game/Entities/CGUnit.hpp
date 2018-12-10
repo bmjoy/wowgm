@@ -16,26 +16,26 @@ namespace wowgm::game::entities
     {
         struct UnitBytes0
         {
-            std::uint8_t Race;
-            std::uint8_t Class;
-            std::uint8_t Gender;
-            std::uint8_t PowerType;
+            uint8_t Race;
+            uint8_t Class;
+            uint8_t Gender;
+            uint8_t PowerType;
         };
 
         struct UnitBytes1
         {
-            std::uint8_t StandState;
-            std::uint8_t FreePetTalentPoints;
-            std::uint8_t StandFlags;
-            std::uint8_t Flags;
+            uint8_t StandState;
+            uint8_t FreePetTalentPoints;
+            uint8_t StandFlags;
+            uint8_t Flags;
         };
 
         struct UnitBytes2
         {
-            std::uint8_t SheathState;
-            std::uint8_t PvpFlags;
-            std::uint8_t RenameFlags;
-            std::uint8_t ShapeshiftForm;
+            uint8_t SheathState;
+            uint8_t PvpFlags;
+            uint8_t RenameFlags;
+            uint8_t ShapeshiftForm;
         };
 
         struct DamageInfo
@@ -46,9 +46,9 @@ namespace wowgm::game::entities
 
         struct AttackPowerInfo
         {
-            std::uint32_t Value;
-            std::uint32_t PositiveModifier;
-            std::uint32_t NegativeModifier;
+            uint32_t Value;
+            uint32_t PositiveModifier;
+            uint32_t NegativeModifier;
             float Multiplier;
         };
 
@@ -60,56 +60,56 @@ namespace wowgm::game::entities
         ObjectGuid CreatedBy;
         ObjectGuid Target;
         ObjectGuid ChannelTarget;
-        std::uint32_t ChannelSpellID;
+        uint32_t ChannelSpellID;
         UnitBytes0 UnitBytes0;
-        std::array<std::uint32_t, 6> Powers;
-        std::array<std::uint32_t, 6> MaxPowers;
+        std::array<uint32_t, 6> Powers;
+        std::array<uint32_t, 6> MaxPowers;
         std::array<float, 5> PowerRegenModifier;
         std::array<float, 5> InterruptedPowerRegenModifier;
-        std::uint32_t Level;
-        std::uint32_t FactionID;
-        std::array<std::uint32_t, 3> VirtualItems;
-        std::array<std::uint32_t, 2> UnitFlags;
-        std::uint32_t AuraState;
-        std::array<std::uint32_t, 3> AttackTimes;
+        uint32_t Level;
+        uint32_t FactionID;
+        std::array<uint32_t, 3> VirtualItems;
+        std::array<uint32_t, 2> UnitFlags;
+        uint32_t AuraState;
+        std::array<uint32_t, 3> AttackTimes;
         float BoundingRadius;
         float CombatReach;
-        std::uint32_t DisplayID;
-        std::uint32_t NativeDisplayID;
-        std::uint32_t MountDisplayID;
+        uint32_t DisplayID;
+        uint32_t NativeDisplayID;
+        uint32_t MountDisplayID;
         std::array<DamageInfo, 2> Damage;
         UnitBytes1 UnitBytes1;
-        std::uint32_t PetNumber;
-        std::uint32_t PetNameTimestamp;
-        std::uint32_t PetExperience;
-        std::uint32_t PetNextLevelXP;
-        std::uint32_t DynamicFlags;
+        uint32_t PetNumber;
+        uint32_t PetNameTimestamp;
+        uint32_t PetExperience;
+        uint32_t PetNextLevelXP;
+        uint32_t DynamicFlags;
         float ModCastSpeed;
         float ModCastHaste;
-        std::uint32_t CreatedBySpell;
-        std::uint32_t NpcFlags;
-        std::uint32_t NpcEmoteState;
-        std::array<std::uint32_t, 5> Stats;
-        std::array<std::uint32_t, 5> PosStats;
-        std::array<std::uint32_t, 5> NegStats;
-        std::array<std::uint32_t, 7> Resistances;
-        std::array<std::uint32_t, 7> ResistancesBuffModPositive;
-        std::array<std::uint32_t, 7> ResistancesBuffModNegative;
-        std::uint32_t BaseMana;
-        std::uint32_t BaseHealth;
+        uint32_t CreatedBySpell;
+        uint32_t NpcFlags;
+        uint32_t NpcEmoteState;
+        std::array<uint32_t, 5> Stats;
+        std::array<uint32_t, 5> PosStats;
+        std::array<uint32_t, 5> NegStats;
+        std::array<uint32_t, 7> Resistances;
+        std::array<uint32_t, 7> ResistancesBuffModPositive;
+        std::array<uint32_t, 7> ResistancesBuffModNegative;
+        uint32_t BaseMana;
+        uint32_t BaseHealth;
         UnitBytes2 UnitBytes2;
         std::array<AttackPowerInfo, 2> AttackPower;
         DamageInfo RangedDamage;
-        std::array<std::uint32_t, 7> PowerCostModifier;
+        std::array<uint32_t, 7> PowerCostModifier;
         std::array<float, 7> PowerCostMultiplier;
         float MaxHealthModifier;
         float HoverHeight;
-        std::uint32_t MaxItemLevel;
-        std::uint32_t _;
+        uint32_t MaxItemLevel;
+        uint32_t _;
     };
 #pragma pack(pop)
 
-    static_assert(sizeof(CGUnitData) == sizeof(std::uint32_t) * 0x008A);
+    static_assert(sizeof(CGUnitData) == sizeof(uint32_t) * 0x008A);
 
     class CGUnit : public CGObject, public CGUnitData
     {

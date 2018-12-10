@@ -314,7 +314,7 @@ namespace vez
 
 #if _DEBUG
         RenderPass* _currentRenderPass = nullptr;
-        std::uint32_t _subpassIndex;
+        uint32_t _subpassIndex;
         VkSubpassContents _subpassContents = VK_SUBPASS_CONTENTS_INLINE;
 
 #endif

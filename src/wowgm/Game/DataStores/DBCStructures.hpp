@@ -12,7 +12,7 @@ namespace wowgm::game::datastores
 {
 #pragma pack(push, 1)
     struct Startup_StringsEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
         const char* UnkMember2;
     };
@@ -20,339 +20,339 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct ItemSparseEntry {
-        std::uint32_t ID;
-        std::uint32_t Quality;
-        std::uint32_t Flags[2];
+        uint32_t ID;
+        uint32_t Quality;
+        uint32_t Flags[2];
         float UnkMember3;
         float UnkMember4;
-        std::uint32_t BuyCount;
-        std::uint32_t BuyPrice;
-        std::uint32_t SpellPrice;
-        std::uint32_t InventoryType;
-        std::uint32_t AllowableClass;
-        std::uint32_t AllowableRace;
-        std::uint32_t ItemLevel;
+        uint32_t BuyCount;
+        uint32_t BuyPrice;
+        uint32_t SpellPrice;
+        uint32_t InventoryType;
+        uint32_t AllowableClass;
+        uint32_t AllowableRace;
+        uint32_t ItemLevel;
         struct {
-            std::uint32_t Level;
-            std::uint32_t Skill;
-            std::uint32_t SkillRank;
-            std::uint32_t Spell;
-            std::uint32_t HonorRank;
-            std::uint32_t CityRank;
+            uint32_t Level;
+            uint32_t Skill;
+            uint32_t SkillRank;
+            uint32_t Spell;
+            uint32_t HonorRank;
+            uint32_t CityRank;
             struct {
-                std::uint32_t FactionID;
-                std::uint32_t Rank;
+                uint32_t FactionID;
+                uint32_t Rank;
             } Reputation;
         } Requirements;
-        std::uint32_t MaxCount;
-        std::uint32_t Stackable;
-        std::uint32_t ContainerSlots;
+        uint32_t MaxCount;
+        uint32_t Stackable;
+        uint32_t ContainerSlots;
         struct {
-            std::uint32_t Type[10];
-            std::uint32_t Value[10];
-            std::uint32_t Allocation[10];
-            std::uint32_t Multiplier[10];
+            uint32_t Type[10];
+            uint32_t Value[10];
+            uint32_t Allocation[10];
+            uint32_t Multiplier[10];
         } Stats;
-        std::uint32_t ScalingStatDistributionID;
-        std::uint32_t DamageType;
-        std::uint32_t Delay;
+        uint32_t ScalingStatDistributionID;
+        uint32_t DamageType;
+        uint32_t Delay;
         float RangedModifier;
-        std::uint32_t SpellID[5];
-        std::uint32_t SpellTriggerMode[5];
-        std::uint32_t SpellCharges[5];
-        std::uint32_t SpellCooldowns[5];
-        std::uint32_t SpellCategories[5];
-        std::uint32_t SpellCategoriesCooldowns[5];
-        std::uint32_t Bonding;
+        uint32_t SpellID[5];
+        uint32_t SpellTriggerMode[5];
+        uint32_t SpellCharges[5];
+        uint32_t SpellCooldowns[5];
+        uint32_t SpellCategories[5];
+        uint32_t SpellCategoriesCooldowns[5];
+        uint32_t Bonding;
         const char* Name[4];
         const char* Description;
-        std::uint32_t PageText;
-        std::uint32_t LanguageID;
-        std::uint32_t PageMaterialID;
-        std::uint32_t StartsQuest;
-        std::uint32_t LockID;
-        std::uint32_t Material;
-        std::uint32_t Sheath;
-        std::uint32_t RandomProperty;
-        std::uint32_t RandomSuffix;
-        std::uint32_t ItemSetID;
-        std::uint32_t AreaID;
-        std::uint32_t MapID;
-        std::uint32_t BagFamily;
-        std::uint32_t TotemCategory;
-        std::uint32_t Color[3];
-        std::uint32_t Content[3];
-        std::uint32_t SocketBonus;
-        std::uint32_t GemProperties;
+        uint32_t PageText;
+        uint32_t LanguageID;
+        uint32_t PageMaterialID;
+        uint32_t StartsQuest;
+        uint32_t LockID;
+        uint32_t Material;
+        uint32_t Sheath;
+        uint32_t RandomProperty;
+        uint32_t RandomSuffix;
+        uint32_t ItemSetID;
+        uint32_t AreaID;
+        uint32_t MapID;
+        uint32_t BagFamily;
+        uint32_t TotemCategory;
+        uint32_t Color[3];
+        uint32_t Content[3];
+        uint32_t SocketBonus;
+        uint32_t GemProperties;
         float ArmorDamageModifier;
-        std::uint32_t Duration;
-        std::uint32_t ItemLimitCategoryID;
-        std::uint32_t HolidayID;
+        uint32_t Duration;
+        uint32_t ItemLimitCategoryID;
+        uint32_t HolidayID;
         float ScalingStatFactor;
-        std::uint32_t CurrencySubstitutionID;
-        std::uint32_t CurrencySubstitutionCount;
+        uint32_t CurrencySubstitutionID;
+        uint32_t CurrencySubstitutionCount;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellVisualKitEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12[3];
-        std::uint32_t UnkMember13;
-        std::uint32_t UnkMember14;
-        std::uint32_t UnkMember15;
-        std::uint32_t UnkMember16[4];
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12[3];
+        uint32_t UnkMember13;
+        uint32_t UnkMember14;
+        uint32_t UnkMember15;
+        uint32_t UnkMember16[4];
         float UnkMember17[4];
         float UnkMember18[4];
         float UnkMember19[4];
         float UnkMember20[4];
-        std::uint32_t UnkMember21;
+        uint32_t UnkMember21;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellVisualEffectNameEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
         const char* UnkMember2;
         float UnkMember3;
         float UnkMember4;
         float UnkMember5;
         float UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t UnkMember7;
         float UnkMember8;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellEffectEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
         float UnkMember6;
         float UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12[2];
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12[2];
         float UnkMember13;
-        std::uint32_t UnkMember14[2];
+        uint32_t UnkMember14[2];
         float UnkMember15;
-        std::uint32_t UnkMember16[3];
-        std::uint32_t UnkMember17;
-        std::uint32_t UnkMember18[2];
-        std::uint32_t UnkMember19;
-        std::uint32_t UnkMember20;
-        std::uint32_t UnkMember21;
+        uint32_t UnkMember16[3];
+        uint32_t UnkMember17;
+        uint32_t UnkMember18[2];
+        uint32_t UnkMember19;
+        uint32_t UnkMember20;
+        uint32_t UnkMember21;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ParticleColorEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[3];
-        std::uint32_t UnkMember2[3];
-        std::uint32_t UnkMember3[3];
+        uint32_t ID;
+        uint32_t UnkMember1[3];
+        uint32_t UnkMember2[3];
+        uint32_t UnkMember3[3];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ObjectEffectPackageElemEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ObjectEffectPackageEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ObjectEffectModifierEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
         float UnkMember4[4];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ObjectEffectGroupEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ObjectEffectEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
         float UnkMember8[3];
-        std::uint32_t UnkMember9;
+        uint32_t UnkMember9;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct NameGenEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct LoadingScreensEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
         const char* UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemVisualEffectsEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemVisualsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[5];
+        uint32_t ID;
+        uint32_t UnkMember1[5];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemDisplayInfoEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1[2];
         const char* UnkMember2[2];
         const char* UnkMember3[2];
-        std::uint32_t UnkMember4[3];
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8[2];
+        uint32_t UnkMember4[3];
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8[2];
         const char* UnkMember9[8];
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct HelmetGeosetVisDataEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[7];
+        uint32_t ID;
+        uint32_t UnkMember1[7];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GuildColorEmblemEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GuildColorBorderEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GuildColorBackgroundEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GlueScreenEmoteEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GameTipsEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CreatureModelDataEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         const char* UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember3;
         float UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
         float UnkMember7;
         float UnkMember8;
         float UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
         float UnkMember14;
         float UnkMember15;
         float UnkMember16;
@@ -371,15 +371,15 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct CreatureFamilyEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
         float UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5[2];
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5[2];
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
         const char* UnkMember9;
         const char* UnkMember10;
     };
@@ -387,118 +387,118 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct CreatureDisplayInfoExtraEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8[11];
-        std::uint32_t UnkMember9;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8[11];
+        uint32_t UnkMember9;
         const char* UnkMember10;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CreatureDisplayInfoEntry {
-        std::uint32_t ID;
-        std::uint32_t ModelID;
-        std::uint32_t SoundID;
-        std::uint32_t ExtendedDisplayInfoID;
+        uint32_t ID;
+        uint32_t ModelID;
+        uint32_t SoundID;
+        uint32_t ExtendedDisplayInfoID;
         float ModelScale;
-        std::uint32_t ModelAlpha;
+        uint32_t ModelAlpha;
         const char* TextureVariations[3];
         const char* PortraitTextureName;
-        std::uint32_t SizeClass;
-        std::uint32_t BloodID;
-        std::uint32_t CreatureSoundID;
-        std::uint32_t ParticleColorID;
-        std::uint32_t CreatureGeosetData;
-        std::uint32_t ObjectEffectPackageID;
-        std::uint32_t AnimReplacementSetID;
+        uint32_t SizeClass;
+        uint32_t BloodID;
+        uint32_t CreatureSoundID;
+        uint32_t ParticleColorID;
+        uint32_t CreatureGeosetData;
+        uint32_t ObjectEffectPackageID;
+        uint32_t AnimReplacementSetID;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CharStartOutfitEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5[24];
-        std::uint32_t UnkMember6[24];
-        std::uint32_t UnkMember7[24];
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5[24];
+        uint32_t UnkMember6[24];
+        uint32_t UnkMember7[24];
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct AnimReplacementSetEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct AnimReplacementEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct AnimKitSegmentEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
         float UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
-        std::uint32_t UnkMember14;
-        std::uint32_t UnkMember15;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
+        uint32_t UnkMember14;
+        uint32_t UnkMember15;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct AnimKitPriorityEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SoundProviderPreferencesEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
         float UnkMember4;
         float UnkMember5;
         float UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
         float UnkMember9;
-        std::uint32_t UnkMember10;
+        uint32_t UnkMember10;
         float UnkMember11;
-        std::uint32_t UnkMember12;
+        uint32_t UnkMember12;
         float UnkMember13;
         float UnkMember14;
         float UnkMember15;
-        std::uint32_t UnkMember16;
+        uint32_t UnkMember16;
         float UnkMember17;
         float UnkMember18;
         float UnkMember19;
@@ -511,89 +511,89 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct SpamMessagesEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SoundFilterElemEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
         float UnkMember4[9];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SoundFilterEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ResistancesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         const char* UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct NamesReservedEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct NamesProfanityEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct MovieVariationEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct MovieFileDataEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct MovieEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemSubClassEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
         const char* UnkMember10;
         const char* UnkMember11;
     };
@@ -601,9 +601,9 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct ItemClassEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         float UnkMember3;
         const char* UnkMember4;
     };
@@ -611,7 +611,7 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct FileDataEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
         const char* UnkMember2;
     };
@@ -619,21 +619,21 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct FactionTemplateEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6[4];
-        std::uint32_t UnkMember7[4];
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6[4];
+        uint32_t UnkMember7[4];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct FactionGroupEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         const char* UnkMember2;
         const char* UnkMember3;
     };
@@ -641,260 +641,260 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct ChrRacesEntry {
-        std::uint32_t ID;
-        std::uint32_t Flags;
-        std::uint32_t FactionID;
-        std::uint32_t ExplorationSoundID;
-        std::uint32_t MaleDisplayID;
-        std::uint32_t FemaleDisplayID;
+        uint32_t ID;
+        uint32_t Flags;
+        uint32_t FactionID;
+        uint32_t ExplorationSoundID;
+        uint32_t MaleDisplayID;
+        uint32_t FemaleDisplayID;
         const char* ClientPrefix;
-        std::uint32_t BaseLanguageID;
-        std::uint32_t CreatureType;
-        std::uint32_t ResSicknessSpellID;
-        std::uint32_t SplashSoundID;
+        uint32_t BaseLanguageID;
+        uint32_t CreatureType;
+        uint32_t ResSicknessSpellID;
+        uint32_t SplashSoundID;
         const char* ClientFileString;
-        std::uint32_t CinematicSequenceID;
-        std::uint32_t Alliance;
+        uint32_t CinematicSequenceID;
+        uint32_t Alliance;
         const char* Name;
         const char* GenderNames[2];
         const char* FacialHairCustomization[2];
         const char* HairCustomization;
-        std::uint32_t UnkMember19;
-        std::uint32_t UnkMember20;
-        std::uint32_t UnkMember21;
-        std::uint32_t UnkMember22;
+        uint32_t UnkMember19;
+        uint32_t UnkMember20;
+        uint32_t UnkMember21;
+        uint32_t UnkMember22;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ChrClassesEntry {
-        std::uint32_t ID;
-        std::uint32_t PowerDisplayID;
+        uint32_t ID;
+        uint32_t PowerDisplayID;
         const char* PetNameIdentifier;
         const char* Name;
         const char* GenderNames[2];
         const char* FileName;
-        std::uint32_t SpellClassSet;
-        std::uint32_t Flags;
-        std::uint32_t CinematicSequence;
-        std::uint32_t Expansion;
-        std::uint32_t AttackPowerPerStrength;
-        std::uint32_t AttackPowerPerAgility;
-        std::uint32_t RangedAttackPowerPerAgility;
+        uint32_t SpellClassSet;
+        uint32_t Flags;
+        uint32_t CinematicSequence;
+        uint32_t Expansion;
+        uint32_t AttackPowerPerStrength;
+        uint32_t AttackPowerPerAgility;
+        uint32_t RangedAttackPowerPerAgility;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ChatProfanityEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CharacterFacialHairStylesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3[5];
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3[5];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CharSectionsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
         const char* UnkMember4[3];
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CharHairGeosetsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CharBaseInfoEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct Cfg_ConfigsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct Cfg_CategoriesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
         const char* UnkMember5;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct BannedAddOnsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[4];
-        std::uint32_t UnkMember2[4];
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1[4];
+        uint32_t UnkMember2[4];
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct AnimKitConfigBoneSetEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct AnimKitConfigEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct AnimKitEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct AnimKitBoneSetEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct AnimKitBoneSetAliasEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct PhaseShiftZoneSoundsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct WorldChunkSoundsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct WorldStateZoneSoundsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ZoneMusicEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2[2];
-        std::uint32_t UnkMember3[2];
-        std::uint32_t UnkMember4[2];
+        uint32_t UnkMember2[2];
+        uint32_t UnkMember3[2];
+        uint32_t UnkMember4[2];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ZoneIntroMusicTableEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct WorldStateUIEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
         const char* UnkMember6;
         const char* UnkMember7;
         const char* UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
         const char* UnkMember11;
         const char* UnkMember12;
         const char* UnkMember13;
-        std::uint32_t UnkMember14[3];
+        uint32_t UnkMember14[3];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct WorldSafeLocsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2[3];
         const char* UnkMember3;
     };
@@ -902,116 +902,116 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct WorldMapTransformsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2[2];
         float UnkMember3[2];
-        std::uint32_t UnkMember4;
+        uint32_t UnkMember4;
         float UnkMember5[2];
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct WorldMapOverlayEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2[4];
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2[4];
         const char* UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct WorldMapContinentEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
         float UnkMember6[2];
         float UnkMember7;
         float UnkMember8[2];
         float UnkMember9[2];
-        std::uint32_t UnkMember10;
+        uint32_t UnkMember10;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct WorldMapAreaEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         const char* UnkMember3;
         float UnkMember4;
         float UnkMember5;
         float UnkMember6;
         float UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct WeaponSwingSounds2Entry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct WeaponImpactSoundsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3[10];
-        std::uint32_t UnkMember4[10];
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3[10];
+        uint32_t UnkMember4[10];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct World_PVP_AreaEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct VocalUISoundsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3[2];
-        std::uint32_t UnkMember4[2];
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3[2];
+        uint32_t UnkMember4[2];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct VehicleUIIndSeatEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         float UnkMember3;
         float UnkMember4;
     };
@@ -1019,16 +1019,16 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct VehicleUIIndicatorEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct VehicleSeatEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         float UnkMember3[3];
         float UnkMember4;
         float UnkMember5;
@@ -1037,12 +1037,12 @@ namespace wowgm::game::datastores
         float UnkMember8;
         float UnkMember9;
         float UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
-        std::uint32_t UnkMember14;
-        std::uint32_t UnkMember15;
-        std::uint32_t UnkMember16;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
+        uint32_t UnkMember14;
+        uint32_t UnkMember15;
+        uint32_t UnkMember16;
         float UnkMember17;
         float UnkMember18;
         float UnkMember19;
@@ -1050,26 +1050,26 @@ namespace wowgm::game::datastores
         float UnkMember21;
         float UnkMember22;
         float UnkMember23;
-        std::uint32_t UnkMember24;
-        std::uint32_t UnkMember25;
-        std::uint32_t UnkMember26;
+        uint32_t UnkMember24;
+        uint32_t UnkMember25;
+        uint32_t UnkMember26;
         float UnkMember27;
         float UnkMember28;
         float UnkMember29;
-        std::uint32_t UnkMember30;
-        std::uint32_t UnkMember31;
-        std::uint32_t UnkMember32;
-        std::uint32_t UnkMember33;
-        std::uint32_t UnkMember34;
-        std::uint32_t UnkMember35;
-        std::uint32_t UnkMember36;
+        uint32_t UnkMember30;
+        uint32_t UnkMember31;
+        uint32_t UnkMember32;
+        uint32_t UnkMember33;
+        uint32_t UnkMember34;
+        uint32_t UnkMember35;
+        uint32_t UnkMember36;
         float UnkMember37;
         float UnkMember38;
-        std::uint32_t UnkMember39;
-        std::uint32_t UnkMember40;
-        std::uint32_t UnkMember41;
-        std::uint32_t UnkMember42;
-        std::uint32_t UnkMember43;
+        uint32_t UnkMember39;
+        uint32_t UnkMember40;
+        uint32_t UnkMember41;
+        uint32_t UnkMember42;
+        uint32_t UnkMember43;
         float UnkMember44;
         float UnkMember45;
         float UnkMember46;
@@ -1080,26 +1080,26 @@ namespace wowgm::game::datastores
         float UnkMember51;
         float UnkMember52;
         float UnkMember53;
-        std::uint32_t UnkMember54;
-        std::uint32_t UnkMember55;
-        std::uint32_t UnkMember56;
-        std::uint32_t UnkMember57;
-        std::uint32_t UnkMember58;
-        std::uint32_t UnkMember59;
-        std::uint32_t UnkMember60;
-        std::uint32_t UnkMember61;
+        uint32_t UnkMember54;
+        uint32_t UnkMember55;
+        uint32_t UnkMember56;
+        uint32_t UnkMember57;
+        uint32_t UnkMember58;
+        uint32_t UnkMember59;
+        uint32_t UnkMember60;
+        uint32_t UnkMember61;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct VehicleEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2;
         float UnkMember3;
         float UnkMember4;
         float UnkMember5;
-        std::uint32_t UnkMember6[8];
+        uint32_t UnkMember6[8];
         float UnkMember7;
         float UnkMember8;
         float UnkMember9;
@@ -1118,26 +1118,26 @@ namespace wowgm::game::datastores
         const char* UnkMember22;
         const char* UnkMember23[2];
         float UnkMember24;
-        std::uint32_t UnkMember25;
+        uint32_t UnkMember25;
         float UnkMember26;
-        std::uint32_t UnkMember27;
-        std::uint32_t UnkMember28[3];
+        uint32_t UnkMember27;
+        uint32_t UnkMember28[3];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct UnitPowerBarEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
         float UnkMember5;
         float UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8[6];
-        std::uint32_t UnkMember9[6];
-        std::uint32_t UnkMember10;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8[6];
+        uint32_t UnkMember9[6];
+        uint32_t UnkMember10;
         const char* UnkMember11;
         const char* UnkMember12;
         const char* UnkMember13;
@@ -1149,32 +1149,32 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct UnitBloodEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[2];
-        std::uint32_t UnkMember2[2];
+        uint32_t ID;
+        uint32_t UnkMember1[2];
+        uint32_t UnkMember2[2];
         const char* UnkMember3[5];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct UnitBloodLevelsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[3];
+        uint32_t ID;
+        uint32_t UnkMember1[3];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct TransportRotationEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         float UnkMember3[4];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct TransportPhysicsEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1;
         float UnkMember2;
         float UnkMember3;
@@ -1190,153 +1190,153 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct TransportAnimationEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         float UnkMember3[3];
-        std::uint32_t UnkMember4;
+        uint32_t UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct TotemCategoryEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct TerrainTypeSoundsEntry {
-        std::uint32_t ID;
+        uint32_t ID;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct TaxiPathEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct TaxiPathNodeEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
         float UnkMember4[3];
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct TaxiNodesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2[3];
         const char* UnkMember3;
-        std::uint32_t UnkMember4[2];
-        std::uint32_t UnkMember5;
+        uint32_t UnkMember4[2];
+        uint32_t UnkMember5;
         float UnkMember6[2];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct TalentTreePrimarySpellsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct TalentTabEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
         const char* UnkMember6;
         const char* UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9[2];
+        uint32_t UnkMember8;
+        uint32_t UnkMember9[2];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct TalentEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4[5];
-        std::uint32_t UnkMember5[3];
-        std::uint32_t UnkMember6[3];
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9[2];
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4[5];
+        uint32_t UnkMember5[3];
+        uint32_t UnkMember6[3];
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9[2];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SummonPropertiesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct StringLookupsEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct StationeryEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         const char* UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellVisualKitModelAttachEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
         float UnkMember4[3];
         float UnkMember5;
         float UnkMember6;
         float UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellVisualKitAreaModelEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
         float UnkMember4;
         float UnkMember5;
         float UnkMember6;
@@ -1345,141 +1345,141 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct SpellVisualEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
-        std::uint32_t UnkMember14;
-        std::uint32_t UnkMember15;
-        std::uint32_t UnkMember16;
-        std::uint32_t UnkMember17;
-        std::uint32_t UnkMember18;
-        std::uint32_t UnkMember19;
-        std::uint32_t UnkMember20;
-        std::uint32_t UnkMember21;
-        std::uint32_t UnkMember22;
-        std::uint32_t UnkMember23;
-        std::uint32_t UnkMember24;
-        std::uint32_t UnkMember25;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
+        uint32_t UnkMember14;
+        uint32_t UnkMember15;
+        uint32_t UnkMember16;
+        uint32_t UnkMember17;
+        uint32_t UnkMember18;
+        uint32_t UnkMember19;
+        uint32_t UnkMember20;
+        uint32_t UnkMember21;
+        uint32_t UnkMember22;
+        uint32_t UnkMember23;
+        uint32_t UnkMember24;
+        uint32_t UnkMember25;
         float UnkMember26[3];
         float UnkMember27[3];
-        std::uint32_t UnkMember28;
+        uint32_t UnkMember28;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellTotemsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[2];
-        std::uint32_t UnkMember2[2];
+        uint32_t ID;
+        uint32_t UnkMember1[2];
+        uint32_t UnkMember2[2];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellTargetRestrictionsEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float ConeAngle;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellSpecialUnitEffectEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellShapeshiftFormEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         const char* UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7[4];
-        std::uint32_t UnkMember8[8];
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7[4];
+        uint32_t UnkMember8[8];
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellShapeshiftEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[2];
-        std::uint32_t UnkMember2[2];
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1[2];
+        uint32_t UnkMember2[2];
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellScalingEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
         float UnkMember5[3];
         float UnkMember6[3];
         float UnkMember7[3];
         float UnkMember8;
-        std::uint32_t UnkMember9;
+        uint32_t UnkMember9;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellRuneCostEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellReagentsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[8];
-        std::uint32_t UnkMember2[8];
+        uint32_t ID;
+        uint32_t UnkMember1[8];
+        uint32_t UnkMember2[8];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellPowerEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
         float UnkMember7;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellRangeEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1[2];
         float UnkMember2[2];
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember3;
         const char* UnkMember4;
         const char* UnkMember5;
     };
@@ -1487,7 +1487,7 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct SpellRadiusEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1;
         float UnkMember2;
         float UnkMember3;
@@ -1496,18 +1496,18 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct SpellMissileMotionEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
         const char* UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellMissileEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2;
         float UnkMember3;
         float UnkMember4;
@@ -1526,91 +1526,91 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct SpellMechanicEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellLevelsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellItemEnchantmentConditionEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[1];
-        std::uint32_t UnkMember2[5];
-        std::uint32_t UnkMember3[1];
-        std::uint32_t UnkMember4[1];
-        std::uint32_t UnkMember5[5];
-        std::uint32_t UnkMember6[1];
+        uint32_t ID;
+        uint32_t UnkMember1[1];
+        uint32_t UnkMember2[5];
+        uint32_t UnkMember3[1];
+        uint32_t UnkMember4[1];
+        uint32_t UnkMember5[5];
+        uint32_t UnkMember6[1];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellItemEnchantmentEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2[3];
-        std::uint32_t UnkMember3[3];
-        std::uint32_t UnkMember4[3];
-        std::uint32_t UnkMember5[3];
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2[3];
+        uint32_t UnkMember3[3];
+        uint32_t UnkMember4[3];
+        uint32_t UnkMember5[3];
         const char* UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
-        std::uint32_t UnkMember14;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
+        uint32_t UnkMember14;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellInterruptsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[2];
-        std::uint32_t UnkMember2[2];
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1[2];
+        uint32_t UnkMember2[2];
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellIconEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellFocusObjectEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellFlyoutItemEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellFlyoutEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
         const char* UnkMember5;
         const char* UnkMember6;
     };
@@ -1618,129 +1618,129 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct SpellEquippedItemsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellEffectCameraShakesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[3];
+        uint32_t ID;
+        uint32_t UnkMember1[3];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellDurationEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellDispelTypeEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
         const char* UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellDifficultyEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[4];
+        uint32_t ID;
+        uint32_t UnkMember1[4];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellDescriptionVariablesEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellEntry {
-        std::uint32_t ID;
-        std::uint32_t Attributes[11];
-        std::uint32_t SpellCastingTimeID;
-        std::uint32_t SpellDurationID;
-        std::uint32_t PowerType;
-        std::uint32_t SpellRangeID;
+        uint32_t ID;
+        uint32_t Attributes[11];
+        uint32_t SpellCastingTimeID;
+        uint32_t SpellDurationID;
+        uint32_t PowerType;
+        uint32_t SpellRangeID;
         float Speed;
-        std::uint32_t SpellVisualID[2];
-        std::uint32_t SpellIconID;
-        std::uint32_t ActiveIconID;
+        uint32_t SpellVisualID[2];
+        uint32_t SpellIconID;
+        uint32_t ActiveIconID;
         const char* Name;
         const char* Rank;
         const char* Description;
         const char* Tooltip;
-        std::uint32_t SchoolMask;
-        std::uint32_t SpellRuneCostID;
-        std::uint32_t SpellMissileID;
-        std::uint32_t SpellDescriptionVariableID;
-        std::uint32_t SpellDifficultyID;
+        uint32_t SchoolMask;
+        uint32_t SpellRuneCostID;
+        uint32_t SpellMissileID;
+        uint32_t SpellDescriptionVariableID;
+        uint32_t SpellDifficultyID;
         float AttackPowerCoefficient;
-        std::uint32_t SpellScalingID;
-        std::uint32_t SpellAuraOptionsID;
-        std::uint32_t SpellAuraRestrictionsID;
-        std::uint32_t SpellCastingRequirementsID;
-        std::uint32_t SpellCategoriesID;
-        std::uint32_t SpellClassOptionsID;
-        std::uint32_t SpellCooldownsID;
-        std::uint32_t UnkMember37;
-        std::uint32_t SpellEquippedItemsID;
-        std::uint32_t SpellInterruptsID;
-        std::uint32_t SpellLevelsID;
-        std::uint32_t SpellPowerID;
-        std::uint32_t SpellReagentsID;
-        std::uint32_t SpellShapeshiftID;
-        std::uint32_t SpellTargetRestrictionsID;
-        std::uint32_t SpellTotemsID;
-        std::uint32_t ResearchProject;
+        uint32_t SpellScalingID;
+        uint32_t SpellAuraOptionsID;
+        uint32_t SpellAuraRestrictionsID;
+        uint32_t SpellCastingRequirementsID;
+        uint32_t SpellCategoriesID;
+        uint32_t SpellClassOptionsID;
+        uint32_t SpellCooldownsID;
+        uint32_t UnkMember37;
+        uint32_t SpellEquippedItemsID;
+        uint32_t SpellInterruptsID;
+        uint32_t SpellLevelsID;
+        uint32_t SpellPowerID;
+        uint32_t SpellReagentsID;
+        uint32_t SpellShapeshiftID;
+        uint32_t SpellTargetRestrictionsID;
+        uint32_t SpellTotemsID;
+        uint32_t ResearchProject;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellCooldownsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellClassOptionsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2[3];
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2[3];
+        uint32_t UnkMember3;
         const char* UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellChainEffectsEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1;
         float UnkMember2;
         float UnkMember3;
         float UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
         const char* UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
         float UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
         float UnkMember13;
         float UnkMember14;
         float UnkMember15;
@@ -1767,13 +1767,13 @@ namespace wowgm::game::datastores
         float UnkMember36;
         float UnkMember37;
         float UnkMember38;
-        std::uint32_t UnkMember39;
-        std::uint32_t UnkMember40;
-        std::uint32_t UnkMember41;
-        std::uint32_t UnkMember42;
-        std::uint32_t UnkMember43;
+        uint32_t UnkMember39;
+        uint32_t UnkMember40;
+        uint32_t UnkMember41;
+        uint32_t UnkMember42;
+        uint32_t UnkMember43;
         const char* UnkMember44;
-        std::uint32_t UnkMember45;
+        uint32_t UnkMember45;
         float UnkMember46;
         float UnkMember47;
     };
@@ -1781,485 +1781,485 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct SpellCategoryEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         const char* UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellCategoriesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellCastTimesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellCastingRequirementsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellAuraVisXTalentTabEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellAuraVisibilityEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellAuraRestrictionsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellAuraOptionsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SpellActivationOverlayEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
         float UnkMember5;
-        std::uint32_t UnkMember6[3];
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
+        uint32_t UnkMember6[3];
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SoundAmbienceFlavorEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SoundAmbienceEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[2];
+        uint32_t ID;
+        uint32_t UnkMember1[2];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SkillTiersEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[16];
-        std::uint32_t UnkMember2[16];
+        uint32_t ID;
+        uint32_t UnkMember1[16];
+        uint32_t UnkMember2[16];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SkillRaceClassInfoEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SkillLineEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         const char* UnkMember2;
         const char* UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t UnkMember4;
         const char* UnkMember5;
-        std::uint32_t UnkMember6;
+        uint32_t UnkMember6;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SkillLineCategoryEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SkillLineAbilitySortedSpellEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SkillLineAbilityEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ServerMessagesEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ScreenLocationEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ScreenEffectEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3[4];
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3[4];
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ScalingStatValuesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
-        std::uint32_t UnkMember14[4];
-        std::uint32_t UnkMember15[4];
-        std::uint32_t UnkMember16[4];
-        std::uint32_t UnkMember17[4];
-        std::uint32_t UnkMember18[4];
-        std::uint32_t UnkMember19[4];
-        std::uint32_t UnkMember20[4];
-        std::uint32_t UnkMember21[4];
-        std::uint32_t UnkMember22;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
+        uint32_t UnkMember14[4];
+        uint32_t UnkMember15[4];
+        uint32_t UnkMember16[4];
+        uint32_t UnkMember17[4];
+        uint32_t UnkMember18[4];
+        uint32_t UnkMember19[4];
+        uint32_t UnkMember20[4];
+        uint32_t UnkMember21[4];
+        uint32_t UnkMember22;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ScalingStatDistributionEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[10];
-        std::uint32_t UnkMember2[10];
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1[10];
+        uint32_t UnkMember2[10];
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct RandPropPointsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[5];
-        std::uint32_t UnkMember2[5];
-        std::uint32_t UnkMember3[5];
+        uint32_t ID;
+        uint32_t UnkMember1[5];
+        uint32_t UnkMember2[5];
+        uint32_t UnkMember3[5];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ResearchSiteEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         const char* UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ResearchProjectEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
         const char* UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
         const char* UnkMember7;
-        std::uint32_t UnkMember8;
+        uint32_t UnkMember8;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ResearchFieldEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ResearchBranchEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
         const char* UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t UnkMember5;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct QuestXPEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[10];
+        uint32_t ID;
+        uint32_t UnkMember1[10];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct QuestSortEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct QuestPOIPointEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct QuestPOIBlobEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct QuestInfoEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct QuestFactionRewardEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[10];
+        uint32_t ID;
+        uint32_t UnkMember1[10];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct PvpDifficultyEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct PowerDisplayEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         const char* UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct PlayerConditionEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct PhaseXPhaseGroupEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct PhaseEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct PaperDollItemFrameEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct PageTextMaterialEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct PackageEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
         const char* UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct OverrideSpellDataEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[10];
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1[10];
+        uint32_t UnkMember2;
         const char* UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct NumTalentsAtLevelEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct NPCSoundsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[4];
+        uint32_t ID;
+        uint32_t UnkMember1[4];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct MountTypeEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[24];
+        uint32_t ID;
+        uint32_t UnkMember1[24];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct MountCapabilityEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct MaterialEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct MapDifficultyEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         const char* UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
         const char* UnkMember6;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct MailTemplateEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
         const char* UnkMember2;
     };
@@ -2267,7 +2267,7 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct LockTypeEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
         const char* UnkMember2;
         const char* UnkMember3;
@@ -2277,106 +2277,106 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct LockEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[8];
-        std::uint32_t UnkMember2[8];
-        std::uint32_t UnkMember3[8];
-        std::uint32_t UnkMember4[8];
+        uint32_t ID;
+        uint32_t UnkMember1[8];
+        uint32_t UnkMember2[8];
+        uint32_t UnkMember3[8];
+        uint32_t UnkMember4[8];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct LoadingScreenTaxiSplinesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2[8];
         float UnkMember3[8];
-        std::uint32_t UnkMember4;
+        uint32_t UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct LfgDungeonsEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
         const char* UnkMember12;
-        std::uint32_t UnkMember13;
-        std::uint32_t UnkMember14;
-        std::uint32_t UnkMember15;
+        uint32_t UnkMember13;
+        uint32_t UnkMember14;
+        uint32_t UnkMember15;
         const char* UnkMember16;
-        std::uint32_t UnkMember17;
-        std::uint32_t UnkMember18;
-        std::uint32_t UnkMember19;
-        std::uint32_t UnkMember20;
+        uint32_t UnkMember17;
+        uint32_t UnkMember18;
+        uint32_t UnkMember19;
+        uint32_t UnkMember20;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct LfgDungeonsGroupingMapEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct LfgDungeonGroupEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct LfgDungeonExpansionEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct LanguagesEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct LanguageWordsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         const char* UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct JournalInstanceEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
         const char* UnkMember7;
         const char* UnkMember8;
     };
@@ -2384,33 +2384,33 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct JournalEncounterSectionEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
         const char* UnkMember9;
         const char* UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct JournalEncounterEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         float UnkMember3[2];
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
         const char* UnkMember8;
         const char* UnkMember9;
     };
@@ -2418,21 +2418,21 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct JournalEncounterItemEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct JournalEncounterCreatureEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
         const char* UnkMember5;
         const char* UnkMember6;
     };
@@ -2440,65 +2440,65 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct ItemSubClassMaskEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         const char* UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemSetEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2[17];
-        std::uint32_t UnkMember3[8];
-        std::uint32_t UnkMember4[8];
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
+        uint32_t UnkMember2[17];
+        uint32_t UnkMember3[8];
+        uint32_t UnkMember4[8];
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemReforgeEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember3;
         float UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemRandomSuffixEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
         const char* UnkMember2;
-        std::uint32_t UnkMember3[5];
-        std::uint32_t UnkMember4[5];
+        uint32_t UnkMember3[5];
+        uint32_t UnkMember4[5];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemRandomPropertiesEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2[5];
+        uint32_t UnkMember2[5];
         const char* UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemPurchaseGroupEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[8];
+        uint32_t ID;
+        uint32_t UnkMember1[8];
         const char* UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemPriceBaseEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2;
         float UnkMember3;
     };
@@ -2506,130 +2506,130 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct ItemPetFoodEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemNameDescriptionEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemLimitCategoryEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemGroupSoundsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[4];
+        uint32_t ID;
+        uint32_t UnkMember1[4];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemDisenchantLootEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemDamageWandEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1[7];
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemDamageTwoHandCasterEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1[7];
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemDamageTwoHandEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1[7];
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemDamageThrownEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1[7];
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemDamageRangedEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1[7];
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemDamageOneHandCasterEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1[7];
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemDamageOneHandEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1[7];
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemDamageAmmoEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1[7];
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemBagFamilyEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemArmorShieldEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2[7];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemArmorTotalEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2;
         float UnkMember3;
         float UnkMember4;
@@ -2639,36 +2639,36 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct ItemArmorQualityEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1[7];
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ImportPriceWeaponEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ImportPriceShieldEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ImportPriceQualityEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ImportPriceArmorEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1;
         float UnkMember2;
         float UnkMember3;
@@ -2678,209 +2678,209 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct HolidaysEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[10];
-        std::uint32_t UnkMember2[26];
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5[10];
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t ID;
+        uint32_t UnkMember1[10];
+        uint32_t UnkMember2[26];
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5[10];
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
         const char* UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct HolidayNamesEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct HolidayDescriptionsEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GuildPerkSpellsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct gtSpellScalingEntry {
-        std::uint32_t ID;
+        uint32_t ID;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct gtRegenMPPerSptEntry {
-        std::uint32_t ID;
+        uint32_t ID;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct gtOCTRegenMPEntry {
-        std::uint32_t ID;
+        uint32_t ID;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct gtOCTHpPerStaminaEntry {
-        std::uint32_t ID;
+        uint32_t ID;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct gtOCTClassCombatRatingScalarEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct gtOCTBaseMPByClassEntry {
-        std::uint32_t ID;
+        uint32_t ID;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct gtOCTBaseHPByClassEntry {
-        std::uint32_t ID;
+        uint32_t ID;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct gtNPCManaCostScalerEntry {
-        std::uint32_t ID;
+        uint32_t ID;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct gtChanceToSpellCritBaseEntry {
-        std::uint32_t ID;
+        uint32_t ID;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct gtChanceToSpellCritEntry {
-        std::uint32_t ID;
+        uint32_t ID;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct gtChanceToMeleeCritBaseEntry {
-        std::uint32_t ID;
+        uint32_t ID;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct gtChanceToMeleeCritEntry {
-        std::uint32_t ID;
+        uint32_t ID;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct gtCombatRatingsEntry {
-        std::uint32_t ID;
+        uint32_t ID;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct gtBarberShopCostBaseEntry {
-        std::uint32_t ID;
+        uint32_t ID;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GMTicketCategoryEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GMSurveySurveysEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[15];
+        uint32_t ID;
+        uint32_t UnkMember1[15];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GMSurveyQuestionsEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GMSurveyCurrentSurveyEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GMSurveyAnswersEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         const char* UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GlyphSlotEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GlyphPropertiesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GemPropertiesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GameTablesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GameObjectDisplayInfoEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* FileName;
-        std::uint32_t SoundID[10];
+        uint32_t SoundID[10];
         float Minimum[3];
         float Maximum[3];
-        std::uint32_t TransportID;
+        uint32_t TransportID;
         float OverrideLootEffectScale;
         float OverrideNameScale;
     };
@@ -2888,7 +2888,7 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct GameObjectArtKitEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1[3];
         const char* UnkMember2[4];
     };
@@ -2896,35 +2896,35 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct FootstepTerrainLookupEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct FactionEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2[4];
-        std::uint32_t UnkMember3[4];
-        std::uint32_t UnkMember4[4];
-        std::uint32_t UnkMember5[4];
-        std::uint32_t UnkMember6;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2[4];
+        uint32_t UnkMember3[4];
+        uint32_t UnkMember4[4];
+        uint32_t UnkMember5[4];
+        uint32_t UnkMember6;
         float UnkMember7[2];
-        std::uint32_t UnkMember8[2];
+        uint32_t UnkMember8[2];
         const char* UnkMember9;
         const char* UnkMember10;
-        std::uint32_t UnkMember11;
+        uint32_t UnkMember11;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ExhaustionEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2;
         float UnkMember3;
         float UnkMember4;
@@ -2935,264 +2935,264 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct EnvironmentalDamageEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct EmotesTextEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3[16];
+        uint32_t UnkMember2;
+        uint32_t UnkMember3[16];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct EmotesTextSoundEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct EmotesTextDataEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct EmotesEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct DurabilityQualityEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct DurabilityCostsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[21];
-        std::uint32_t UnkMember2[8];
+        uint32_t ID;
+        uint32_t UnkMember1[21];
+        uint32_t UnkMember2[8];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct DungeonMapChunkEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
         float UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct DungeonMapEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         float UnkMember3[2];
         float UnkMember4[2];
-        std::uint32_t UnkMember5;
+        uint32_t UnkMember5;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct DungeonEncounterEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
         const char* UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct DestructibleModelDataEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
-        std::uint32_t UnkMember14;
-        std::uint32_t UnkMember15;
-        std::uint32_t UnkMember16;
-        std::uint32_t UnkMember17;
-        std::uint32_t UnkMember18;
-        std::uint32_t UnkMember19;
-        std::uint32_t UnkMember20;
-        std::uint32_t UnkMember21;
-        std::uint32_t UnkMember22;
-        std::uint32_t UnkMember23;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
+        uint32_t UnkMember14;
+        uint32_t UnkMember15;
+        uint32_t UnkMember16;
+        uint32_t UnkMember17;
+        uint32_t UnkMember18;
+        uint32_t UnkMember19;
+        uint32_t UnkMember20;
+        uint32_t UnkMember21;
+        uint32_t UnkMember22;
+        uint32_t UnkMember23;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct DeathThudLookupsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct DanceMovesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
         const char* UnkMember5;
         const char* UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t UnkMember7;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CurrencyCategoryEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         const char* UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CurrencyTypesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         const char* UnkMember2;
         const char* UnkMember3[2];
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
         const char* UnkMember9;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CreatureTypeEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CreatureSpellDataEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[4];
-        std::uint32_t UnkMember2[4];
+        uint32_t ID;
+        uint32_t UnkMember1[4];
+        uint32_t UnkMember2[4];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CreatureSoundDataEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
-        std::uint32_t UnkMember14[5];
-        std::uint32_t UnkMember15[4];
-        std::uint32_t UnkMember16;
-        std::uint32_t UnkMember17;
-        std::uint32_t UnkMember18;
-        std::uint32_t UnkMember19;
-        std::uint32_t UnkMember20;
-        std::uint32_t UnkMember21;
-        std::uint32_t UnkMember22;
-        std::uint32_t UnkMember23;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
+        uint32_t UnkMember14[5];
+        uint32_t UnkMember15[4];
+        uint32_t UnkMember16;
+        uint32_t UnkMember17;
+        uint32_t UnkMember18;
+        uint32_t UnkMember19;
+        uint32_t UnkMember20;
+        uint32_t UnkMember21;
+        uint32_t UnkMember22;
+        uint32_t UnkMember23;
         float UnkMember24;
         float UnkMember25;
-        std::uint32_t UnkMember26;
-        std::uint32_t UnkMember27;
-        std::uint32_t UnkMember28;
-        std::uint32_t UnkMember29;
-        std::uint32_t UnkMember30;
-        std::uint32_t UnkMember31;
-        std::uint32_t UnkMember32;
+        uint32_t UnkMember26;
+        uint32_t UnkMember27;
+        uint32_t UnkMember28;
+        uint32_t UnkMember29;
+        uint32_t UnkMember30;
+        uint32_t UnkMember31;
+        uint32_t UnkMember32;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CreatureMovementInfoEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CreatureImmunitiesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6[6];
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8[12];
-        std::uint32_t UnkMember9;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6[6];
+        uint32_t UnkMember7;
+        uint32_t UnkMember8[12];
+        uint32_t UnkMember9;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CinematicSequencesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2[8];
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2[8];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CinematicCameraEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
         float UnkMember3[3];
         float UnkMember4;
     };
@@ -3200,16 +3200,16 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct ChrClassesXPowerTypesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ChatChannelsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         const char* UnkMember3;
         const char* UnkMember4;
     };
@@ -3217,106 +3217,106 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct CharTitlesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         const char* UnkMember2;
         const char* UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CastableRaidBuffsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CameraShakesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         float UnkMember3;
         float UnkMember4;
         float UnkMember5;
         float UnkMember6;
         float UnkMember7;
-        std::uint32_t UnkMember8;
+        uint32_t UnkMember8;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct CameraModeEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
         float UnkMember4[3];
         float UnkMember5[3];
         float UnkMember6;
         float UnkMember7;
         float UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct BattlemasterListEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[8];
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1[8];
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
         const char* UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct BarberShopStyleEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         const char* UnkMember2;
         const char* UnkMember3;
         float UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct BankBagSlotPricesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct AuctionHouseEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
         const char* UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ArmorLocationEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1;
         float UnkMember2;
         float UnkMember3;
@@ -3327,12 +3327,12 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct AreaTriggerEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2[3];
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
         float UnkMember6;
         float UnkMember7;
         float UnkMember8;
@@ -3343,192 +3343,192 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct AreaAssignmentEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct AreaPOISortedWorldStateEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct AreaPOIEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2[9];
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2[9];
+        uint32_t UnkMember3;
         float UnkMember4[2];
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
         const char* UnkMember8;
         const char* UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct AreaGroupEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[6];
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1[6];
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct Achievement_CategoryEntry {
-        std::uint32_t ID;
-        std::int32_t ParentCategoryID;
+        uint32_t ID;
+        int32_t ParentCategoryID;
         const char* Name;
-        std::uint32_t SortOrder;
+        uint32_t SortOrder;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct Achievement_CriteriaEntry {
-        std::uint32_t ID;
-        std::uint32_t AchievementID;
-        std::uint32_t Type;
-        std::uint32_t MainRequirement;
-        std::uint64_t MainRequirementCount;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
+        uint32_t ID;
+        uint32_t AchievementID;
+        uint32_t Type;
+        uint32_t MainRequirement;
+        uint64_t MainRequirementCount;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
         const char* Name;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
-        std::uint32_t UnkMember14;
-        std::uint32_t UnkMember15;
-        std::uint32_t UnkMember16;
-        std::uint32_t UnkMember17[3];
-        std::uint32_t UnkMember18[3];
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
+        uint32_t UnkMember14;
+        uint32_t UnkMember15;
+        uint32_t UnkMember16;
+        uint32_t UnkMember17[3];
+        uint32_t UnkMember18[3];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct AchievementEntry {
-        std::uint32_t ID;
-        std::uint32_t RequiredFaction;
-        std::uint32_t MapID;
-        std::int32_t ParentAchievementID;
+        uint32_t ID;
+        uint32_t RequiredFaction;
+        uint32_t MapID;
+        int32_t ParentAchievementID;
         const char* Name;
         const char* Description;
-        std::uint32_t CategoryID;
-        std::uint32_t Points;
-        std::uint32_t OrderInCategory;
-        std::uint32_t Flags;
-        std::uint32_t IconID;
+        uint32_t CategoryID;
+        uint32_t Points;
+        uint32_t OrderInCategory;
+        uint32_t Flags;
+        uint32_t IconID;
         const char* Rewards;
-        std::uint32_t Count;
-        std::uint32_t ReferenceAchievement;
+        uint32_t Count;
+        uint32_t ReferenceAchievement;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemCurrencyCostEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ItemExtendedCostEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4[5];
-        std::uint32_t UnkMember5[5];
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8[5];
-        std::uint32_t UnkMember9[5];
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
-        std::uint32_t UnkMember14;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4[5];
+        uint32_t UnkMember5[5];
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8[5];
+        uint32_t UnkMember9[5];
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
+        uint32_t UnkMember14;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct KeyChainEntry {
-        std::uint32_t ID;
-        std::uint8_t UnkMember1[32];
+        uint32_t ID;
+        uint8_t UnkMember1[32];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct DeclinedWordCasesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         const char* UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct DeclinedWordEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ZoneLightPointEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2[2];
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct ZoneLightEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct WMOAreaTableEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
         const char* UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
-        std::uint32_t UnkMember14;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
+        uint32_t UnkMember14;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct WeatherEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
         float UnkMember3;
         float UnkMember4[3];
         const char* UnkMember5;
@@ -3537,317 +3537,317 @@ namespace wowgm::game::datastores
 
 #pragma pack(push, 1)
     struct TerrainTypeEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct TerrainMaterialEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
         const char* UnkMember3;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SoundEntriesFallbacksEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SoundEmittersEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1[3];
         float UnkMember2[3];
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
         const char* UnkMember5;
-        std::uint32_t UnkMember6;
+        uint32_t UnkMember6;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SoundEmitterPillPointsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2[3];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct LiquidTypeEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
         float UnkMember6;
         float UnkMember7;
         float UnkMember8;
         float UnkMember9;
-        std::uint32_t UnkMember10;
+        uint32_t UnkMember10;
         float UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
-        std::uint32_t UnkMember14;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
+        uint32_t UnkMember14;
         const char* UnkMember15[6];
-        std::uint32_t UnkMember16[2];
+        uint32_t UnkMember16[2];
         float UnkMember17[18];
-        std::uint32_t UnkMember18[4];
+        uint32_t UnkMember18[4];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct LiquidObjectEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         float UnkMember1;
         float UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct LiquidMaterialEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct LightSkyboxEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct LightFloatBandEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2[16];
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2[16];
         float UnkMember3[16];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct LightEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2;
         float UnkMember3;
         float UnkMember4;
         float UnkMember5;
         float UnkMember6;
-        std::uint32_t UnkMember7[8];
+        uint32_t UnkMember7[8];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GroundEffectTextureEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1[4];
-        std::uint32_t UnkMember2[4];
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
+        uint32_t ID;
+        uint32_t UnkMember1[4];
+        uint32_t UnkMember2[4];
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct GroundEffectDoodadEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
+        uint32_t UnkMember2;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct FootprintTexturesEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct MapEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* Directory;
-        std::uint32_t InstanceType;
-        std::uint32_t Flags;
-        std::uint32_t MapType;
-        std::uint32_t IsPvpMap;
+        uint32_t InstanceType;
+        uint32_t Flags;
+        uint32_t MapType;
+        uint32_t IsPvpMap;
         const char* Name;
-        std::uint32_t AreaID;
+        uint32_t AreaID;
         const char* Introductions[2];
-        std::uint32_t LoadingScreenID;
+        uint32_t LoadingScreenID;
         float BattlefieldMapIconScale;
         struct {
-            std::int32_t MapID;
+            int32_t MapID;
             float X;
             float Y;
         } CorpseInfo;
-        std::int32_t TimeOfDayOverride;
-        std::uint32_t Expansion;
-        std::uint32_t ExpireTime;
-        std::uint32_t MaxPlayers;
-        std::int32_t RootPhaseMapID;
+        int32_t TimeOfDayOverride;
+        uint32_t Expansion;
+        uint32_t ExpireTime;
+        uint32_t MaxPlayers;
+        int32_t RootPhaseMapID;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct LightParamsEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
         float UnkMember4;
         float UnkMember5;
         float UnkMember6;
         float UnkMember7;
         float UnkMember8;
-        std::uint32_t UnkMember9;
+        uint32_t UnkMember9;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct LightIntBandEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2[16];
-        std::uint32_t UnkMember3[16];
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2[16];
+        uint32_t UnkMember3[16];
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct AreaTableEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
         const char* UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13[4];
+        uint32_t UnkMember12;
+        uint32_t UnkMember13[4];
         float UnkMember14;
         float UnkMember15;
-        std::uint32_t UnkMember16;
-        std::uint32_t UnkMember17;
-        std::uint32_t UnkMember18;
-        std::uint32_t UnkMember19;
-        std::uint32_t UnkMember20;
-        std::uint32_t UnkMember21;
-        std::uint32_t UnkMember22;
+        uint32_t UnkMember16;
+        uint32_t UnkMember17;
+        uint32_t UnkMember18;
+        uint32_t UnkMember19;
+        uint32_t UnkMember20;
+        uint32_t UnkMember21;
+        uint32_t UnkMember22;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct AnimationDataEntry {
-        std::uint32_t ID;
+        uint32_t ID;
         const char* UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SoundEntriesEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         const char* UnkMember2;
         const char* UnkMember3[10];
-        std::uint32_t UnkMember4[10];
+        uint32_t UnkMember4[10];
         const char* UnkMember5;
         float UnkMember6;
-        std::uint32_t UnkMember7;
+        uint32_t UnkMember7;
         float UnkMember8;
         float UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
         float UnkMember12;
         float UnkMember13;
         float UnkMember14;
         float UnkMember15;
-        std::uint32_t UnkMember16;
+        uint32_t UnkMember16;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct SoundEntriesAdvancedEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
+        uint32_t ID;
+        uint32_t UnkMember1;
         float UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
         float UnkMember12;
         float UnkMember13;
         float UnkMember14;
         float UnkMember15;
         float UnkMember16;
-        std::uint32_t UnkMember17;
-        std::uint32_t UnkMember18;
+        uint32_t UnkMember17;
+        uint32_t UnkMember18;
         float UnkMember19;
         float UnkMember20;
         float UnkMember21;
         float UnkMember22;
-        std::uint32_t UnkMember23;
-        std::uint32_t UnkMember24;
+        uint32_t UnkMember23;
+        uint32_t UnkMember24;
         float UnkMember25;
     };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
     struct VideoHardwareEntry {
-        std::uint32_t ID;
-        std::uint32_t UnkMember1;
-        std::uint32_t UnkMember2;
-        std::uint32_t UnkMember3;
-        std::uint32_t UnkMember4;
-        std::uint32_t UnkMember5;
-        std::uint32_t UnkMember6;
-        std::uint32_t UnkMember7;
-        std::uint32_t UnkMember8;
-        std::uint32_t UnkMember9;
-        std::uint32_t UnkMember10;
-        std::uint32_t UnkMember11;
-        std::uint32_t UnkMember12;
-        std::uint32_t UnkMember13;
-        std::uint32_t UnkMember14;
-        std::uint32_t UnkMember15;
-        std::uint32_t UnkMember16;
-        std::uint32_t UnkMember17;
+        uint32_t ID;
+        uint32_t UnkMember1;
+        uint32_t UnkMember2;
+        uint32_t UnkMember3;
+        uint32_t UnkMember4;
+        uint32_t UnkMember5;
+        uint32_t UnkMember6;
+        uint32_t UnkMember7;
+        uint32_t UnkMember8;
+        uint32_t UnkMember9;
+        uint32_t UnkMember10;
+        uint32_t UnkMember11;
+        uint32_t UnkMember12;
+        uint32_t UnkMember13;
+        uint32_t UnkMember14;
+        uint32_t UnkMember15;
+        uint32_t UnkMember16;
+        uint32_t UnkMember17;
         const char* UnkMember18;
         const char* UnkMember19;
-        std::uint32_t UnkMember20;
-        std::uint32_t UnkMember21;
-        std::uint32_t UnkMember22;
+        uint32_t UnkMember20;
+        uint32_t UnkMember21;
+        uint32_t UnkMember22;
     };
 #pragma pack(pop)
 }

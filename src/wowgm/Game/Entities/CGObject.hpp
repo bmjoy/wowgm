@@ -19,14 +19,14 @@ namespace wowgm::game::entities
     {
         ObjectGuid GUID;
         ObjectGuid Data;
-        std::array<std::uint16_t, 2> Type;
-        std::uint32_t Entry;
+        std::array<uint16_t, 2> Type;
+        uint32_t Entry;
         float Scale;
-        std::uint32_t _; // Padding
+        uint32_t _; // Padding
     };
 #pragma pack(pop)
 
-    static_assert(sizeof(CGObjectData) == sizeof(std::uint32_t) * 8);
+    static_assert(sizeof(CGObjectData) == sizeof(uint32_t) * 8);
 
     class CGUnit;
     class CGGameObject;

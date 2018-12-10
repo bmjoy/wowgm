@@ -42,21 +42,21 @@ namespace wowgm::protocol::world
 
         SHA1 context;
         context.UpdateData(username);
-        for (std::uint32_t i = 0; i < packet.Seeds.size(); ++i)
-            context.UpdateData(reinterpret_cast<std::uint8_t*>(&packet.Seeds[i]), 4);
+        for (uint32_t i = 0; i < packet.Seeds.size(); ++i)
+            context.UpdateData(reinterpret_cast<uint8_t*>(&packet.Seeds[i]), 4);
 
-        auto checkInt64 = [](SHA1 const& sourceContext, std::uint32_t maxByte, std::uint64_t* output) -> bool {
-            std::uint64_t zero = 0;
+        auto checkInt64 = [](SHA1 const& sourceContext, uint32_t maxByte, uint64_t* output) -> bool {
+            uint64_t zero = 0;
 
             while (true)
             {
                 SHA1 context(sourceContext);
-                context.UpdateData(reinterpret_cast<std::uint8_t*>(&zero), 8);
+                context.UpdateData(reinterpret_cast<uint8_t*>(&zero), 8);
                 context.Finalize();
 
                 // Find the first non-zero bit in the digest
-                std::uint32_t bitIndex = 0;
-                std::uint32_t digestItr = 0;
+                uint32_t bitIndex = 0;
+                uint32_t digestItr = 0;
                 while (!context.GetDigest()[digestItr])
                 {
                     ++digestItr;
@@ -66,7 +66,7 @@ namespace wowgm::protocol::world
                 }
                 if (digestItr < SHA_DIGEST_LENGTH)
                 {
-                    for (std::uint8_t currentDigestByte = context.GetDigest()[digestItr]; !(currentDigestByte & 1); ++bitIndex)
+                    for (uint8_t currentDigestByte = context.GetDigest()[digestItr]; !(currentDigestByte & 1); ++bitIndex)
                         currentDigestByte >>= 1;
                 }
                 if (bitIndex >= maxByte)
@@ -81,7 +81,7 @@ namespace wowgm::protocol::world
             return true;
         };
 
-        std::uint64_t dosResponse = 0;
+        uint64_t dosResponse = 0;
         if (!checkInt64(context, packet.UnkByte, &dosResponse))
         {
             LOG_DEBUG << "Failed to validate dos response, sending zero instead.";
@@ -92,10 +92,10 @@ namespace wowgm::protocol::world
 
         context.Initialize();
         context.UpdateData(username);
-        std::uint32_t zero = 0u;
-        context.UpdateData(reinterpret_cast<std::uint8_t*>(&zero), 4);
+        uint32_t zero = 0u;
+        context.UpdateData(reinterpret_cast<uint8_t*>(&zero), 4);
         context.UpdateBigNumbers(clientSeed);
-        context.UpdateData(reinterpret_cast<std::uint8_t*>(&packet.AuthSeed), 4);
+        context.UpdateData(reinterpret_cast<uint8_t*>(&packet.AuthSeed), 4);
         context.UpdateBigNumbers(sClientServices->GetSessionKey());
         context.Finalize();
 

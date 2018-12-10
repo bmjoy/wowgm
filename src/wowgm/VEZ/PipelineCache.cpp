@@ -25,7 +25,7 @@ namespace vez
         return result;
     }
 
-    VkResult PipelineCache::Create(Device* pDevice, std::unique_ptr<std::uint8_t[]> dataBlob, size_t dataSize, PipelineCache** ppPipelineCache)
+    VkResult PipelineCache::Create(Device* pDevice, std::unique_ptr<uint8_t[]> dataBlob, size_t dataSize, PipelineCache** ppPipelineCache)
     {
         PipelineCache* pipelineCache = new PipelineCache;
 
@@ -53,17 +53,17 @@ namespace vez
         vkDestroyPipelineCache(_device->GetHandle(), _handle, nullptr);
     }
 
-    std::unique_ptr<std::uint8_t[]> PipelineCache::GetBlob(size_t& size)
+    std::unique_ptr<uint8_t[]> PipelineCache::GetBlob(size_t& size)
     {
         VkResult result = vkGetPipelineCacheData(_device->GetHandle(), _handle, &size, nullptr);
         if (result != VK_SUCCESS)
-            return std::unique_ptr<std::uint8_t[]> {};
+            return std::unique_ptr<uint8_t[]> {};
 
-        std::uint8_t* data = new std::uint8_t[size];
+        uint8_t* data = new uint8_t[size];
         result = vkGetPipelineCacheData(_device->GetHandle(), _handle, &size, data);
         if (result != VK_SUCCESS)
-            return std::unique_ptr<std::uint8_t[]> {};
+            return std::unique_ptr<uint8_t[]> {};
 
-        return std::unique_ptr<std::uint8_t[]>(data);
+        return std::unique_ptr<uint8_t[]>(data);
     }
 }

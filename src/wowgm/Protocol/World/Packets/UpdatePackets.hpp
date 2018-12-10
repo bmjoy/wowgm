@@ -20,7 +20,7 @@ namespace wowgm::protocol::world::packets
 
         void Read() override;
 
-        std::uint16_t MapID = 0xFFFF;
+        uint16_t MapID = 0xFFFF;
         std::vector<CClientObjCreate> Updates;
         std::vector<ObjectGuid> DestroyObjects;
     };

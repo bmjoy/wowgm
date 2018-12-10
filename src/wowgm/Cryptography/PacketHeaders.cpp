@@ -61,7 +61,7 @@ namespace wowgm::protocol::world
             BOOST_ASSERT(_headerBuffer.GetActiveSize() == 0);
 
             _headerBuffer.Reset();
-            std::uint8_t* headerData = _headerBuffer.GetReadPointer();
+            uint8_t* headerData = _headerBuffer.GetReadPointer();
 
             BOOST_ASSERT(_headerBuffer.GetActiveSize() == 0);
             Size = ((headerData[0] & 0x7F) << 16) | (headerData[1] << 8) | headerData[2];
@@ -74,7 +74,7 @@ namespace wowgm::protocol::world
             BOOST_ASSERT(_headerBuffer.GetActiveSize() == 0);
 
             _headerBuffer.Reset();
-            std::uint8_t* headerData = _headerBuffer.GetReadPointer();
+            uint8_t* headerData = _headerBuffer.GetReadPointer();
 
             Size = (headerData[0] << 8) | headerData[1];
             Command = Opcode((headerData[3] << 8) | headerData[2]);

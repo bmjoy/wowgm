@@ -15,10 +15,10 @@ namespace wowgm::game::entities
 
     struct ItemEnchantmentInfo
     {
-        std::uint32_t ID;
-        std::uint32_t Duration;
-        std::uint16_t _;
-        std::uint16_t Charges;
+        uint32_t ID;
+        uint32_t Duration;
+        uint16_t _;
+        uint16_t Charges;
     };
 
     class CGPlayer;
@@ -30,20 +30,20 @@ namespace wowgm::game::entities
         ObjectGuid Contained;
         ObjectGuid Creator;
         ObjectGuid GiftCreator;
-        std::uint32_t StackCount;
-        std::uint32_t Duration;
-        std::array<std::uint32_t, 5> SpellCharges;
-        std::uint32_t Flags;
+        uint32_t StackCount;
+        uint32_t Duration;
+        std::array<uint32_t, 5> SpellCharges;
+        uint32_t Flags;
         std::array<ItemEnchantmentInfo, 15> Enchantments;
-        std::uint32_t PropertySeed;
-        std::uint32_t RandomPropertiesID;
-        std::uint32_t Durability;
-        std::uint32_t MaxDurability;
-        std::uint32_t CreatePlayedTime;
+        uint32_t PropertySeed;
+        uint32_t RandomPropertiesID;
+        uint32_t Durability;
+        uint32_t MaxDurability;
+        uint32_t CreatePlayedTime;
     };
 #pragma pack(pop)
 
-    static_assert(sizeof(CGItemData) == sizeof(std::uint32_t) * 66);
+    static_assert(sizeof(CGItemData) == sizeof(uint32_t) * 66);
 
     class CGItem : public CGItemData, public CGObject
     {

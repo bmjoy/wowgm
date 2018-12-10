@@ -44,8 +44,8 @@ namespace wowgm::filesystem
         virtual size_t GetFileSize() const = 0;
 
         virtual LoadStrategy GetLoadStrategy() const = 0;
-        virtual std::uint8_t const* GetData() = 0;
-        virtual size_t ReadBytes(size_t offset, size_t length, std::uint8_t* buffer, size_t bufferSize) = 0;
+        virtual uint8_t const* GetData() = 0;
+        virtual size_t ReadBytes(size_t offset, size_t length, uint8_t* buffer, size_t bufferSize) = 0;
     };
 
     class MpqFile : public FileHandle<MpqFile>
@@ -62,14 +62,14 @@ namespace wowgm::filesystem
         void Close() override;
         size_t GetFileSize() const override;
         LoadStrategy GetLoadStrategy() const override;
-        std::uint8_t const* GetData() override;
-        size_t ReadBytes(size_t offset, size_t length, std::uint8_t* buffer, size_t bufferSize) override;
+        uint8_t const* GetData() override;
+        size_t ReadBytes(size_t offset, size_t length, uint8_t* buffer, size_t bufferSize) override;
 
     private:
         HANDLE _fileHandle;
         LoadStrategy _loadStrategy;
 
-        std::vector<std::uint8_t> _fileData;
+        std::vector<uint8_t> _fileData;
     };
 
     class DiskFile : public FileHandle<DiskFile>
@@ -84,8 +84,8 @@ namespace wowgm::filesystem
         void Close() override;
         size_t GetFileSize() const override;
         LoadStrategy GetLoadStrategy() const override;
-        std::uint8_t const* GetData() override;
-        size_t ReadBytes(size_t offset, size_t length, std::uint8_t* buffer, size_t bufferSize) override;
+        uint8_t const* GetData() override;
+        size_t ReadBytes(size_t offset, size_t length, uint8_t* buffer, size_t bufferSize) override;
 
     private:
         void _LoadToMemory(const std::string& fileName);

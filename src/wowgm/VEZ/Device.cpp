@@ -20,7 +20,7 @@ namespace vez
         PhysicalDevice* pPhysicalDevice = pCreateInfo->physicalDevice;
 
         // Enumerate queue families
-        std::uint32_t queueFamilyCount = 0;
+        uint32_t queueFamilyCount = 0;
         vkGetPhysicalDeviceQueueFamilyProperties(pPhysicalDevice->GetHandle(), &queueFamilyCount, nullptr);
 
         std::vector<VkQueueFamilyProperties> queueFamilyProperties(queueFamilyCount);
@@ -28,7 +28,7 @@ namespace vez
 
         std::vector<VkDeviceQueueCreateInfo> queueCreateInfos(queueFamilyCount);
         std::vector<std::vector<float>> priorities(queueFamilyCount);
-        for (std::uint32_t i = 0; i < queueFamilyCount; ++i)
+        for (uint32_t i = 0; i < queueFamilyCount; ++i)
         {
             const float defaultPriority = 1.0f;
             priorities[i].resize(queueFamilyProperties[i].queueCount, defaultPriority);
@@ -53,7 +53,7 @@ namespace vez
         deviceCreateInfo.enabledLayerCount = pCreateInfo->enabledLayerCount;
 
         deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
-        deviceCreateInfo.queueCreateInfoCount = std::uint32_t(queueCreateInfos.size());
+        deviceCreateInfo.queueCreateInfoCount = uint32_t(queueCreateInfos.size());
         deviceCreateInfo.pEnabledFeatures = &enabledFeatures;
 
         VkDevice handle = VK_NULL_HANDLE;
@@ -77,10 +77,10 @@ namespace vez
 
         // Acquire all the device's queue families for layer use.
         device->_queues.resize(queueFamilyCount);
-        for (std::uint32_t i = 0; i < queueFamilyCount; ++i)
+        for (uint32_t i = 0; i < queueFamilyCount; ++i)
         {
             QueueFamily qf;
-            for (std::uint32_t j = 0U; j < queueCreateInfos[i].queueCount; ++j)
+            for (uint32_t j = 0U; j < queueCreateInfos[i].queueCount; ++j)
             {
                 VkQueue queue = VK_NULL_HANDLE;
                 vkGetDeviceQueue(handle, i, j, &queue);
@@ -596,7 +596,7 @@ namespace vez
         if (result != VK_SUCCESS)
             return result;
 
-        for (std::uint32_t i = 0; i < commandBufferCount; ++i)
+        for (uint32_t i = 0; i < commandBufferCount; ++i)
             ppCommandBuffers[i] = new CommandBuffer(pool, handles[i], level);
 
         return VK_SUCCESS;

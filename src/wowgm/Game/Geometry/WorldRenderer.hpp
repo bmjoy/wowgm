@@ -10,7 +10,7 @@ namespace wowgm::game::geometry
 
     using namespace wowgm::game::structures;
 
-    enum GeometryLoadFlags : std::uint32_t
+    enum GeometryLoadFlags : uint32_t
     {
         Terrain = 0x01,
         Vmaps = 0x02,
@@ -21,7 +21,7 @@ namespace wowgm::game::geometry
     {
     public:
         static void SetCoordinates(C3Vector const& position);
-        static void SetMapID(std::uint32_t mapID);
+        static void SetMapID(uint32_t mapID);
 
         static void LoadGeometry(GeometryLoadFlags flags);
 
@@ -35,7 +35,7 @@ namespace wowgm::game::geometry
 
     private:
         C3Vector _worldPosition;
-        std::uint32_t _mapID = -1;
+        uint32_t _mapID = -1;
 
         ADT* _adt = nullptr;
 

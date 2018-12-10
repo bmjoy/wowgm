@@ -15,16 +15,16 @@ namespace wowgm::game
         ~WorldStateMgr();
 
     public:
-        void InitWorldState(std::uint32_t mapID, std::uint32_t areaID, std::uint32_t zoneID);
+        void InitWorldState(uint32_t mapID, uint32_t areaID, uint32_t zoneID);
 
-        void UpdateWorldState(std::uint32_t worldStateID, std::uint32_t value);
+        void UpdateWorldState(uint32_t worldStateID, uint32_t value);
 
     private:
-        std::uint32_t _mapID;
-        std::uint32_t _areaID;
-        std::uint32_t _zoneID;
+        uint32_t _mapID;
+        uint32_t _areaID;
+        uint32_t _zoneID;
 
-        std::unordered_map<std::uint32_t, std::uint32_t> _worldStates;
+        std::unordered_map<uint32_t, uint32_t> _worldStates;
     };
 }
 

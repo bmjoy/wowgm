@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <array>
 #include <openssl/sha.h>  // for SHA_DIGEST_LENGTH
-#include <cstdint>        // for std::uint32_t, std::uint8_t, std::uint16_t
+#include <cstdint>        // for uint32_t, uint8_t, uint16_t
 #include <string>         // for string
 
 #include "ResponseCodes.hpp"
@@ -19,24 +19,24 @@ namespace wowgm::protocol::world::packets
 
         void Read() override;
 
-        std::uint32_t AuthSeed;
-        std::array<std::uint32_t, 8> Seeds = {};
-        std::uint8_t UnkByte;
+        uint32_t AuthSeed;
+        std::array<uint32_t, 8> Seeds = {};
+        uint8_t UnkByte;
     };
 
     struct AccountInfo
     {
-        std::uint32_t BillingTimeRemaining;
-        std::uint32_t UnkAccountInfo;
-        std::uint32_t BillingTimeRested;
-        std::uint8_t PlayerExpansion;
-        std::uint8_t AccountExpansion;
-        std::uint8_t BillingFlags;
+        uint32_t BillingTimeRemaining;
+        uint32_t UnkAccountInfo;
+        uint32_t BillingTimeRested;
+        uint8_t PlayerExpansion;
+        uint8_t AccountExpansion;
+        uint8_t BillingFlags;
     };
 
     struct QueueInfo
     {
-        std::uint32_t Position;
+        uint32_t Position;
         bool Bit;
     };
 
@@ -57,16 +57,16 @@ namespace wowgm::protocol::world::packets
 
         WorldPacket const* Write() override;
 
-        std::uint32_t ServerID = 0;
-        std::uint32_t BattlegroupID = 0;
-        std::uint8_t LoginServerType = 0;
-        std::uint32_t RealmID = 0;
-        std::uint16_t Build = 0;
-        std::array<std::uint8_t, SHA_DIGEST_LENGTH> Digest = { };
-        std::uint32_t RegionID;
+        uint32_t ServerID = 0;
+        uint32_t BattlegroupID = 0;
+        uint8_t LoginServerType = 0;
+        uint32_t RealmID = 0;
+        uint16_t Build = 0;
+        std::array<uint8_t, SHA_DIGEST_LENGTH> Digest = { };
+        uint32_t RegionID;
         std::string AccountName;
-        std::uint32_t ClientSeed;
-        std::uint64_t DosResponse;
+        uint32_t ClientSeed;
+        uint64_t DosResponse;
         bool UseIPv6 = false;
     };
 }

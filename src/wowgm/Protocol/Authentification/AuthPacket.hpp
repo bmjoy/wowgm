@@ -39,7 +39,7 @@ namespace wowgm::protocol::authentification
             if (_socket && _socket->IsOpen())
             {
                 MessageBuffer buffer(1 + sizeof(T) + _extraData.size());
-                buffer.GetWritePointer()[0] = std::uint8_t(_command);
+                buffer.GetWritePointer()[0] = uint8_t(_command);
                 buffer.WriteCompleted(1);
                 memcpy(reinterpret_cast<T*>(buffer.GetWritePointer()), &_data, sizeof(T));
                 buffer.WriteCompleted(sizeof(T));
@@ -87,7 +87,7 @@ namespace wowgm::protocol::authentification
         T _data;
 
         std::size_t _wpos;
-        std::vector<std::uint8_t> _extraData;
+        std::vector<uint8_t> _extraData;
     };
 
 } // authentification

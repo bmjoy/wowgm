@@ -75,7 +75,7 @@ namespace wowgm::protocol::authentification
 
         AuthPacket<LogonChallenge> command(this->shared_from_this(), AUTH_LOGON_CHALLENGE);
         command.GetData()->Error = 6;
-        command.GetData()->Size = std::uint16_t(30 + sClientServices->GetUsername().length());
+        command.GetData()->Size = uint16_t(30 + sClientServices->GetUsername().length());
         command.GetData()->Game = gameCode;
         command.GetData()->Version[0] = 4;
         command.GetData()->Version[1] = 3;
@@ -85,8 +85,8 @@ namespace wowgm::protocol::authentification
         command.GetData()->OS = operatingSystem;
         command.GetData()->CountryCode = countryCode;
         command.GetData()->timeZoneBias = 0x3C;
-        command.GetData()->IP = *reinterpret_cast<std::uint32_t*>(GetLocalEndpoint().address().to_v4().to_bytes().data());
-        command.GetData()->Name.Length = std::uint8_t(sClientServices->GetUsername().length());
+        command.GetData()->IP = *reinterpret_cast<uint32_t*>(GetLocalEndpoint().address().to_v4().to_bytes().data());
+        command.GetData()->Name.Length = uint8_t(sClientServices->GetUsername().length());
         command += sClientServices->GetUsername();
 
         // Sent when out of scope
@@ -141,10 +141,10 @@ namespace wowgm::protocol::authentification
 
         S = ((B + k * (N - g.ModExp(x, N))) % N).ModExp(a + (u * x), N);
 
-        std::uint8_t sData[32];
+        uint8_t sData[32];
         memcpy(sData, S.AsByteArray(32).get(), 32);
-        std::uint8_t keyData[40];
-        std::uint8_t temp[16];
+        uint8_t keyData[40];
+        uint8_t temp[16];
 
         for (int i = 0; i < 16; ++i)
             temp[i] = sData[i * 2];
@@ -169,9 +169,9 @@ namespace wowgm::protocol::authentification
         K.SetBinary(keyData, 40);
         sClientServices->SetSessionKey(K);
 
-        std::uint8_t gNHash[20] = { };
-        std::uint8_t nHash[20] = { };
-        std::uint8_t gHash[20] = { };
+        uint8_t gNHash[20] = { };
+        uint8_t nHash[20] = { };
+        uint8_t gHash[20] = { };
         context.Initialize();
         context.UpdateBigNumbers(N);
         context.Finalize();
@@ -182,13 +182,13 @@ namespace wowgm::protocol::authentification
         context.Finalize();
         memcpy(gHash, context.GetDigest(), context.GetLength());
 
-        for (std::uint32_t hashItr = 0; hashItr < SHA_DIGEST_LENGTH; ++hashItr)
+        for (uint32_t hashItr = 0; hashItr < SHA_DIGEST_LENGTH; ++hashItr)
             gNHash[hashItr] = nHash[hashItr] ^ gHash[hashItr];
 
         BigNumber t3;
         t3.SetBinary(gNHash, 20);
 
-        std::uint8_t userHash[20];
+        uint8_t userHash[20];
         context.Initialize();
         context.UpdateData(sClientServices->GetUsername());
         context.Finalize();
@@ -275,7 +275,7 @@ namespace wowgm::protocol::authentification
         std::vector<AuthRealmInfo> realmList;
         realmList.resize(authData->Count);
 
-        for (std::uint8_t i = 0; i < realmList.size(); ++i)
+        for (uint8_t i = 0; i < realmList.size(); ++i)
         {
             realmList[i].Type = GetReadBuffer().GetReadPointer()[0];
             realmList[i].Locked = GetReadBuffer().GetReadPointer()[1];
@@ -296,7 +296,7 @@ namespace wowgm::protocol::authentification
             if ((realmList[i].Flags & 0x04) != 0)
             {
                 memcpy(realmList[i].Version, GetReadBuffer().GetReadPointer(), 3);
-                realmList[i].Build = *reinterpret_cast<std::uint16_t*>(GetReadBuffer().GetReadPointer() + 3);
+                realmList[i].Build = *reinterpret_cast<uint16_t*>(GetReadBuffer().GetReadPointer() + 3);
 
                 GetReadBuffer().ReadCompleted(3 + 2);
             }

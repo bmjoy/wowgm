@@ -4,7 +4,7 @@
 
 namespace wowgm::protocol::world
 {
-    enum class ResponseCodes : std::uint8_t
+    enum class ResponseCodes : uint8_t
     {
         RESPONSE_SUCCESS                                       = 0,
         RESPONSE_FAILURE                                       = 1,

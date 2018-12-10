@@ -7,6 +7,6 @@ namespace wowgm::game::structures
 {
     struct JamCliValuesUpdate
     {
-        std::unordered_map<std::uint32_t, std::uint32_t> Descriptors;
+        std::unordered_map<uint32_t, uint32_t> Descriptors;
     };
 }

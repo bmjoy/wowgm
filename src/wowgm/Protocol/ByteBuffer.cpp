@@ -49,9 +49,9 @@ namespace wowgm::protocol
         return *this;
     }
 
-    std::uint32_t ByteBuffer::ReadPackedTime()
+    uint32_t ByteBuffer::ReadPackedTime()
     {
-        std::uint32_t packedDate = read<std::uint32_t>();
+        uint32_t packedDate = read<uint32_t>();
         tm lt = tm();
 
         lt.tm_min = packedDate & 0x3F;
@@ -61,10 +61,10 @@ namespace wowgm::protocol
         lt.tm_mon = (packedDate >> 20) & 0xF;
         lt.tm_year = ((packedDate >> 24) & 0x1F) + 100;
 
-        return std::uint32_t(mktime(&lt));
+        return uint32_t(mktime(&lt));
     }
 
-    void ByteBuffer::append(const std::uint8_t *src, size_t cnt)
+    void ByteBuffer::append(const uint8_t *src, size_t cnt)
     {
         BOOST_ASSERT_MSG_FMT(src, "Attempted to put a NULL-pointer in ByteBuffer (pos: %Iu size: %Iu)", _wpos, size());
         BOOST_ASSERT_MSG_FMT(cnt, "Attempted to put a zero-sized value in ByteBuffer (pos: %Iu size: %Iu)", _wpos, size());
@@ -79,10 +79,10 @@ namespace wowgm::protocol
     {
         tm lt;
         localtime_r(&time, &lt);
-        append<std::uint32_t>((lt.tm_year - 100) << 24 | lt.tm_mon << 20 | (lt.tm_mday - 1) << 14 | lt.tm_wday << 11 | lt.tm_hour << 6 | lt.tm_min);
+        append<uint32_t>((lt.tm_year - 100) << 24 | lt.tm_mon << 20 | (lt.tm_mday - 1) << 14 | lt.tm_wday << 11 | lt.tm_hour << 6 | lt.tm_min);
     }
 
-    void ByteBuffer::put(size_t pos, const std::uint8_t *src, size_t cnt)
+    void ByteBuffer::put(size_t pos, const uint8_t *src, size_t cnt)
     {
         BOOST_ASSERT_MSG_FMT(pos + cnt <= size(), "Attempted to put value with size: %Iu in ByteBuffer (pos: %Iu size: %Iu)", cnt, pos, size());
         BOOST_ASSERT_MSG_FMT(src, "Attempted to put a NULL-pointer in ByteBuffer (pos: %Iu size: %Iu)", pos, size());
@@ -91,12 +91,12 @@ namespace wowgm::protocol
         std::memcpy(&_storage[pos], src, cnt);
     }
 
-    void ByteBuffer::PutBits(std::size_t pos, std::size_t value, std::uint32_t bitCount)
+    void ByteBuffer::PutBits(std::size_t pos, std::size_t value, uint32_t bitCount)
     {
         BOOST_ASSERT_MSG_FMT(pos + bitCount <= size() * 8, "Attempted to put %u bits in ByteBuffer (bitpos: %Iu size: %Iu)", bitCount, pos, size());
         BOOST_ASSERT_MSG(bitCount, "Attempted to put a zero bits in ByteBuffer");
 
-        for (std::uint32_t i = 0; i < bitCount; ++i)
+        for (uint32_t i = 0; i < bitCount; ++i)
         {
             std::size_t wp = (pos + i) / 8;
             std::size_t bit = (pos + i) % 8;
@@ -109,7 +109,7 @@ namespace wowgm::protocol
 
     void ByteBuffer::ReadPackedGuid(ObjectGuid& guid)
     {
-        std::uint64_t uValue = 0;
+        uint64_t uValue = 0;
         ReadPackedUInt64(uValue);
         guid.Set(uValue);
     }

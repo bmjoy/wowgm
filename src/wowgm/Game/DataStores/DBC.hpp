@@ -9,7 +9,7 @@ namespace wowgm::game::datastores
     namespace DataStores {
         void Initialize();
 
-        template <typename T> T const* GetRecord(std::uint32_t index);
+        template <typename T> T const* GetRecord(uint32_t index);
     }
 }
 

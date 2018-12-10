@@ -18,7 +18,7 @@ namespace wowgm::protocol::world::packets
 
         void Read() override;
 
-        std::uint32_t MapID = 0;
+        uint32_t MapID = 0;
         C4Vector Position;
     };
 }

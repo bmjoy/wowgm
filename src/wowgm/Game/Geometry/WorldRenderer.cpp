@@ -28,7 +28,7 @@ namespace wowgm::game::geometry
         Instance()->_worldPosition = position;
     }
 
-    void WorldRenderer::SetMapID(std::uint32_t mapID)
+    void WorldRenderer::SetMapID(uint32_t mapID)
     {
         Instance()->_mapID = mapID;
     }

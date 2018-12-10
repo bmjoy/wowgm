@@ -11,7 +11,7 @@ namespace wowgm::protocol::world
 
     struct ServerPacketHeader
     {
-        std::uint16_t Size;
+        uint16_t Size;
         Opcode Command;
 
         ServerPacketHeader();
@@ -30,16 +30,16 @@ namespace wowgm::protocol::world
     #pragma pack(push, 1)
     struct ClientPacketHeader
     {
-        ClientPacketHeader(std::uint16_t size, Opcode opcode) : Size(size), Command(opcode)
+        ClientPacketHeader(uint16_t size, Opcode opcode) : Size(size), Command(opcode)
         {
             std::swap(Data[0], Data[1]);
         }
 
         union
         {
-            std::uint8_t Data[6];
+            uint8_t Data[6];
             struct {
-                std::uint16_t Size;
+                uint16_t Size;
                 Opcode Command;
             };
         };

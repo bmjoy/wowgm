@@ -9,15 +9,15 @@ namespace wowgm::game::structures
 {
     ObjectGuid const ObjectGuid::Empty = ObjectGuid();
 
-    std::uint8_t& ObjectGuid::operator [] (std::uint32_t index)
+    uint8_t& ObjectGuid::operator [] (uint32_t index)
     {
-        BOOST_ASSERT(index < sizeof(std::uint64_t));
+        BOOST_ASSERT(index < sizeof(uint64_t));
         return _data._bytes[index];
     }
 
-    std::uint8_t const& ObjectGuid::operator [] (std::uint32_t index) const
+    uint8_t const& ObjectGuid::operator [] (uint32_t index) const
     {
-        BOOST_ASSERT(index < sizeof(std::uint64_t));
+        BOOST_ASSERT(index < sizeof(uint64_t));
         return _data._bytes[index];
     }
 
@@ -59,13 +59,13 @@ namespace wowgm::game::structures
 
     ByteBuffer& operator << (ByteBuffer& buf, ObjectGuid const& guid)
     {
-        buf << std::uint64_t(guid.GetRawValue());
+        buf << uint64_t(guid.GetRawValue());
         return buf;
     }
 
     ByteBuffer& operator >> (ByteBuffer& buf, ObjectGuid& guid)
     {
-        guid.Set(buf.read<std::uint64_t>());
+        guid.Set(buf.read<uint64_t>());
         return buf;
     }
 

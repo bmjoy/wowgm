@@ -11,14 +11,14 @@ namespace wowgm::game::datastores
     struct Startup_StringsMeta {
         constexpr Startup_StringsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nss";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -26,17 +26,17 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Startup_Strings.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemSparseMeta {
         constexpr ItemSparseMeta() { }
 
-        constexpr static const std::uint32_t field_count = 68;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 532; // 0x214
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 68;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 532; // 0x214
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  16,  20,  24,  28,  32,  36,  40,
             44,  48,  52,  56,  60,  64,  68,  72,  76,  80,
             84,  88,  92,  96, 136, 176, 216, 256, 260, 264,
@@ -46,7 +46,7 @@ namespace wowgm::game::datastores
             500, 504, 508, 512, 516, 520, 524, 528
         };
         constexpr static const char field_types[] = "niiffiiiiiiiiiiiiiiiiiiiiiiiiifiiiiiiisssssiiiiiiiiiiiiiiiiiifiiifii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   8,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,  40,  40,  40,  40,   4,   4,   4,
@@ -60,21 +60,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Item-sparse.db2"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemMeta {
         constexpr ItemMeta() { }
 
-        constexpr static const std::uint32_t field_count = 8;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 8;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28
         };
         constexpr static const char field_types[] = "niiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = true;
@@ -82,23 +82,23 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Item.db2"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellVisualKitMeta {
         constexpr SpellVisualKitMeta() { }
 
-        constexpr static const std::uint32_t field_count = 22;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 156; // 0x9C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 22;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 156; // 0x9C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  60,  64,  68,  72,  88, 104, 120,
             136, 152
         };
         constexpr static const char field_types[] = "niiiiiiiiiiiiiiiiffffi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,  12,   4,   4,   4,  16,  16,  16,  16,
             16,   4
@@ -108,21 +108,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellVisualKit.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellVisualEffectNameMeta {
         constexpr SpellVisualEffectNameMeta() { }
 
-        constexpr static const std::uint32_t field_count = 9;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 9;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32
         };
         constexpr static const char field_types[] = "nssffffif";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   1,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -130,23 +130,23 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellVisualEffectName.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellEffectMeta {
         constexpr SpellEffectMeta() { }
 
-        constexpr static const std::uint32_t field_count = 22;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 108; // 0x6C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 22;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 108; // 0x6C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  56,  60,  68,  72,  84,  88,  96,
             100, 104
         };
         constexpr static const char field_types[] = "nifiiiffiiiiififiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   8,   4,   8,   4,  12,   4,   8,   4,
             4,   4
@@ -156,21 +156,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellEffect.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ParticleColorMeta {
         constexpr ParticleColorMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 40; // 0x28
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 40; // 0x28
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  16,  28
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  12,  12,  12
         };
         constexpr static const bool sparse_storage = false;
@@ -178,21 +178,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ParticleColor.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ObjectEffectPackageElemMeta {
         constexpr ObjectEffectPackageElemMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -200,21 +200,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ObjectEffectPackageElem.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ObjectEffectPackageMeta {
         constexpr ObjectEffectPackageMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -222,21 +222,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ObjectEffectPackage.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ObjectEffectModifierMeta {
         constexpr ObjectEffectModifierMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niiif";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,  16
         };
         constexpr static const bool sparse_storage = false;
@@ -244,21 +244,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ObjectEffectModifier.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ObjectEffectGroupMeta {
         constexpr ObjectEffectGroupMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -266,22 +266,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ObjectEffectGroup.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ObjectEffectMeta {
         constexpr ObjectEffectMeta() { }
 
-        constexpr static const std::uint32_t field_count = 10;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 48; // 0x30
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 10;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 48; // 0x30
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  44
 
         };
         constexpr static const char field_types[] = "nsiiiiiifi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,  12,   4
 
         };
@@ -290,21 +290,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ObjectEffect.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct NameGenMeta {
         constexpr NameGenMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "nsii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -312,21 +312,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "NameGen.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LoadingScreensMeta {
         constexpr LoadingScreensMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "nssi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -334,21 +334,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "LoadingScreens.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemVisualEffectsMeta {
         constexpr ItemVisualEffectsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -356,21 +356,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemVisualEffects.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemVisualsMeta {
         constexpr ItemVisualsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  20
         };
         constexpr static const bool sparse_storage = false;
@@ -378,22 +378,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemVisuals.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemDisplayInfoMeta {
         constexpr ItemDisplayInfoMeta() { }
 
-        constexpr static const std::uint32_t field_count = 12;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 100; // 0x64
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 12;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 100; // 0x64
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  12,  20,  28,  40,  44,  48,  52,  60,
             92,  96
         };
         constexpr static const char field_types[] = "nsssiiiiisii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   8,   8,   8,  12,   4,   4,   4,   8,  32,
             4,   4
         };
@@ -402,21 +402,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemDisplayInfo.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct HelmetGeosetVisDataMeta {
         constexpr HelmetGeosetVisDataMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  28
         };
         constexpr static const bool sparse_storage = false;
@@ -424,21 +424,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "HelmetGeosetVisData.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GuildColorEmblemMeta {
         constexpr GuildColorEmblemMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   5,   6
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   1,   1,   1
         };
         constexpr static const bool sparse_storage = false;
@@ -446,21 +446,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GuildColorEmblem.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GuildColorBorderMeta {
         constexpr GuildColorBorderMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   5,   6
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   1,   1,   1
         };
         constexpr static const bool sparse_storage = false;
@@ -468,21 +468,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GuildColorBorder.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GuildColorBackgroundMeta {
         constexpr GuildColorBackgroundMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   5,   6
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   1,   1,   1
         };
         constexpr static const bool sparse_storage = false;
@@ -490,21 +490,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GuildColorBackground.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GlueScreenEmoteMeta {
         constexpr GlueScreenEmoteMeta() { }
 
-        constexpr static const std::uint32_t field_count = 8;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 8;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28
         };
         constexpr static const char field_types[] = "niiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -512,21 +512,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GlueScreenEmote.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GameTipsMeta {
         constexpr GameTipsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "nsii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -534,23 +534,23 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GameTips.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CreatureModelDataMeta {
         constexpr CreatureModelDataMeta() { }
 
-        constexpr static const std::uint32_t field_count = 27;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 124; // 0x7C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 27;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 124; // 0x7C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56,  60,  64,  68,  80,  92,
             96, 100, 104, 108, 112, 116, 120
         };
         constexpr static const char field_types[] = "nisifiifffiiiifffffffffffff";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,  12,  12,   4,
             4,   4,   4,   4,   4,   4,   4
@@ -560,22 +560,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CreatureModelData.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CreatureFamilyMeta {
         constexpr CreatureFamilyMeta() { }
 
-        constexpr static const std::uint32_t field_count = 11;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 48; // 0x30
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 11;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 48; // 0x30
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  28,  32,  36,  40,
             44
         };
         constexpr static const char field_types[] = "nfifiiiiiss";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   8,   4,   4,   4,   4,
             4
         };
@@ -584,22 +584,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CreatureFamily.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CreatureDisplayInfoExtraMeta {
         constexpr CreatureDisplayInfoExtraMeta() { }
 
-        constexpr static const std::uint32_t field_count = 11;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 84; // 0x54
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 11;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 84; // 0x54
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  76,
             80
         };
         constexpr static const char field_types[] = "niiiiiiiiis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,  44,   4,
             4
         };
@@ -608,22 +608,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CreatureDisplayInfoExtra.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CreatureDisplayInfoMeta {
         constexpr CreatureDisplayInfoMeta() { }
 
-        constexpr static const std::uint32_t field_count = 15;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 68; // 0x44
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 15;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 68; // 0x44
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  36,  40,  44,
             48,  52,  56,  60,  64
         };
         constexpr static const char field_types[] = "niiifissiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,  12,   4,   4,   4,
             4,   4,   4,   4,   4
         };
@@ -632,22 +632,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CreatureDisplayInfo.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CharStartOutfitMeta {
         constexpr CharStartOutfitMeta() { }
 
-        constexpr static const std::uint32_t field_count = 10;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 304; // 0x130
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 10;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 304; // 0x130
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   5,   6,   7,   8, 104, 200, 296, 300
 
         };
         constexpr static const char field_types[] = "niiiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   1,   1,   1,   1,  96,  96,  96,   4,   4
 
         };
@@ -656,21 +656,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CharStartOutfit.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AnimReplacementSetMeta {
         constexpr AnimReplacementSetMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -678,21 +678,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AnimReplacementSet.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AnimReplacementMeta {
         constexpr AnimReplacementMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -700,22 +700,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AnimReplacement.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AnimKitSegmentMeta {
         constexpr AnimKitSegmentMeta() { }
 
-        constexpr static const std::uint32_t field_count = 16;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 64; // 0x40
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 16;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 64; // 0x40
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56,  60
         };
         constexpr static const char field_types[] = "niiiiiiiiiifiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4
         };
@@ -724,21 +724,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AnimKitSegment.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AnimKitPriorityMeta {
         constexpr AnimKitPriorityMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -746,23 +746,23 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AnimKitPriority.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SoundProviderPreferencesMeta {
         constexpr SoundProviderPreferencesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 24;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 96; // 0x60
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 24;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 96; // 0x60
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56,  60,  64,  68,  72,  76,
             80,  84,  88,  92
         };
         constexpr static const char field_types[] = "nsiifffiifififffifffffff";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4
@@ -772,21 +772,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SoundProviderPreferences.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpamMessagesMeta {
         constexpr SpamMessagesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -794,21 +794,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpamMessages.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SoundFilterElemMeta {
         constexpr SoundFilterElemMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 52; // 0x34
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 52; // 0x34
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niiif";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,  36
         };
         constexpr static const bool sparse_storage = false;
@@ -816,21 +816,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SoundFilterElem.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SoundFilterMeta {
         constexpr SoundFilterMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -838,21 +838,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SoundFilter.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ResistancesMeta {
         constexpr ResistancesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -860,21 +860,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Resistances.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct NamesReservedMeta {
         constexpr NamesReservedMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nsi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -882,21 +882,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "NamesReserved.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct NamesProfanityMeta {
         constexpr NamesProfanityMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nsi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -904,21 +904,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "NamesProfanity.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct MovieVariationMeta {
         constexpr MovieVariationMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -926,21 +926,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "MovieVariation.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct MovieFileDataMeta {
         constexpr MovieFileDataMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -948,21 +948,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "MovieFileData.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct MovieMeta {
         constexpr MovieMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "nsii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -970,22 +970,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Movie.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemSubClassMeta {
         constexpr ItemSubClassMeta() { }
 
-        constexpr static const std::uint32_t field_count = 12;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 52; // 0x34
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 12;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 52; // 0x34
+        constexpr static const uint32_t field_offsets[] = {
             4,   8,  12,  16,  20,  24,  28,  32,  36,  40,
             44,  48
         };
         constexpr static const char field_types[] = "niiiiiiiiiss";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4
         };
@@ -994,21 +994,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemSubClass.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemClassMeta {
         constexpr ItemClassMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             4,   8,  12,  16,  20
         };
         constexpr static const char field_types[] = "niifs";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1016,21 +1016,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemClass.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct FileDataMeta {
         constexpr FileDataMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nss";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1038,21 +1038,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "FileData.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct FactionTemplateMeta {
         constexpr FactionTemplateMeta() { }
 
-        constexpr static const std::uint32_t field_count = 8;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 56; // 0x38
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 8;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 56; // 0x38
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  40
         };
         constexpr static const char field_types[] = "niiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,  16,  16
         };
         constexpr static const bool sparse_storage = false;
@@ -1060,21 +1060,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "FactionTemplate.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct FactionGroupMeta {
         constexpr FactionGroupMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niss";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1082,23 +1082,23 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "FactionGroup.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ChrRacesMeta {
         constexpr ChrRacesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 23;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 96; // 0x60
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 23;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 96; // 0x60
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56,  60,  64,  68,  76,  80,
             84,  88,  92
         };
         constexpr static const char field_types[] = "niiiiisiiiisiisssssiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,   8,   4,   4,
             4,   4,   4
@@ -1108,22 +1108,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ChrRaces.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ChrClassesMeta {
         constexpr ChrClassesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 14;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 56; // 0x38
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 14;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 56; // 0x38
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52
         };
         constexpr static const char field_types[] = "nisssssiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4
         };
@@ -1132,21 +1132,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ChrClasses.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ChatProfanityMeta {
         constexpr ChatProfanityMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nsi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1154,21 +1154,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ChatProfanity.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CharacterFacialHairStylesMeta {
         constexpr CharacterFacialHairStylesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,  20
         };
         constexpr static const bool sparse_storage = false;
@@ -1176,21 +1176,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CharacterFacialHairStyles.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CharSectionsMeta {
         constexpr CharSectionsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 8;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 40; // 0x28
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 8;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 40; // 0x28
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  28,  32,  36
         };
         constexpr static const char field_types[] = "niiisiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,  12,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1198,21 +1198,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CharSections.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CharHairGeosetsMeta {
         constexpr CharHairGeosetsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20
         };
         constexpr static const char field_types[] = "niiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1220,21 +1220,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CharHairGeosets.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CharBaseInfoMeta {
         constexpr CharBaseInfoMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             4,   5
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             1,   1
         };
         constexpr static const bool sparse_storage = false;
@@ -1242,21 +1242,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CharBaseInfo.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct Cfg_ConfigsMeta {
         constexpr Cfg_ConfigsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1264,21 +1264,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Cfg_Configs.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct Cfg_CategoriesMeta {
         constexpr Cfg_CategoriesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20
         };
         constexpr static const char field_types[] = "niiiis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1286,21 +1286,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Cfg_Categories.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct BannedAddOnsMeta {
         constexpr BannedAddOnsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 44; // 0x2C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 44; // 0x2C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  20,  36,  40
         };
         constexpr static const char field_types[] = "niiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  16,  16,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1308,21 +1308,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "BannedAddOns.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AnimKitConfigBoneSetMeta {
         constexpr AnimKitConfigBoneSetMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1330,21 +1330,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AnimKitConfigBoneSet.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AnimKitConfigMeta {
         constexpr AnimKitConfigMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1352,21 +1352,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AnimKitConfig.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AnimKitMeta {
         constexpr AnimKitMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1374,21 +1374,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AnimKit.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AnimKitBoneSetMeta {
         constexpr AnimKitBoneSetMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20
         };
         constexpr static const char field_types[] = "nsiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1396,21 +1396,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AnimKitBoneSet.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AnimKitBoneSetAliasMeta {
         constexpr AnimKitBoneSetAliasMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1418,22 +1418,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AnimKitBoneSetAlias.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct PhaseShiftZoneSoundsMeta {
         constexpr PhaseShiftZoneSoundsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 14;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 56; // 0x38
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 14;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 56; // 0x38
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52
         };
         constexpr static const char field_types[] = "niiiiiiiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4
         };
@@ -1442,21 +1442,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "PhaseShiftZoneSounds.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct WorldChunkSoundsMeta {
         constexpr WorldChunkSoundsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 9;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 40; // 0x28
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 9;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 40; // 0x28
+        constexpr static const uint32_t field_offsets[] = {
             4,   8,  12,  16,  20,  24,  28,  32,  36
         };
         constexpr static const char field_types[] = "niiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1464,21 +1464,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "WorldChunkSounds.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct WorldStateZoneSoundsMeta {
         constexpr WorldStateZoneSoundsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 8;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 8;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             4,   8,  12,  16,  20,  24,  28,  32
         };
         constexpr static const char field_types[] = "niiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1486,21 +1486,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "WorldStateZoneSounds.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ZoneMusicMeta {
         constexpr ZoneMusicMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  16,  24
         };
         constexpr static const char field_types[] = "nsiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   8,   8,   8
         };
         constexpr static const bool sparse_storage = false;
@@ -1508,21 +1508,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ZoneMusic.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ZoneIntroMusicTableMeta {
         constexpr ZoneIntroMusicTableMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "nsiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1530,22 +1530,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ZoneIntroMusicTable.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct WorldStateUIMeta {
         constexpr WorldStateUIMeta() { }
 
-        constexpr static const std::uint32_t field_count = 15;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 68; // 0x44
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 15;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 68; // 0x44
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56
         };
         constexpr static const char field_types[] = "niiiiisssiisssi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,  12
         };
@@ -1554,21 +1554,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "WorldStateUI.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct WorldSafeLocsMeta {
         constexpr WorldSafeLocsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  20
         };
         constexpr static const char field_types[] = "nifs";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  12,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1576,21 +1576,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "WorldSafeLocs.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct WorldMapTransformsMeta {
         constexpr WorldMapTransformsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 9;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 48; // 0x30
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 9;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 48; // 0x30
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  16,  24,  28,  36,  40,  44
         };
         constexpr static const char field_types[] = "niffifiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   8,   8,   4,   8,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1598,22 +1598,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "WorldMapTransforms.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct WorldMapOverlayMeta {
         constexpr WorldMapOverlayMeta() { }
 
-        constexpr static const std::uint32_t field_count = 12;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 60; // 0x3C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 12;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 60; // 0x3C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  24,  28,  32,  36,  40,  44,  48,
             52,  56
         };
         constexpr static const char field_types[] = "niisiiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  16,   4,   4,   4,   4,   4,   4,   4,
             4,   4
         };
@@ -1622,22 +1622,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "WorldMapOverlay.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct WorldMapContinentMeta {
         constexpr WorldMapContinentMeta() { }
 
-        constexpr static const std::uint32_t field_count = 11;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 56; // 0x38
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 11;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 56; // 0x38
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  32,  36,  44,
             52
         };
         constexpr static const char field_types[] = "niiiiiffffi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   8,   4,   8,   8,
             4
         };
@@ -1646,22 +1646,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "WorldMapContinent.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct WorldMapAreaMeta {
         constexpr WorldMapAreaMeta() { }
 
-        constexpr static const std::uint32_t field_count = 14;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 56; // 0x38
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 14;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 56; // 0x38
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52
         };
         constexpr static const char field_types[] = "niisffffiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4
         };
@@ -1670,21 +1670,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "WorldMapArea.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct WeaponSwingSounds2Meta {
         constexpr WeaponSwingSounds2Meta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1692,21 +1692,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "WeaponSwingSounds2.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct WeaponImpactSoundsMeta {
         constexpr WeaponImpactSoundsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 92; // 0x5C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 92; // 0x5C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  52
         };
         constexpr static const char field_types[] = "niiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,  40,  40
         };
         constexpr static const bool sparse_storage = false;
@@ -1714,21 +1714,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "WeaponImpactSounds.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct World_PVP_AreaMeta {
         constexpr World_PVP_AreaMeta() { }
 
-        constexpr static const std::uint32_t field_count = 7;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 28; // 0x1C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 7;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 28; // 0x1C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24
         };
         constexpr static const char field_types[] = "niiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1736,21 +1736,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "World_PVP_Area.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct VocalUISoundsMeta {
         constexpr VocalUISoundsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 28; // 0x1C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 28; // 0x1C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  20
         };
         constexpr static const char field_types[] = "niiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   8,   8
         };
         constexpr static const bool sparse_storage = false;
@@ -1758,21 +1758,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "VocalUISounds.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct VehicleUIIndSeatMeta {
         constexpr VehicleUIIndSeatMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niiff";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1780,21 +1780,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "VehicleUIIndSeat.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct VehicleUIIndicatorMeta {
         constexpr VehicleUIIndicatorMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1802,17 +1802,17 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "VehicleUIIndicator.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct VehicleSeatMeta {
         constexpr VehicleSeatMeta() { }
 
-        constexpr static const std::uint32_t field_count = 62;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 264; // 0x108
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 62;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 264; // 0x108
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  24,  28,  32,  36,  40,  44,
             48,  52,  56,  60,  64,  68,  72,  76,  80,  84,
             88,  92,  96, 100, 104, 108, 112, 116, 120, 124,
@@ -1822,7 +1822,7 @@ namespace wowgm::game::datastores
             256, 260
         };
         constexpr static const char field_types[] = "niiffffffffiiiiiifffffffiiifffiiiiiiiffiiiiiffffffffffiiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,  12,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
@@ -1836,23 +1836,23 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "VehicleSeat.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct VehicleMeta {
         constexpr VehicleMeta() { }
 
-        constexpr static const std::uint32_t field_count = 29;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 160; // 0xA0
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 29;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 160; // 0xA0
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  56,  60,  64,
             68,  72,  76,  80,  84,  88,  92,  96, 100, 104,
             108, 116, 120, 124, 132, 136, 140, 144, 148
         };
         constexpr static const char field_types[] = "niffffiffffffffffffffsssfifii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,  32,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             8,   4,   4,   8,   4,   4,   4,   4,  12
@@ -1862,22 +1862,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Vehicle.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct UnitPowerBarMeta {
         constexpr UnitPowerBarMeta() { }
 
-        constexpr static const std::uint32_t field_count = 17;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 108; // 0x6C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 17;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 108; // 0x6C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  56,
             80,  84,  88,  92,  96, 100, 104
         };
         constexpr static const char field_types[] = "niiiiffiiiissssff";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,  24,  24,
             4,   4,   4,   4,   4,   4,   4
         };
@@ -1886,21 +1886,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "UnitPowerBar.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct UnitBloodMeta {
         constexpr UnitBloodMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 40; // 0x28
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 40; // 0x28
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  12,  20
         };
         constexpr static const char field_types[] = "niis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   8,   8,  20
         };
         constexpr static const bool sparse_storage = false;
@@ -1908,21 +1908,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "UnitBlood.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct UnitBloodLevelsMeta {
         constexpr UnitBloodLevelsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  12
         };
         constexpr static const bool sparse_storage = false;
@@ -1930,21 +1930,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "UnitBloodLevels.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct TransportRotationMeta {
         constexpr TransportRotationMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 28; // 0x1C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 28; // 0x1C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niif";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,  16
         };
         constexpr static const bool sparse_storage = false;
@@ -1952,22 +1952,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "TransportRotation.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct TransportPhysicsMeta {
         constexpr TransportPhysicsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 11;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 44; // 0x2C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 11;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 44; // 0x2C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40
         };
         constexpr static const char field_types[] = "nffffffffff";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4
         };
@@ -1976,21 +1976,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "TransportPhysics.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct TransportAnimationMeta {
         constexpr TransportAnimationMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 28; // 0x1C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 28; // 0x1C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  24
         };
         constexpr static const char field_types[] = "niifi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,  12,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -1998,21 +1998,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "TransportAnimation.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct TotemCategoryMeta {
         constexpr TotemCategoryMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "nsii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2020,21 +2020,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "TotemCategory.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct TerrainTypeSoundsMeta {
         constexpr TerrainTypeSoundsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 1;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 4; // 0x4
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 1;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 4; // 0x4
+        constexpr static const uint32_t field_offsets[] = {
             0
         };
         constexpr static const char field_types[] = "n";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4
         };
         constexpr static const bool sparse_storage = false;
@@ -2042,21 +2042,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "TerrainTypeSounds.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct TaxiPathMeta {
         constexpr TaxiPathMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2064,21 +2064,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "TaxiPath.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct TaxiPathNodeMeta {
         constexpr TaxiPathNodeMeta() { }
 
-        constexpr static const std::uint32_t field_count = 9;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 44; // 0x2C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 9;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 44; // 0x2C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  28,  32,  36,  40
         };
         constexpr static const char field_types[] = "niiifiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,  12,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2086,21 +2086,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "TaxiPathNode.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct TaxiNodesMeta {
         constexpr TaxiNodesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 7;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 44; // 0x2C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 7;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 44; // 0x2C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  20,  24,  32,  36
         };
         constexpr static const char field_types[] = "nifsiif";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  12,   4,   8,   4,   8
         };
         constexpr static const bool sparse_storage = false;
@@ -2108,21 +2108,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "TaxiNodes.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct TalentTreePrimarySpellsMeta {
         constexpr TalentTreePrimarySpellsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2130,22 +2130,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "TalentTreePrimarySpells.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct TalentTabMeta {
         constexpr TalentTabMeta() { }
 
-        constexpr static const std::uint32_t field_count = 10;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 44; // 0x2C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 10;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 44; // 0x2C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36
 
         };
         constexpr static const char field_types[] = "nsiiiissii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   8
 
         };
@@ -2154,22 +2154,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "TalentTab.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct TalentMeta {
         constexpr TalentMeta() { }
 
-        constexpr static const std::uint32_t field_count = 10;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 76; // 0x4C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 10;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 76; // 0x4C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  36,  48,  60,  64,  68
 
         };
         constexpr static const char field_types[] = "niiiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,  20,  12,  12,   4,   4,   8
 
         };
@@ -2178,21 +2178,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Talent.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SummonPropertiesMeta {
         constexpr SummonPropertiesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20
         };
         constexpr static const char field_types[] = "niiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2200,21 +2200,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SummonProperties.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct StringLookupsMeta {
         constexpr StringLookupsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2222,21 +2222,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "StringLookups.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct StationeryMeta {
         constexpr StationeryMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "nisi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2244,22 +2244,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Stationery.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellVisualKitModelAttachMeta {
         constexpr SpellVisualKitModelAttachMeta() { }
 
-        constexpr static const std::uint32_t field_count = 12;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 56; // 0x38
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 12;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 56; // 0x38
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  28,  32,  36,  40,  44,
             48,  52
         };
         constexpr static const char field_types[] = "niiiffffiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,  12,   4,   4,   4,   4,   4,
             4,   4
         };
@@ -2268,21 +2268,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellVisualKitModelAttach.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellVisualKitAreaModelMeta {
         constexpr SpellVisualKitAreaModelMeta() { }
 
-        constexpr static const std::uint32_t field_count = 7;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 28; // 0x1C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 7;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 28; // 0x1C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24
         };
         constexpr static const char field_types[] = "nsiifff";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2290,23 +2290,23 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellVisualKitAreaModel.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellVisualMeta {
         constexpr SpellVisualMeta() { }
 
-        constexpr static const std::uint32_t field_count = 29;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 132; // 0x84
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 29;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 132; // 0x84
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56,  60,  64,  68,  72,  76,
             80,  84,  88,  92,  96, 100, 104, 116, 128
         };
         constexpr static const char field_types[] = "niiiiiiiiiiiiiiiiiiiiiiiiiffi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,  12,  12,   4
@@ -2316,21 +2316,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellVisual.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellTotemsMeta {
         constexpr SpellTotemsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  12
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   8,   8
         };
         constexpr static const bool sparse_storage = false;
@@ -2338,21 +2338,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellTotems.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellTargetRestrictionsMeta {
         constexpr SpellTargetRestrictionsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20
         };
         constexpr static const char field_types[] = "nfiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2360,21 +2360,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellTargetRestrictions.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellSpecialUnitEffectMeta {
         constexpr SpellSpecialUnitEffectMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2382,22 +2382,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellSpecialUnitEffect.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellShapeshiftFormMeta {
         constexpr SpellShapeshiftFormMeta() { }
 
-        constexpr static const std::uint32_t field_count = 11;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 84; // 0x54
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 11;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 84; // 0x54
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  44,  76,
             80
         };
         constexpr static const char field_types[] = "nisiiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,  16,  32,   4,
             4
         };
@@ -2406,21 +2406,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellShapeshiftForm.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellShapeshiftMeta {
         constexpr SpellShapeshiftMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  12,  20
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   8,   8,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2428,22 +2428,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellShapeshift.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellScalingMeta {
         constexpr SpellScalingMeta() { }
 
-        constexpr static const std::uint32_t field_count = 10;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 64; // 0x40
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 10;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 64; // 0x40
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  32,  44,  56,  60
 
         };
         constexpr static const char field_types[] = "niiiiffffi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,  12,  12,  12,   4,   4
 
         };
@@ -2452,21 +2452,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellScaling.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellRuneCostMeta {
         constexpr SpellRuneCostMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2474,21 +2474,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellRuneCost.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellReagentsMeta {
         constexpr SpellReagentsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 68; // 0x44
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 68; // 0x44
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  36
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  32,  32
         };
         constexpr static const bool sparse_storage = false;
@@ -2496,21 +2496,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellReagents.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellPowerMeta {
         constexpr SpellPowerMeta() { }
 
-        constexpr static const std::uint32_t field_count = 8;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 8;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28
         };
         constexpr static const char field_types[] = "niiiiiif";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2518,21 +2518,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellPower.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellRangeMeta {
         constexpr SpellRangeMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  12,  20,  24,  28
         };
         constexpr static const char field_types[] = "nffiss";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   8,   8,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2540,21 +2540,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellRange.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellRadiusMeta {
         constexpr SpellRadiusMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "nfff";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2562,21 +2562,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellRadius.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellMissileMotionMeta {
         constexpr SpellMissileMotionMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "nssii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2584,22 +2584,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellMissileMotion.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellMissileMeta {
         constexpr SpellMissileMeta() { }
 
-        constexpr static const std::uint32_t field_count = 15;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 60; // 0x3C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 15;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 60; // 0x3C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56
         };
         constexpr static const char field_types[] = "nifffffffffffff";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4
         };
@@ -2608,21 +2608,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellMissile.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellMechanicMeta {
         constexpr SpellMechanicMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2630,21 +2630,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellMechanic.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellLevelsMeta {
         constexpr SpellLevelsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2652,21 +2652,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellLevels.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellItemEnchantmentConditionMeta {
         constexpr SpellItemEnchantmentConditionMeta() { }
 
-        constexpr static const std::uint32_t field_count = 7;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 72; // 0x48
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 7;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 72; // 0x48
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  12,  32,  37,  44,  64
         };
         constexpr static const char field_types[] = "niiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   5,  20,   5,   5,  20,   5
         };
         constexpr static const bool sparse_storage = false;
@@ -2674,22 +2674,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellItemEnchantmentCondition.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellItemEnchantmentMeta {
         constexpr SpellItemEnchantmentMeta() { }
 
-        constexpr static const std::uint32_t field_count = 15;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 92; // 0x5C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 15;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 92; // 0x5C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  20,  32,  44,  56,  60,  64,  68,
             72,  76,  80,  84,  88
         };
         constexpr static const char field_types[] = "niiiiisiiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  12,  12,  12,  12,   4,   4,   4,   4,
             4,   4,   4,   4,   4
         };
@@ -2698,21 +2698,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellItemEnchantment.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellInterruptsMeta {
         constexpr SpellInterruptsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  12,  20
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   8,   8,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2720,21 +2720,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellInterrupts.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellIconMeta {
         constexpr SpellIconMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2742,21 +2742,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellIcon.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellFocusObjectMeta {
         constexpr SpellFocusObjectMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2764,21 +2764,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellFocusObject.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellFlyoutItemMeta {
         constexpr SpellFlyoutItemMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2786,21 +2786,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellFlyoutItem.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellFlyoutMeta {
         constexpr SpellFlyoutMeta() { }
 
-        constexpr static const std::uint32_t field_count = 7;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 28; // 0x1C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 7;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 28; // 0x1C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24
         };
         constexpr static const char field_types[] = "niiiiss";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2808,21 +2808,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellFlyout.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellEquippedItemsMeta {
         constexpr SpellEquippedItemsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2830,21 +2830,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellEquippedItems.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellEffectCameraShakesMeta {
         constexpr SpellEffectCameraShakesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  12
         };
         constexpr static const bool sparse_storage = false;
@@ -2852,21 +2852,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellEffectCameraShakes.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellDurationMeta {
         constexpr SpellDurationMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2874,21 +2874,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellDuration.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellDispelTypeMeta {
         constexpr SpellDispelTypeMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "nsiis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2896,21 +2896,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellDispelType.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellDifficultyMeta {
         constexpr SpellDifficultyMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  16
         };
         constexpr static const bool sparse_storage = false;
@@ -2918,21 +2918,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellDifficulty.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellDescriptionVariablesMeta {
         constexpr SpellDescriptionVariablesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2940,17 +2940,17 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellDescriptionVariables.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellMeta {
         constexpr SpellMeta() { }
 
-        constexpr static const std::uint32_t field_count = 47;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 192; // 0xC0
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 47;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 192; // 0xC0
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56,  60,  64,  68,  76,  80,
             84,  88,  92,  96, 100, 104, 108, 112, 116, 120,
@@ -2958,7 +2958,7 @@ namespace wowgm::game::datastores
             164, 168, 172, 176, 180, 184, 188
         };
         constexpr static const char field_types[] = "niiiiiiiiiiiiiiifiiissssiiiiifiiiiiiiiiiiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,   8,   4,   4,
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
@@ -2970,21 +2970,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Spell.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellCooldownsMeta {
         constexpr SpellCooldownsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -2992,21 +2992,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellCooldowns.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellClassOptionsMeta {
         constexpr SpellClassOptionsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 28; // 0x1C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 28; // 0x1C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  20,  24
         };
         constexpr static const char field_types[] = "niiis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  12,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3014,17 +3014,17 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellClassOptions.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellChainEffectsMeta {
         constexpr SpellChainEffectsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 48;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 180; // 0xB4
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 48;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 180; // 0xB4
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56,  60,  64,  68,  72,  76,
             80,  84,  88,  92,  96, 100, 104, 108, 112, 116,
@@ -3032,7 +3032,7 @@ namespace wowgm::game::datastores
             157, 158, 159, 160, 164, 168, 172, 176
         };
         constexpr static const char field_types[] = "nffffiisiifiiffffffffffffffffffffffffffiiiiisiff";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
@@ -3044,21 +3044,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellChainEffects.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellCategoryMeta {
         constexpr SpellCategoryMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   1,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3066,21 +3066,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellCategory.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellCategoriesMeta {
         constexpr SpellCategoriesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 7;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 28; // 0x1C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 7;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 28; // 0x1C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24
         };
         constexpr static const char field_types[] = "niiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3088,21 +3088,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellCategories.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellCastTimesMeta {
         constexpr SpellCastTimesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3110,21 +3110,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellCastTimes.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellCastingRequirementsMeta {
         constexpr SpellCastingRequirementsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 7;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 28; // 0x1C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 7;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 28; // 0x1C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24
         };
         constexpr static const char field_types[] = "niiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3132,21 +3132,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellCastingRequirements.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellAuraVisXTalentTabMeta {
         constexpr SpellAuraVisXTalentTabMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3154,21 +3154,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellAuraVisXTalentTab.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellAuraVisibilityMeta {
         constexpr SpellAuraVisibilityMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3176,21 +3176,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellAuraVisibility.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellAuraRestrictionsMeta {
         constexpr SpellAuraRestrictionsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 9;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 9;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32
         };
         constexpr static const char field_types[] = "niiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3198,21 +3198,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellAuraRestrictions.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellAuraOptionsMeta {
         constexpr SpellAuraOptionsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3220,21 +3220,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellAuraOptions.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SpellActivationOverlayMeta {
         constexpr SpellActivationOverlayMeta() { }
 
-        constexpr static const std::uint32_t field_count = 9;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 44; // 0x2C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 9;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 44; // 0x2C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  36,  40
         };
         constexpr static const char field_types[] = "niiiifiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,  12,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3242,21 +3242,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SpellActivationOverlay.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SoundAmbienceFlavorMeta {
         constexpr SoundAmbienceFlavorMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3264,21 +3264,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SoundAmbienceFlavor.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SoundAmbienceMeta {
         constexpr SoundAmbienceMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   8
         };
         constexpr static const bool sparse_storage = false;
@@ -3286,21 +3286,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SoundAmbience.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SkillTiersMeta {
         constexpr SkillTiersMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 132; // 0x84
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 132; // 0x84
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  68
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  64,  64
         };
         constexpr static const bool sparse_storage = false;
@@ -3308,21 +3308,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SkillTiers.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SkillRaceClassInfoMeta {
         constexpr SkillRaceClassInfoMeta() { }
 
-        constexpr static const std::uint32_t field_count = 9;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 9;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32
         };
         constexpr static const char field_types[] = "niiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3330,21 +3330,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SkillRaceClassInfo.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SkillLineMeta {
         constexpr SkillLineMeta() { }
 
-        constexpr static const std::uint32_t field_count = 7;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 28; // 0x1C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 7;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 28; // 0x1C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24
         };
         constexpr static const char field_types[] = "nissisi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3352,21 +3352,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SkillLine.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SkillLineCategoryMeta {
         constexpr SkillLineCategoryMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nsi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3374,21 +3374,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SkillLineCategory.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SkillLineAbilitySortedSpellMeta {
         constexpr SkillLineAbilitySortedSpellMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3396,22 +3396,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SkillLineAbilitySortedSpell.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SkillLineAbilityMeta {
         constexpr SkillLineAbilityMeta() { }
 
-        constexpr static const std::uint32_t field_count = 14;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 56; // 0x38
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 14;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 56; // 0x38
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52
         };
         constexpr static const char field_types[] = "niiiiiiiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4
         };
@@ -3420,21 +3420,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SkillLineAbility.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ServerMessagesMeta {
         constexpr ServerMessagesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3442,21 +3442,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ServerMessages.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ScreenLocationMeta {
         constexpr ScreenLocationMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3464,21 +3464,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ScreenLocation.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ScreenEffectMeta {
         constexpr ScreenEffectMeta() { }
 
-        constexpr static const std::uint32_t field_count = 8;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 44; // 0x2C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 8;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 44; // 0x2C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  28,  32,  36,  40
         };
         constexpr static const char field_types[] = "nsiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,  16,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3486,23 +3486,23 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ScreenEffect.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ScalingStatValuesMeta {
         constexpr ScalingStatValuesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 23;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 188; // 0xBC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 23;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 188; // 0xBC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56,  72,  88, 104, 120, 136,
             152, 168, 184
         };
         constexpr static const char field_types[] = "niiiiiiiiiiiiiiiiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,  16,  16,  16,  16,  16,  16,
             16,  16,   4
@@ -3512,21 +3512,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ScalingStatValues.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ScalingStatDistributionMeta {
         constexpr ScalingStatDistributionMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 92; // 0x5C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 92; // 0x5C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  44,  84,  88
         };
         constexpr static const char field_types[] = "niiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  40,  40,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3534,21 +3534,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ScalingStatDistribution.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct RandPropPointsMeta {
         constexpr RandPropPointsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 64; // 0x40
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 64; // 0x40
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  24,  44
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  20,  20,  20
         };
         constexpr static const bool sparse_storage = false;
@@ -3556,21 +3556,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "RandPropPoints.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ResearchSiteMeta {
         constexpr ResearchSiteMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niisi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3578,21 +3578,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ResearchSite.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ResearchProjectMeta {
         constexpr ResearchProjectMeta() { }
 
-        constexpr static const std::uint32_t field_count = 9;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 9;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32
         };
         constexpr static const char field_types[] = "nssiiiisi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3600,21 +3600,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ResearchProject.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ResearchFieldMeta {
         constexpr ResearchFieldMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nsi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3622,21 +3622,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ResearchField.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ResearchBranchMeta {
         constexpr ResearchBranchMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20
         };
         constexpr static const char field_types[] = "nsiisi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3644,21 +3644,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ResearchBranch.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct QuestXPMeta {
         constexpr QuestXPMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 44; // 0x2C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 44; // 0x2C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  40
         };
         constexpr static const bool sparse_storage = false;
@@ -3666,21 +3666,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "QuestXP.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct QuestSortMeta {
         constexpr QuestSortMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3688,21 +3688,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "QuestSort.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct QuestPOIPointMeta {
         constexpr QuestPOIPointMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3710,21 +3710,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "QuestPOIPoint.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct QuestPOIBlobMeta {
         constexpr QuestPOIBlobMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3732,21 +3732,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "QuestPOIBlob.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct QuestInfoMeta {
         constexpr QuestInfoMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3754,21 +3754,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "QuestInfo.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct QuestFactionRewardMeta {
         constexpr QuestFactionRewardMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 44; // 0x2C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 44; // 0x2C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  40
         };
         constexpr static const bool sparse_storage = false;
@@ -3776,21 +3776,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "QuestFactionReward.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct PvpDifficultyMeta {
         constexpr PvpDifficultyMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20
         };
         constexpr static const char field_types[] = "niiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3798,21 +3798,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "PvpDifficulty.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct PowerDisplayMeta {
         constexpr PowerDisplayMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  13,  14
         };
         constexpr static const char field_types[] = "nisiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   1,   1,   1
         };
         constexpr static const bool sparse_storage = false;
@@ -3820,21 +3820,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "PowerDisplay.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct PlayerConditionMeta {
         constexpr PlayerConditionMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3842,21 +3842,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "PlayerCondition.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct PhaseXPhaseGroupMeta {
         constexpr PhaseXPhaseGroupMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3864,21 +3864,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "PhaseXPhaseGroup.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct PhaseMeta {
         constexpr PhaseMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nsi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3886,21 +3886,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Phase.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct PaperDollItemFrameMeta {
         constexpr PaperDollItemFrameMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             4,   8,  12
         };
         constexpr static const char field_types[] = "nsi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3908,21 +3908,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "PaperDollItemFrame.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct PageTextMaterialMeta {
         constexpr PageTextMaterialMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3930,21 +3930,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "PageTextMaterial.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct PackageMeta {
         constexpr PackageMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "nsis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3952,21 +3952,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Package.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct OverrideSpellDataMeta {
         constexpr OverrideSpellDataMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 52; // 0x34
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 52; // 0x34
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  44,  48
         };
         constexpr static const char field_types[] = "niis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  40,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3974,21 +3974,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "OverrideSpellData.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct NumTalentsAtLevelMeta {
         constexpr NumTalentsAtLevelMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "nf";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -3996,21 +3996,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "NumTalentsAtLevel.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct NPCSoundsMeta {
         constexpr NPCSoundsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  16
         };
         constexpr static const bool sparse_storage = false;
@@ -4018,21 +4018,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "NPCSounds.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct MountTypeMeta {
         constexpr MountTypeMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 100; // 0x64
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 100; // 0x64
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  96
         };
         constexpr static const bool sparse_storage = false;
@@ -4040,21 +4040,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "MountType.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct MountCapabilityMeta {
         constexpr MountCapabilityMeta() { }
 
-        constexpr static const std::uint32_t field_count = 8;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 8;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28
         };
         constexpr static const char field_types[] = "niiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4062,21 +4062,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "MountCapability.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct MaterialMeta {
         constexpr MaterialMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4084,21 +4084,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Material.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct MapDifficultyMeta {
         constexpr MapDifficultyMeta() { }
 
-        constexpr static const std::uint32_t field_count = 7;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 28; // 0x1C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 7;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 28; // 0x1C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24
         };
         constexpr static const char field_types[] = "niisiis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4106,21 +4106,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "MapDifficulty.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct MailTemplateMeta {
         constexpr MailTemplateMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nss";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4128,21 +4128,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "MailTemplate.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LockTypeMeta {
         constexpr LockTypeMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "nssss";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4150,21 +4150,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "LockType.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LockMeta {
         constexpr LockMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 132; // 0x84
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 132; // 0x84
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  36,  68, 100
         };
         constexpr static const char field_types[] = "niiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  32,  32,  32,  32
         };
         constexpr static const bool sparse_storage = false;
@@ -4172,21 +4172,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Lock.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LoadingScreenTaxiSplinesMeta {
         constexpr LoadingScreenTaxiSplinesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 76; // 0x4C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 76; // 0x4C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  40,  72
         };
         constexpr static const char field_types[] = "niffi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  32,  32,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4194,23 +4194,23 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "LoadingScreenTaxiSplines.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LfgDungeonsMeta {
         constexpr LfgDungeonsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 21;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 84; // 0x54
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 21;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 84; // 0x54
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56,  60,  64,  68,  72,  76,
             80
         };
         constexpr static const char field_types[] = "nsiiiiiiiiiisiiisiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4
@@ -4220,21 +4220,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "LfgDungeons.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LfgDungeonsGroupingMapMeta {
         constexpr LfgDungeonsGroupingMapMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4242,21 +4242,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "LfgDungeonsGroupingMap.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LfgDungeonGroupMeta {
         constexpr LfgDungeonGroupMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "nsiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4264,21 +4264,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "LfgDungeonGroup.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LfgDungeonExpansionMeta {
         constexpr LfgDungeonExpansionMeta() { }
 
-        constexpr static const std::uint32_t field_count = 8;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 8;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28
         };
         constexpr static const char field_types[] = "niiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4286,21 +4286,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "LfgDungeonExpansion.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LanguagesMeta {
         constexpr LanguagesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4308,21 +4308,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Languages.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LanguageWordsMeta {
         constexpr LanguageWordsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4330,21 +4330,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "LanguageWords.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct JournalInstanceMeta {
         constexpr JournalInstanceMeta() { }
 
-        constexpr static const std::uint32_t field_count = 9;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 9;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32
         };
         constexpr static const char field_types[] = "niiiiiiss";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4352,22 +4352,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "JournalInstance.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct JournalEncounterSectionMeta {
         constexpr JournalEncounterSectionMeta() { }
 
-        constexpr static const std::uint32_t field_count = 14;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 56; // 0x38
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 14;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 56; // 0x38
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52
         };
         constexpr static const char field_types[] = "niiiiiiiissiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4
         };
@@ -4376,22 +4376,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "JournalEncounterSection.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct JournalEncounterMeta {
         constexpr JournalEncounterMeta() { }
 
-        constexpr static const std::uint32_t field_count = 10;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 44; // 0x2C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 10;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 44; // 0x2C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  20,  24,  28,  32,  36,  40
 
         };
         constexpr static const char field_types[] = "niifiiiiss";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   8,   4,   4,   4,   4,   4,   4
 
         };
@@ -4400,21 +4400,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "JournalEncounter.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct JournalEncounterItemMeta {
         constexpr JournalEncounterItemMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4422,21 +4422,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "JournalEncounterItem.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct JournalEncounterCreatureMeta {
         constexpr JournalEncounterCreatureMeta() { }
 
-        constexpr static const std::uint32_t field_count = 7;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 28; // 0x1C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 7;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 28; // 0x1C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24
         };
         constexpr static const char field_types[] = "niiiiss";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4444,21 +4444,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "JournalEncounterCreature.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemSubClassMaskMeta {
         constexpr ItemSubClassMaskMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             4,   8,  12
         };
         constexpr static const char field_types[] = "nis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4466,21 +4466,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemSubClassMask.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemSetMeta {
         constexpr ItemSetMeta() { }
 
-        constexpr static const std::uint32_t field_count = 7;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 148; // 0x94
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 7;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 148; // 0x94
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  76, 108, 140, 144
         };
         constexpr static const char field_types[] = "nsiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  68,  32,  32,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4488,21 +4488,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemSet.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemReforgeMeta {
         constexpr ItemReforgeMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "nifif";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4510,21 +4510,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemReforge.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemRandomSuffixMeta {
         constexpr ItemRandomSuffixMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 52; // 0x34
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 52; // 0x34
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  32
         };
         constexpr static const char field_types[] = "nssii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,  20,  20
         };
         constexpr static const bool sparse_storage = false;
@@ -4532,21 +4532,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemRandomSuffix.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemRandomPropertiesMeta {
         constexpr ItemRandomPropertiesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  28
         };
         constexpr static const char field_types[] = "nsis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  20,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4554,21 +4554,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemRandomProperties.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemPurchaseGroupMeta {
         constexpr ItemPurchaseGroupMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 40; // 0x28
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 40; // 0x28
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  36
         };
         constexpr static const char field_types[] = "nis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  32,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4576,21 +4576,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemPurchaseGroup.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemPriceBaseMeta {
         constexpr ItemPriceBaseMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niff";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4598,21 +4598,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemPriceBase.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemPetFoodMeta {
         constexpr ItemPetFoodMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4620,21 +4620,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemPetFood.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemNameDescriptionMeta {
         constexpr ItemNameDescriptionMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nsi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4642,21 +4642,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemNameDescription.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemLimitCategoryMeta {
         constexpr ItemLimitCategoryMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "nsii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4664,21 +4664,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemLimitCategory.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemGroupSoundsMeta {
         constexpr ItemGroupSoundsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  16
         };
         constexpr static const bool sparse_storage = false;
@@ -4686,21 +4686,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemGroupSounds.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemDisenchantLootMeta {
         constexpr ItemDisenchantLootMeta() { }
 
-        constexpr static const std::uint32_t field_count = 7;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 28; // 0x1C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 7;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 28; // 0x1C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24
         };
         constexpr static const char field_types[] = "niiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4708,21 +4708,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemDisenchantLoot.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemDamageWandMeta {
         constexpr ItemDamageWandMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  32
         };
         constexpr static const char field_types[] = "nfi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  28,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4730,21 +4730,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemDamageWand.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemDamageTwoHandCasterMeta {
         constexpr ItemDamageTwoHandCasterMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  32
         };
         constexpr static const char field_types[] = "nfi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  28,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4752,21 +4752,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemDamageTwoHandCaster.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemDamageTwoHandMeta {
         constexpr ItemDamageTwoHandMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  32
         };
         constexpr static const char field_types[] = "nfi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  28,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4774,21 +4774,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemDamageTwoHand.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemDamageThrownMeta {
         constexpr ItemDamageThrownMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  32
         };
         constexpr static const char field_types[] = "nfi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  28,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4796,21 +4796,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemDamageThrown.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemDamageRangedMeta {
         constexpr ItemDamageRangedMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  32
         };
         constexpr static const char field_types[] = "nfi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  28,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4818,21 +4818,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemDamageRanged.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemDamageOneHandCasterMeta {
         constexpr ItemDamageOneHandCasterMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  32
         };
         constexpr static const char field_types[] = "nfi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  28,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4840,21 +4840,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemDamageOneHandCaster.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemDamageOneHandMeta {
         constexpr ItemDamageOneHandMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  32
         };
         constexpr static const char field_types[] = "nfi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  28,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4862,21 +4862,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemDamageOneHand.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemDamageAmmoMeta {
         constexpr ItemDamageAmmoMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  32
         };
         constexpr static const char field_types[] = "nfi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  28,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4884,21 +4884,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemDamageAmmo.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemBagFamilyMeta {
         constexpr ItemBagFamilyMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4906,21 +4906,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemBagFamily.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemArmorShieldMeta {
         constexpr ItemArmorShieldMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nif";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  28
         };
         constexpr static const bool sparse_storage = false;
@@ -4928,21 +4928,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemArmorShield.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemArmorTotalMeta {
         constexpr ItemArmorTotalMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20
         };
         constexpr static const char field_types[] = "niffff";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4950,21 +4950,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemArmorTotal.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemArmorQualityMeta {
         constexpr ItemArmorQualityMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  32
         };
         constexpr static const char field_types[] = "nfi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  28,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4972,21 +4972,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemArmorQuality.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ImportPriceWeaponMeta {
         constexpr ImportPriceWeaponMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "nf";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -4994,21 +4994,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ImportPriceWeapon.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ImportPriceShieldMeta {
         constexpr ImportPriceShieldMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "nf";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5016,21 +5016,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ImportPriceShield.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ImportPriceQualityMeta {
         constexpr ImportPriceQualityMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "nf";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5038,21 +5038,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ImportPriceQuality.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ImportPriceArmorMeta {
         constexpr ImportPriceArmorMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "nffff";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5060,22 +5060,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ImportPriceArmor.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct HolidaysMeta {
         constexpr HolidaysMeta() { }
 
-        constexpr static const std::uint32_t field_count = 12;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 220; // 0xDC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 12;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 220; // 0xDC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  44, 148, 152, 156, 196, 200, 204, 208,
             212, 216
         };
         constexpr static const char field_types[] = "niiiiiiisiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  40, 104,   4,   4,  40,   4,   4,   4,   4,
             4,   4
         };
@@ -5084,21 +5084,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Holidays.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct HolidayNamesMeta {
         constexpr HolidayNamesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5106,21 +5106,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "HolidayNames.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct HolidayDescriptionsMeta {
         constexpr HolidayDescriptionsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5128,21 +5128,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "HolidayDescriptions.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GuildPerkSpellsMeta {
         constexpr GuildPerkSpellsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5150,21 +5150,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GuildPerkSpells.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct gtSpellScalingMeta {
         constexpr gtSpellScalingMeta() { }
 
-        constexpr static const std::uint32_t field_count = 1;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 1;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             4
         };
         constexpr static const char field_types[] = "n";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4
         };
         constexpr static const bool sparse_storage = false;
@@ -5172,21 +5172,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "gtSpellScaling.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct gtRegenMPPerSptMeta {
         constexpr gtRegenMPPerSptMeta() { }
 
-        constexpr static const std::uint32_t field_count = 1;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 1;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             4
         };
         constexpr static const char field_types[] = "n";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4
         };
         constexpr static const bool sparse_storage = false;
@@ -5194,21 +5194,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "gtRegenMPPerSpt.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct gtOCTRegenMPMeta {
         constexpr gtOCTRegenMPMeta() { }
 
-        constexpr static const std::uint32_t field_count = 1;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 1;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             4
         };
         constexpr static const char field_types[] = "n";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4
         };
         constexpr static const bool sparse_storage = false;
@@ -5216,21 +5216,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "gtOCTRegenMP.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct gtOCTHpPerStaminaMeta {
         constexpr gtOCTHpPerStaminaMeta() { }
 
-        constexpr static const std::uint32_t field_count = 1;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 1;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             4
         };
         constexpr static const char field_types[] = "n";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4
         };
         constexpr static const bool sparse_storage = false;
@@ -5238,21 +5238,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "gtOCTHpPerStamina.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct gtOCTClassCombatRatingScalarMeta {
         constexpr gtOCTClassCombatRatingScalarMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "nf";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5260,21 +5260,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "gtOCTClassCombatRatingScalar.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct gtOCTBaseMPByClassMeta {
         constexpr gtOCTBaseMPByClassMeta() { }
 
-        constexpr static const std::uint32_t field_count = 1;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 1;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             4
         };
         constexpr static const char field_types[] = "n";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4
         };
         constexpr static const bool sparse_storage = false;
@@ -5282,21 +5282,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "gtOCTBaseMPByClass.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct gtOCTBaseHPByClassMeta {
         constexpr gtOCTBaseHPByClassMeta() { }
 
-        constexpr static const std::uint32_t field_count = 1;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 1;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             4
         };
         constexpr static const char field_types[] = "n";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4
         };
         constexpr static const bool sparse_storage = false;
@@ -5304,21 +5304,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "gtOCTBaseHPByClass.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct gtNPCManaCostScalerMeta {
         constexpr gtNPCManaCostScalerMeta() { }
 
-        constexpr static const std::uint32_t field_count = 1;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 1;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             4
         };
         constexpr static const char field_types[] = "n";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4
         };
         constexpr static const bool sparse_storage = false;
@@ -5326,21 +5326,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "gtNPCManaCostScaler.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct gtChanceToSpellCritBaseMeta {
         constexpr gtChanceToSpellCritBaseMeta() { }
 
-        constexpr static const std::uint32_t field_count = 1;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 1;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             4
         };
         constexpr static const char field_types[] = "n";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4
         };
         constexpr static const bool sparse_storage = false;
@@ -5348,21 +5348,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "gtChanceToSpellCritBase.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct gtChanceToSpellCritMeta {
         constexpr gtChanceToSpellCritMeta() { }
 
-        constexpr static const std::uint32_t field_count = 1;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 1;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             4
         };
         constexpr static const char field_types[] = "n";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4
         };
         constexpr static const bool sparse_storage = false;
@@ -5370,21 +5370,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "gtChanceToSpellCrit.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct gtChanceToMeleeCritBaseMeta {
         constexpr gtChanceToMeleeCritBaseMeta() { }
 
-        constexpr static const std::uint32_t field_count = 1;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 1;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             4
         };
         constexpr static const char field_types[] = "n";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4
         };
         constexpr static const bool sparse_storage = false;
@@ -5392,21 +5392,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "gtChanceToMeleeCritBase.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct gtChanceToMeleeCritMeta {
         constexpr gtChanceToMeleeCritMeta() { }
 
-        constexpr static const std::uint32_t field_count = 1;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 1;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             4
         };
         constexpr static const char field_types[] = "n";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4
         };
         constexpr static const bool sparse_storage = false;
@@ -5414,21 +5414,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "gtChanceToMeleeCrit.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct gtCombatRatingsMeta {
         constexpr gtCombatRatingsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 1;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 1;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             4
         };
         constexpr static const char field_types[] = "n";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4
         };
         constexpr static const bool sparse_storage = false;
@@ -5436,21 +5436,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "gtCombatRatings.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct gtBarberShopCostBaseMeta {
         constexpr gtBarberShopCostBaseMeta() { }
 
-        constexpr static const std::uint32_t field_count = 1;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 1;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             4
         };
         constexpr static const char field_types[] = "n";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4
         };
         constexpr static const bool sparse_storage = false;
@@ -5458,21 +5458,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "gtBarberShopCostBase.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GMTicketCategoryMeta {
         constexpr GMTicketCategoryMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5480,21 +5480,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GMTicketCategory.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GMSurveySurveysMeta {
         constexpr GMSurveySurveysMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 64; // 0x40
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 64; // 0x40
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  60
         };
         constexpr static const bool sparse_storage = false;
@@ -5502,21 +5502,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GMSurveySurveys.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GMSurveyQuestionsMeta {
         constexpr GMSurveyQuestionsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5524,21 +5524,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GMSurveyQuestions.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GMSurveyCurrentSurveyMeta {
         constexpr GMSurveyCurrentSurveyMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5546,21 +5546,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GMSurveyCurrentSurvey.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GMSurveyAnswersMeta {
         constexpr GMSurveyAnswersMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5568,21 +5568,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GMSurveyAnswers.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GlyphSlotMeta {
         constexpr GlyphSlotMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5590,21 +5590,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GlyphSlot.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GlyphPropertiesMeta {
         constexpr GlyphPropertiesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5612,21 +5612,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GlyphProperties.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GemPropertiesMeta {
         constexpr GemPropertiesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20
         };
         constexpr static const char field_types[] = "niiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5634,21 +5634,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GemProperties.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GameTablesMeta {
         constexpr GameTablesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             4,   8,  12
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5656,21 +5656,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GameTables.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GameObjectDisplayInfoMeta {
         constexpr GameObjectDisplayInfoMeta() { }
 
-        constexpr static const std::uint32_t field_count = 8;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 84; // 0x54
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 8;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 84; // 0x54
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  48,  60,  72,  76,  80
         };
         constexpr static const char field_types[] = "nsiffiff";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  40,  12,  12,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5678,21 +5678,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GameObjectDisplayInfo.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GameObjectArtKitMeta {
         constexpr GameObjectArtKitMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  16
         };
         constexpr static const char field_types[] = "nss";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  12,  16
         };
         constexpr static const bool sparse_storage = false;
@@ -5700,21 +5700,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GameObjectArtKit.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct FootstepTerrainLookupMeta {
         constexpr FootstepTerrainLookupMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5722,22 +5722,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "FootstepTerrainLookup.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct FactionMeta {
         constexpr FactionMeta() { }
 
-        constexpr static const std::uint32_t field_count = 12;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 104; // 0x68
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 12;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 104; // 0x68
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  24,  40,  56,  72,  76,  84,  92,
             96, 100
         };
         constexpr static const char field_types[] = "niiiiiifissi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  16,  16,  16,  16,   4,   8,   8,   4,
             4,   4
         };
@@ -5746,21 +5746,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Faction.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ExhaustionMeta {
         constexpr ExhaustionMeta() { }
 
-        constexpr static const std::uint32_t field_count = 7;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 28; // 0x1C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 7;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 28; // 0x1C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24
         };
         constexpr static const char field_types[] = "nifffsf";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5768,21 +5768,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Exhaustion.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct EnvironmentalDamageMeta {
         constexpr EnvironmentalDamageMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5790,21 +5790,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "EnvironmentalDamage.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct EmotesTextMeta {
         constexpr EmotesTextMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 76; // 0x4C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 76; // 0x4C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "nsii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,  64
         };
         constexpr static const bool sparse_storage = false;
@@ -5812,21 +5812,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "EmotesText.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct EmotesTextSoundMeta {
         constexpr EmotesTextSoundMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5834,21 +5834,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "EmotesTextSound.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct EmotesTextDataMeta {
         constexpr EmotesTextDataMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5856,21 +5856,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "EmotesTextData.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct EmotesMeta {
         constexpr EmotesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 8;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 8;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28
         };
         constexpr static const char field_types[] = "nsiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5878,21 +5878,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Emotes.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct DurabilityQualityMeta {
         constexpr DurabilityQualityMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "nf";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5900,21 +5900,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "DurabilityQuality.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct DurabilityCostsMeta {
         constexpr DurabilityCostsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 120; // 0x78
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 120; // 0x78
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  88
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  84,  32
         };
         constexpr static const bool sparse_storage = false;
@@ -5922,21 +5922,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "DurabilityCosts.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct DungeonMapChunkMeta {
         constexpr DungeonMapChunkMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niiif";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5944,21 +5944,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "DungeonMapChunk.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct DungeonMapMeta {
         constexpr DungeonMapMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  20,  28
         };
         constexpr static const char field_types[] = "niiffi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   8,   8,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5966,21 +5966,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "DungeonMap.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct DungeonEncounterMeta {
         constexpr DungeonEncounterMeta() { }
 
-        constexpr static const std::uint32_t field_count = 8;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 8;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28
         };
         constexpr static const char field_types[] = "niiiisii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -5988,23 +5988,23 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "DungeonEncounter.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct DestructibleModelDataMeta {
         constexpr DestructibleModelDataMeta() { }
 
-        constexpr static const std::uint32_t field_count = 24;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 96; // 0x60
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 24;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 96; // 0x60
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56,  60,  64,  68,  72,  76,
             80,  84,  88,  92
         };
         constexpr static const char field_types[] = "niiiiiiiiiiiiiiiiiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4
@@ -6014,21 +6014,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "DestructibleModelData.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct DeathThudLookupsMeta {
         constexpr DeathThudLookupsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6036,21 +6036,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "DeathThudLookups.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct DanceMovesMeta {
         constexpr DanceMovesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 8;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 8;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28
         };
         constexpr static const char field_types[] = "niiiissi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6058,21 +6058,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "DanceMoves.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CurrencyCategoryMeta {
         constexpr CurrencyCategoryMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6080,22 +6080,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CurrencyCategory.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CurrencyTypesMeta {
         constexpr CurrencyTypesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 10;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 44; // 0x2C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 10;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 44; // 0x2C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  20,  24,  28,  32,  36,  40
 
         };
         constexpr static const char field_types[] = "nissiiiiis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   8,   4,   4,   4,   4,   4,   4
 
         };
@@ -6104,21 +6104,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CurrencyTypes.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CreatureTypeMeta {
         constexpr CreatureTypeMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nsi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6126,21 +6126,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CreatureType.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CreatureSpellDataMeta {
         constexpr CreatureSpellDataMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  20
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  16,  16
         };
         constexpr static const bool sparse_storage = false;
@@ -6148,24 +6148,24 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CreatureSpellData.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CreatureSoundDataMeta {
         constexpr CreatureSoundDataMeta() { }
 
-        constexpr static const std::uint32_t field_count = 33;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 160; // 0xA0
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 33;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 160; // 0xA0
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56,  76,  92,  96, 100, 104,
             108, 112, 116, 120, 124, 128, 132, 136, 140, 144,
             148, 152, 156
         };
         constexpr static const char field_types[] = "niiiiiiiiiiiiiiiiiiiiiiiffiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,  20,  16,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
@@ -6176,21 +6176,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CreatureSoundData.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CreatureMovementInfoMeta {
         constexpr CreatureMovementInfoMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "nf";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6198,22 +6198,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CreatureMovementInfo.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CreatureImmunitiesMeta {
         constexpr CreatureImmunitiesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 10;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 104; // 0x68
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 10;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 104; // 0x68
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  48,  52, 100
 
         };
         constexpr static const char field_types[] = "niiiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,  24,   4,  48,   4
 
         };
@@ -6222,21 +6222,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CreatureImmunities.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CinematicSequencesMeta {
         constexpr CinematicSequencesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 40; // 0x28
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 40; // 0x28
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  32
         };
         constexpr static const bool sparse_storage = false;
@@ -6244,21 +6244,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CinematicSequences.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CinematicCameraMeta {
         constexpr CinematicCameraMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 28; // 0x1C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 28; // 0x1C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  24
         };
         constexpr static const char field_types[] = "nsiff";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,  12,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6266,21 +6266,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CinematicCamera.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ChrClassesXPowerTypesMeta {
         constexpr ChrClassesXPowerTypesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             4,   8
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6288,21 +6288,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ChrClassesXPowerTypes.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ChatChannelsMeta {
         constexpr ChatChannelsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niiss";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6310,21 +6310,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ChatChannels.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CharTitlesMeta {
         constexpr CharTitlesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20
         };
         constexpr static const char field_types[] = "nissii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6332,21 +6332,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CharTitles.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CastableRaidBuffsMeta {
         constexpr CastableRaidBuffsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6354,21 +6354,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CastableRaidBuffs.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CameraShakesMeta {
         constexpr CameraShakesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 9;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 9;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32
         };
         constexpr static const char field_types[] = "niifffffi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6376,22 +6376,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CameraShakes.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct CameraModeMeta {
         constexpr CameraModeMeta() { }
 
-        constexpr static const std::uint32_t field_count = 13;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 68; // 0x44
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 13;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 68; // 0x44
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  28,  40,  44,  48,  52,
             56,  60,  64
         };
         constexpr static const char field_types[] = "nsiifffffiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,  12,  12,   4,   4,   4,   4,
             4,   4,   4
         };
@@ -6400,22 +6400,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "CameraMode.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct BattlemasterListMeta {
         constexpr BattlemasterListMeta() { }
 
-        constexpr static const std::uint32_t field_count = 13;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 80; // 0x50
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 13;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 80; // 0x50
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  36,  40,  44,  48,  52,  56,  60,  64,
             68,  72,  76
         };
         constexpr static const char field_types[] = "niiisiiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  32,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4
         };
@@ -6424,21 +6424,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "BattlemasterList.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct BarberShopStyleMeta {
         constexpr BarberShopStyleMeta() { }
 
-        constexpr static const std::uint32_t field_count = 8;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 8;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28
         };
         constexpr static const char field_types[] = "nissfiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6446,21 +6446,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "BarberShopStyle.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct BankBagSlotPricesMeta {
         constexpr BankBagSlotPricesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6468,21 +6468,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "BankBagSlotPrices.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AuctionHouseMeta {
         constexpr AuctionHouseMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niiis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6490,21 +6490,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AuctionHouse.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ArmorLocationMeta {
         constexpr ArmorLocationMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20
         };
         constexpr static const char field_types[] = "nfffff";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6512,22 +6512,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ArmorLocation.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AreaTriggerMeta {
         constexpr AreaTriggerMeta() { }
 
-        constexpr static const std::uint32_t field_count = 11;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 52; // 0x34
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 11;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 52; // 0x34
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  20,  24,  28,  32,  36,  40,  44,
             48
         };
         constexpr static const char field_types[] = "nifiiifffff";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  12,   4,   4,   4,   4,   4,   4,   4,
             4
         };
@@ -6536,21 +6536,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AreaTrigger.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AreaAssignmentMeta {
         constexpr AreaAssignmentMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             4,   8,  12,  16
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6558,21 +6558,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AreaAssignment.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AreaPOISortedWorldStateMeta {
         constexpr AreaPOISortedWorldStateMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6580,22 +6580,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AreaPOISortedWorldState.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AreaPOIMeta {
         constexpr AreaPOIMeta() { }
 
-        constexpr static const std::uint32_t field_count = 13;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 88; // 0x58
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 13;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 88; // 0x58
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  44,  48,  56,  60,  64,  68,  72,
             76,  80,  84
         };
         constexpr static const char field_types[] = "niiifiiissiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  36,   4,   8,   4,   4,   4,   4,   4,
             4,   4,   4
         };
@@ -6604,21 +6604,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AreaPOI.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AreaGroupMeta {
         constexpr AreaGroupMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  28
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  24,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6626,21 +6626,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AreaGroup.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct Achievement_CategoryMeta {
         constexpr Achievement_CategoryMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "nisi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6648,22 +6648,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Achievement_Category.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct Achievement_CriteriaMeta {
         constexpr Achievement_CriteriaMeta() { }
 
-        constexpr static const std::uint32_t field_count = 19;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 96; // 0x60
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 19;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 96; // 0x60
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  24,  28,  32,  36,  40,
             44,  48,  52,  56,  60,  64,  68,  72,  84
         };
         constexpr static const char field_types[] = "niiiliiiisiiiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   8,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,  12,  12
         };
@@ -6672,22 +6672,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Achievement_Criteria.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AchievementMeta {
         constexpr AchievementMeta() { }
 
-        constexpr static const std::uint32_t field_count = 14;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 56; // 0x38
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 14;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 56; // 0x38
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52
         };
         constexpr static const char field_types[] = "niiissiiiiisii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4
         };
@@ -6696,21 +6696,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Achievement.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemCurrencyCostMeta {
         constexpr ItemCurrencyCostMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ni";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = true;
@@ -6718,22 +6718,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemCurrencyCost.db2"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ItemExtendedCostMeta {
         constexpr ItemExtendedCostMeta() { }
 
-        constexpr static const std::uint32_t field_count = 15;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 124; // 0x7C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 15;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 124; // 0x7C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  36,  56,  60,  64,  84,
             104, 108, 112, 116, 120
         };
         constexpr static const char field_types[] = "niiiiiiiiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,  20,  20,   4,   4,  20,  20,
             4,   4,   4,   4,   4
         };
@@ -6742,21 +6742,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ItemExtendedCost.db2"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct KeyChainMeta {
         constexpr KeyChainMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 36; // 0x24
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 36; // 0x24
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "nb";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  32
         };
         constexpr static const bool sparse_storage = true;
@@ -6764,21 +6764,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "KeyChain.db2"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct DeclinedWordCasesMeta {
         constexpr DeclinedWordCasesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "niis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6786,21 +6786,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "DeclinedWordCases.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct DeclinedWordMeta {
         constexpr DeclinedWordMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6808,21 +6808,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "DeclinedWord.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ZoneLightPointMeta {
         constexpr ZoneLightPointMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  16
         };
         constexpr static const char field_types[] = "nifi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   8,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6830,21 +6830,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ZoneLightPoint.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct ZoneLightMeta {
         constexpr ZoneLightMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "nsii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6852,22 +6852,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "ZoneLight.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct WMOAreaTableMeta {
         constexpr WMOAreaTableMeta() { }
 
-        constexpr static const std::uint32_t field_count = 15;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 60; // 0x3C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 15;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 60; // 0x3C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56
         };
         constexpr static const char field_types[] = "niiiiiiiiiisiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4
         };
@@ -6876,21 +6876,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "WMOAreaTable.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct WeatherMeta {
         constexpr WeatherMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 32; // 0x20
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 32; // 0x20
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  28
         };
         constexpr static const char field_types[] = "niiffs";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,  12,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6898,21 +6898,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Weather.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct TerrainTypeMeta {
         constexpr TerrainTypeMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 28; // 0x1C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 28; // 0x1C
+        constexpr static const uint32_t field_offsets[] = {
             4,   8,  12,  16,  20,  24
         };
         constexpr static const char field_types[] = "nsiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6920,21 +6920,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "TerrainType.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct TerrainMaterialMeta {
         constexpr TerrainMaterialMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 16; // 0x10
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 16; // 0x10
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12
         };
         constexpr static const char field_types[] = "nsis";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6942,21 +6942,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "TerrainMaterial.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SoundEntriesFallbacksMeta {
         constexpr SoundEntriesFallbacksMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6964,21 +6964,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SoundEntriesFallbacks.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SoundEmittersMeta {
         constexpr SoundEmittersMeta() { }
 
-        constexpr static const std::uint32_t field_count = 7;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 44; // 0x2C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 7;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 44; // 0x2C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  16,  28,  32,  36,  40
         };
         constexpr static const char field_types[] = "nffiisi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  12,  12,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -6986,21 +6986,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SoundEmitters.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SoundEmitterPillPointsMeta {
         constexpr SoundEmitterPillPointsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 20; // 0x14
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 20; // 0x14
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nif";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  12
         };
         constexpr static const bool sparse_storage = false;
@@ -7008,22 +7008,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SoundEmitterPillPoints.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LiquidTypeMeta {
         constexpr LiquidTypeMeta() { }
 
-        constexpr static const std::uint32_t field_count = 19;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 180; // 0xB4
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 19;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 180; // 0xB4
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56,  60,  84,  92, 164
         };
         constexpr static const char field_types[] = "nsiiiiffffifiiisifi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,  24,   8,  72,  16
         };
@@ -7032,21 +7032,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "LiquidType.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LiquidObjectMeta {
         constexpr LiquidObjectMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20
         };
         constexpr static const char field_types[] = "nffiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -7054,21 +7054,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "LiquidObject.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LiquidMaterialMeta {
         constexpr LiquidMaterialMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -7076,21 +7076,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "LiquidMaterial.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LightSkyboxMeta {
         constexpr LightSkyboxMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nsi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -7098,21 +7098,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "LightSkybox.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LightFloatBandMeta {
         constexpr LightFloatBandMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 136; // 0x88
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 136; // 0x88
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  72
         };
         constexpr static const char field_types[] = "niif";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  64,  64
         };
         constexpr static const bool sparse_storage = false;
@@ -7120,21 +7120,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "LightFloatBand.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LightMeta {
         constexpr LightMeta() { }
 
-        constexpr static const std::uint32_t field_count = 8;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 60; // 0x3C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 8;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 60; // 0x3C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28
         };
         constexpr static const char field_types[] = "nifffffi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,  32
         };
         constexpr static const bool sparse_storage = false;
@@ -7142,21 +7142,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Light.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GroundEffectTextureMeta {
         constexpr GroundEffectTextureMeta() { }
 
-        constexpr static const std::uint32_t field_count = 5;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 44; // 0x2C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 5;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 44; // 0x2C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,  20,  36,  40
         };
         constexpr static const char field_types[] = "niiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,  16,  16,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -7164,21 +7164,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GroundEffectTexture.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct GroundEffectDoodadMeta {
         constexpr GroundEffectDoodadMeta() { }
 
-        constexpr static const std::uint32_t field_count = 3;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 12; // 0xC
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 3;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 12; // 0xC
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8
         };
         constexpr static const char field_types[] = "nsi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -7186,21 +7186,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "GroundEffectDoodad.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct FootprintTexturesMeta {
         constexpr FootprintTexturesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 2;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 8; // 0x8
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 2;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 8; // 0x8
+        constexpr static const uint32_t field_offsets[] = {
             0,   4
         };
         constexpr static const char field_types[] = "ns";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -7208,22 +7208,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "FootprintTextures.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct MapMeta {
         constexpr MapMeta() { }
 
-        constexpr static const std::uint32_t field_count = 19;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 80; // 0x50
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 19;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 80; // 0x50
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  60,  64,  68,  72,  76
         };
         constexpr static const char field_types[] = "nsiiiisissififiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   8,   4,   4,   4,   4,   4
         };
@@ -7232,22 +7232,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "Map.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LightParamsMeta {
         constexpr LightParamsMeta() { }
 
-        constexpr static const std::uint32_t field_count = 10;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 40; // 0x28
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 10;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 40; // 0x28
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36
 
         };
         constexpr static const char field_types[] = "niiifffffi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4
 
         };
@@ -7256,21 +7256,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "LightParams.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct LightIntBandMeta {
         constexpr LightIntBandMeta() { }
 
-        constexpr static const std::uint32_t field_count = 4;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 136; // 0x88
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 4;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 136; // 0x88
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  72
         };
         constexpr static const char field_types[] = "niii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,  64,  64
         };
         constexpr static const bool sparse_storage = false;
@@ -7278,23 +7278,23 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "LightIntBand.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AreaTableMeta {
         constexpr AreaTableMeta() { }
 
-        constexpr static const std::uint32_t field_count = 23;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 104; // 0x68
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 23;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 104; // 0x68
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  68,  72,  76,  80,  84,  88,
             92,  96, 100
         };
         constexpr static const char field_types[] = "niiiiiiiiiisiiffiiiiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,  16,   4,   4,   4,   4,   4,   4,
             4,   4,   4
@@ -7304,21 +7304,21 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AreaTable.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct AnimationDataMeta {
         constexpr AnimationDataMeta() { }
 
-        constexpr static const std::uint32_t field_count = 6;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 24; // 0x18
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 6;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 24; // 0x18
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20
         };
         constexpr static const char field_types[] = "nsiiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4
         };
         constexpr static const bool sparse_storage = false;
@@ -7326,22 +7326,22 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "AnimationData.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SoundEntriesMeta {
         constexpr SoundEntriesMeta() { }
 
-        constexpr static const std::uint32_t field_count = 17;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 140; // 0x8C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 17;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 140; // 0x8C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  52,  92,  96, 100, 104, 108,
             112, 116, 120, 124, 128, 132, 136
         };
         constexpr static const char field_types[] = "nissisfiffiiffffi";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,  40,  40,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4
         };
@@ -7350,23 +7350,23 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SoundEntries.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct SoundEntriesAdvancedMeta {
         constexpr SoundEntriesAdvancedMeta() { }
 
-        constexpr static const std::uint32_t field_count = 26;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 104; // 0x68
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 26;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 104; // 0x68
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56,  60,  64,  68,  72,  76,
             80,  84,  88,  92,  96, 100
         };
         constexpr static const char field_types[] = "nifiiiiiiiiifffffiiffffiif";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4
@@ -7376,23 +7376,23 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "SoundEntriesAdvanced.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 
     struct VideoHardwareMeta {
         constexpr VideoHardwareMeta() { }
 
-        constexpr static const std::uint32_t field_count = 23;
-        constexpr static const std::uint32_t index_column = 0;
-        constexpr static const std::uint32_t record_size = 92; // 0x5C
-        constexpr static const std::uint32_t field_offsets[] = {
+        constexpr static const uint32_t field_count = 23;
+        constexpr static const uint32_t index_column = 0;
+        constexpr static const uint32_t record_size = 92; // 0x5C
+        constexpr static const uint32_t field_offsets[] = {
             0,   4,   8,  12,  16,  20,  24,  28,  32,  36,
             40,  44,  48,  52,  56,  60,  64,  68,  72,  76,
             80,  84,  88
         };
         constexpr static const char field_types[] = "niiiiiiiiiiiiiiiiissiii";
-        constexpr static const std::uint32_t field_sizes[] = {
+        constexpr static const uint32_t field_sizes[] = {
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4,   4,   4,   4,   4,   4,   4,   4,
             4,   4,   4
@@ -7402,7 +7402,7 @@ namespace wowgm::game::datastores
 
         static const char* name() { return "VideoHardware.dbc"; }
 
-        static_assert(sizeof(field_offsets) / sizeof(std::uint32_t) == field_count, "");
+        static_assert(sizeof(field_offsets) / sizeof(uint32_t) == field_count, "");
         static_assert(sizeof(field_types) / sizeof(char) == field_count + 1, "");
     };
 

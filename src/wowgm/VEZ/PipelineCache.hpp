@@ -13,11 +13,11 @@ namespace vez
     {
     public:
         static VkResult Create(Device* pDevice, PipelineCache** ppPipelineCache);
-        static VkResult Create(Device* pDevice, std::unique_ptr<std::uint8_t[]> dataBlob, size_t dataSize, PipelineCache** ppPipelineCache);
+        static VkResult Create(Device* pDevice, std::unique_ptr<uint8_t[]> dataBlob, size_t dataSize, PipelineCache** ppPipelineCache);
 
         ~PipelineCache();
 
-        std::unique_ptr<std::uint8_t[]> GetBlob(size_t& size);
+        std::unique_ptr<uint8_t[]> GetBlob(size_t& size);
 
         VkPipelineCache GetHandle() const { return _handle; }
 

@@ -19,7 +19,7 @@ namespace vez
 
         Device* GetDevice() { return _device; }
         VkDescriptorSetLayout GetHandle() const { return _handle; }
-        std::unordered_map<std::uint32_t, VkDescriptorSetLayoutBinding> const& GetBindings() const { return _bindings; }
+        std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding> const& GetBindings() const { return _bindings; }
 
         bool GetLayoutBinding(uint32_t bindingIndex, VkDescriptorSetLayoutBinding** pBinding);
 
@@ -32,6 +32,6 @@ namespace vez
         DescriptorPool* _descriptorPool = nullptr;
 
         VkDescriptorSetLayout _handle = VK_NULL_HANDLE;
-        std::unordered_map<std::uint32_t, VkDescriptorSetLayoutBinding> _bindings;
+        std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding> _bindings;
     };
 }

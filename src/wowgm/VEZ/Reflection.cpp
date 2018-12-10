@@ -39,7 +39,7 @@ namespace vez
             }
         };
 
-        bool ReflectResources(std::vector<std::uint32_t> const& spirvCode, VkShaderStageFlagBits shaderStage, std::vector<PipelineResource>& resourceContainer)
+        bool ReflectResources(std::vector<uint32_t> const& spirvCode, VkShaderStageFlagBits shaderStage, std::vector<PipelineResource>& resourceContainer)
         {
             CustomCompiler compiler(spirvCode);
             spirv_cross::CompilerGLSL::Options opts = compiler.get_common_options();

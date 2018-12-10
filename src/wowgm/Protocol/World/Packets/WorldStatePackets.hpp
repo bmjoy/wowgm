@@ -9,17 +9,17 @@ namespace wowgm::protocol::world::packets
     {
         struct WorldStateInfo
         {
-            std::uint32_t VariableID;
-            std::int32_t Value;
+            uint32_t VariableID;
+            int32_t Value;
         };
 
         ClientInitWorldStates(WorldPacket&& packet);
 
         void Read() override;
 
-        std::uint32_t ZoneID = 0; ///< ZoneId
-        std::uint32_t AreaID = 0; ///< AreaId
-        std::uint32_t MapID = 0; ///< MapId
+        uint32_t ZoneID = 0; ///< ZoneId
+        uint32_t AreaID = 0; ///< AreaId
+        uint32_t MapID = 0; ///< MapId
 
         std::vector<WorldStateInfo> Worldstates;
     };
@@ -30,8 +30,8 @@ namespace wowgm::protocol::world::packets
 
         void Read() override;
 
-        std::int32_t Value = 0;
+        int32_t Value = 0;
         bool Hidden = false; ///< @todo: research
-        std::uint32_t VariableID = 0;
+        uint32_t VariableID = 0;
     };
 }

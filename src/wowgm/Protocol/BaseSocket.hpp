@@ -21,7 +21,7 @@ namespace wowgm::protocol
             virtual void QueuePacket(MessageBuffer&& buffer) = 0;
 
             virtual void Connect(tcp::endpoint const& endpoint) = 0;
-            virtual void Connect(std::string_view hostname, std::uint32_t port) = 0;
+            virtual void Connect(std::string_view hostname, uint32_t port) = 0;
 
             virtual tcp::endpoint GetLocalEndpoint() const = 0;
 

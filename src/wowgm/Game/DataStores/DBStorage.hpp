@@ -14,27 +14,27 @@ namespace wowgm::game::datastores
 
     struct DBCHeader
     {
-        std::uint32_t Magic;
-        std::uint32_t RecordCount;
-        std::uint32_t FieldCount;
-        std::uint32_t RecordSize;
-        std::uint32_t StringBlockSize;
+        uint32_t Magic;
+        uint32_t RecordCount;
+        uint32_t FieldCount;
+        uint32_t RecordSize;
+        uint32_t StringBlockSize;
     };
 
     struct DB2Header
     {
-        std::uint32_t Magic;
-        std::uint32_t RecordCount;
-        std::uint32_t FieldCount;
-        std::uint32_t RecordSize;
-        std::uint32_t StringBlockSize;
-        std::uint32_t TableHash;
-        std::uint32_t Build;
-        std::uint32_t TimestampLastWritten;
-        std::uint32_t MinIndex;
-        std::uint32_t MaxIndex;
-        std::uint32_t Locale;
-        std::uint32_t CopyTableSize;
+        uint32_t Magic;
+        uint32_t RecordCount;
+        uint32_t FieldCount;
+        uint32_t RecordSize;
+        uint32_t StringBlockSize;
+        uint32_t TableHash;
+        uint32_t Build;
+        uint32_t TimestampLastWritten;
+        uint32_t MinIndex;
+        uint32_t MaxIndex;
+        uint32_t Locale;
+        uint32_t CopyTableSize;
     };
 
     template <typename T>
@@ -48,17 +48,17 @@ namespace wowgm::game::datastores
 
         static void Initialize();
 
-        static void LoadRecords(std::uint8_t const* data);
+        static void LoadRecords(uint8_t const* data);
 
-        static void CopyToMemory(std::uint32_t index, std::uint8_t const* data);
+        static void CopyToMemory(uint32_t index, uint8_t const* data);
 
-        static T* GetRecord(std::uint32_t index);
+        static T* GetRecord(uint32_t index);
 
     private:
         static header_type& get_header();
-        static std::unordered_map<std::uint32_t, T>& get_storage();
+        static std::unordered_map<uint32_t, T>& get_storage();
 
-        static std::vector<std::uint8_t>& get_string_table();
+        static std::vector<uint8_t>& get_string_table();
     };
 
 }

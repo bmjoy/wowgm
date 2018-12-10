@@ -452,7 +452,7 @@ namespace vez
 #endif
 
         std::vector<VkBufferImageCopy> bufferRegions(regionCount);
-        for (std::uint32_t i = 0; i < regionCount; ++i)
+        for (uint32_t i = 0; i < regionCount; ++i)
         {
             VkBufferImageCopy& imageCopy = bufferRegions[i];
             imageCopy.imageSubresource.baseArrayLayer = pRegions[i].imageSubresource.baseArrayLayer;
@@ -477,7 +477,7 @@ namespace vez
 #endif
 
         std::vector<VkBufferImageCopy> bufferRegions(regionCount);
-        for (std::uint32_t i = 0; i < regionCount; ++i)
+        for (uint32_t i = 0; i < regionCount; ++i)
         {
             VkBufferImageCopy& imageCopy = bufferRegions[i];
             imageCopy.imageSubresource.baseArrayLayer = pRegions[i].imageSubresource.baseArrayLayer;
@@ -507,7 +507,7 @@ namespace vez
     void CommandBuffer::ClearColorImage(Image* pImage, const VkClearColorValue* pColor, uint32_t rangeCount, const ImageSubresourceRange* pRanges)
     {
         std::vector<VkImageSubresourceRange> subresourceRanges(rangeCount);
-        for (std::uint32_t i = 0; i < rangeCount; ++i)
+        for (uint32_t i = 0; i < rangeCount; ++i)
         {
             VkImageSubresourceRange& vkRange = subresourceRanges[i];
             ImageSubresourceRange const& appRange = pRanges[i];
@@ -526,7 +526,7 @@ namespace vez
     void CommandBuffer::ClearDepthStencilImage(Image* pImage, const VkClearDepthStencilValue* pDepthStencil, uint32_t rangeCount, const ImageSubresourceRange* pRanges)
     {
         std::vector<VkImageSubresourceRange> subresourceRanges(rangeCount);
-        for (std::uint32_t i = 0; i < rangeCount; ++i)
+        for (uint32_t i = 0; i < rangeCount; ++i)
         {
             VkImageSubresourceRange& vkRange = subresourceRanges[i];
             ImageSubresourceRange const& appRange = pRanges[i];
@@ -545,7 +545,7 @@ namespace vez
     void CommandBuffer::ClearAttachments(uint32_t attachmentCount, const ClearAttachment* pAttachments, uint32_t rectCount, const VkClearRect* pRects)
     {
         std::vector<VkClearAttachment> attachments(attachmentCount);
-        for (std::uint32_t i = 0; i < attachmentCount; ++i)
+        for (uint32_t i = 0; i < attachmentCount; ++i)
         {
             ClearAttachment const& attachment = pAttachments[i];
             VkClearAttachment& vkAttachment = attachments[i];
@@ -657,7 +657,7 @@ namespace vez
     //
     //         vkCmdPipelineBarrier(_handle, std::get<0>(kv.first), std::get<1>(kv.first), std::get<2>(kv.first), 0, nullptr, barriersToDelete.size(), barriersToDelete.data(), 0, nullptr);
     //
-    //         std::uint32_t i = 0;
+    //         uint32_t i = 0;
     //         for (auto it = barriersToDelete.begin(); it != barriersToDelete.end(); ++it)
     //             kv.second.bufferMemoryBarriers.erase(it);
     //     }
@@ -684,7 +684,7 @@ namespace vez
     //
     //         vkCmdPipelineBarrier(_handle, std::get<0>(kv.first), std::get<1>(kv.first), std::get<2>(kv.first), 0, nullptr, 0, nullptr, barriersToDelete.size(), barriersToDelete.data());
     //
-    //         std::uint32_t i = 0;
+    //         uint32_t i = 0;
     //         for (auto it = barriersToDelete.begin(); it != barriersToDelete.end(); ++it)
     //             kv.second.imageMemoryBarriers.erase(it);
     //     }

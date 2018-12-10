@@ -49,7 +49,7 @@ namespace vez
 class GameWindow
 {
 public:
-    explicit GameWindow(std::string_view title, std::uint32_t width = 1024, std::uint32_t height = 768);
+    explicit GameWindow(std::string_view title, uint32_t width = 1024, uint32_t height = 768);
     virtual ~GameWindow();
 
 public:
@@ -58,9 +58,9 @@ public:
     void InitializeInterface();
 
     void ToggleVSync();
-    void ToggleFullscreen(std::int32_t selectedMonitor = -1);
+    void ToggleFullscreen(int32_t selectedMonitor = -1);
 
-    void OnResize(std::uint32_t width, std::uint32_t height);
+    void OnResize(uint32_t width, uint32_t height);
     void Draw();
     void OnKeyUp(int key, int mods);
     void OnKeyDown(int key, int mods);
@@ -97,8 +97,8 @@ private:
     template <typename T>
     inline void DelayedReleaseResource(T const& value, std::function<void(T)> destructor)
     {
-        constexpr bool isVulkanObject = vez::traits::vulkan_type<T>::type != VK_OBJECT_TYPE_UNKNOWN;
-        constexpr bool isVezObject = !std::is_same<typename vez::traits::vez_type<T>::underlying_type, std::nullptr_t>::value;
+        constexpr bool isVulkanObject = vez::is_vulkan_type<T>::value;
+        constexpr bool isVezObject = vez::is_vez_type<T>::value;
 
         if constexpr (isVulkanObject || isVezObject)
         {
@@ -120,9 +120,9 @@ private:
 
     GLFWwindow* _window;
 
-    std::int32_t _previousWindowData[4] = { 0, 0, 0, 0 };
-    std::uint32_t _width;
-    std::uint32_t _height;
+    int32_t _previousWindowData[4] = { 0, 0, 0, 0 };
+    uint32_t _width;
+    uint32_t _height;
 
     bool _vsync = false;
 
@@ -201,7 +201,7 @@ private:
 
     struct {
         std::array<vez::CommandBuffer*, 3> Interface{ nullptr, nullptr, nullptr }; // One command buffer per frame
-        std::uint32_t FrameIndex = 0;
+        uint32_t FrameIndex = 0;
     } _commandBuffers;
 
     struct {
@@ -226,8 +226,8 @@ private:
     vez::ImageView* _interfaceFontTextureView = nullptr;
     vez::Sampler* _interfaceFontSampler = nullptr;
 
-    std::uint32_t _interfaceVertexCount = 0;
-    std::uint32_t _interfaceIndexCount = 0;
+    uint32_t _interfaceVertexCount = 0;
+    uint32_t _interfaceIndexCount = 0;
 
     std::list<std::function<void()>> _dumpster;
     std::queue<std::pair<VkFence, std::function<void()>>> _recycler;
