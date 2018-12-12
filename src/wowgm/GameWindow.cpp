@@ -859,14 +859,12 @@ void GameWindow::Update(std::chrono::microseconds previousFrameTime)
 void GameWindow::Draw()
 {
     vez::SubmitInfo submitInfo{ };
-    submitInfo.pCommandBuffers = &_commandBuffers.Interface[_commandBuffers.FrameIndex];
-    submitInfo.commandBufferCount = 1;
+    submitInfo.commandBuffers.push_back(_commandBuffers.Interface[_commandBuffers.FrameIndex]);
 
     VkFence submissionFence = VK_NULL_HANDLE;
 
     VkSemaphore semaphore = VK_NULL_HANDLE;
-    submitInfo.pSignalSemaphores = &semaphore;
-    submitInfo.signalSemaphoreCount = 1;
+    submitInfo.signalSemaphores.push_back(semaphore);
 
     if (_graphicsQueue->Submit(1, &submitInfo, &submissionFence) != VK_SUCCESS)
         wowgm::exceptions::throw_with_trace<std::runtime_error>("Unable to submit a queue.");
@@ -874,14 +872,12 @@ void GameWindow::Draw()
     _PrepareDelayedDestruction(submissionFence);
 
     // Present to screen
-    VkPipelineStageFlags waitDstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
     vez::PresentInfo presentInfo{ };
-    presentInfo.waitSemaphoreCount = 1;
-    presentInfo.pWaitSemaphores = &semaphore;
-    presentInfo.pWaitDstStageMask = &waitDstStageMask;
-    presentInfo.swapchainCount = 1;
-    presentInfo.pSwapchains = &_swapchain;
-    presentInfo.pImages = &_frameBuffer.ColorImage;
+    presentInfo.waitSemaphores.push_back(semaphore);
+    presentInfo.swapchains.push_back(vez::PresentInfo::PresentChain {
+        _swapchain, _frameBuffer.ColorImage, VK_NOT_READY
+    });
+
     if (_graphicsQueue->Present(&presentInfo) != VK_SUCCESS)
         wowgm::exceptions::throw_with_trace<std::runtime_error>("Unable to present the framebuffer to the target surface.");
 

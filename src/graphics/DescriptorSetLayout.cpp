@@ -4,6 +4,8 @@
 #include "VEZ.hpp"
 #include "Helpers.hpp"
 
+#include <extstd/containers/extract.hpp>
+
 namespace vez
 {
     VkResult DescriptorSetLayout::Create(Device* device, const std::vector<PipelineResource>& setResources, DescriptorSetLayout** pLayout)
@@ -50,7 +52,7 @@ namespace vez
         VkDescriptorSetLayoutCreateInfo layoutCreateInfo = {};
         layoutCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
         layoutCreateInfo.bindingCount = static_cast<uint32_t>(descriptorSetLayout->_bindings.size());
-        layoutCreateInfo.pBindings = std::to_value_vector(descriptorSetLayout->_bindings).data();
+        layoutCreateInfo.pBindings = extstd::values(descriptorSetLayout->_bindings).data();
         auto result = vkCreateDescriptorSetLayout(descriptorSetLayout->_device->GetHandle(), &layoutCreateInfo, nullptr, &descriptorSetLayout->_handle);
         if (result != VK_SUCCESS)
         {

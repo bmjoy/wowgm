@@ -53,8 +53,11 @@ namespace vez
         template <typename C> static yes& test(decltype(&C::GetHandle));
         template <typename C> static no& test(...);
 
+        // decay doesn't remove pointers
+        using decayed_t = typename std::remove_pointer<typename std::decay<T>::type>::type;
+
     public:
-        enum { value = sizeof(test<T>(0)) == sizeof(yes) };
+        enum { value = sizeof(test<decayed_t>(0)) == sizeof(yes) };
     };
 
     template <typename T>
@@ -110,21 +113,18 @@ namespace vez
 #undef VULKAN_OBJECT_TYPE
 
     template <typename T>
-    struct vez_traits
+    struct traits
     {
-        static_assert(is_vez_type<T>::value);
+    private:
+        // decay doesn't remove pointers
+        using decayed_t = typename std::remove_pointer<typename std::decay<T>::type>::type;
 
-        using handle_type = decltype(std::declval<T>().GetHandle());
+    public:
+        static_assert(is_vez_type<decayed_t>::value, "Type is not a VEZ handle.");
+
+        using handle_type = decltype(std::declval<decayed_t>().GetHandle());
+
         constexpr static const VkObjectType object_type = object_type<handle_type>::value;
         constexpr static const VkDebugReportObjectTypeEXT object_type_ext = object_type_ext<handle_type>::value;
-
-        constexpr static bool is_vulkan_type_handle = is_vulkan_type<handle_type>::value;
     };
-
-}
-
-namespace std
-{
-    template <typename T>
-    struct is_data_container : public is_same<decltype(declval<T>().data()), typename add_const<typename T::element_type>::type*> { };
 }

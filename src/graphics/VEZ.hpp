@@ -363,31 +363,37 @@ namespace vez
         VkExtent3D                                       imageExtent;
     };
 
-
+    // https://vulkan.lunarg.com/doc/view/1.0.33.0/linux/vkspec.chunked/ch29s06.html#VkPresentInfoKHR
     struct PresentInfo
     {
+        struct PresentChain {
+            //< A given swapchain must not appear in this list more than once.
+            Swapchain* swapchain;
+            //< Each entry in this array identifies the image to present on the corresponding entry in the pSwapchains array.
+            Image*     image;
+            //<  Applications that do not need per-swapchain results can use NULL for pResults.
+            //< If non-NULL, each entry in pResults will be set to the VkResult for presenting
+            //< the swapchain corresponding to the same index in pSwapchains.
+            VkResult result;
+        };
+
+        // pNext is NULL or a pointer to an extension-specific structure.
         const void*                                      pNext = nullptr;
-        Swapchain* const*                                pSwapchains;
-        const VkSemaphore*                               pWaitSemaphores;
-        VkSemaphore*                                     pSignalSemaphores;
-        const VkPipelineStageFlags*                      pWaitDstStageMask;
-        Image* const*                                    pImages;
-        VkResult*                                        pResults;
-        uint32_t                                         signalSemaphoreCount;
-        uint32_t                                         waitSemaphoreCount;
-        uint32_t                                         swapchainCount;
+
+        std::vector<PresentChain>                        swapchains;
+        // waitSemaphores, if not VK_NULL_HANDLE, is an array of VkSemaphore objects,
+        // and specifies the semaphores to wait for before issuing the present request.
+        std::vector<VkSemaphore>                         waitSemaphores;
+
     };
 
     struct SubmitInfo
     {
         const void*                                      pNext = nullptr;
-        const VkSemaphore*                               pWaitSemaphores;
+        std::vector<std::pair<VkSemaphore, VkPipelineStageFlags>> waitSemaphores;
         const VkPipelineStageFlags*                      pWaitDstStageMask;
-        CommandBuffer* const*                            pCommandBuffers;
-        VkSemaphore*                                     pSignalSemaphores;
-        uint32_t                                         signalSemaphoreCount;
-        uint32_t                                         commandBufferCount;
-        uint32_t                                         waitSemaphoreCount;
+        std::vector<CommandBuffer*>                      commandBuffers;
+        std::vector<VkSemaphore>                         signalSemaphores;
     };
 
     struct AttachmentReference

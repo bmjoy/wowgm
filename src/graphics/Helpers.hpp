@@ -8,7 +8,7 @@
 
 #include <boost/iterator/transform_iterator.hpp>
 
-#include "Defines.hpp"
+#include <shared/Defines.hpp>
 
 namespace vez
 {
@@ -390,65 +390,3 @@ namespace vez
     }
 }
 
-namespace std
-{
-    template <template <typename, typename, typename...> typename KeyValueContainer, typename... Ts>
-    struct container_traits
-    {
-        using map_type = KeyValueContainer<Ts...>;
-        using allocator_type = typename map_type::allocator_type;
-
-        using key_type = typename map_type::key_type;
-        using value_type = typename map_type::value_type;
-
-        using allocator_traits = ::std::allocator_traits<allocator_type>;
-
-        template <typename U, template <typename, typename> typename Vector = vector>
-        using container_type = Vector<U, typename allocator_traits::template rebind_alloc<U>>;
-
-        template <template <typename, typename> typename Vector = vector>
-        using value_container_type = container_type<value_type, Vector>;
-
-        template <template <typename, typename> typename Vector = vector>
-        using key_container_type = container_type<key_type, Vector>;
-    };
-
-    namespace
-    {
-        template <typename Key, typename T, typename U = T, template <typename...> typename Container, typename... Ts>
-        static inline auto to_u_vector(Container<Key, T, Ts...> const& map)
-        {
-            using container_traits_t = container_traits<Container, Key, T, Ts...>;
-            using vector_type = typename container_traits_t::template container_type<U>;
-
-            auto mutator = [](pair<const Key, T> const& kv) -> U { return std::get<U>(kv); };
-            auto itr = boost::make_transform_iterator(map.begin(), mutator);
-            auto end = boost::make_transform_iterator(map.end(), mutator);
-
-            vector_type range(itr, end);
-            return range;
-        }
-    }
-
-    template <typename Key, typename T, typename... Ts>
-    static inline auto to_value_vector(unordered_map<Key, T, Ts...> const& map) -> typename container_traits<unordered_map, Key, T, Ts...>::template container_type<T>
-    {
-#if COMPILER == COMPILER_MICROSOFT
-        // Just fix your deduction rules...
-        return to_u_vector<Key, T, T, unordered_map, Ts...>(map);
-#else
-        return to_u_vector<T>(map);
-#endif
-    }
-
-    template <typename Key, typename T, typename... Ts>
-    static inline auto to_key_vector(unordered_map<Key, T, Ts...> const& map) -> typename container_traits<unordered_map, Key, T, Ts...>::template container_type<Key>
-    {
-#if COMPILER == COMPILER_MICROSOFT
-        // Just fix your deduction rules...
-        return to_u_vector<Key, T, Key, unordered_map, Ts...>(map);
-#else
-        return to_u_vector<Key>(map);
-#endif
-    }
-}

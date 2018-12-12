@@ -17,8 +17,10 @@ namespace vez
         uint32_t GetIndex() const { return _index; }
         VkQueueFlags GetFlags() const { return _properties.queueFlags; }
 
-        // VkResult Submit(uint32_t submitCount, ...);
         VkResult WaitIdle();
+
+        VkResult AcquireImageIndex(Swapchain* swapchain, uint32_t& imageIndex, VkSemaphore* semaphore = nullptr);
+
         VkResult Present(const PresentInfo* pPresentInfo);
         VkResult Submit(uint32_t submitCount, const SubmitInfo* pSubmits, VkFence* pFence);
 

@@ -7,6 +7,7 @@
 #include "Instance.hpp"
 #include "Framebuffer.hpp"
 #include "RenderPass.hpp"
+#include "Mutator.hpp"
 
 #include <vector>
 #include <boost/iterator/transform_iterator.hpp>
@@ -247,12 +248,8 @@ namespace vez
 
     void CommandBuffer::BindVertexBuffers(uint32_t firstBinding, uint32_t bindingCount, Buffer** ppBuffers, const VkDeviceSize* pOffsets)
     {
-        std::vector<Buffer*> bufferObjects(&ppBuffers[firstBinding], &ppBuffers[firstBinding + bindingCount]);
-
-        auto mutator = [](Buffer* buffer) -> VkBuffer { return buffer->GetHandle(); };
-        auto begin = boost::make_transform_iterator(bufferObjects.begin(), mutator);
-        auto end = boost::make_transform_iterator(bufferObjects.end(), mutator);
-        std::vector<VkBuffer> buffers(begin, end);
+        std::vector<Buffer*> bufferObjects(ppBuffers + firstBinding, ppBuffers + firstBinding + bindingCount);
+        std::vector<VkBuffer> buffers(AsObjectHandles(bufferObjects));
 
         vkCmdBindVertexBuffers(_handle, firstBinding, bindingCount, buffers.data(), pOffsets);
     }

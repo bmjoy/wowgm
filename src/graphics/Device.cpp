@@ -404,8 +404,7 @@ namespace vez
                         // Submit to the queue.
                         {
                             SubmitInfo submitInfo = {};
-                            submitInfo.commandBufferCount = 1;
-                            submitInfo.pCommandBuffers = &cmdBuffer;
+                            submitInfo.commandBuffers.emplace_back(cmdBuffer);
                             VkResult result = queue->Submit(1, &submitInfo, nullptr);
                             if (result != VK_SUCCESS)
                                 return result;
@@ -549,8 +548,7 @@ namespace vez
 
                         {
                             SubmitInfo submitInfo = {};
-                            submitInfo.commandBufferCount = 1;
-                            submitInfo.pCommandBuffers = &cmdBuffer;
+                            submitInfo.commandBuffers.emplace_back(cmdBuffer);
                             VkResult result = queue->Submit(1, &submitInfo, nullptr);
                             if (result != VK_SUCCESS)
                                 return result;
