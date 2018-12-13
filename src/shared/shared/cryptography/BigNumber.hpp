@@ -5,7 +5,7 @@
 
 struct bignum_st;
 
-namespace wowgm::cryptography
+namespace shared::crypto
 {
     class SHA1;
 

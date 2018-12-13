@@ -3,7 +3,7 @@
 #include <openssl/evp.h>
 #include <cstdint>
 
-namespace wowgm::cryptography
+namespace shared::crypto
 {
     class ARC4
     {
@@ -18,5 +18,4 @@ namespace wowgm::cryptography
         private:
             EVP_CIPHER_CTX * m_ctx;
     };
-
 }

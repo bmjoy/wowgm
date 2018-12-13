@@ -1,6 +1,8 @@
 #include "Assert.hpp"
 
 #include <iostream>
+#include <cstdarg>
+
 #include <boost/config/detail/suffix.hpp>
 
 namespace boost

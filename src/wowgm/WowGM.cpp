@@ -3,17 +3,6 @@
 
 #include <iostream>
 #include <string>
-#include <vulkan/vulkan.h>
-
-#include "Assert.hpp"
-#include "Logger.hpp"
-#include "Updater.hpp"
-#include "BigNumber.hpp"
-#include "FileSystem.hpp"
-
-#include "glfw.hpp"
-
-#include "GameWindow.hpp"
 
 #include <boost/exception/get_error_info.hpp>
 

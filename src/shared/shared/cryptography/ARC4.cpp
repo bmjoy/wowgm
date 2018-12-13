@@ -1,6 +1,6 @@
 #include "ARC4.hpp"
 
-namespace wowgm::cryptography
+namespace shared::crypto
 {
     ARC4::ARC4(uint32_t len) : m_ctx(EVP_CIPHER_CTX_new())
     {

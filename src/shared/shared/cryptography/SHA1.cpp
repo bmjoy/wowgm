@@ -1,9 +1,8 @@
 #include "SHA1.hpp"
-#include "Utils.hpp"
 
 #include <cstring>
 
-namespace wowgm::cryptography
+namespace shared::crypto
 {
 
     SHA1::SHA1(SHA1 const& other)
@@ -56,4 +55,4 @@ namespace wowgm::cryptography
         SHA1_Final(mDigest, &mC);
     }
 
-} // namespace wowgm::cryptography
+} // namespace shared::crypto

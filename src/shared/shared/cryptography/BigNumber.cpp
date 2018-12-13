@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <memory>
 
-namespace wowgm::cryptography
+namespace shared::crypto
 {
 
     BigNumber::BigNumber() : _bn(BN_new())

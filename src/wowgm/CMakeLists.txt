@@ -32,8 +32,7 @@ add_dependencies(WowGM storm extstd graphics shared)
 target_include_directories(WowGM
   PUBLIC
     ${PUBLIC_INCLUDES}
-    ${Boost_INCLUDE_DIR}
-    ${OPENSSL_INCLUDE_DIR})
+    ${Boost_INCLUDE_DIR})
 
 add_definitions(-DWIN32_LEAN_AND_MEAN)
 

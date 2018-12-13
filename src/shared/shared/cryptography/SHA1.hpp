@@ -5,9 +5,8 @@
 #include <openssl/sha.h>
 
 #include "BigNumber.hpp"
-#include "Assert.hpp"
 
-namespace wowgm::cryptography
+namespace shared::crypto
 {
 
     class SHA1
@@ -22,7 +21,6 @@ namespace wowgm::cryptography
         template <typename T, typename... Args, typename std::enable_if<std::is_same<T, BigNumber>::value, int>::type = 0>
         void UpdateBigNumbers(T const& bn0, Args&&... args)
         {
-            BOOST_ASSERT(bn0.GetNumBytes() != 0);
             UpdateData(bn0.AsByteArray().get(), bn0.GetNumBytes());
             UpdateBigNumbers(std::forward<Args>(args)...);
         }
@@ -30,7 +28,6 @@ namespace wowgm::cryptography
         template <typename T, typename std::enable_if<std::is_same<T, BigNumber>::value, int>::type = 0>
         void UpdateBigNumbers(T const& bn0)
         {
-            BOOST_ASSERT(bn0.GetNumBytes() != 0);
             UpdateData(bn0.AsByteArray().get(), bn0.GetNumBytes());
         }
 
@@ -38,7 +35,7 @@ namespace wowgm::cryptography
         void UpdateData(std::array<T, N>& arr)
         {
             static_assert(std::is_standard_layout<T>::value, "T must be a simple data type");
-            UpdateData(reinterpret_cast<uint8_t*>(arr.data()), arr.size() * sizeof(T));
+            UpdateData(reinterpret_cast<uint8_t*>(arr.data()), N * sizeof(T));
         }
 
         void UpdateData(const uint8_t *dta, int len);

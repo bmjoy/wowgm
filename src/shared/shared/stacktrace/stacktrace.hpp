@@ -1,5 +1,5 @@
-#ifndef WOWGM_ASSERT_H_
-#define WOWGM_ASSERT_H_
+#ifndef STACKTRACE_GUARD_H_
+#define STACKTRACE_GUARD_H_
 
 #define BOOST_ENABLE_ASSERT_DEBUG_HANDLER
 
@@ -339,7 +339,7 @@ namespace boost
 
         /// Outputs stacktrace in a human readable format to output stream; unsafe to use in async handlers.
         template <class CharT, class TraitsT>
-        std::basic_ostream<CharT, TraitsT>& operator<<(std::basic_ostream<CharT, TraitsT>& os, const application_stacktrace& bt)
+        std::basic_ostream<CharT, TraitsT>& operator << (std::basic_ostream<CharT, TraitsT>& os, const application_stacktrace& bt)
         {
             if (bt)
                 os << boost::stacktrace::detail::to_string(&bt.as_vector()[0], bt.size());
@@ -349,30 +349,4 @@ namespace boost
     }
 }
 
-typedef boost::error_info<tag_stacktrace, boost::stacktrace::application_stacktrace> traced;
-
-namespace wowgm::exceptions
-{
-    template <class E = std::runtime_error, typename... Args>
-    inline void throw_with_trace(Args&&... args)
-    {
-        E ex(std::forward<Args>(args)...);
-        throw boost::enable_error_info(ex) << traced(boost::stacktrace::application_stacktrace());
-    }
-}
-
-namespace boost
-{
-    void assertion_failed_msg_fmt(char const* expr, char const* msg, char const* function, char const* file, long line, ...);
-
-    inline void assertion_failed_msg(char const* expr, char const* msg, char const* function, char const* file, long line);
-
-    inline void assertion_failed(char const* expr, char const* function, char const* file, long line) {
-        ::boost::assertion_failed_msg(expr, 0 /*nullptr*/, function, file, line);
-    }
-} // namespace boost
-
-#endif // WOWGM_ASSERT_H_
-
-#define BOOST_ASSERT_MSG_FMT(expr, msg, ...) (BOOST_LIKELY(!!(expr))? ((void)0): ::boost::assertion_failed_msg_fmt(#expr, msg, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__, ##__VA_ARGS__))
-
+#endif // STACKTRACE_GUARD_H_

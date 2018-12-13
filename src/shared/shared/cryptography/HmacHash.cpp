@@ -1,10 +1,9 @@
 #include "HmacHash.hpp"
 #include "BigNumber.hpp"
-#include "Assert.hpp"
 
 #include <cstring>
 
-namespace wowgm::cryptography
+namespace shared::crypto
 {
 
 #if defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER < 0x10100000L
@@ -52,7 +51,6 @@ namespace wowgm::cryptography
     {
         uint32_t length = 0;
         HMAC_Final(_ctx, _digest, &length);
-        BOOST_ASSERT(length == DigestLength);
     }
 
     template<HashCreateFn HashCreator, uint32_t DigestLength>
