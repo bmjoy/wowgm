@@ -6,7 +6,7 @@ CollectSourceFiles(
   # ...
 )
 
-find_package(GLM REQUIRED)
+find_package(glm REQUIRED)
 find_package(GLI REQUIRED)
 
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
@@ -30,8 +30,6 @@ target_include_directories(graphics
     ${CMAKE_CURRENT_BINARY_DIR}
     ${SHARED_INCLUDE_DIRS}
     # The graphics stuff.
-    ${GLM_INCLUDE_DIR}
-    ${glfw_INCLUDE_DIRS}
     ${IMGUI_INCLUDE_DIR}
     ${CMAKE_SOURCE_DIR}/dep/vma
     ${CMAKE_SOURCE_DIR}/dep/spirv-compiler/glslang
@@ -45,6 +43,7 @@ target_link_libraries(graphics
   PRIVATE
     Vulkan::Vulkan
     glfw
+    glm
     glslang
     OGLCompiler
     OSDependent

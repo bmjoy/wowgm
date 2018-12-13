@@ -23,8 +23,7 @@ target_link_libraries(WowGM
     storm
     extstd
     graphics
-  PUBLIC
-    ${OPENSSL_LIBRARIES}
+	shared
 )
 
 add_dependencies(WowGM storm extstd graphics shared)
@@ -32,12 +31,14 @@ add_dependencies(WowGM storm extstd graphics shared)
 target_include_directories(WowGM
   PUBLIC
     ${PUBLIC_INCLUDES}
-    ${Boost_INCLUDE_DIR})
+    ${Boost_INCLUDE_DIR}
+)
 
 add_definitions(-DWIN32_LEAN_AND_MEAN)
 
 add_custom_command(TARGET WowGM POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy_directory
-		${CMAKE_CURRENT_SOURCE_DIR}/resources $<TARGET_FILE_DIR:WowGM>/resources)
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_CURRENT_SOURCE_DIR}/resources $<TARGET_FILE_DIR:WowGM>/resources
+)
 
 install(TARGETS WowGM DESTINATION "${CMAKE_INSTALL_PREFIX}")
