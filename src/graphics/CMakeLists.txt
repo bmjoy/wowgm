@@ -41,9 +41,9 @@ target_include_directories(graphics
 target_link_libraries(graphics
   PUBLIC
     extstd
-    Vulkan::Vulkan
+    shared
   PRIVATE
-    extstd
+    Vulkan::Vulkan
     glfw
     glslang
     OGLCompiler
@@ -54,6 +54,6 @@ target_link_libraries(graphics
     spirv-cross-glsl
 )
 
-add_dependencies(graphics shared)
+add_dependencies(graphics extstd shared)
 
 add_definitions(-DWIN32_LEAN_AND_MEAN)

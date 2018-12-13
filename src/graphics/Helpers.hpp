@@ -8,7 +8,7 @@
 
 #include <boost/iterator/transform_iterator.hpp>
 
-#include <shared/Defines.hpp>
+#include <shared/defines.hpp>
 
 namespace vez
 {
