@@ -13,18 +13,10 @@ add_library(extstd
   ${PRIVATE_SOURCES}
 )
 
-CollectIncludeDirectories(
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  PRIVATE_INCLUDES
-  # Excludes
-  # ...
-)
-
 target_include_directories(extstd
   PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
   PRIVATE
-    ${PRIVATE_INCLUDES}
     ${Boost_INCLUDE_DIRS}
 )
 
