@@ -5,10 +5,10 @@
 #include <memory>
 #include <mutex>
 
-#include <StormLib.h>
-
 #include <shared/filesystem/file_system.hpp>
 #include <shared/defines.hpp>
+
+#include <windows.h>
 
 #if (PLATFORM == PLATFORM_UNIX) || (PLATFORM == PLATFORM_APPLE)
 #include <sys/types.h>
@@ -67,8 +67,8 @@ namespace shared::filesystem
         ~disk_file_system();
 
         void Initialize(const std::string& rootFolder) override;
-        std::shared_ptr<file_handle<disk_file>> OpenFile(const std::string& relFilePath, LoadStrategy loadStrategy) override;
-        std::shared_ptr<file_handle<disk_file>> OpenDirectFile(const std::string& filePath, LoadStrategy loadStrategy = LoadStrategy::Mapped) override;
+        std::shared_ptr<disk_file> OpenFile(const std::string& relFilePath, LoadStrategy loadStrategy) override;
+        std::shared_ptr<disk_file> OpenDirectFile(const std::string& filePath, LoadStrategy loadStrategy = LoadStrategy::Mapped) override;
         bool FileExists(const std::string& relFilePath, const std::string& root) const override;
         bool FileExists(const std::string& relFilePath) const override;
 

@@ -7,6 +7,8 @@
 #include <cstring>
 #include <string_view>
 
+#include <shared/filesystem/mpq_file_system.hpp>
+
 #ifdef min
 #undef min
 #endif
@@ -23,7 +25,7 @@ namespace wowgm::game::geometry
     /*  --------------------------------- ADT TILE --------------------------------- */
     MapChunk::MapChunk(uint32_t x, uint32_t y, const std::string& directoryName)
     {
-        auto manager = MpqFileSystem::Instance();
+        auto manager = mpq_file_system::Instance();
 
         std::stringstream filePath;
         filePath << "world/maps/" << directoryName << '/' << directoryName << '_' << x << '_' << y;
@@ -36,9 +38,9 @@ namespace wowgm::game::geometry
         // Marker for validity, set as long as we don't find vertices
         _boundingBox.Minimum.Z = std::numeric_limits<float>::min();
 
-        std::shared_ptr<FileHandle<MpqFile>> rootFile = manager->OpenFile(filePath.str() + ".adt", LoadStrategy::Mapped);
-        std::shared_ptr<FileHandle<MpqFile>> objFile = manager->OpenFile(filePath.str() + "_obj0.adt", LoadStrategy::Mapped);
-        std::shared_ptr<FileHandle<MpqFile>> texFile = manager->OpenFile(filePath.str() + "_tex0.adt", LoadStrategy::Mapped);
+        std::shared_ptr<mpq_file> rootFile = manager->OpenFile(filePath.str() + ".adt", LoadStrategy::Mapped);
+        std::shared_ptr<mpq_file> objFile = manager->OpenFile(filePath.str() + "_obj0.adt", LoadStrategy::Mapped);
+        std::shared_ptr<mpq_file> texFile = manager->OpenFile(filePath.str() + "_tex0.adt", LoadStrategy::Mapped);
 
         if (!rootFile || !objFile || !texFile)
             return;
@@ -56,7 +58,7 @@ namespace wowgm::game::geometry
         _chunks.clear();
     }
 
-    void MapChunk::ParseFile(std::shared_ptr<FileHandle<MpqFile>> const& fileHandle)
+    void MapChunk::ParseFile(std::shared_ptr<file_handle<mpq_file>> const& fileHandle)
     {
         uint8_t const* rootData = fileHandle->GetData();
         uint8_t const* position = rootData;

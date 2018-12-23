@@ -1,5 +1,6 @@
 #include "Utils.hpp"
-#include "Defines.hpp"
+
+#include <shared/defines.hpp>
 
 #include <sstream>
 

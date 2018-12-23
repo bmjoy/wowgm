@@ -21,7 +21,7 @@ namespace shared::filesystem
         _rootFolder = rootFolder;
     }
 
-    std::shared_ptr<file_handle<disk_file>> disk_file_system::OpenFile(const std::string& relFilePath, LoadStrategy loadStrategy)
+    std::shared_ptr<disk_file> disk_file_system::OpenFile(const std::string& relFilePath, LoadStrategy loadStrategy)
     {
         boost::filesystem::path filePath = _rootFolder;
         filePath /= relFilePath;
@@ -29,7 +29,7 @@ namespace shared::filesystem
         return OpenDirectFile(filePath.string(), loadStrategy);
     }
 
-    std::shared_ptr<file_handle<disk_file>> disk_file_system::OpenDirectFile(const std::string& filePath, LoadStrategy loadStrategy)
+    std::shared_ptr<disk_file> disk_file_system::OpenDirectFile(const std::string& filePath, LoadStrategy loadStrategy)
     {
         return std::shared_ptr<disk_file>(new disk_file(filePath, loadStrategy));
     }

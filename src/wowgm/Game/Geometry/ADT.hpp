@@ -1,6 +1,5 @@
 #pragma once
 
-#include "FileSystem.hpp"
 #include "C3Vector.hpp"
 #include "CAaBox.hpp"
 #include "CArgb.hpp"
@@ -9,6 +8,8 @@
 #include <string>
 #include <vector>
 #include <array>
+
+#include <shared/filesystem/mpq_file_system.hpp>
 
 namespace wowgm::game::geometry
 {
@@ -123,7 +124,7 @@ namespace wowgm::game::geometry
         bool HasGeometry() const;
 
     private:
-        void ParseFile(std::shared_ptr<FileHandle<MpqFile>> const& fileHandle);
+        void ParseFile(std::shared_ptr<file_handle<mpq_file>> const& fileHandle);
 
         void HandleTerrainChunk(uint32_t identifier, std::vector<uint8_t> const& content);
 

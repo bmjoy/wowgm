@@ -63,18 +63,12 @@ int main(int argc, char* argv[])
         std::cout << std::endl;
 
         auto authserver = mapped_values["server"].as<std::string>();
-        sUpdater->Start();
+        // sUpdater->Start();
 
-        GameWindow window("WowGM");
-        window.InitializeWindow(false);
-        window.InitializeVulkan();
-        window.InitializeInterface();
+        // Needs to be inherited etc
+        // gfx::Window window;
 
-        window.Run();
-
-        window.PrepareForRelease();
-
-        sUpdater->Stop();
+        // sUpdater->Stop();
     }
     catch (const boost::system::system_error& se)
     {

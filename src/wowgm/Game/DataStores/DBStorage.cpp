@@ -4,6 +4,8 @@
 
 #include "Profiler.hpp"
 
+#include <shared/filesystem/mpq_file_system.hpp>
+
 // Fucking windows.
 #ifdef max
 #undef max
@@ -17,7 +19,7 @@ namespace wowgm::game::datastores
         std::string completeFilePath = "DBFilesClient\\";
         completeFilePath += meta_t::name();
 
-        auto fileHandle = MpqFileSystem::Instance()->OpenFile(completeFilePath, LoadStrategy::Memory);
+        auto fileHandle = mpq_file_system::Instance()->OpenFile(completeFilePath, LoadStrategy::Memory);
         if (fileHandle == nullptr)
             return;
 

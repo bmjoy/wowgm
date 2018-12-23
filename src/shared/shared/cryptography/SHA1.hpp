@@ -2,13 +2,13 @@
 
 #include <string>
 #include <type_traits>
+
 #include <openssl/sha.h>
 
 #include <shared/cryptography/BigNumber.hpp>
 
 namespace shared::crypto
 {
-
     class SHA1
     {
     public:
@@ -50,7 +50,7 @@ namespace shared::crypto
         int GetLength() const { return SHA_DIGEST_LENGTH; }
 
     private:
-        SHA_CTX mC;
+        SHAstate_st mC;
         uint8_t mDigest[SHA_DIGEST_LENGTH];
     };
 } // wowgm::cryptography

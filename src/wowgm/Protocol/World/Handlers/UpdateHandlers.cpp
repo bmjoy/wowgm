@@ -68,7 +68,7 @@ namespace wowgm::protocol::world
                         {
                             WorldRenderer::SetCoordinates(itr.Movement.Position);
                             WorldRenderer::SetMapID(packet.MapID);
-                            WorldRenderer::LoadGeometry(GeometryLoadFlags::Terrain | GeometryLoadFlags::Mmaps | GeometryLoadFlags::Vmaps);
+                            WorldRenderer::LoadGeometry((GeometryLoadFlags)(GeometryLoadFlags::Terrain | GeometryLoadFlags::Mmaps | GeometryLoadFlags::Vmaps));
 
                             ObjectAccessor::s_localPlayer = itr.GUID;
                         }

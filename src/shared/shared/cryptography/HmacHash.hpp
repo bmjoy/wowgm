@@ -6,7 +6,6 @@
 
 namespace shared::crypto
 {
-
     class BigNumber;
 
 #define SEED_KEY_SIZE 16

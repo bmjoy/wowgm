@@ -116,7 +116,7 @@ namespace wowgm::protocol::world
             if (isCompressed)
                 worldPacket.Decompress(GetDecompressionStream());
 
-            LOG_INFO("[S->C] {0} (0x{0:X4}, {1} bytes)", GetOpcodeNameForLogging(worldPacket.GetOpcode()), worldPacket.GetOpcode(), worldPacket.size());
+            LOG_INFO("[S->C] {0} (0x{0:X4}, {1} bytes)", GetOpcodeNameForLogging(worldPacket.GetOpcode()), uint32_t(worldPacket.GetOpcode()), worldPacket.size());
 
             PacketLogger::WriteServerPacket(&worldPacket);
 

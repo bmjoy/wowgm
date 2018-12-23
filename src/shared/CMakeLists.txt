@@ -19,7 +19,7 @@ target_include_directories(shared
   PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
   PRIVATE
-    ${EXTSTD_INCLUDE_DIRS}   # src/extstd
+    ${EXTSTD_INCLUDE_DIRS}                  # src/extstd
     ${CMAKE_SOURCE_DIR}/dep/StormLib/src
 )
 

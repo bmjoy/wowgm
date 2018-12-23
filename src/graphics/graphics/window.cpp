@@ -11,7 +11,7 @@ namespace gfx
 
     void Window::runWindowLoop(const std::function<void()>& frameHandler)
     {
-        while (0 == glfwWindowShouldClose(window))
+        while (glfwWindowShouldClose(window) == 0)
         {
             glfwPollEvents();
             frameHandler();

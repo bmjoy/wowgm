@@ -12,7 +12,6 @@
 #include "ClientServices.hpp"
 #include "ResponseCodes.hpp"
 
-
 #include <array>
 
 namespace wowgm::protocol::world
@@ -41,17 +40,17 @@ namespace wowgm::protocol::world
 
         std::string username = sClientServices->GetUsername();
 
-        SHA1 context;
+        shared::crypto::SHA1 context;
         context.UpdateData(username);
         for (uint32_t i = 0; i < packet.Seeds.size(); ++i)
             context.UpdateData(reinterpret_cast<uint8_t*>(&packet.Seeds[i]), 4);
 
-        auto checkInt64 = [](SHA1 const& sourceContext, uint32_t maxByte, uint64_t* output) -> bool {
+        auto checkInt64 = [](shared::crypto::SHA1 const& sourceContext, uint32_t maxByte, uint64_t* output) -> bool {
             uint64_t zero = 0;
 
             while (true)
             {
-                SHA1 context(sourceContext);
+                shared::crypto::SHA1 context(sourceContext);
                 context.UpdateData(reinterpret_cast<uint8_t*>(&zero), 8);
                 context.Finalize();
 

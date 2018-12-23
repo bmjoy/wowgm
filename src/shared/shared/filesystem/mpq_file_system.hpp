@@ -5,10 +5,10 @@
 #include <memory>
 #include <mutex>
 
-#include <StormLib.h>
-
 #include <shared/defines.hpp>
 #include <shared/filesystem/file_system.hpp>
+
+#include <windows.h>
 
 namespace shared::filesystem
 {
@@ -51,8 +51,8 @@ namespace shared::filesystem
         ~mpq_file_system();
 
         void Initialize(const std::string& rootFolder) override;
-        std::shared_ptr<file_handle<mpq_file>> OpenFile(const std::string& filePath, LoadStrategy loadStrategy) override;
-        std::shared_ptr<file_handle<mpq_file>> OpenDirectFile(const std::string& filePath, LoadStrategy loadStrategy = LoadStrategy::Mapped) override
+        std::shared_ptr<mpq_file> OpenFile(const std::string& filePath, LoadStrategy loadStrategy) override;
+        std::shared_ptr<mpq_file> OpenDirectFile(const std::string& filePath, LoadStrategy loadStrategy = LoadStrategy::Mapped) override
         {
             return { };
         }

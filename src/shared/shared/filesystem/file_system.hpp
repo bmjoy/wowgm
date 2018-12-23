@@ -39,8 +39,8 @@ namespace shared::filesystem
     class file_system
     {
         virtual void Initialize(const std::string& rootFolder) = 0;
-        virtual std::shared_ptr<file_handle<T>> OpenFile(const std::string& filePath, LoadStrategy loadStrategy = LoadStrategy::Mapped) = 0;
-        virtual std::shared_ptr<file_handle<T>> OpenDirectFile(const std::string& filePath, LoadStrategy loadStrategy = LoadStrategy::Mapped) = 0;
+        virtual std::shared_ptr<T> OpenFile(const std::string& filePath, LoadStrategy loadStrategy = LoadStrategy::Mapped) = 0;
+        virtual std::shared_ptr<T> OpenDirectFile(const std::string& filePath, LoadStrategy loadStrategy = LoadStrategy::Mapped) = 0;
 
         void SetLocale(Locale clientLocale) { _clientLocale = clientLocale; }
         Locale GetLocale() const { return _clientLocale; }

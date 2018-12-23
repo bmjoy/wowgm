@@ -1,10 +1,10 @@
 #include <shared/cryptography/SHA1.hpp>
 
 #include <cstring>
+#include <openssl/sha.h>
 
 namespace shared::crypto
 {
-
     SHA1::SHA1(SHA1 const& other)
     {
         SHA1_Init(&mC);

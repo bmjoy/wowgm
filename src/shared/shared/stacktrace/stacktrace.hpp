@@ -351,4 +351,6 @@ namespace shared
     }
 }
 
+typedef boost::error_info<struct tag_stacktrace, shared::stacktrace::application_stacktrace> traced;
+
 #endif // STACKTRACE_GUARD_H_

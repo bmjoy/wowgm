@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <boost/filesystem.hpp>
 
-#include <windows.h>
+#include <StormLib.h>
 
 // TODO: Throw proper exceptions here. Stormlib provides a shim GetlastError/SetLastError even on non-windows systems
 namespace shared::filesystem
@@ -59,7 +59,7 @@ namespace shared::filesystem
         _archiveHandles.clear();
     }
 
-    std::shared_ptr<file_handle<mpq_file>> mpq_file_system::OpenFile(const std::string& filePath, LoadStrategy loadStrategy)
+    std::shared_ptr<mpq_file> mpq_file_system::OpenFile(const std::string& filePath, LoadStrategy loadStrategy)
     {
         for (HANDLE archiveHandle : _archiveHandles)
         {

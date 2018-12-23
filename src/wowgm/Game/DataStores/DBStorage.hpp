@@ -4,8 +4,9 @@
 #include <string>
 #include <type_traits>
 
-#include "FileSystem.hpp"
+#include <shared/filesystem/mpq_file_system.hpp>
 #include <shared/assert/assert.hpp>
+
 #include "DBTraits.hpp"
 
 namespace wowgm::game::datastores
