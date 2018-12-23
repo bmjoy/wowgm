@@ -1,7 +1,7 @@
-#include "Image.hpp"
-#include "CommandBuffer.hpp"
-#include "Helpers.hpp"
-#include "Device.hpp"
+#include <graphics/vulkan/Image.hpp>
+#include <graphics/vulkan/CommandBuffer.hpp>
+#include <graphics/vulkan/Helpers.hpp>
+#include <graphics/vulkan/Device.hpp>
 
 namespace gfx::vk
 {

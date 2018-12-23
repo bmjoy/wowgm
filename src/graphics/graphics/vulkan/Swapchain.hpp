@@ -1,6 +1,6 @@
 #pragma once
 
-#include "VK.hpp"
+#include <graphics/vulkan/VK.hpp>
 #include <vector>
 
 namespace gfx::vk

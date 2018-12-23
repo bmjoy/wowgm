@@ -1,15 +1,15 @@
-#include "Device.hpp"
-#include "PipelineCache.hpp"
-#include "PhysicalDevice.hpp"
-#include "Queue.hpp"
-#include "Buffer.hpp"
-#include "Image.hpp"
-#include "CommandPool.hpp"
-#include "CommandBuffer.hpp"
-#include "Spinlock.hpp"
-#include "DescriptorSetLayoutCache.hpp"
-#include "Framebuffer.hpp"
-#include "Helpers.hpp"
+#include <graphics/vulkan/Device.hpp>
+#include <graphics/vulkan/PipelineCache.hpp>
+#include <graphics/vulkan/PhysicalDevice.hpp>
+#include <graphics/vulkan/Queue.hpp>
+#include <graphics/vulkan/Buffer.hpp>
+#include <graphics/vulkan/Image.hpp>
+#include <graphics/vulkan/CommandPool.hpp>
+#include <graphics/vulkan/CommandBuffer.hpp>
+#include <graphics/vulkan/Spinlock.hpp>
+#include <graphics/vulkan/DescriptorSetLayoutCache.hpp>
+#include <graphics/vulkan/Framebuffer.hpp>
+#include <graphics/vulkan/Helpers.hpp>
 
 #include <vector>
 

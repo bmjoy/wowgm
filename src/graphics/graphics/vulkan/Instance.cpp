@@ -1,6 +1,6 @@
 
-#include "Instance.hpp"
-#include "PhysicalDevice.hpp"
+#include <graphics/vulkan/Instance.hpp>
+#include <graphics/vulkan/PhysicalDevice.hpp>
 
 #include <shared/threading/thread_pool.hpp>
 

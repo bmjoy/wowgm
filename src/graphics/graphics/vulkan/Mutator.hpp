@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Traits.hpp"
+#include <graphics/vulkan/Traits.hpp>
 
 namespace gfx::vk
 {

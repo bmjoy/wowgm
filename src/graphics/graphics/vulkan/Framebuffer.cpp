@@ -1,7 +1,7 @@
-#include "Framebuffer.hpp"
-#include "ImageView.hpp"
-#include "RenderPass.hpp"
-#include "Device.hpp"
+#include <graphics/vulkan/Framebuffer.hpp>
+#include <graphics/vulkan/ImageView.hpp>
+#include <graphics/vulkan/RenderPass.hpp>
+#include <graphics/vulkan/Device.hpp>
 
 #include <boost/iterator/transform_iterator.hpp>
 

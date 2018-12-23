@@ -1,6 +1,6 @@
-#include "Buffer.hpp"
-#include "Device.hpp"
-#include "Instance.hpp"
+#include <graphics/vulkan/Buffer.hpp>
+#include <graphics/vulkan/Device.hpp>
+#include <graphics/vulkan/Instance.hpp>
 
 namespace gfx::vk
 {

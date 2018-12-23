@@ -4,6 +4,6 @@
 #include <stdexcept>
 #include <boost/filesystem.hpp>
 
-namespace wowgm::filesystem
+namespace shared::filesystem
 {
 }

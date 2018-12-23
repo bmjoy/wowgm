@@ -1,7 +1,7 @@
-#include "Swapchain.hpp"
-#include "Device.hpp"
-#include "PhysicalDevice.hpp"
-#include "Image.hpp"
+#include <graphics/vulkan/Swapchain.hpp>
+#include <graphics/vulkan/Device.hpp>
+#include <graphics/vulkan/PhysicalDevice.hpp>
+#include <graphics/vulkan/Image.hpp>
 
 #include <limits>
 #include <algorithm>

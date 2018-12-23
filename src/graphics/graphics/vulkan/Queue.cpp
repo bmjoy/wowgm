@@ -1,9 +1,9 @@
-#include "Queue.hpp"
-#include "Device.hpp"
-#include "PhysicalDevice.hpp"
-#include "Instance.hpp"
-#include "Swapchain.hpp"
-#include "Mutator.hpp"
+#include <graphics/vulkan/Queue.hpp>
+#include <graphics/vulkan/Device.hpp>
+#include <graphics/vulkan/PhysicalDevice.hpp>
+#include <graphics/vulkan/Instance.hpp>
+#include <graphics/vulkan/Swapchain.hpp>
+#include <graphics/vulkan/Mutator.hpp>
 
 #include <boost/iterator/transform_iterator.hpp>
 

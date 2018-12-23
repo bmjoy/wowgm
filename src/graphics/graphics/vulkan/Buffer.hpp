@@ -3,8 +3,7 @@
 #include <vulkan/vulkan.h>
 #include <cstdint>
 
-#include "VK.hpp"
-
+#include <graphics/vulkan/VK.hpp>
 
 namespace gfx::vk
 {

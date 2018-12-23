@@ -5,12 +5,17 @@
 #include <string>
 
 #include <boost/exception/get_error_info.hpp>
+#include <boost/system/system_error.hpp>
+
+#include <shared/filesystem/disk_file_system.hpp>
+#include <shared/stacktrace/stacktrace.hpp>
 
 namespace po = boost::program_options;
 
 int main(int argc, char* argv[])
 {
-    wowgm::filesystem::DiskFileSystem::Instance()->Initialize(".");
+    using dfs = shared::filesystem::disk_file_system;
+    dfs::Instance()->Initialize(".");
 
     try {
         po::options_description desc("Allowed options");
@@ -75,7 +80,7 @@ int main(int argc, char* argv[])
     {
         std::cerr << se.code() << " " << se.what() << std::endl;
 
-        const boost::stacktrace::application_stacktrace* st = boost::get_error_info<traced>(se);
+        const shared::stacktrace::application_stacktrace* st = boost::get_error_info<traced>(se);
         if (st)
             std::cerr << *st << std::endl;
     }
@@ -83,7 +88,7 @@ int main(int argc, char* argv[])
     {
         std::cerr << e.what() << std::endl;
 
-        const boost::stacktrace::application_stacktrace* st = boost::get_error_info<traced>(e);
+        const shared::stacktrace::application_stacktrace* st = boost::get_error_info<traced>(e);
         if (st)
             std::cerr << *st << std::endl;
     }

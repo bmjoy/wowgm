@@ -3,7 +3,7 @@
 #include <vulkan/vulkan.h>
 #include <vector>
 #include <unordered_map>
-#include "Spinlock.hpp"
+#include <graphics/vulkan/Spinlock.hpp>
 
 namespace gfx::vk
 {

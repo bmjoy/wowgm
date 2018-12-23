@@ -1,6 +1,6 @@
-#include "CommandPool.hpp"
-#include "Device.hpp"
-#include "CommandBuffer.hpp"
+#include <graphics/vulkan/CommandPool.hpp>
+#include <graphics/vulkan/Device.hpp>
+#include <graphics/vulkan/CommandBuffer.hpp>
 
 #include <boost/iterator/transform_iterator.hpp>
 

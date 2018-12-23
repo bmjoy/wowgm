@@ -1,6 +1,6 @@
-#include "ImageView.hpp"
-#include "Image.hpp"
-#include "Device.hpp"
+#include <graphics/vulkan/ImageView.hpp>
+#include <graphics/vulkan/Image.hpp>
+#include <graphics/vulkan/Device.hpp>
 
 namespace gfx::vk
 {

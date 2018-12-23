@@ -2,8 +2,8 @@
 
 #include <vulkan/vulkan.h>
 
-#include "VK.hpp"
-#include "Spinlock.hpp"
+#include <graphics/vulkan/VK.hpp>
+#include <graphics/vulkan/Spinlock.hpp>
 
 namespace gfx::vk
 {

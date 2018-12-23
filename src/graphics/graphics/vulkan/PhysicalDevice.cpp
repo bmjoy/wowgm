@@ -1,7 +1,7 @@
-#include "PhysicalDevice.hpp"
-#include "Instance.hpp"
+#include <graphics/vulkan/PhysicalDevice.hpp>
+#include <graphics/vulkan/Instance.hpp>
 
-#include "VK.hpp"
+#include <graphics/vulkan/VK.hpp>
 
 namespace gfx::vk
 {

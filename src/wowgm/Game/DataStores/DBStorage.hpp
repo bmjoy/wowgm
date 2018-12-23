@@ -10,7 +10,7 @@
 
 namespace wowgm::game::datastores
 {
-    using namespace wowgm::filesystem;
+    using namespace shared::filesystem;
 
     struct DBCHeader
     {

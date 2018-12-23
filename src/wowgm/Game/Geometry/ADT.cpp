@@ -13,7 +13,7 @@
 
 namespace wowgm::game::geometry
 {
-    using namespace wowgm::filesystem;
+    using namespace shared::filesystem;
 
     constexpr static const float TILE_SIZE  = 1600.0f / 3.0f;
     constexpr static const float MAX_XY     = 32.0f * TILE_SIZE;

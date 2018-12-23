@@ -1,11 +1,11 @@
-#include "Pipeline.hpp"
-#include "PipelineCache.hpp"
-#include "Shader.hpp"
-#include "Device.hpp"
-#include "DescriptorSetLayoutCache.hpp"
-#include "DescriptorSetLayout.hpp"
+#include <graphics/vulkan/Pipeline.hpp>
+#include <graphics/vulkan/PipelineCache.hpp>
+#include <graphics/vulkan/Shader.hpp>
+#include <graphics/vulkan/Device.hpp>
+#include <graphics/vulkan/DescriptorSetLayoutCache.hpp>
+#include <graphics/vulkan/DescriptorSetLayout.hpp>
 
-#include "VK.hpp"
+#include <graphics/vulkan/VK.hpp>
 
 namespace gfx::vk
 {

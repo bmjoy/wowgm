@@ -12,7 +12,7 @@
 
 namespace wowgm::game::geometry
 {
-    using namespace wowgm::filesystem;
+    using namespace shared::filesystem;
     using namespace wowgm::game::structures;
 
     struct SMChunk

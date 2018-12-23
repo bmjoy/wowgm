@@ -1,6 +1,6 @@
-#include "DescriptorPool.hpp"
-#include "Device.hpp"
-#include "DescriptorSetLayout.hpp"
+#include <graphics/vulkan/DescriptorPool.hpp>
+#include <graphics/vulkan/Device.hpp>
+#include <graphics/vulkan/DescriptorSetLayout.hpp>
 
 namespace gfx::vk
 {

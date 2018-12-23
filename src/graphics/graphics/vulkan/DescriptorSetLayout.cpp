@@ -1,8 +1,8 @@
-#include "DescriptorSetLayout.hpp"
-#include "Device.hpp"
-#include "DescriptorPool.hpp"
-#include "VK.hpp"
-#include "Helpers.hpp"
+#include <graphics/vulkan/DescriptorSetLayout.hpp>
+#include <graphics/vulkan/Device.hpp>
+#include <graphics/vulkan/DescriptorPool.hpp>
+#include <graphics/vulkan/VK.hpp>
+#include <graphics/vulkan/Helpers.hpp>
 
 #include <extstd/containers/extract.hpp>
 

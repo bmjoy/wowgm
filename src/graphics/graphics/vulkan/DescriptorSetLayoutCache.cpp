@@ -1,6 +1,6 @@
-#include "DescriptorSetLayoutCache.hpp"
-#include "DescriptorSetLayout.hpp"
-#include "VK.hpp"
+#include <graphics/vulkan/DescriptorSetLayoutCache.hpp>
+#include <graphics/vulkan/DescriptorSetLayout.hpp>
+#include <graphics/vulkan/VK.hpp>
 
 
 namespace gfx::vk

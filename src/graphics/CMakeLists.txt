@@ -16,27 +16,19 @@ add_library(graphics
   ${PRIVATE_SOURCES}
 )
 
-CollectIncludeDirectories(
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  PRIVATE_INCLUDES
-  # Excludes
-  # ...
-)
-
 target_include_directories(graphics
   PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
   PRIVATE
-    ${PRIVATE_INCLUDES}    # src/graphics
-	${SHARED_INCLUDE_DIRS} # src/extstd
-	${EXTSTD_INCLUDE_DIRS} # src/shared
-	
+    ${SHARED_INCLUDE_DIRS} # src/extstd
+    ${EXTSTD_INCLUDE_DIRS} # src/shared
+
     ${IMGUI_INCLUDE_DIR}
 	
-	# Memory allocator
+    # Memory allocator
     ${CMAKE_SOURCE_DIR}/dep/vma
 	
-	# Shader reflection
+    # Shader reflection
     ${CMAKE_SOURCE_DIR}/dep/spirv-compiler/glslang
     ${CMAKE_SOURCE_DIR}/dep/spirv-compiler/SPIRV-cross
 )

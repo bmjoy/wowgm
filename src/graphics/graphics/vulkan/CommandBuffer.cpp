@@ -1,13 +1,13 @@
-#include "CommandBuffer.hpp"
-#include "CommandPool.hpp"
-#include "Device.hpp"
-#include "Buffer.hpp"
-#include "Image.hpp"
-#include "Pipeline.hpp"
-#include "Instance.hpp"
-#include "Framebuffer.hpp"
-#include "RenderPass.hpp"
-#include "Mutator.hpp"
+#include <graphics/vulkan/CommandBuffer.hpp>
+#include <graphics/vulkan/CommandPool.hpp>
+#include <graphics/vulkan/Device.hpp>
+#include <graphics/vulkan/Buffer.hpp>
+#include <graphics/vulkan/Image.hpp>
+#include <graphics/vulkan/Pipeline.hpp>
+#include <graphics/vulkan/Instance.hpp>
+#include <graphics/vulkan/Framebuffer.hpp>
+#include <graphics/vulkan/RenderPass.hpp>
+#include <graphics/vulkan/Mutator.hpp>
 
 #include <vector>
 #include <boost/iterator/transform_iterator.hpp>

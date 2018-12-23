@@ -4,9 +4,9 @@
 #include <vector>
 #include <cstdint>
 
-#include "VK.hpp"
-#include "Device.hpp"
-#include "Traits.hpp"
+#include <graphics/vulkan/VK.hpp>
+#include <graphics/vulkan/Device.hpp>
+#include <graphics/vulkan/Traits.hpp>
 
 namespace shared::threading
 {

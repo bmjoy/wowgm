@@ -1,7 +1,7 @@
 #pragma once
 
-#include "VK.hpp"
-#include "Instance.hpp"
+#include <graphics/vulkan/VK.hpp>
+#include <graphics/vulkan/Instance.hpp>
 
 namespace gfx::vk
 {

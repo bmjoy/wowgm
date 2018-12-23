@@ -1,6 +1,6 @@
-#include "Shader.hpp"
-#include "Reflection.hpp"
-#include "Instance.hpp"
+#include <graphics/vulkan/Shader.hpp>
+#include <graphics/vulkan/Reflection.hpp>
+#include <graphics/vulkan/Instance.hpp>
 
 namespace gfx::vk
 {
