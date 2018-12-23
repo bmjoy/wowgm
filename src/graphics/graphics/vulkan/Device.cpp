@@ -194,7 +194,17 @@ namespace gfx::vk
         if (result != VK_SUCCESS)
             return result;
 
-        *ppBuffer = Buffer::CreateFromDevice(this, pCreateInfo, buffer, allocation);
+        *ppBuffer = new Buffer();
+        (*ppBuffer)->_handle = buffer;
+        (*ppBuffer)->_device = this;
+        (*ppBuffer)->_allocation = allocation;
+        (*ppBuffer)->_size = pCreateInfo->size;
+
+#if _DEBUG
+        if (pCreateInfo->pBufferName != nullptr)
+            GetInstance()->SetObjectName(this, *ppBuffer, pCreateInfo->pBufferName);
+#endif
+
         return VK_SUCCESS;
     }
 

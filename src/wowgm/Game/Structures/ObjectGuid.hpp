@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Assert.hpp"
+#include <shared/assert/assert.hpp>
 #include "ByteBuffer.hpp"
 
 #include <cstdint>

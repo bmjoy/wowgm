@@ -1,4 +1,4 @@
-#include "ARC4.hpp"
+#include <shared/cryptography/ARC4.hpp>
 
 namespace shared::crypto
 {

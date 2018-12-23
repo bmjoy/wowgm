@@ -5,7 +5,7 @@
 #include <type_traits>
 
 #include "FileSystem.hpp"
-#include "Assert.hpp"
+#include <shared/assert/assert.hpp>
 #include "DBTraits.hpp"
 
 namespace wowgm::game::datastores

@@ -1,6 +1,6 @@
 #include "PacketLogger.hpp"
 #include "ClientServices.hpp"
-#include "BigNumber.hpp"
+#include <shared/cryptography/BigNumber.hpp>
 
 #include <cstdint>
 #include <memory>
@@ -9,7 +9,7 @@
 namespace wowgm::utilities
 {
     using namespace wowgm::protocol;
-    using namespace wowgm::cryptography;
+    using namespace shared::crypto;
     using namespace std::chrono;
     static const steady_clock::time_point start_time = steady_clock::now();
 

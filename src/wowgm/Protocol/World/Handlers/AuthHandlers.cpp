@@ -6,18 +6,19 @@
 #include "Packet.hpp"
 #include "RealmList.hpp"
 
-#include "BigNumber.hpp"
-#include "SHA1.hpp"
+#include <shared/cryptography/BigNumber.hpp>
+#include <shared/cryptography/SHA1.hpp>
+
 #include "ClientServices.hpp"
 #include "ResponseCodes.hpp"
-#include "Logger.hpp"
+
 
 #include <array>
 
 namespace wowgm::protocol::world
 {
     using namespace packets;
-    using namespace wowgm::cryptography;
+    using namespace shared::crypto;
     using namespace wowgm::protocol::authentification;
 
     bool WorldSocket::HandleAuthResponse(ClientConnectionAuthResponse& packet)
@@ -83,12 +84,7 @@ namespace wowgm::protocol::world
 
         uint64_t dosResponse = 0;
         if (!checkInt64(context, packet.UnkByte, &dosResponse))
-        {
-            LOG_DEBUG << "Failed to validate dos response, sending zero instead.";
             dosResponse = 0;
-        }
-        else
-            LOG_DEBUG << "Dos response calculated as " << dosResponse;
 
         context.Initialize();
         context.UpdateData(username);

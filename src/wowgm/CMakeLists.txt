@@ -20,19 +20,28 @@ target_link_libraries(WowGM
   PRIVATE
     boost
     zlib
-    storm
     extstd
     graphics
-	shared
+    shared
 )
 
-add_dependencies(WowGM storm extstd graphics shared)
+CollectIncludeDirectories(
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  PRIVATE_INCLUDES
+  # Excludes
+  # ...
+)
 
 target_include_directories(WowGM
   PUBLIC
-    ${PUBLIC_INCLUDES}
-    ${Boost_INCLUDE_DIR}
+    ${CMAKE_BINARY_DIR}
+  PRIVATE
+    ${PRIVATE_INCLUDES}
+    ${SHARED_INCLUDE_DIRS}
+    ${GRAPHICS_INCLUDE_DIRS}
 )
+
+add_dependencies(WowGM extstd graphics shared)
 
 add_definitions(-DWIN32_LEAN_AND_MEAN)
 

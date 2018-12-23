@@ -9,7 +9,7 @@
 #include "RealmList.hpp"
 #include "AuthCommand.hpp"
 #include "AuthResult.hpp"
-#include "BigNumber.hpp"
+#include <shared/cryptography/BigNumber.hpp>
 #include "Socket.hpp"
 #include "CharacterPackets.hpp"
 
@@ -24,7 +24,7 @@ namespace wowgm::protocol
     class BaseSocket;
 
     using namespace wowgm::threading;
-    using namespace wowgm::cryptography;
+    using namespace shared::crypto;
     using namespace authentification;
 
     class ClientServices

@@ -2,6 +2,7 @@
 #include "Instance.hpp"
 #include "PhysicalDevice.hpp"
 
+#include <shared/threading/thread_pool.hpp>
 
 namespace gfx::vk
 {
@@ -15,7 +16,7 @@ namespace gfx::vk
         createInfo.ppEnabledLayerNames = pCreateInfo->ppEnabledLayerNames;
         createInfo.enabledLayerCount = pCreateInfo->enabledLayerCount;
 
-        VkApplicationInfo applicationInfo{};
+        VkApplicationInfo applicationInfo { };
         applicationInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
         applicationInfo.apiVersion = pCreateInfo->pApplicationInfo->apiVersion;
         applicationInfo.applicationVersion = pCreateInfo->pApplicationInfo->applicationVersion;
@@ -30,7 +31,7 @@ namespace gfx::vk
         if (result != VK_SUCCESS)
             return result;
 
-        Instance* instance = new Instance;
+        Instance* instance = new Instance();
         instance->_handle = instanceHandle;
 
         // Get all the physical devices
@@ -52,13 +53,12 @@ namespace gfx::vk
             instance->_physicalDevices[i] = new PhysicalDevice(instance, physicalDevices[i]);
 
         // Create a thread pool with an unique worker thread for now.
-        instance->_threadPool = new ThreadPool(1);
+        instance->_threadPool = new thread_pool(1);
 
 #if _DEBUG
         // Install debug callbacks if needed
         if (pCreateInfo->debugUtils.messengerCallback != nullptr)
         {
-
             auto debugUtilsCallbackInstaller = PFN_vkCreateDebugUtilsMessengerEXT(vkGetInstanceProcAddr(instanceHandle, "vkCreateDebugUtilsMessengerEXT"));
             if (debugUtilsCallbackInstaller != nullptr)
             {

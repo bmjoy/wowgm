@@ -6,18 +6,18 @@
 #include "AuthResult.hpp"
 #include "RealmList.hpp"
 #include "Utils.hpp"
-#include "SHA1.hpp"
-#include "Logger.hpp"
+
 #include "ClientServices.hpp"
 
 #include <iostream>
 
 #include <boost/algorithm/string.hpp>
 
+#include <shared/cryptography/SHA1.hpp>
+#include <shared/log/log.hpp>
+
 namespace wowgm::protocol::authentification
 {
-    using namespace wowgm::cryptography;
-
     AuthSocket::AuthSocket(asio::io_context& io_context) : Socket(io_context)
     {
         InitializeHandlers();
@@ -115,11 +115,11 @@ namespace wowgm::protocol::authentification
 
         BigNumber A, a, u, x, S, M1, K;
 
-        LOG_INFO << "[S->C] AUTH_LOGON_CHALLENGE.";
+        LOG_INFO("[S->C] AUTH_LOGON_CHALLENGE.");
 
         BigNumber& passwordHash = sClientServices->GetPasswordHash();
 
-        SHA1 context;
+        shared::crypto::SHA1 context;
         context.UpdateBigNumbers(salt);
         context.UpdateBigNumbers(passwordHash);
         context.Finalize();
@@ -209,20 +209,20 @@ namespace wowgm::protocol::authentification
         context.Finalize();
         M2.SetBinary(context);
 
-        LOG_INFO << "[C->S] AUTH_LOGON_PROOF.";
-        LOG_DEBUG << "s = " << salt.AsHexStr();
-        LOG_DEBUG << "N = " << N.AsHexStr();
-        LOG_DEBUG << "A = " << A.AsHexStr();
-        LOG_DEBUG << "a = " << a.AsHexStr();
-        LOG_DEBUG << "B = " << B.AsHexStr();
-        LOG_DEBUG << "u = " << u.AsHexStr();
-        LOG_DEBUG << "S = " << S.AsHexStr();
-        LOG_DEBUG << "K = " << K.AsHexStr();
-        LOG_DEBUG << "Us= " << wowgm::utilities::ByteArrayToHexStr(userHash, 20);
-        LOG_DEBUG << "T3= " << t3.AsHexStr();
-        LOG_DEBUG << "x = " << x.AsHexStr();
-        LOG_DEBUG << "M1= " << M1.AsHexStr();
-        LOG_DEBUG << "M2= " << M2.AsHexStr();
+        LOG_INFO("[C->S] AUTH_LOGON_PROOF.");
+        // LOG_INFO("s = " << salt.AsHexStr();
+        // LOG_DEBUG << "N = " << N.AsHexStr();
+        // LOG_DEBUG << "A = " << A.AsHexStr();
+        // LOG_DEBUG << "a = " << a.AsHexStr();
+        // LOG_DEBUG << "B = " << B.AsHexStr();
+        // LOG_DEBUG << "u = " << u.AsHexStr();
+        // LOG_DEBUG << "S = " << S.AsHexStr();
+        // LOG_DEBUG << "K = " << K.AsHexStr();
+        // LOG_DEBUG << "Us= " << wowgm::utilities::ByteArrayToHexStr(userHash, 20);
+        // LOG_DEBUG << "T3= " << t3.AsHexStr();
+        // LOG_DEBUG << "x = " << x.AsHexStr();
+        // LOG_DEBUG << "M1= " << M1.AsHexStr();
+        // LOG_DEBUG << "M2= " << M2.AsHexStr();
 
         sClientServices->UpdateIdentificationStatus(AUTH_LOGON_PROOF, LOGIN_OK);
 
@@ -241,7 +241,7 @@ namespace wowgm::protocol::authentification
         AuthPacket<AuthLogonProof> command(GetReadBuffer());
         AuthLogonProof* proof = command.GetData();
 
-        LOG_INFO << "[S->C] AUTH_LOGON_PROOF.";
+        LOG_INFO("[S->C] AUTH_LOGON_PROOF.");
 
         sClientServices->UpdateIdentificationStatus(AUTH_LOGON_PROOF, AuthResult(proof->Error));
 
@@ -257,7 +257,7 @@ namespace wowgm::protocol::authentification
         sClientServices->UpdateIdentificationStatus(REALM_LIST, LOGIN_OK);
 
         // Request realm list
-        LOG_INFO << "[C->S] REALM_LIST.";
+        LOG_INFO("[C->S] REALM_LIST.");
         AuthPacket<RealmList> realmList(this->shared_from_this(), REALM_LIST);
         realmList.GetData()->Data = 0;
         return true;
@@ -265,7 +265,7 @@ namespace wowgm::protocol::authentification
 
     bool AuthSocket::HandleRealmList()
     {
-        LOG_INFO << "[S->C] REALM_LIST.";
+        LOG_INFO("[S->C] REALM_LIST.");
 
         AuthPacket<AuthRealmList> command(GetReadBuffer());
         AuthRealmList* authData = command.GetData();

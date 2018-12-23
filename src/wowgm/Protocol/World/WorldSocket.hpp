@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Socket.hpp"
-#include "BigNumber.hpp"
-#include "SHA1.hpp"
-#include "MPSCQueue.hpp"
 #include "WorldPacket.hpp"
 #include "WorldPacketCrypt.hpp"
 #include "MessageBuffer.hpp"
 #include "PacketHeaders.hpp"
+
+#include <shared/cryptography/BigNumber.hpp>
+#include <shared/cryptography/SHA1.hpp>
+#include <shared/threading/MPSCQueue.hpp>
 
 #include <boost/asio/detail/type_traits.hpp>
 #include <boost/asio/io_context.hpp>
@@ -43,7 +44,7 @@ namespace wowgm::protocol::world
     }
 
     using namespace packets;
-    using namespace wowgm::cryptography;
+    using namespace shared::crypto;
     using namespace wowgm::utilities;
 
     class EncryptablePacket;

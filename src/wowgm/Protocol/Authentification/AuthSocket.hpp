@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Socket.hpp"
-#include "BigNumber.hpp"
-#include "SHA1.hpp"
+#include <shared/cryptography/BigNumber.hpp>
+#include <shared/cryptography/SHA1.hpp>
 
 #include "RealmList.hpp"
 
@@ -21,7 +21,7 @@ using tcp = asio::ip::tcp;
 
 namespace wowgm::protocol::authentification
 {
-    using namespace wowgm::cryptography;
+    using namespace shared::crypto;
 
     class AuthSocket : public Socket<AuthSocket>
     {

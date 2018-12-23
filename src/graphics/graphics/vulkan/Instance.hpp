@@ -4,11 +4,14 @@
 #include <vector>
 #include <cstdint>
 
-#include <shared/threading/ThreadPool.hpp>
-
 #include "VK.hpp"
 #include "Device.hpp"
 #include "Traits.hpp"
+
+namespace shared::threading
+{
+    class thread_pool;
+}
 
 namespace gfx::vk
 {
@@ -21,7 +24,7 @@ namespace gfx::vk
 
         VkInstance GetHandle() const { return _handle; }
         std::vector<PhysicalDevice*> const& GetPhysicalDevices() const { return _physicalDevices; }
-        ThreadPool* GetThreadPool() const { return _threadPool; }
+        thread_pool* GetThreadPool() const { return _threadPool; }
 
         Instance() { }
         ~Instance();
@@ -30,17 +33,15 @@ namespace gfx::vk
         Instance(Instance&&) = delete;
 
         template <typename T>
-        VkResult SetObjectName(Device* device, T* object, std::string_view objectName)
+        VkResult SetObjectName(Device* device, T objectHandleValue, std::string_view objectName)
         {
 #if _DEBUG
-            uint64_t objectHandleValue = reinterpret_cast<uintptr_t>(object->GetHandle());
-
             if (vkSetDebugUtilsObjectNameEXT != nullptr)
             {
                 VkDebugUtilsObjectNameInfoEXT nameInfo{};
                 nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
                 nameInfo.pObjectName = objectName.data();
-                nameInfo.objectHandle = objectHandleValue;
+                nameInfo.objectHandle = uint64_t(objectHandleValue);
                 nameInfo.objectType = gfx::vk::traits<T>::object_type;
 
                 return vkSetDebugUtilsObjectNameEXT(device->GetHandle(), &nameInfo);
@@ -49,9 +50,9 @@ namespace gfx::vk
             {
                 VkDebugMarkerObjectNameInfoEXT nameInfo{};
                 nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT;
-                nameInfo.pObjectName = objectName;
+                nameInfo.pObjectName = objectName.data();
                 nameInfo.objectType = gfx::vk::traits<T>::object_type_ext;
-                nameInfo.object = objectHandleValue;
+                nameInfo.object = uint64_t(objectHandleValue);
 
                 return vkDebugMarkerSetObjectNameEXT(device->GetHandle(), &nameInfo);
             }
@@ -62,7 +63,7 @@ namespace gfx::vk
     private:
         VkInstance _handle = VK_NULL_HANDLE;
         std::vector<PhysicalDevice*> _physicalDevices;
-        ThreadPool* _threadPool = nullptr;
+        thread_pool* _threadPool = nullptr;
 
         VkDebugUtilsMessengerEXT _debugUtilsUserCallback = nullptr;
         VkDebugReportCallbackEXT _debugReportCallback = nullptr;

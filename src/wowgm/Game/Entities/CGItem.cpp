@@ -47,23 +47,26 @@ namespace wowgm::game::entities
         return this;
     }
 
-    void CGItem::UpdateDescriptors(JamCliValuesUpdate const& valuesUpdate)
+    uint32_t CGItem::UpdateDescriptors(JamCliValuesUpdate& valuesUpdate)
     {
-        CGObject::UpdateDescriptors(valuesUpdate);
+        uint32_t startOffset = CGObject::UpdateDescriptors(valuesUpdate);
 
         uint8_t* itemDataBase = reinterpret_cast<uint8_t*>(&GetItemData());
-        for (auto&& itr : valuesUpdate.Descriptors)
+
+        auto itr = valuesUpdate.Descriptors.begin();
+        while (itr != valuesUpdate.Descriptors.end())
         {
-            auto offset = itr.first * 4;
-
-            if (offset <= sizeof(CGObjectData))
+            uint32_t calculatedOffset = itr->first * 4 - startOffset;
+            if (calculatedOffset > sizeof(CGItemData))
+            {
+                ++itr;
                 continue;
+            }
 
-            offset -= sizeof(CGObjectData);
-            if (offset > sizeof(CGItemData))
-                continue;
-
-            *reinterpret_cast<uint32_t*>(itemDataBase + offset) = itr.second;
+            *reinterpret_cast<uint32_t*>(itemDataBase + calculatedOffset) = itr->second;
+            itr = valuesUpdate.Descriptors.erase(itr);
         }
+
+        return startOffset + sizeof(CGItemData);
     }
 }

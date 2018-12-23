@@ -135,6 +135,6 @@ namespace wowgm::game::entities
         CGPlayer* ToPlayer() override;
         CGPlayer const* ToPlayer() const override;
 
-        void UpdateDescriptors(JamCliValuesUpdate const& valuesUpdate) override;
+        uint32_t UpdateDescriptors(JamCliValuesUpdate& valuesUpdate) override;
     };
 }

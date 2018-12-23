@@ -3,8 +3,9 @@
 #include "SocketManager.hpp"
 #include "AuthSocket.hpp"
 #include "WorldSocket.hpp"
-#include "Logger.hpp"
-#include "SHA1.hpp"
+
+#include <shared/log/log.hpp>
+#include <shared/cryptography/SHA1.hpp>
 
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/ip/address.hpp>
@@ -99,8 +100,8 @@ namespace wowgm::protocol
         _socket->CloseSocket();
         _socket.reset();
 
-        LOG_INFO << "Disconnecting from authentification server.";
-        LOG_INFO << "Connecting to realm " << realmInfo.Name << " at " << realmInfo.GetEndpoint();
+        LOG_INFO("Disconnecting from authentification server.");
+        LOG_INFO("Connecting to realm {} at {}", realmInfo.Name, realmInfo.GetEndpoint());
 
         auto worldSocket = _socketUpdater->Create<WorldSocket>(_socketUpdater->GetContext());
         worldSocket->Connect(realmInfo.GetEndpoint());
@@ -174,7 +175,7 @@ namespace wowgm::protocol
         if (_passwordHash.is_initialized())
             return _passwordHash.get();
 
-        SHA1 context;
+        shared::crypto::SHA1 context;
         context.Initialize();
         context.UpdateData(_username);
         context.UpdateData(':');

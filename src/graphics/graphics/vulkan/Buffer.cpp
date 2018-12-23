@@ -1,24 +1,9 @@
 #include "Buffer.hpp"
 #include "Device.hpp"
+#include "Instance.hpp"
 
 namespace gfx::vk
 {
-    Buffer* Buffer::CreateFromDevice(Device* device, const BufferCreateInfo* pCreateInfo, VkBuffer bufferHandle, VmaAllocation allocation)
-    {
-        Buffer* buffer = new Buffer;
-        buffer->_handle = bufferHandle;
-        buffer->_device = device;
-        buffer->_allocation = allocation;
-        buffer->_size = pCreateInfo->size;
-
-#if _DEBUG
-        // if (pCreateInfo->pBufferName != nullptr)
-        //     buffer->SetName(pCreateInfo->pBufferName);
-#endif
-
-        return buffer;
-    }
-
     VkResult Buffer::Map(void** ppData)
     {
         return _device->MapBuffer(this, ppData);

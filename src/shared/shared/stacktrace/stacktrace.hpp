@@ -10,8 +10,10 @@
 
 struct tag_stacktrace { };
 
-namespace boost
+namespace shared
 {
+    using namespace boost::stacktrace;
+
     namespace stacktrace
     {
         // More or less copypasted from boost.stacktrace. Frames within boost are skipped until we hit the first non-boost frame.

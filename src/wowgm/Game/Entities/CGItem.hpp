@@ -60,6 +60,6 @@ namespace wowgm::game::entities
         CGItem* ToItem() override;
         CGItem const* ToItem() const override;
 
-        void UpdateDescriptors(JamCliValuesUpdate const& valuesUpdate) override;
+        uint32_t UpdateDescriptors(JamCliValuesUpdate& valuesUpdate) override;
     };
 }

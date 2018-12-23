@@ -1,4 +1,4 @@
-#include "SHA1.hpp"
+#include <shared/cryptography/SHA1.hpp>
 
 #include <cstring>
 

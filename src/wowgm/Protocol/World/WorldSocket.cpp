@@ -1,5 +1,4 @@
 #include "WorldSocket.hpp"
-#include "Logger.hpp"
 #include "Packet.hpp"
 #include "Opcodes.hpp"
 #include "PacketLogger.hpp"
@@ -9,6 +8,7 @@
 #include <boost/core/demangle.hpp>
 #include <typeinfo>
 #include <iomanip>
+#include <shared/log/log.hpp>
 
 namespace wowgm::protocol::world
 {
@@ -116,7 +116,7 @@ namespace wowgm::protocol::world
             if (isCompressed)
                 worldPacket.Decompress(GetDecompressionStream());
 
-            LOG_INFO << "[S->C] " << worldPacket.GetOpcode() << " (0x" << std::hex << std::setw(4) << std::setfill('0') << uint32_t(worldPacket.GetOpcode()) << ", " << std::dec << worldPacket.size() << " bytes" << (isCompressed ? ", compressed" : "" ) << ")";
+            LOG_INFO("[S->C] {0} (0x{0:X4}, {1} bytes)", GetOpcodeNameForLogging(worldPacket.GetOpcode()), worldPacket.GetOpcode(), worldPacket.size());
 
             PacketLogger::WriteServerPacket(&worldPacket);
 
@@ -131,7 +131,7 @@ namespace wowgm::protocol::world
             if (serverInitializer != ServerConnectionInitialize)
                 return false;
 
-            LOG_INFO << "Connection initialized.";
+            LOG_INFO("Connection initialized.");
 
             _isInitialized = true;
 
@@ -171,7 +171,7 @@ namespace wowgm::protocol::world
             uint32_t packetSize = queued->size();
             ClientPacketHeader packetHeader(uint16_t(queued->size() + ClientPacketHeader::opcode_size), queued->GetOpcode());
 
-            LOG_INFO << "[C->S] " << packetHeader.Command << " (0x" << std::hex << std::setw(4) << std::setfill('0') << uint32_t(packetHeader.Command) << ", " << std::dec << queued->size() << " bytes)";
+            LOG_INFO("[C->S] {0} (0x{1}, {2} bytes)", GetOpcodeNameForLogging(packetHeader.Command), uint32_t(packetHeader.Command), queued->size());
 
             if (queued->NeedsEncryption())
                 _authCrypt.EncryptSend(packetHeader.Data, ClientPacketHeader::data_size);

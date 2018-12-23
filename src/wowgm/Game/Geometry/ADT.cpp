@@ -1,6 +1,7 @@
 #include "ADT.hpp"
-#include "Assert.hpp"
-#include "Logger.hpp"
+
+#include <shared/assert/assert.hpp>
+#include <shared/log/log.hpp>
 
 #include <sstream>
 #include <cstring>
@@ -113,7 +114,7 @@ namespace wowgm::game::geometry
             default:
             {
                 std::string_view chunkIdentifier(reinterpret_cast<char const*>(&identifier), 4);
-                LOG_INFO << "ADT Loading - Skipped " << chunkIdentifier << " chunk (" << content.size() << " bytes)";
+                LOG_INFO("ADT Loading - Skipped {} chunk ({} bytes)", chunkIdentifier, content.size());
                 break;
             }
         }
@@ -234,7 +235,7 @@ namespace wowgm::game::geometry
             default:
             {
                 std::string_view chunkIdentifier(reinterpret_cast<char const*>(&identifier), 4);
-                LOG_INFO << "ADT [MCNK] Skipped " << chunkIdentifier << " chunk (" << content.size() << " bytes)";
+                LOG_INFO("ADT [MCNK] Skipped {} chunk ({} bytes)", chunkIdentifier, content.size());
                 break;
             }
         }

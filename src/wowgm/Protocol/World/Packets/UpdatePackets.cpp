@@ -1,8 +1,8 @@
 #include "UpdatePackets.hpp"
 #include "PacketUtils.hpp"
-#include "Assert.hpp"
+#include <shared/assert/assert.hpp>
 #if _DEBUG
-#include "Logger.hpp"
+
 #endif
 
 namespace wowgm::protocol::world::packets
@@ -395,10 +395,6 @@ namespace wowgm::protocol::world::packets
                         ObjectGuid destroyGuid;
                         _worldPacket.ReadPackedGuid(destroyGuid);
                         DestroyObjects.push_back(destroyGuid);
-
-#if _DEBUG
-                        LOG_DEBUG << "Destroying " << destroyGuid.ToString();
-#endif
                     }
 
                     break;
@@ -407,9 +403,6 @@ namespace wowgm::protocol::world::packets
                 case UpdateType::CreateObject2:
                 {
                     _worldPacket.ReadPackedGuid(objCreate.GUID);
-#if _DEBUG
-                    LOG_DEBUG << "Received create block for " << objCreate.GUID.ToString();
-#endif
                     _worldPacket >> objCreate.Movement;
                     _worldPacket >> objCreate.Values;
                     break;
@@ -417,9 +410,6 @@ namespace wowgm::protocol::world::packets
                 case UpdateType::Values:
                 {
                     _worldPacket.ReadPackedGuid(objCreate.GUID);
-#if _DEBUG
-                    LOG_DEBUG << "Received values update for " << objCreate.GUID.ToString();
-#endif
                     _worldPacket >> objCreate.Values;
 
                     break;

@@ -1,3 +1,4 @@
+# extstd.CMakeLists
 
 CollectSourceFiles(
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -14,25 +15,23 @@ add_library(extstd
 
 CollectIncludeDirectories(
   ${CMAKE_CURRENT_SOURCE_DIR}
-  PUBLIC_INCLUDES
+  PRIVATE_INCLUDES
   # Excludes
   # ...
 )
 
 target_include_directories(extstd
   PUBLIC
-    ${CMAKE_BINARY_DIR}
-    ${PUBLIC_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}
   PRIVATE
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${Boost_INCLUDE_DIR}
+    ${PRIVATE_INCLUDES}
+    ${Boost_INCLUDE_DIRS}
 )
 
-set(EXTSTD_INCLUDE_DIRS ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+set(EXTSTD_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Path to src/extstd")
 
 target_link_libraries(extstd
-  PUBLIC
+  PRIVATE
     boost
 )
 

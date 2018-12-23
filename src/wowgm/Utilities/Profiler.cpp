@@ -1,6 +1,6 @@
 #include "Profiler.hpp"
 
-#include "Logger.hpp"
+#include <shared/log/log.hpp>
 
 profiler_manager* profiler_manager::instance()
 {
@@ -29,9 +29,9 @@ void profiler_manager::report(std::string&& str, std::chrono::microseconds ns)
     }
 
     if (ref->count == 1)
-        LOG_PERFORMANCE << str << ": Execution time: " << (float(ref->min) / 1000.0f) << " milliseconds";
+        LOG_INFO("{}: Execution time: {} ms", str, float(ref->min) / 1000.0f);
     else
-        LOG_PERFORMANCE << str << ": Execution time: " << (float(ref->min) / 1000.0f) << " to " << (float(ref->max) / 1000.0f) << " milliseconds (" << (float(ref->avg) / 1000.0f) << " average).";
+        LOG_INFO("{}: Execution time: {} to {} ms", str, float(ref->min) / 1000.0f, float(ref->max) / 1000.0f);
 }
 
 profiler::profiler(std::string&& str) : _start(std::chrono::high_resolution_clock::now()), _name(std::move(str))

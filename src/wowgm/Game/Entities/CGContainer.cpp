@@ -35,23 +35,25 @@ namespace wowgm::game::entities
         return static_cast<CGItem const*>(this);
     }
 
-    void CGContainer::UpdateDescriptors(JamCliValuesUpdate const& valuesUpdate)
+    uint32_t CGContainer::UpdateDescriptors(JamCliValuesUpdate& valuesUpdate)
     {
-        CGItem::UpdateDescriptors(valuesUpdate);
+        uint32_t startOffset = CGItem::UpdateDescriptors(valuesUpdate);
+        uint8_t* itemDatabase = reinterpret_cast<uint8_t*>(&GetContainerData());
 
-        uint8_t* itemDataBase = reinterpret_cast<uint8_t*>(&GetContainerData());
-        for (auto&& itr : valuesUpdate.Descriptors)
+        auto itr = valuesUpdate.Descriptors.begin();
+        while (itr != valuesUpdate.Descriptors.end())
         {
-            auto offset = itr.first * 4;
-
-            if (offset <= sizeof(CGItemData) + sizeof(CGObjectData))
+            uint32_t calculatedOffset = itr->first * 4 - startOffset;
+            if (calculatedOffset > sizeof(CGContainerData))
+            {
+                ++itr;
                 continue;
+            }
 
-            offset -= sizeof(CGObjectData) + sizeof(CGObjectData);
-            if (offset > sizeof(CGItemData))
-                continue;
-
-            *reinterpret_cast<uint32_t*>(itemDataBase + offset) = itr.second;
+            *reinterpret_cast<uint32_t*>(itemDatabase + calculatedOffset) = itr->second;
+            itr = valuesUpdate.Descriptors.erase(itr);
         }
+
+        return startOffset + sizeof(CGContainerData);
     }
 }

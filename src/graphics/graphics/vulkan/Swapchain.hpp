@@ -30,6 +30,7 @@ namespace gfx::vk
         VkResult AcquireNextImage(uint32_t* pImageIndex, VkSemaphore* pImageAcquiredSemaphore);
 
         Image* GetImage(uint32_t index);
+        uint32_t GetImageIndex(Image* image);
 
     private:
         VkResult Allocate();

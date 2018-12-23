@@ -1,3 +1,4 @@
+# graphics.CMakeLists
 
 CollectSourceFiles(
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -6,8 +7,8 @@ CollectSourceFiles(
   # ...
 )
 
-find_package(glm REQUIRED)
-find_package(GLI REQUIRED)
+# find_package(glm REQUIRED)
+# find_package(GLI REQUIRED)
 
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -17,31 +18,34 @@ add_library(graphics
 
 CollectIncludeDirectories(
   ${CMAKE_CURRENT_SOURCE_DIR}
-  PUBLIC_INCLUDES
+  PRIVATE_INCLUDES
   # Excludes
   # ...
 )
 
 target_include_directories(graphics
   PUBLIC
-    ${CMAKE_BINARY_DIR}
-    ${PUBLIC_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}
   PRIVATE
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${SHARED_INCLUDE_DIRS}
-    # The graphics stuff.
+    ${PRIVATE_INCLUDES}    # src/graphics
+	${SHARED_INCLUDE_DIRS} # src/extstd
+	${EXTSTD_INCLUDE_DIRS} # src/shared
+	
     ${IMGUI_INCLUDE_DIR}
+	
+	# Memory allocator
     ${CMAKE_SOURCE_DIR}/dep/vma
+	
+	# Shader reflection
     ${CMAKE_SOURCE_DIR}/dep/spirv-compiler/glslang
     ${CMAKE_SOURCE_DIR}/dep/spirv-compiler/SPIRV-cross
 )
 
 target_link_libraries(graphics
-  PUBLIC
-    extstd
-    shared
   PRIVATE
     Vulkan::Vulkan
+    shared
+    extstd
     glfw
     glm
     glslang
@@ -53,6 +57,12 @@ target_link_libraries(graphics
     spirv-cross-glsl
 )
 
-add_dependencies(graphics extstd shared)
+add_dependencies(graphics shared extstd)
 
-add_definitions(-DWIN32_LEAN_AND_MEAN)
+# add_dependencies(graphics glfw)
+
+set(GRAPHICS_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Path to src/graphics")
+
+if( WIN32 )
+  add_definitions(-DWIN32_LEAN_AND_MEAN)
+endif()

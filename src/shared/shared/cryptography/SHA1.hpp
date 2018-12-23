@@ -4,7 +4,7 @@
 #include <type_traits>
 #include <openssl/sha.h>
 
-#include "BigNumber.hpp"
+#include <shared/cryptography/BigNumber.hpp>
 
 namespace shared::crypto
 {

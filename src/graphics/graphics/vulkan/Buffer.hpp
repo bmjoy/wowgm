@@ -8,11 +8,12 @@
 
 namespace gfx::vk
 {
-    class Buffer // : public NamedObject<Buffer>
+    class Buffer
     {
-    public:
+        friend class Device;
+        Buffer() { }
 
-        static Buffer* CreateFromDevice(Device* device, const BufferCreateInfo* pCreateInfo, VkBuffer bufferHandle, VmaAllocation allocation);
+    public:
 
         Device* GetDevice() const { return _device; }
         VkBuffer GetHandle() const { return _handle; }

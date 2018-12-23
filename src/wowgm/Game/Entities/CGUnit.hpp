@@ -123,6 +123,6 @@ namespace wowgm::game::entities
         CGUnit* ToUnit() override;
         CGUnit const* ToUnit() const override;
 
-        void UpdateDescriptors(JamCliValuesUpdate const& valuesUpdate) override;
+        uint32_t UpdateDescriptors(JamCliValuesUpdate& valuesUpdate) override;
     };
 }

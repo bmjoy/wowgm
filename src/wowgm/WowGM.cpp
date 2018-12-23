@@ -10,13 +10,6 @@ namespace po = boost::program_options;
 
 int main(int argc, char* argv[])
 {
-    // Seed the OpenSSL's PRNG here.
-    // That way it won't auto-seed when calling BigNumber::SetRand and slow down the first world login
-    wowgm::cryptography::BigNumber seed;
-    seed.SetRand(16 * 8);
-
-    wowgm::log::initialize();
-
     wowgm::filesystem::DiskFileSystem::Instance()->Initialize(".");
 
     try {

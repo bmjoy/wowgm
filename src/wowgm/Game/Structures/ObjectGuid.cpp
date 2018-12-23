@@ -1,5 +1,5 @@
 #include "ObjectGuid.hpp"
-#include "Assert.hpp"
+#include <shared/assert/assert.hpp>
 
 #include <sstream>
 #include <iomanip>

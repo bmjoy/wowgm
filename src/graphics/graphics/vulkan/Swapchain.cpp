@@ -206,4 +206,18 @@ namespace gfx::vk
         // Return success.
         return VK_SUCCESS;
     }
+
+    uint32_t Swapchain::GetImageIndex(Image* image)
+    {
+        uint32_t idx = 0;
+
+        for (auto&& itr : _images)
+        {
+            if (itr->GetHandle() == image->GetHandle())
+                return idx;
+
+            ++idx;
+        }
+        return -1;
+    }
 }

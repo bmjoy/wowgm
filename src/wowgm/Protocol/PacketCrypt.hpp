@@ -1,13 +1,14 @@
 #pragma once
 
-#include "BigNumber.hpp"
-#include "ARC4.hpp"
+#include <shared/cryptography/BigNumber.hpp>
+
+#include <shared/cryptography/ARC4.hpp>
 
 #include <cstdint>
 
 namespace wowgm::protocol
 {
-    using namespace wowgm::cryptography;
+    using namespace shared::crypto;
 
     class PacketCrypt
     {

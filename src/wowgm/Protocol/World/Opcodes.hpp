@@ -1408,13 +1408,4 @@ namespace wowgm::protocol::world
 
 
     const char* GetOpcodeNameForLogging(Opcode opcode);
-
-    /// Outputs stacktrace in a human readable format to output stream; unsafe to use in async handlers.
-    template <class CharT, class TraitsT>
-    std::basic_ostream<CharT, TraitsT>& operator<<(std::basic_ostream<CharT, TraitsT>& os, Opcode opcode)
-    {
-        os << GetOpcodeNameForLogging(opcode);
-
-        return os;
-    }
 }

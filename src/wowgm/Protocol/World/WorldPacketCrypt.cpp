@@ -1,6 +1,7 @@
 #include "WorldPacketCrypt.hpp"
-#include "HmacHash.hpp"
-#include "BigNumber.hpp"
+
+#include <shared/cryptography/HmacHash.hpp>
+#include <shared/cryptography/BigNumber.hpp>
 
 #include <cstring>
 

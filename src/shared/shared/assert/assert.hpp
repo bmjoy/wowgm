@@ -7,16 +7,15 @@
 #include <boost/assert.hpp>
 #include <iostream>
 
-#include "stacktrace.hpp"
+namespace shared::stacktrace
+{
+    class application_stacktrace;
+}
 
-namespace wowgm::exceptions
+namespace shared::exceptions
 {
     template <class E = std::runtime_error, typename... Args>
-    inline void throw_with_trace(Args&&... args)
-    {
-        E ex(std::forward<Args>(args)...);
-        throw boost::enable_error_info(ex) << traced(boost::stacktrace::application_stacktrace());
-    }
+    inline void throw_with_trace(Args&&... args);
 }
 
 namespace boost

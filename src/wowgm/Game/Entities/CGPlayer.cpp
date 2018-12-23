@@ -34,22 +34,26 @@ namespace wowgm::game::entities
         return static_cast<CGPlayerData&>(*this);
     }
 
-    void CGPlayer::UpdateDescriptors(JamCliValuesUpdate const& valuesUpdate)
+    uint32_t CGPlayer::UpdateDescriptors(JamCliValuesUpdate& valuesUpdate)
     {
-        CGUnit::UpdateDescriptors(valuesUpdate);
+        uint32_t startOffset = CGUnit::UpdateDescriptors(valuesUpdate);
 
-        uint8_t* unitDataBase = reinterpret_cast<uint8_t*>(&GetPlayerData());
-        for (auto&& itr : valuesUpdate.Descriptors)
+        uint8_t* unitDatabase = reinterpret_cast<uint8_t*>(&GetPlayerData());
+
+        auto itr = valuesUpdate.Descriptors.begin();
+        while (itr != valuesUpdate.Descriptors.end())
         {
-            auto offset = itr.first * 4;
-            if (offset <= sizeof(CGObjectData) + sizeof(CGUnitData))
+            uint32_t calculatedOffset = itr->first * 4 - startOffset;
+            if (calculatedOffset > sizeof(CGPlayerData))
+            {
+                ++itr;
                 continue;
+            }
 
-            offset -= sizeof(CGObjectData) + sizeof(CGUnitData);
-            if (offset > sizeof(CGPlayerData))
-                continue;
-
-            *reinterpret_cast<uint32_t*>(unitDataBase + offset) = itr.second;
+            *reinterpret_cast<uint32_t*>(unitDatabase + calculatedOffset) = itr->second;
+            itr = valuesUpdate.Descriptors.erase(itr);
         }
+
+        return startOffset + sizeof(CGPlayerData);
     }
 }

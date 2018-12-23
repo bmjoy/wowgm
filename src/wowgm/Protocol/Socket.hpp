@@ -2,7 +2,7 @@
 
 #include "BaseSocket.hpp"
 #include "MessageBuffer.hpp"
-#include "Assert.hpp"
+#include <shared/assert/assert.hpp>
 
 #include <boost/array.hpp>
 #include <boost/asio/ip/tcp.hpp>

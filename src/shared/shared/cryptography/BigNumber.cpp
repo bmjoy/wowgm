@@ -1,5 +1,5 @@
-#include "BigNumber.hpp"
-#include "SHA1.hpp"
+#include <shared/cryptography/BigNumber.hpp>
+#include <shared/cryptography/SHA1.hpp>
 
 #include <openssl/bn.h>
 #include <cstring>

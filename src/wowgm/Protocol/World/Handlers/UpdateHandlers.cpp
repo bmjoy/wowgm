@@ -26,7 +26,7 @@ namespace wowgm::protocol::world
         for (ObjectGuid const& itr : packet.DestroyObjects)
             ObjectAccessor::Destroy(itr);
 
-        for (CClientObjCreate const& itr : packet.Updates)
+        for (CClientObjCreate& itr : packet.Updates)
         {
             if (itr.UpdateType == UpdateType::Values)
             {

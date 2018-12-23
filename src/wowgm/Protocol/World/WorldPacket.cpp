@@ -1,5 +1,6 @@
 #include "WorldPacket.hpp"
-#include "Assert.hpp"
+
+#include <shared/assert/assert.hpp>
 
 namespace wowgm::protocol::world
 {

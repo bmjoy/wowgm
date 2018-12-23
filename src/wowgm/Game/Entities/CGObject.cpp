@@ -96,16 +96,25 @@ namespace wowgm::game::entities
         return static_cast<C3Vector const&>(*this);
     }
 
-    void CGObject::UpdateDescriptors(JamCliValuesUpdate const& valuesUpdate)
+    uint32_t CGObject::UpdateDescriptors(JamCliValuesUpdate& valuesUpdate)
     {
         uint8_t* objectDataBase = reinterpret_cast<uint8_t*>(&GetObjectData());
-        for (auto&& itr : valuesUpdate.Descriptors)
-        {
-            if (itr.first * 4 > sizeof(CGObjectData))
-                continue;
 
-            *reinterpret_cast<uint32_t*>(objectDataBase + itr.first * 4) = itr.second;
+        auto itr = valuesUpdate.Descriptors.begin();
+        while (itr != valuesUpdate.Descriptors.end())
+        {
+            uint32_t calculatedOffset = itr->first * 4;
+            if (calculatedOffset > sizeof(CGObjectData))
+            {
+                ++itr;
+                continue;
+            }
+
+            *reinterpret_cast<uint32_t*>(objectDataBase + calculatedOffset) = itr->second;
+            itr = valuesUpdate.Descriptors.erase(itr);
         }
+
+        return sizeof(CGObjectData);
     }
 
     TypeMask CGObject::GetTypeMask() const

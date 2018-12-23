@@ -46,7 +46,7 @@ namespace wowgm::game::entities
         CGObjectData const& GetObjectData() const;
         CGObjectData& GetObjectData();
 
-        virtual void UpdateDescriptors(JamCliValuesUpdate const& valuesUpdate);
+        virtual uint32_t UpdateDescriptors(JamCliValuesUpdate& valuesUpdate);
 
         virtual CGUnit* ToUnit();
         virtual CGUnit const* ToUnit() const;

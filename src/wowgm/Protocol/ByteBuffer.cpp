@@ -19,7 +19,7 @@
 #include "ByteBuffer.hpp"
 #include "MessageBuffer.hpp"
 #include "Utils.hpp"
-#include "Assert.hpp"
+#include <shared/assert/assert.hpp>
 #include "ObjectGuid.hpp"
 #include <sstream>
 #include <ctime>
