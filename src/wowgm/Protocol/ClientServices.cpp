@@ -18,6 +18,22 @@ using namespace wowgm::protocol::world;
 using namespace wowgm::protocol::authentification;
 using namespace wowgm::threading;
 
+template <typename T>
+struct fmt::formatter<ip::basic_endpoint<T>>
+{
+    using endpoint_t = ip::basic_endpoint<T>;
+
+    template <typename Context>
+    constexpr auto parse(Context& ctx) { return ctx.begin(); }
+
+    template <typename Format>
+    auto format(const endpoint_t& endpoint, Format& ctx)
+    {
+        boost::asio::ip::detail::endpoint temp_endpoint(endpoint.address(), endpoint.port());
+        return format_to(ctx.out(), "{}", temp_endpoint.to_string());
+    }
+};
+
 namespace wowgm::protocol
 {
     ClientServices* ClientServices::instance()

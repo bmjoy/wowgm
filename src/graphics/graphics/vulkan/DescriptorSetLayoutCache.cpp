@@ -14,8 +14,10 @@ namespace gfx::vk
 
     DescriptorSetLayoutCache::~DescriptorSetLayoutCache()
     {
-        for (auto it : _layouts)
+        for (DescriptorSetLayout* it : _layouts)
             delete it;
+
+        _layouts.clear();
     }
 
     VkResult DescriptorSetLayoutCache::CreateLayout(uint32_t setIndex, const std::vector<PipelineResource>& setResources, DescriptorSetLayout** pLayout)
@@ -25,14 +27,14 @@ namespace gfx::vk
         VkResult result = VK_SUCCESS;
 
         // Acquire access to the cache.
-        // _spinLock.Lock();
+        _spinLock.Lock();
 
         result = DescriptorSetLayout::Create(_device, setResources, &descriptorSetLayout);
-        // if (result == VK_SUCCESS)
-        //     _layouts.push_back(descriptorSetLayout);
+        if (result == VK_SUCCESS)
+            _layouts.push_back(descriptorSetLayout);
 
         // Release access to the cache.
-        // _spinLock.Unlock();
+        _spinLock.Unlock();
 
         // Return result.
         if (result == VK_SUCCESS)

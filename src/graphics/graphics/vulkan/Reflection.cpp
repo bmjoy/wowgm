@@ -15,6 +15,11 @@ namespace gfx::vk
 
             }
 
+            CustomCompiler(const std::uint32_t* code, uint32_t wordCount) : spirv_cross::CompilerGLSL(code, wordCount)
+            {
+
+            }
+
             VkAccessFlags GetAccessFlags(const spirv_cross::SPIRType& type)
             {
                 // SPIRV-Cross hack to get the correct readonly and writeonly attributes on ssbos.
@@ -39,9 +44,14 @@ namespace gfx::vk
             }
         };
 
-        bool ReflectResources(std::vector<uint32_t> const& spirvCode, VkShaderStageFlagBits shaderStage, std::vector<PipelineResource>& resourceContainer)
+        bool ReflectResources(std::vector<uint8_t> const& spirv, VkShaderStageFlagBits shaderStage, std::vector<PipelineResource>& resourceContainer)
         {
-            CustomCompiler compiler(spirvCode);
+            const uint32_t* spirvCode = reinterpret_cast<const uint32_t*>(spirv.data());
+            uint32_t wordCount = spirv.size() / sizeof(uint32_t);
+            if ((spirv.size() % sizeof(uint32_t)) != 0)
+                ++wordCount;
+
+            CustomCompiler compiler(spirvCode, wordCount);
             spirv_cross::CompilerGLSL::Options opts = compiler.get_common_options();
             opts.enable_420pack_extension = true;
             compiler.set_common_options(opts);
@@ -224,15 +234,20 @@ namespace gfx::vk
             {
                 auto nonReadable = compiler.get_decoration(resource.id, spv::DecorationNonReadable);
                 auto nonWriteable = compiler.get_decoration(resource.id, spv::DecorationNonWritable);
+
                 VkAccessFlags access = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
-                if (nonReadable) access = VK_ACCESS_SHADER_WRITE_BIT;
-                else if (nonWriteable) access = VK_ACCESS_SHADER_READ_BIT;
+                if (nonReadable)
+                    access = VK_ACCESS_SHADER_WRITE_BIT;
+                else if (nonWriteable)
+                    access = VK_ACCESS_SHADER_READ_BIT;
 
                 const auto& typeInfo = compiler.get_type_from_variable(resource.id);
 
                 PipelineResource pipelineResource = {};
                 pipelineResource.stages = shaderStage;
-                pipelineResource.resourceType = (typeInfo.image.dim == spv::Dim::DimBuffer) ? PIPELINE_RESOURCE_TYPE_STORAGE_TEXEL_BUFFER : PIPELINE_RESOURCE_TYPE_STORAGE_IMAGE;
+                pipelineResource.resourceType = (typeInfo.image.dim == spv::Dim::DimBuffer)
+                    ? PIPELINE_RESOURCE_TYPE_STORAGE_TEXEL_BUFFER
+                    : PIPELINE_RESOURCE_TYPE_STORAGE_IMAGE;
                 pipelineResource.access = access;
                 pipelineResource.set = compiler.get_decoration(resource.id, spv::DecorationDescriptorSet);
                 pipelineResource.binding = compiler.get_decoration(resource.id, spv::DecorationBinding);

@@ -3,14 +3,21 @@
 #include <vector>
 #include <string>
 #include <string_view>
+#include <cstdint>
 
 #include <graphics/vulkan/VK.hpp>
 
 namespace gfx::vk
 {
-    class Shader // : public NamedObject<Shader>
+    class Device;
+
+    class Shader final // : public NamedObject<Shader>
     {
     public:
+        ~Shader();
+
+        static Shader* FromDisk(Device* device, const char* filePath, const char* entryPoint, VkShaderStageFlagBits stage);
+
         static VkResult Create(Device* pDevice, const ShaderModuleCreateInfo* pCreateInfo, Shader** pShader);
 
         VkShaderModule GetHandle() const { return _handle; }
@@ -20,8 +27,6 @@ namespace gfx::vk
         const std::string_view GetEntryPoint() const { return std::string_view(_entryPoint); }
 
         const std::vector<PipelineResource>& GetResources() const { return _resources; }
-
-        ShaderModuleCreateInfo const& GetCreateInfo() const { return _createInfo; }
 
         Instance* GetInstance() const;
         Device* GetDevice() const;
@@ -36,8 +41,6 @@ namespace gfx::vk
         std::vector<PipelineResource> _resources;
 
         std::string _entryPoint;
-        std::vector<uint32_t> _spirv;
-
-        ShaderModuleCreateInfo _createInfo;
+        std::vector<uint8_t> _spirv;
     };
 }

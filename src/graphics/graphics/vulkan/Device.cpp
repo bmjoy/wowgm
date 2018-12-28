@@ -11,6 +11,8 @@
 #include <graphics/vulkan/Framebuffer.hpp>
 #include <graphics/vulkan/Helpers.hpp>
 
+#include <extstd/literals/memory.hpp>
+
 #include <vector>
 
 namespace gfx::vk
@@ -47,10 +49,10 @@ namespace gfx::vk
         VkDeviceCreateInfo deviceCreateInfo{};
         deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
         deviceCreateInfo.pNext = pCreateInfo->pNext;
-        deviceCreateInfo.ppEnabledExtensionNames = pCreateInfo->ppEnabledExtensionNames;
-        deviceCreateInfo.ppEnabledLayerNames = pCreateInfo->ppEnabledLayerNames;
-        deviceCreateInfo.enabledExtensionCount = pCreateInfo->enabledExtensionCount;
-        deviceCreateInfo.enabledLayerCount = pCreateInfo->enabledLayerCount;
+        deviceCreateInfo.ppEnabledExtensionNames = pCreateInfo->enabledExtensionNames.data();
+        deviceCreateInfo.ppEnabledLayerNames = pCreateInfo->enabledLayerNames.data();
+        deviceCreateInfo.enabledExtensionCount = pCreateInfo->enabledExtensionNames.size();
+        deviceCreateInfo.enabledLayerCount = pCreateInfo->enabledLayerNames.size();
 
         deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
         deviceCreateInfo.queueCreateInfoCount = uint32_t(queueCreateInfos.size());
@@ -102,7 +104,7 @@ namespace gfx::vk
 
         // Create a permanently pinned 8 MB data buffer for buffer copies with the GPU on targets that are not CPU visible
         BufferCreateInfo bufferCreateInfo = {};
-        bufferCreateInfo.size = 8 * 1024 * 1024;
+        bufferCreateInfo.size = 8_MB;
         bufferCreateInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
         bufferCreateInfo.pBufferName = "Staging buffer";
         result = device->CreateBuffer(VMA_MEMORY_USAGE_CPU_ONLY, VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT, &bufferCreateInfo, &device->_stagingBuffer);
@@ -128,18 +130,27 @@ namespace gfx::vk
     {
         vkDeviceWaitIdle(_handle);
 
+        DestroyBuffer(_stagingBuffer);
+
         delete _descriptorSetLayoutCache;
         delete _pipelineCache;
+
+        vkDestroyDevice(_handle, nullptr);
     }
 
     VkResult Device::MapBuffer(Buffer* pBuffer, void** ppData)
     {
-        return vmaMapMemory(_allocator, pBuffer->GetAllocation(), ppData);
+        VkResult result = vmaMapMemory(_allocator, pBuffer->_allocation, ppData);
+        pBuffer->SetMapped(result == VK_SUCCESS);
+        return result;
     }
 
     void Device::UnmapBuffer(Buffer* pBuffer)
     {
-        vmaUnmapMemory(_allocator, pBuffer->GetAllocation());
+        if (!pBuffer->_mapped)
+            return;
+
+        vmaUnmapMemory(_allocator, pBuffer->_allocation);
     }
 
     VkResult Device::CreateBuffer(VmaMemoryUsage memoryUsage, VmaAllocationCreateFlagBits allocationFlags, const BufferCreateInfo* pCreateInfo, Buffer** ppBuffer)
@@ -210,8 +221,10 @@ namespace gfx::vk
 
     void Device::DestroyBuffer(Buffer* pBuffer)
     {
-        if (pBuffer->GetAllocation() != VK_NULL_HANDLE)
-            vmaDestroyBuffer(_allocator, pBuffer->GetHandle(), pBuffer->GetAllocation());
+        UnmapBuffer(pBuffer);
+
+        if (pBuffer->_allocation != VK_NULL_HANDLE)
+            vmaDestroyBuffer(_allocator, pBuffer->GetHandle(), pBuffer->_allocation);
         else
             vkDestroyBuffer(_handle, pBuffer->GetHandle(), nullptr);
 
@@ -389,7 +402,7 @@ namespace gfx::vk
 
                         // Flush the memory write.
                         VmaAllocationInfo allocInfo = {};
-                        vmaGetAllocationInfo(_allocator, _stagingBuffer->GetAllocation(), &allocInfo);
+                        vmaGetAllocationInfo(_allocator, _stagingBuffer->_allocation, &allocInfo);
 
                         VkMappedMemoryRange memoryRange = {};
                         memoryRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
@@ -532,7 +545,7 @@ namespace gfx::vk
 
                         // Flush the memory write.
                         VmaAllocationInfo allocInfo = {};
-                        vmaGetAllocationInfo(_allocator, _stagingBuffer->GetAllocation(), &allocInfo);
+                        vmaGetAllocationInfo(_allocator, _stagingBuffer->_allocation, &allocInfo);
 
                         VkMappedMemoryRange memoryRange = {};
                         memoryRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
@@ -599,13 +612,9 @@ namespace gfx::vk
     {
         CommandPool* pool = GetCommandPool(pQueue);
 
-        std::vector<VkCommandBuffer> handles(commandBufferCount);
-        VkResult result = pool->AllocateCommandBuffers(level, commandBufferCount, handles.data(), pNext);
+        VkResult result = pool->AllocateCommandBuffers(level, commandBufferCount, ppCommandBuffers, pNext);
         if (result != VK_SUCCESS)
             return result;
-
-        for (uint32_t i = 0; i < commandBufferCount; ++i)
-            ppCommandBuffers[i] = new CommandBuffer(pool, handles[i], level);
 
         return VK_SUCCESS;
     }

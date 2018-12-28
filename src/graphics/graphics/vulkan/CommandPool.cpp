@@ -32,7 +32,7 @@ namespace gfx::vk
             vkDestroyCommandPool(_device->GetHandle(), _handle, nullptr);
     }
 
-    VkResult CommandPool::AllocateCommandBuffers(VkCommandBufferLevel level, uint32_t commandBufferCount, VkCommandBuffer* pCommandBuffers, const void* pNext)
+    VkResult CommandPool::AllocateCommandBuffers(VkCommandBufferLevel level, uint32_t commandBufferCount, CommandBuffer** pCommandBuffers, const void* pNext)
     {
         // Safe guard access to internal resources across threads.
         _spinLock.Lock();
@@ -52,16 +52,41 @@ namespace gfx::vk
         // Unlock access to internal resources.
         _spinLock.Unlock();
 
+        if (result == VK_SUCCESS)
+        {
+            for (uint32_t i = 0; i < commandBufferCount; ++i)
+                pCommandBuffers[i] = new CommandBuffer(this, commandBuffers[i], level);
+        }
+
         // Return result.
         return result;
     }
 
-    void CommandPool::FreeCommandBuffers(uint32_t commandBufferCount, const VkCommandBuffer* pCommandBuffers)
+    void CommandPool::FreeCommandBuffer(CommandBuffer* commandBuffer)
+    {
+        _spinLock.Lock();
+
+        auto handle = commandBuffer->GetHandle();
+
+        vkFreeCommandBuffers(_device->GetHandle(), _handle, 1, &handle);
+
+        _spinLock.Unlock();
+    }
+
+    void CommandPool::FreeCommandBuffers(uint32_t commandBufferCount, CommandBuffer** pCommandBuffers)
     {
         // Safe guard access to internal resources across threads.
         _spinLock.Lock();
 
-        vkFreeCommandBuffers(_device->GetHandle(), _handle, commandBufferCount, pCommandBuffers);
+        std::vector<VkCommandBuffer> cmdBuffers(commandBufferCount);
+        for (uint32_t i = 0; i < commandBufferCount; ++i)
+        {
+            cmdBuffers[i] = pCommandBuffers[i]->GetHandle();
+
+            pCommandBuffers[i]->MarkAsDeleted();
+        }
+
+        vkFreeCommandBuffers(_device->GetHandle(), _handle, commandBufferCount, cmdBuffers.data());
 
         _spinLock.Unlock();
     }

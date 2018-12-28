@@ -21,10 +21,16 @@ namespace gfx::vk
     {
         friend class PipelineCache;
 
+        Pipeline();
+
+    public:
+
+        ~Pipeline();
+
     public:
         static VkResult Create(Device* pDevice, const GraphicsPipelineCreateInfo* pCreateInfo, Pipeline** ppPipeline);
 
-        static VkResult Create(Device* pDevice, const ComputePipelineCreateInfo* pCreateInfo, Pipeline** ppPipeline);
+        // static VkResult Create(Device* pDevice, const ComputePipelineCreateInfo* pCreateInfo, Pipeline** ppPipeline);
 
         VkPipelineBindPoint GetBindPoint() const { return _bindPoint; }
 
@@ -32,7 +38,7 @@ namespace gfx::vk
 
         Device* GetDevice() const { return _device; }
 
-        VkPipelineLayout GetLayout() const { return _layout; }
+        VkPipelineLayout GetLayout() const { return _pipelineLayout; }
 
         PipelineDynamicState const& GetDynamicStates() const { return _dynamicState; }
 
@@ -47,9 +53,10 @@ namespace gfx::vk
 
     private:
         VkPipeline _handle = VK_NULL_HANDLE;
-        VkPipelineLayout _layout = VK_NULL_HANDLE;
+        VkPipelineLayout _pipelineLayout = VK_NULL_HANDLE;
 
         Device* _device = nullptr;
+        RenderPass* _renderPass = nullptr;
 
         VkPipelineBindPoint _bindPoint;
         PipelineDynamicState _dynamicState;

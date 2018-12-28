@@ -4,14 +4,9 @@
 
 namespace gfx::vk
 {
-    VkResult Buffer::Map(void** ppData)
+    void Buffer::SetMapped(bool mapped)
     {
-        return _device->MapBuffer(this, ppData);
-    }
-
-    void Buffer::Unmap()
-    {
-        _device->UnmapBuffer(this);
+        _mapped = mapped;
     }
 
     Instance* Buffer::GetInstance() const
@@ -22,7 +17,7 @@ namespace gfx::vk
     VkResult Buffer::WriteBytes(VkDeviceSize offset, const uint8_t* data, VkDeviceSize dataSize)
     {
         uint8_t* mappedData = nullptr;
-        VkResult mapResult = Map((void**)&mappedData);
+        VkResult mapResult = _device->MapBuffer(this, (void**)&mappedData);
         if (mapResult == VK_SUCCESS)
         {
             if (offset + dataSize > _size)

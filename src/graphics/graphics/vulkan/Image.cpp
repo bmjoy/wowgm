@@ -2,6 +2,7 @@
 #include <graphics/vulkan/CommandBuffer.hpp>
 #include <graphics/vulkan/Helpers.hpp>
 #include <graphics/vulkan/Device.hpp>
+#include <graphics/vulkan/Instance.hpp>
 
 namespace gfx::vk
 {
@@ -15,8 +16,8 @@ namespace gfx::vk
         memcpy(&imageObject->_createInfo, pImageCreateInfo, sizeof(ImageCreateInfo));
 
 #if _DEBUG
-        // if (pImageCreateInfo->pImageName != nullptr)
-        //     imageObject->SetName(pImageCreateInfo->pImageName);
+        if (pImageCreateInfo->pImageName != nullptr)
+            device->GetInstance()->SetObjectName(device, imageObject, pImageCreateInfo->pImageName);
 #endif
 
         return imageObject;

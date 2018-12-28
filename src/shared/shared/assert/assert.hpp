@@ -7,15 +7,25 @@
 #include <boost/assert.hpp>
 #include <iostream>
 
-namespace shared::stacktrace
-{
-    class application_stacktrace;
-}
+#include <shared/stacktrace/stacktrace.hpp>
 
-namespace shared::exceptions
+#include <fmt/format.h>
+
+namespace shared::assert
 {
-    template <class E = std::runtime_error, typename... Args>
-    inline void throw_with_trace(Args&&... args);
+    template <typename E = std::runtime_error, typename... Args>
+    inline void throw_with_trace(const char* str, Args&&... args)
+    {
+        E ex(fmt::format(str, std::forward<Args>(args)...).c_str());
+        throw boost::enable_error_info(ex) << traced(shared::stacktrace::application_stacktrace());
+    }
+
+    template <typename E = std::runtime_error>
+    inline void throw_with_trace(const char* str)
+    {
+        E ex(str);
+        throw boost::enable_error_info(ex) << traced(shared::stacktrace::application_stacktrace());
+    }
 }
 
 namespace boost

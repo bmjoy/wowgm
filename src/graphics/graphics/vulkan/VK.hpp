@@ -76,19 +76,19 @@ namespace gfx::vk
     struct InstanceCreateInfo
     {
         const ApplicationInfo*                        pApplicationInfo;
-        const char* const*                            ppEnabledLayerNames;
-        const char* const*                            ppEnabledExtensionNames;
-        uint32_t                                      enabledLayerCount;
-        uint32_t                                      enabledExtensionCount;
-        VkInstanceCreateFlags                         flags;
+        std::vector<const char*>                      enabledLayerNames;
+        std::vector<const char*>                      enabledExtensionNames;
+        VkInstanceCreateFlags                         flags = 0;
         struct {
             VkDebugUtilsMessageSeverityFlagsEXT       messageSeverity;
             VkDebugUtilsMessageTypeFlagsEXT           messageType;
             PFN_vkDebugUtilsMessengerCallbackEXT      messengerCallback = nullptr;
+            void*                                     pUserData = nullptr;
         } debugUtils;
         struct {
             VkDebugReportFlagsEXT                     flags;
             PFN_vkDebugReportCallbackEXT              callback = nullptr;
+            void*                                     pUserData = nullptr;
         } debugReport;
     };
 
@@ -96,10 +96,8 @@ namespace gfx::vk
     {
         const void*                                   pNext = nullptr;
         PhysicalDevice*                               physicalDevice = nullptr;
-        const char* const*                            ppEnabledLayerNames = nullptr;
-        const char* const*                            ppEnabledExtensionNames = nullptr;
-        uint32_t                                      enabledLayerCount = 0;
-        uint32_t                                      enabledExtensionCount = 0;
+        std::vector<const char*>                      enabledLayerNames;
+        std::vector<const char*>                      enabledExtensionNames;
     };
 
     struct BufferCreateInfo
@@ -169,11 +167,9 @@ namespace gfx::vk
     struct PipelineViewportStateCreateInfo
     {
         const void*                                   pNext = nullptr;
-        const VkViewport*                             pViewports;
-        const VkRect2D*                               pScissors;
+        std::vector<VkViewport>                       viewports;
+        std::vector<VkRect2D>                         scissors;
         VkPipelineViewportStateCreateFlags            flags;
-        uint32_t                                      viewportCount;
-        uint32_t                                      scissorCount;
     };
 
     struct PipelineRasterizationStateCreateInfo
@@ -225,8 +221,7 @@ namespace gfx::vk
         VkPipelineColorBlendStateCreateFlags          flags;
         VkBool32                                      logicOpEnable = VK_FALSE;
         VkLogicOp                                     logicOp = VK_LOGIC_OP_COPY;
-        uint32_t                                      attachmentCount;
-        const VkPipelineColorBlendAttachmentState*    pAttachments;
+        std::vector<VkPipelineColorBlendAttachmentState> attachments;
         float                                         blendConstants[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
     };
 
@@ -238,6 +233,7 @@ namespace gfx::vk
         const VkDynamicState*                         pDynamicStates;
     };
 
+#pragma pack(push, 1)
     struct PipelineDynamicState
     {
         bool                                          viewport : 1;
@@ -260,24 +256,24 @@ namespace gfx::vk
             return viewport || scissors || lineWidth || depthBias || blendConstants || depthBounds || stencilCompareMask || stencilWriteMask || stencilReference;
         }
     };
+#pragma pack(pop)
 
     struct GraphicsPipelineCreateInfo
     {
         const void*                                      pNext = nullptr;
-        VkPipelineCreateFlags                            flags;
-        uint32_t                                         stageCount;
-        const PipelineShaderStageCreateInfo*             pStages;
-        PipelineVertexInputStateCreateInfo               vertexInputState;
-        PipelineInputAssemblyStateCreateInfo             inputAssemblyState;
-        PipelineTessellationStateCreateInfo              tessellationState;
-        PipelineViewportStateCreateInfo                  viewportState;
-        PipelineRasterizationStateCreateInfo             rasterizationState;
-        PipelineMultisampleStateCreateInfo               multisampleState;
+        VkPipelineCreateFlags                            flags = 0;
+        std::vector<Shader*>                             shaders;
+        PipelineVertexInputStateCreateInfo               vertexInputState{};
+        PipelineInputAssemblyStateCreateInfo             inputAssemblyState{};
+        PipelineTessellationStateCreateInfo              tessellationState{};
+        PipelineViewportStateCreateInfo                  viewportState{};
+        PipelineRasterizationStateCreateInfo             rasterizationState{};
+        PipelineMultisampleStateCreateInfo               multisampleState{};
         PipelineDepthStencilStateCreateInfo              depthStencilState;
-        PipelineColorBlendStateCreateInfo                colorBlendState;
-        PipelineDynamicState                             dynamicState;
+        PipelineColorBlendStateCreateInfo                colorBlendState{};
+        PipelineDynamicState                             dynamicState{};
         VkPipelineLayout*                                pLayout = nullptr; // Optional. If not set, we generate the layout from SPIRV reflection.
-        VkRenderPass                                     renderPass = VK_NULL_HANDLE;
+        RenderPass*                                      renderPass = nullptr;
         uint32_t                                         subpass = 0;
         VkPipeline                                       basePipelineHandle = VK_NULL_HANDLE;
         int32_t                                          basePipelineIndex = -1;
@@ -287,10 +283,9 @@ namespace gfx::vk
     {
         const void*                                      pNext = nullptr;
         VkShaderStageFlagBits                            stage;
-        size_t                                           codeSize;
-        const uint32_t*                                  pCode;
-        const char*                                      pGLSLSource;
-        const char*                                      pEntryPoint;
+        std::vector<uint8_t>                             code;
+        const char*                                      pGLSLSource = nullptr;
+        const char*                                      pEntryPoint = nullptr;
     };
 
     struct PipelineResource
@@ -315,7 +310,7 @@ namespace gfx::vk
     {
         const void*                                      pNext = nullptr;
         VkSurfaceKHR                                     surface;
-        VkSurfaceFormatKHR                               format;
+        VkSurfaceFormatKHR                               preferredFormat;
         bool                                             tripleBuffer;
     };
 
@@ -332,7 +327,6 @@ namespace gfx::vk
         const void*                                      pNext;
         Image*                                           image;
         VkImageViewType                                  viewType;
-        VkFormat                                         format;
         VkComponentMapping                               components;
         ImageSubresourceRange                            subresourceRange;
     };
@@ -409,8 +403,7 @@ namespace gfx::vk
         Framebuffer*                                     pFramebuffer;
         RenderPass*                                      pRenderPass;
         VkRect2D                                         renderArea;
-        uint32_t                                         attachmentCount;
-        const AttachmentReference*                       pAttachments;
+        std::vector<VkClearValue>                        clearValues;
     };
 
     struct SamplerCreateInfo
@@ -436,8 +429,7 @@ namespace gfx::vk
     struct FramebufferCreateInfo
     {
         const void*                                      pNext;
-        uint32_t                                         attachmentCount;
-        const ImageView**                                ppAttachments;
+        std::vector<ImageView*>                          attachments;
         uint32_t                                         width;
         uint32_t                                         height;
         uint32_t                                         layers;

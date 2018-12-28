@@ -43,7 +43,7 @@ namespace shared::filesystem
                 if (SFileOpenArchive(itr->path().string<tstring>().c_str(), 0, MPQ_OPEN_READ_ONLY, &fileHandle))
                     _archiveHandles.push_back(fileHandle);
                 else
-                    shared::exceptions::throw_with_trace<std::runtime_error>("Error loading archive.");
+                    shared::assert::throw_with_trace("Error loading archive.");
             }
         }
         catch (const std::exception& e) {
@@ -101,7 +101,7 @@ namespace shared::filesystem
 
         _fileData.resize(GetFileSize());
         if (!SFileReadFile(_fileHandle, _fileData.data(), GetFileSize()))
-            shared::exceptions::throw_with_trace<std::runtime_error>("Unable to read file");
+            shared::assert::throw_with_trace("Unable to read file");
 
         // Immediately close the handle, but don't call Close() - this would clear the buffer
         SFileCloseFile(_fileHandle);

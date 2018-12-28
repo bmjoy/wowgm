@@ -23,7 +23,10 @@ namespace gfx::vk
 
     CommandBuffer::~CommandBuffer()
     {
-        _pool->FreeCommandBuffers(1, &_handle);
+        if (_handle == VK_NULL_HANDLE)
+            return;
+
+        _pool->FreeCommandBuffer(this);
         _handle = VK_NULL_HANDLE;
     }
 
@@ -163,6 +166,10 @@ namespace gfx::vk
         beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
         beginInfo.framebuffer = pBeginInfo->pFramebuffer->GetHandle();
         beginInfo.renderPass = pBeginInfo->pRenderPass->GetHandle();
+
+        beginInfo.pClearValues = pBeginInfo->clearValues.data();
+        beginInfo.clearValueCount = pBeginInfo->clearValues.size();
+
         memcpy(&beginInfo.renderArea, &pBeginInfo->renderArea, sizeof(VkRect2D));
 
 #if _DEBUG

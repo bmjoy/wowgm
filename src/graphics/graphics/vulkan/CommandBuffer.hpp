@@ -13,11 +13,17 @@ namespace gfx::vk
     class ImageBlit; // TODO
     class ImageResolve; // TODO
 
-    class CommandBuffer // : public NamedObject<CommandBuffer>
+    class CommandBuffer
     {
+    private:
+        friend class CommandPool;
+
+        void MarkAsDeleted() {
+            _handle = VK_NULL_HANDLE;
+        }
+
     public:
         CommandBuffer(CommandPool* pool, VkCommandBuffer handle, VkCommandBufferLevel level);
-
         ~CommandBuffer();
 
         CommandPool* GetPool() { return _pool; }

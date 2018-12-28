@@ -4,6 +4,9 @@
 #include <cstring>
 #include <cstdint>
 
+// Shut up.
+#define BOOST_ASIO_ENABLE_BUFFER_DEBUGGING
+
 #include <boost/asio/buffer.hpp>
 
 namespace wowgm::protocol
@@ -125,16 +128,6 @@ namespace wowgm::protocol
             }
 
             return *this;
-        }
-
-        boost::asio::mutable_buffer AsWriteBuffer()
-        {
-            return boost::asio::buffer(GetWritePointer(), GetRemainingSpace());
-        }
-
-        boost::asio::mutable_buffer AsReadBuffer()
-        {
-            return boost::asio::buffer(GetReadPointer(), GetActiveSize());
         }
 
         std::string ReadCString(std::string& other, size_t maxLength = -1)

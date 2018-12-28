@@ -2,12 +2,29 @@
 #include <graphics/vulkan/Device.hpp>
 #include <graphics/vulkan/PhysicalDevice.hpp>
 #include <graphics/vulkan/Image.hpp>
+#include <graphics/vulkan/ImageView.hpp>
+#include <graphics/vulkan/Framebuffer.hpp>
+
+#include <shared/assert/assert.hpp>
 
 #include <limits>
 #include <algorithm>
 
+#ifdef max
+#undef max
+#undef min
+#endif
+
 namespace gfx::vk
 {
+    Swapchain::~Swapchain()
+    {
+        for (auto&& itr : _imageViews)
+            vkDestroyImageView(_device->GetHandle(), itr->GetHandle(), nullptr);
+
+        vkDestroySwapchainKHR(_device->GetHandle(), GetHandle(), nullptr);
+    }
+
     static SwapchainSupport QuerySwapchainSupport(VkPhysicalDevice device, VkSurfaceKHR surface)
     {
         SwapchainSupport support;
@@ -68,7 +85,7 @@ namespace gfx::vk
         else
             desiredModes = { VK_PRESENT_MODE_IMMEDIATE_KHR, VK_PRESENT_MODE_MAILBOX_KHR };
 
-        // Iterate over all available present mdoes and match to one of the desired ones.
+        // Iterate over all available present modes and match to one of the desired ones.
         for (const auto& availablePresentMode : availablePresentModes)
         {
             for (auto mode : desiredModes)
@@ -118,13 +135,18 @@ namespace gfx::vk
         return VK_SUCCESS;
     }
 
+    VkExtent2D const& Swapchain::GetExtent() const
+    {
+        return _swapchainSupport.capabilities.currentExtent;
+    }
+
     VkResult Swapchain::Allocate()
     {
         // Request current surface properties.
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(_device->GetPhysicalDevice()->GetHandle(), _surface, &_swapchainSupport.capabilities);
 
         // Select the best color format and present mode based on what's available.
-        auto surfaceFormat = ChooseSwapSurfaceFormat(_swapchainSupport.formats, _createInfo.format.format, _createInfo.format.colorSpace);
+        auto surfaceFormat = ChooseSwapSurfaceFormat(_swapchainSupport.formats, _createInfo.preferredFormat.format, _createInfo.preferredFormat.colorSpace);
         auto presentMode = ChooseSwapPresentMode(_swapchainSupport.presentModes, true /* m_vsyncEnabled */);
 
         // Determine the total number of images required.
@@ -144,7 +166,7 @@ namespace gfx::vk
         swapchainCreateInfo.imageColorSpace = surfaceFormat.colorSpace;
         swapchainCreateInfo.imageExtent = extent;
         swapchainCreateInfo.imageArrayLayers = 1;
-        swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+        swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
         //! TODO This should be conditional on queue being used
         swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
@@ -173,14 +195,20 @@ namespace gfx::vk
         // Copy new swapchain handle.
         _handle = handle;
 
-        // Clear old list of images.
-        _images.clear();
+        { // Clear previous image(view)s
+            for (auto&& itr : _images)
+                vkDestroyImage(_device->GetHandle(), itr->GetHandle(), nullptr);
+
+            for (auto&& itr : _imageViews)
+                vkDestroyImageView(_device->GetHandle(), itr->GetHandle(), nullptr);
+
+            _images.clear();
+            _imageViews.clear();
+        }
 
         // Get the actual image count after swapchain is created since it could change.
         imageCount = 0U;
         vkGetSwapchainImagesKHR(_device->GetHandle(), _handle, &imageCount, nullptr);
-
-        // Get the swapchain's image handles.
         std::vector<VkImage> images(imageCount);
         vkGetSwapchainImagesKHR(_device->GetHandle(), _handle, &imageCount, &images[0]);
 
@@ -189,7 +217,7 @@ namespace gfx::vk
         {
             ImageCreateInfo imageCreateInfo = {};
             imageCreateInfo.imageType = VK_IMAGE_TYPE_2D;
-            imageCreateInfo.format = _createInfo.format.format;
+            imageCreateInfo.format = surfaceFormat.format;
             imageCreateInfo.extent = { extent.width, extent.height, 1 };
             imageCreateInfo.mipLevels = 1;
             imageCreateInfo.arrayLayers = 1;
@@ -198,13 +226,49 @@ namespace gfx::vk
             imageCreateInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 
             auto image = Image::CreateFromHandle(_device, &imageCreateInfo, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, handle, nullptr);
-            _images.push_back(image);
 
             // image->TransitionToLayout(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR); // Is this needed?
+
+            ImageViewCreateInfo imageViewCreateInfo{};
+            imageViewCreateInfo.image = image;
+            imageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+            imageViewCreateInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+            imageViewCreateInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+            imageViewCreateInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+            imageViewCreateInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+            imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
+            imageViewCreateInfo.subresourceRange.levelCount = 1;
+            imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
+            imageViewCreateInfo.subresourceRange.layerCount = 1;
+
+            ImageView* imageView = nullptr;
+            VkResult result = ImageView::Create(_device, &imageViewCreateInfo, &imageView);
+            if (result != VK_SUCCESS)
+                shared::assert::throw_with_trace("Unable to create a view into one of the images of the swapchain");
+
+            _images.push_back(image);
+            _imageViews.push_back(imageView);
         }
 
         // Return success.
         return VK_SUCCESS;
+    }
+
+    Framebuffer* Swapchain::CreateFrameBuffer(uint32_t frameIndex, RenderPass* renderPass)
+    {
+        FramebufferCreateInfo framebufferCreateInfo{};
+        framebufferCreateInfo.pRenderPass = renderPass;
+        framebufferCreateInfo.layers = 1;
+        framebufferCreateInfo.width = GetExtent().width;
+        framebufferCreateInfo.height = GetExtent().height;
+        framebufferCreateInfo.attachments.push_back(_imageViews[frameIndex]);
+
+        Framebuffer* frameBuffer = nullptr;
+        VkResult result = Framebuffer::Create(_device, &framebufferCreateInfo, &frameBuffer);
+        if (result != VK_SUCCESS)
+            shared::assert::throw_with_trace("Unable to create a framebuffer for frame {}", frameIndex);
+
+        return frameBuffer;
     }
 
     uint32_t Swapchain::GetImageIndex(Image* image)
@@ -219,5 +283,10 @@ namespace gfx::vk
             ++idx;
         }
         return -1;
+    }
+
+    ImageView* Swapchain::GetImageView(uint32_t index)
+    {
+        return _imageViews[index];
     }
 }

@@ -49,10 +49,12 @@ namespace gfx::vk
             descriptorSetLayout->_bindings.emplace(resource.binding, bindingInfo);
         }
 
+        auto bindings = extstd::values(descriptorSetLayout->_bindings);
+
         VkDescriptorSetLayoutCreateInfo layoutCreateInfo = {};
         layoutCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-        layoutCreateInfo.bindingCount = static_cast<uint32_t>(descriptorSetLayout->_bindings.size());
-        layoutCreateInfo.pBindings = extstd::values(descriptorSetLayout->_bindings).data();
+        layoutCreateInfo.bindingCount = static_cast<uint32_t>(bindings.size());
+        layoutCreateInfo.pBindings = bindings.data();
         auto result = vkCreateDescriptorSetLayout(descriptorSetLayout->_device->GetHandle(), &layoutCreateInfo, nullptr, &descriptorSetLayout->_handle);
         if (result != VK_SUCCESS)
         {
@@ -73,7 +75,6 @@ namespace gfx::vk
     DescriptorSetLayout::~DescriptorSetLayout()
     {
         vkDestroyDescriptorSetLayout(_device->GetHandle(), _handle, nullptr);
-        delete _descriptorPool;
     }
 
     bool DescriptorSetLayout::GetLayoutBinding(uint32_t bindingIndex, VkDescriptorSetLayoutBinding** pBinding)

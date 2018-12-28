@@ -11,13 +11,14 @@ namespace gfx::vk
         createInfo.pNext = pCreateInfo->pNext;
         createInfo.image = pCreateInfo->image->GetHandle();
         createInfo.viewType = pCreateInfo->viewType;
-        createInfo.format = pCreateInfo->format;
+        createInfo.format = pCreateInfo->image->GetCreateInfo().format;
         memcpy(&createInfo.components, &pCreateInfo->components, sizeof(VkComponentMapping));
         createInfo.subresourceRange.aspectMask = pCreateInfo->image->GetImageAspectFlags();
         createInfo.subresourceRange.baseMipLevel = pCreateInfo->subresourceRange.baseMipLevel;
         createInfo.subresourceRange.levelCount = pCreateInfo->subresourceRange.levelCount;
         createInfo.subresourceRange.baseArrayLayer = pCreateInfo->subresourceRange.baseArrayLayer;
         createInfo.subresourceRange.layerCount = pCreateInfo->subresourceRange.layerCount;
+
 
         VkImageView handle = VK_NULL_HANDLE;
         VkResult result = vkCreateImageView(pDevice->GetHandle(), &createInfo, nullptr, &handle);
@@ -29,7 +30,7 @@ namespace gfx::vk
         pImageView->_device = pDevice;
         pImageView->_image = pCreateInfo->image;
         pImageView->_viewType = pCreateInfo->viewType;
-        pImageView->_format = pCreateInfo->format;
+        pImageView->_format = pCreateInfo->image->GetCreateInfo().format;
 
         memcpy(&pImageView->_components, &pCreateInfo->components, sizeof(VkComponentMapping));
         memcpy(&pImageView->_subresourceRange, &pCreateInfo->subresourceRange, sizeof(VkImageSubresourceRange));

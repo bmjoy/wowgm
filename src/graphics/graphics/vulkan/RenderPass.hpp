@@ -13,7 +13,11 @@ namespace gfx::vk
     enum class AttachmentType
     {
         Color,
-        Input
+        Input,
+        // TODO: NYI below
+        Resolve,
+        DepthStencil,
+        Preserve
     };
 
     class Device;
@@ -30,7 +34,7 @@ namespace gfx::vk
      * renderPass->BeginSubpass();
      * renderPass->AddAttachmentReference(AttachmentType::Color, attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
      * renderPass->FinalizeSubpass();
-     * renderPass->CreateHandle();
+     * renderPass->Finalize();
      *
      */
     class RenderPass
@@ -59,7 +63,7 @@ namespace gfx::vk
          */
         void AddAttachmentReference(AttachmentType type, uint32_t attachmentIndex, VkImageLayout layout);
 
-        void CreateHandle();
+        void Finalize();
 
         void BeginSubpass();
         void FinalizeSubpass();
@@ -68,12 +72,17 @@ namespace gfx::vk
 
         Device* _device = nullptr;
 
-        VkSubpassDescription* _currentSubpass = nullptr;
-
         VkRenderPass _handle = VK_NULL_HANDLE;
 
-        std::unordered_map<AttachmentType, std::vector<VkAttachmentDescription>> _attachments;
-        std::vector<VkSubpassDescription> _subpasses;
-        std::unordered_map<AttachmentType, std::vector<VkAttachmentReference>> _attachmentReferences;
+        using attachment_reference_map = std::unordered_map<AttachmentType, std::vector<VkAttachmentReference>>;
+        using attachment_map = std::unordered_map<AttachmentType, std::vector<VkAttachmentDescription>>;
+
+        using SubpassInfo = std::pair<VkSubpassDescription, attachment_reference_map>;
+
+        SubpassInfo* _currentSubpass = nullptr;
+
+        attachment_map _attachments;
+        std::vector<SubpassInfo> _subpasses;
+
     };
 }

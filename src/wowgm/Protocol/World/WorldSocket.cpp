@@ -4,6 +4,9 @@
 #include "PacketLogger.hpp"
 #include "MiscPackets.hpp"
 
+// Shut up.
+#define BOOST_ASIO_ENABLE_BUFFER_DEBUGGING
+
 #include <boost/asio/buffer.hpp>
 #include <boost/core/demangle.hpp>
 #include <typeinfo>

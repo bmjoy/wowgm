@@ -7,6 +7,8 @@
 
 namespace gfx::vk
 {
+    class CommandBuffer;
+
     class CommandPool
     {
     public:
@@ -20,10 +22,10 @@ namespace gfx::vk
 
         VkCommandPool GetHandle() const { return _handle; }
 
-        VkResult AllocateCommandBuffers(VkCommandBufferLevel level, uint32_t commandBufferCount, VkCommandBuffer* commandBuffers, const void* pNext);
+        VkResult AllocateCommandBuffers(VkCommandBufferLevel level, uint32_t commandBufferCount, CommandBuffer** commandBuffers, const void* pNext);
 
-        void FreeCommandBuffers(uint32_t commandBufferCount, const VkCommandBuffer* commandBuffers);
-
+        void FreeCommandBuffers(uint32_t commandBufferCount, CommandBuffer** commandBuffers);
+        void FreeCommandBuffer(CommandBuffer* commandBuffers);
     private:
         Device* _device = nullptr;
         VkCommandPool _handle = VK_NULL_HANDLE;

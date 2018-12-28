@@ -4,18 +4,35 @@
 #include <graphics/vulkan/Device.hpp>
 #include <graphics/vulkan/DescriptorSetLayoutCache.hpp>
 #include <graphics/vulkan/DescriptorSetLayout.hpp>
+#include <graphics/vulkan/RenderPass.hpp>
 
 #include <graphics/vulkan/VK.hpp>
 
+#include <extstd/containers/extract.hpp>
+
+#include <shared/assert/assert.hpp>
+
+#include <boost/iterator/transform_iterator.hpp>
+
 namespace gfx::vk
 {
-
-    void MergeShaderResources(std::unordered_map<std::string, PipelineResource>& pipelineResources, const PipelineShaderStageCreateInfo* pStages, uint32_t stageCount)
+    Pipeline::Pipeline()
     {
-        std::vector<PipelineShaderStageCreateInfo> pipelineStages(pStages, pStages + stageCount);
-        for (auto&& pipelineStage : pipelineStages)
+
+    }
+
+    Pipeline::~Pipeline()
+    {
+        vkDestroyPipeline(_device->GetHandle(), GetHandle(), nullptr);
+        vkDestroyPipelineLayout(_device->GetHandle(), GetLayout(), nullptr);
+        vkDestroyRenderPass(_device->GetHandle(), _renderPass->GetHandle(), nullptr);
+    }
+
+    void MergeShaderResources(std::unordered_map<std::string, PipelineResource>& pipelineResources, const Shader* const* pShaders, uint32_t stageCount)
+    {
+        for (uint32_t i = 0; i < stageCount; ++i)
         {
-            for (auto&& resource : pipelineStage.shader->GetResources())
+            for (auto&& resource : pShaders[i]->GetResources())
             {
                 // The key used for each resource is its name, except in the case of outputs, since its legal to
                 // have separate outputs with the same name across shader stages.
@@ -43,19 +60,22 @@ namespace gfx::vk
         VkGraphicsPipelineCreateInfo pipelineCreateInfo{};
         pipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
         pipelineCreateInfo.flags = pCreateInfo->flags;
-        pipelineCreateInfo.stageCount = pCreateInfo->stageCount;
+        pipelineCreateInfo.stageCount = pCreateInfo->shaders.size();
 
-        std::vector<VkPipelineShaderStageCreateInfo> shaderStages(pCreateInfo->stageCount);
-        for (uint32_t i = 0; i < pCreateInfo->stageCount; ++i)
+        if (pipelineCreateInfo.stageCount == 0)
+            shared::assert::throw_with_trace("No shader stages provided. Did you forget to add shaders, you spoon?");
+
+        std::vector<VkPipelineShaderStageCreateInfo> shaderStages(pCreateInfo->shaders.size());
+        for (uint32_t i = 0; i < pCreateInfo->shaders.size(); ++i)
         {
             VkPipelineShaderStageCreateInfo& stageInfo = shaderStages[i];
             stageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
             stageInfo.pNext = nullptr;
-            stageInfo.flags = pCreateInfo->pStages[i].flags;
-            stageInfo.stage = pCreateInfo->pStages[i].stage;
-            stageInfo.module = pCreateInfo->pStages[i].shader->GetHandle();
-            stageInfo.pName = pCreateInfo->pStages[i].pName;
-            stageInfo.pSpecializationInfo = pCreateInfo->pStages[i].pSpecializationInfo;
+            stageInfo.flags = 0; // TODO: Flags
+            stageInfo.stage = pCreateInfo->shaders[i]->GetStage();
+            stageInfo.module = pCreateInfo->shaders[i]->GetHandle();
+            stageInfo.pName = pCreateInfo->shaders[i]->GetEntryPoint().data();
+            stageInfo.pSpecializationInfo = nullptr; // TODO: Specialization constants
         }
 
         pipelineCreateInfo.pStages = shaderStages.data();
@@ -107,10 +127,10 @@ namespace gfx::vk
         viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
         viewportState.pNext = pCreateInfo->viewportState.pNext;
         viewportState.flags = pCreateInfo->viewportState.flags;
-        viewportState.pScissors = pCreateInfo->viewportState.pScissors;
-        viewportState.pViewports = pCreateInfo->viewportState.pViewports;
-        viewportState.scissorCount = pCreateInfo->viewportState.scissorCount;
-        viewportState.viewportCount = pCreateInfo->viewportState.viewportCount;
+        viewportState.pScissors = pCreateInfo->viewportState.scissors.data();
+        viewportState.pViewports = pCreateInfo->viewportState.viewports.data();
+        viewportState.scissorCount = pCreateInfo->viewportState.scissors.size();
+        viewportState.viewportCount = pCreateInfo->viewportState.viewports.size();
 
         VkPipelineRasterizationStateCreateInfo rasterizationState{};
         pipelineCreateInfo.pRasterizationState = &rasterizationState;
@@ -160,11 +180,11 @@ namespace gfx::vk
         colorBlendState.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
         colorBlendState.flags = pCreateInfo->colorBlendState.flags;
         colorBlendState.pNext = pCreateInfo->colorBlendState.pNext;
-        colorBlendState.attachmentCount = pCreateInfo->colorBlendState.attachmentCount;
+        colorBlendState.attachmentCount = pCreateInfo->colorBlendState.attachments.size();
         memcpy(colorBlendState.blendConstants, pCreateInfo->colorBlendState.blendConstants, sizeof(float) * 4);
         colorBlendState.logicOp = pCreateInfo->colorBlendState.logicOp;
         colorBlendState.logicOpEnable = pCreateInfo->colorBlendState.logicOpEnable;
-        colorBlendState.pAttachments = pCreateInfo->colorBlendState.pAttachments;
+        colorBlendState.pAttachments = pCreateInfo->colorBlendState.attachments.data();
 
         if (pCreateInfo->dynamicState)
         {
@@ -198,20 +218,20 @@ namespace gfx::vk
         else
             pipelineCreateInfo.pDynamicState = nullptr;
 
-        pipelineCreateInfo.renderPass = pCreateInfo->renderPass;
+        pipelineCreateInfo.renderPass = pCreateInfo->renderPass->GetHandle();
         pipelineCreateInfo.subpass = pCreateInfo->subpass;
         pipelineCreateInfo.basePipelineHandle = pCreateInfo->basePipelineHandle;
         pipelineCreateInfo.basePipelineIndex = pCreateInfo->basePipelineIndex;
 
         if (pCreateInfo->pLayout != nullptr)
         {
-            pPipeline->_layout = *pCreateInfo->pLayout;
+            pPipeline->_pipelineLayout = *pCreateInfo->pLayout;
             pipelineCreateInfo.layout = *pCreateInfo->pLayout;
         }
         else
         {
             std::unordered_map<std::string, PipelineResource> pipelineResources;
-            MergeShaderResources(pipelineResources, pCreateInfo->pStages, pCreateInfo->stageCount);
+            MergeShaderResources(pipelineResources, pCreateInfo->shaders.data(), pCreateInfo->shaders.size());
 
             pPipeline->CreateSetBindings(pipelineResources);
             VkResult result = pPipeline->CreateDescriptorSetLayouts();
@@ -222,6 +242,43 @@ namespace gfx::vk
             }
 
             //! FIXME TODO: Create the VkPipelineLayout handle
+            VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo{};
+            pipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+
+            std::vector<VkPushConstantRange> pushConstants;
+            for (auto&& kv : pipelineResources)
+            {
+                auto& resource = kv.second;
+                switch (resource.resourceType)
+                {
+                    case PIPELINE_RESOURCE_TYPE_PUSH_CONSTANT_BUFFER:
+                    {
+                        VkPushConstantRange pushConstant{};
+                        pushConstant.offset = resource.offset;
+                        pushConstant.size = resource.size;
+                        pushConstant.stageFlags = resource.stages;
+                        pushConstants.push_back(pushConstant);
+                        break;
+                    }
+                }
+            }
+
+            pipelineLayoutCreateInfo.pPushConstantRanges = pushConstants.data();
+            pipelineLayoutCreateInfo.pushConstantRangeCount = pushConstants.size();
+
+            auto descriptorSetLayouts = extstd::values(pPipeline->_descriptorSetLayouts);
+            std::vector<VkDescriptorSetLayout> descriptors(descriptorSetLayouts.size());
+            for (uint32_t i = 0; i < descriptorSetLayouts.size(); ++i)
+                descriptors[i] = descriptorSetLayouts[i]->GetHandle();
+
+            pipelineLayoutCreateInfo.pSetLayouts = descriptors.data();
+            pipelineLayoutCreateInfo.setLayoutCount = descriptors.size();
+
+            result = vkCreatePipelineLayout(pDevice->GetHandle(), &pipelineLayoutCreateInfo, nullptr, &pPipeline->_pipelineLayout);
+            if (result != VK_SUCCESS)
+                shared::assert::throw_with_trace("Unable to create a pipeline layout from reflection!");
+
+            pipelineCreateInfo.layout = pPipeline->_pipelineLayout;
         }
 
         VkPipelineCache pipelineCache = VK_NULL_HANDLE;
@@ -240,6 +297,7 @@ namespace gfx::vk
 #endif
 
         *ppPipeline = pPipeline;
+        pPipeline->_renderPass = pCreateInfo->renderPass;
 
         return VK_SUCCESS;
     }

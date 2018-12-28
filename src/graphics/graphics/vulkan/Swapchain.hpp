@@ -6,6 +6,9 @@
 namespace gfx::vk
 {
     class Image;
+    class ImageView;
+    class Framebuffer;
+    class RenderPass;
 
     struct SwapchainSupport
     {
@@ -14,11 +17,14 @@ namespace gfx::vk
         std::vector<VkPresentModeKHR> presentModes;
     };
 
-    class Swapchain
+    class Swapchain final
     {
     public:
+        ~Swapchain();
+
         static VkResult Create(Device* pDevice, const SwapchainCreateInfo* pCreateInfo, Swapchain** ppSwapchain);
 
+        Device* GetDevice() { return _device; }
         VkSwapchainKHR GetHandle() { return _handle; }
 
         const SwapchainCreateInfo& GetCreateInfo() { return _createInfo; }
@@ -31,6 +37,12 @@ namespace gfx::vk
 
         Image* GetImage(uint32_t index);
         uint32_t GetImageIndex(Image* image);
+
+        ImageView* GetImageView(uint32_t index);
+
+        VkExtent2D const& GetExtent() const;
+
+        Framebuffer* CreateFrameBuffer(uint32_t frameIndex, RenderPass* renderPass);
 
     private:
         VkResult Allocate();
@@ -45,5 +57,6 @@ namespace gfx::vk
         Device* _device = nullptr;
 
         std::vector<Image*> _images;
+        std::vector<ImageView*> _imageViews;
     };
 }

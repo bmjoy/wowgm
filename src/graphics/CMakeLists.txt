@@ -19,15 +19,15 @@ add_library(graphics
 target_include_directories(graphics
   PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+
+    # Memory allocator
+    ${CMAKE_SOURCE_DIR}/dep/vma
   PRIVATE
     ${SHARED_INCLUDE_DIRS} # src/extstd
     ${EXTSTD_INCLUDE_DIRS} # src/shared
 
     ${IMGUI_INCLUDE_DIR}
-	
-    # Memory allocator
-    ${CMAKE_SOURCE_DIR}/dep/vma
-	
+
     # Shader reflection
     ${CMAKE_SOURCE_DIR}/dep/spirv-compiler/glslang
     ${CMAKE_SOURCE_DIR}/dep/spirv-compiler/SPIRV-cross

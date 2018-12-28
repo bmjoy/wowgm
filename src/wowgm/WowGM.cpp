@@ -1,14 +1,21 @@
-#include <boost/program_options.hpp>
-#include <boost/stacktrace/stacktrace.hpp>
-
 #include <iostream>
 #include <string>
 
+#include <boost/program_options.hpp>
 #include <boost/exception/get_error_info.hpp>
 #include <boost/system/system_error.hpp>
 
 #include <shared/filesystem/disk_file_system.hpp>
 #include <shared/stacktrace/stacktrace.hpp>
+
+#include <graphics/vulkan/CommandBuffer.hpp>
+#include <graphics/vulkan/CommandPool.hpp>
+#include <graphics/vulkan/Queue.hpp>
+#include <graphics/vulkan/Framebuffer.hpp>
+#include <graphics/vulkan/Swapchain.hpp>
+#include <graphics/vulkan/Device.hpp>
+
+#include "Window.hpp"
 
 namespace po = boost::program_options;
 
@@ -63,6 +70,13 @@ int main(int argc, char* argv[])
         std::cout << std::endl;
 
         auto authserver = mapped_values["server"].as<std::string>();
+
+        wowgm::Window window(400, 300, "WowGM");
+
+        window.runWindowLoop([&window]() {
+
+        });
+
         // sUpdater->Start();
 
         // Needs to be inherited etc

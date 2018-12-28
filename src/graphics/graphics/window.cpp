@@ -1,43 +1,29 @@
 #include <graphics/window.hpp>
+#include <graphics/vulkan/Instance.hpp>
+
+#include <shared/assert/assert.hpp>
 
 #include <mutex>
 
 namespace gfx
 {
-    void Window::setSizeLimits(const glm::uvec2& minSize, const glm::uvec2& maxSize)
-    {
-        glfwSetWindowSizeLimits(window, minSize.x, minSize.y, (maxSize.x != 0) ? maxSize.x : minSize.x, (maxSize.y != 0) ? maxSize.y : minSize.y);
-    }
-
-    void Window::runWindowLoop(const std::function<void()>& frameHandler)
-    {
-        while (glfwWindowShouldClose(window) == 0)
-        {
-            glfwPollEvents();
-            frameHandler();
-        }
-    }
-
-    void Window::terminate()
-    {
-        glfwTerminate();
-    }
-
-    void Window::createWindow(const glm::uvec2& size, const glm::ivec2& position)
+    Window::Window(int32_t width, int32_t height, std::string const& title)
     {
         static std::once_flag glfwInitFlag;
         std::call_once(glfwInitFlag, []() -> void {
             int32_t resultCode = glfwInit();
-            if (resultCode != GLFW_TRUE)
-            {
+            if (resultCode != GLFW_TRUE) {
                 // throw somehow
             }
         });
 
+        // Prevent GLFW from creating stuff for us
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+
         // Disable window resize
-        window = glfwCreateWindow(size.x, size.y, "Window Title", nullptr, nullptr);
-        if (position != glm::ivec2{ -1, -1 })
-            glfwSetWindowPos(window, position.x, position.y);
+        window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+        // if (position != glm::ivec2{ -1, -1 })
+        //     glfwSetWindowPos(window, position.x, position.y);
 
         glfwSetWindowUserPointer(window, this);
         glfwSetKeyCallback(window, KeyboardHandler);
@@ -48,26 +34,48 @@ namespace gfx
         glfwSetScrollCallback(window, MouseScrollHandler);
     }
 
-    vk::SurfaceKHR Window::createSurface(const vk::Instance& instance, const vk::AllocationCallbacks* pAllocator)
+    Window::~Window()
     {
-        return createWindowSurface(window, instance, pAllocator);
+        glfwDestroyWindow(window);
+
+        static std::once_flag glfwCleaner;
+        std::call_once(glfwCleaner, []() -> void {
+            glfwTerminate();
+        });
     }
 
-#if defined(VULKAN_HPP)
-    std::vector<std::string> Window::getRequiredInstanceExtensions()
+    void Window::setSizeLimits(const glm::uvec2& minSize, const glm::uvec2& maxSize)
+    {
+        glfwSetWindowSizeLimits(window, minSize.x, minSize.y, (maxSize.x != 0) ? maxSize.x : minSize.x, (maxSize.y != 0) ? maxSize.y : minSize.y);
+    }
+
+    void Window::runWindowLoop(std::function<void()> frameHandler)
+    {
+        while (glfwWindowShouldClose(window) == 0)
+        {
+            glfwPollEvents();
+
+            frameHandler();
+        }
+    }
+
+#if defined(VK_NULL_HANDLE)
+    VkSurfaceKHR Window::createSurface(vk::Instance* instance, const VkAllocationCallbacks* pAllocator)
+    {
+        VkSurfaceKHR surface;
+        VkResult result = glfwCreateWindowSurface(instance->GetHandle(), window, pAllocator, &surface);
+        if (result != VK_SUCCESS)
+            shared::assert::throw_with_trace("An error occured while GLFW was creating a surface!");
+        return surface;
+    }
+
+    std::vector<const char*> Window::getRequiredInstanceExtensions()
     {
         uint32_t count = 0;
         const char** names = glfwGetRequiredInstanceExtensions(&count);
 
-        std::vector<std::string> result(names, names + count);
+        std::vector<const char*> result(names, names + count);
         return result;
-    }
-
-    vk::SurfaceKHR Window::createWindowSurface(GLFWwindow* window, const vk::Instance& instance, const vk::AllocationCallbacks* pAllocator) {
-        VkSurfaceKHR rawSurface;
-        vk::Result result =
-            static_cast<vk::Result>(glfwCreateWindowSurface((VkInstance)instance, window, reinterpret_cast<const VkAllocationCallbacks*>(pAllocator), &rawSurface));
-        return vk::createResultValue(result, rawSurface, "vk::CommandBuffer::begin");
     }
 #endif
 
@@ -138,20 +146,6 @@ namespace gfx
         default:
             break;
         }
-    }
-
-    void Window::destroyWindow()
-    {
-        glfwDestroyWindow(window);
-        window = nullptr;
-    }
-
-    void Window::makeCurrent() const {
-        glfwMakeContextCurrent(window);
-    }
-
-    void Window::present() const {
-        glfwSwapBuffers(window);
     }
 
     void Window::showWindow(bool show)

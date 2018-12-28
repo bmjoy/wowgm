@@ -37,13 +37,3 @@ namespace boost
     }
 
 }
-
-namespace shared::exceptions {
-
-    template <class E, typename... Args>
-    inline void throw_with_trace(Args&&... args)
-    {
-        E ex(std::forward<Args>(args)...);
-        throw boost::enable_error_info(ex) << traced(boost::stacktrace::application_stacktrace());
-    }
-}

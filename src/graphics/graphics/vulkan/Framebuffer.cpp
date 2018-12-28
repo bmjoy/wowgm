@@ -9,12 +9,10 @@ namespace gfx::vk
 {
     VkResult Framebuffer::Create(Device* pDevice, const FramebufferCreateInfo* pCreateInfo, Framebuffer** ppFramebuffer)
     {
-        std::vector<ImageView*> attachmentObjects(pCreateInfo->attachmentCount);
-        std::vector<VkImageView> attachments(pCreateInfo->attachmentCount);
-        for (uint32_t i = 0; i < pCreateInfo->attachmentCount; ++i)
+        std::vector<VkImageView> attachments(pCreateInfo->attachments.size());
+        for (uint32_t i = 0; i < pCreateInfo->attachments.size(); ++i)
         {
-            attachments.push_back(pCreateInfo->ppAttachments[i]->GetHandle());
-            attachmentObjects.push_back(const_cast<ImageView*>(pCreateInfo->ppAttachments[i]));
+            attachments.push_back(pCreateInfo->attachments[i]->GetHandle());
         }
         // Create a Framebuffer class instance.
         Framebuffer* framebuffer = new Framebuffer;
@@ -22,7 +20,7 @@ namespace gfx::vk
         framebuffer->_width = pCreateInfo->width;
         framebuffer->_height = pCreateInfo->height;
         framebuffer->_layers = pCreateInfo->layers;
-        framebuffer->_attachments = std::move(attachmentObjects);
+        framebuffer->_attachments = std::move(pCreateInfo->attachments);
 
         VkFramebufferCreateInfo createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;

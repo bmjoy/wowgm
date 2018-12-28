@@ -10,6 +10,6 @@ namespace gfx::vk
 
     namespace SPIRV
     {
-        bool ReflectResources(std::vector<uint32_t> const& spirvCode, VkShaderStageFlagBits shaderStage, std::vector<PipelineResource>& resourceContainer);
+        bool ReflectResources(std::vector<uint8_t> const& spirvCode, VkShaderStageFlagBits shaderStage, std::vector<PipelineResource>& resourceContainer);
     }
 }
