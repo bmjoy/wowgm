@@ -10,6 +10,8 @@
 #include <graphics/vulkan/PhysicalDevice.hpp>
 
 #include <vulkan/vulkan.h>
+#include <boost/core/demangle.hpp>
+
 #include <type_traits>
 
 namespace gfx::vk
@@ -19,7 +21,7 @@ namespace gfx::vk
 
 namespace wowgm
 {
-
+    // Quick hack to circumvent MetricsRenderer<MetricsRenderer<T>>
     template <typename T>
     struct metrics_traits
     {
@@ -87,7 +89,7 @@ namespace wowgm
         void onRenderQuery(gfx::vk::CommandBuffer* commandBuffer) override
         {
             if (_queryPool != VK_NULL_HANDLE)
-                vkCmdWriteTimestamp(commandBuffer->GetHandle(), VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, _queryPool, 0);
+                vkCmdWriteTimestamp(commandBuffer->GetHandle(), VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, _queryPool, 0);
 
             base_t::onRenderQuery(commandBuffer);
 
@@ -107,9 +109,12 @@ namespace wowgm
                 VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WAIT_BIT);
             BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to acquire the timestamps");
 
+            // Constexpr so that its just not a magic number. used for demangling
+            constexpr const char ns[] = "class wowgm::";
+
             uint64_t interval = timers[1] - timers[0];
-            double executionTime = interval * GetDevice()->GetPhysicalDevice()->GetPhysicalDeviceProperties().limits.timestampPeriod;
-            LOG_GRAPHICS("Execution time {}", executionTime);
+            double executionTime = interval * GetDevice()->GetPhysicalDevice()->GetPhysicalDeviceProperties().limits.timestampPeriod / 1000000.0f;
+            LOG_GRAPHICS("{} - {} ms", boost::core::demangle(typeid(T).name()).substr(sizeof(ns) - 1), executionTime);
         }
 
     private:
