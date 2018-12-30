@@ -17,7 +17,7 @@ namespace gfx::vk
 
 #if _DEBUG
         if (pImageCreateInfo->pImageName != nullptr)
-            device->GetInstance()->SetObjectName(device, imageObject, pImageCreateInfo->pImageName);
+            imageObject->SetName(pImageCreateInfo->pImageName);
 #endif
 
         return imageObject;

@@ -56,7 +56,6 @@ namespace gfx::vk
         VkPipelineLayout _pipelineLayout = VK_NULL_HANDLE;
 
         Device* _device = nullptr;
-        RenderPass* _renderPass = nullptr;
 
         VkPipelineBindPoint _bindPoint;
         PipelineDynamicState _dynamicState;

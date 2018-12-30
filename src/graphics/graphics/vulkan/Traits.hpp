@@ -120,7 +120,7 @@ namespace gfx::vk
         using decayed_t = typename std::remove_pointer<typename std::decay<T>::type>::type;
 
     public:
-        static_assert(is_vk_type<decayed_t>::value, "Type is not a VEZ handle.");
+        static_assert(is_vk_type<decayed_t>::value, "Type is not a gfx::vk handle.");
 
         using handle_type = decltype(std::declval<decayed_t>().GetHandle());
 

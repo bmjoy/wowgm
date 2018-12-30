@@ -78,10 +78,13 @@ namespace gfx::vk
         VkResult DestroyFramebuffer(Framebuffer* pFramebuffer);
 
     public: /* Fence */
-
+        VkResult CreateFence(VkFence* pFence, VkFenceCreateFlagBits createFlags);
+        VkResult GetFenceStatus(VkFence fence);
         void DestroyFence(VkFence fence);
 
-        VkResult GetFenceStatus(VkFence fence);
+    public: /* Semaphore */
+        VkResult CreateSemaphore(VkSemaphore* pSemaphore);
+        void DestroySemaphore(VkSemaphore semaphore);
 
     private:
 

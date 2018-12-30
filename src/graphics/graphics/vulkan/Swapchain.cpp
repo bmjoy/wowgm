@@ -271,6 +271,11 @@ namespace gfx::vk
         return frameBuffer;
     }
 
+    Image* Swapchain::GetImage(uint32_t index)
+    {
+        return _images[index];
+    }
+
     uint32_t Swapchain::GetImageIndex(Image* image)
     {
         uint32_t idx = 0;

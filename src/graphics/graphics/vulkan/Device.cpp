@@ -213,7 +213,7 @@ namespace gfx::vk
 
 #if _DEBUG
         if (pCreateInfo->pBufferName != nullptr)
-            GetInstance()->SetObjectName(this, *ppBuffer, pCreateInfo->pBufferName);
+            (*ppBuffer)->SetName(pCreateInfo->pBufferName);
 #endif
 
         return VK_SUCCESS;
@@ -701,6 +701,15 @@ namespace gfx::vk
         vkDeviceWaitIdle(_handle);
     }
 
+    VkResult Device::CreateFence(VkFence* pFence, VkFenceCreateFlagBits createFlags)
+    {
+        VkFenceCreateInfo fenceInfo = {};
+        fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+        fenceInfo.flags = createFlags;
+
+        return vkCreateFence(_handle, &fenceInfo, nullptr, pFence);
+    }
+
     void Device::DestroyFence(VkFence fence)
     {
         vkDestroyFence(_handle, fence, nullptr);
@@ -721,4 +730,18 @@ namespace gfx::vk
         delete pFramebuffer;
         return VK_SUCCESS;
     }
+
+    VkResult Device::CreateSemaphore(VkSemaphore* semaphore)
+    {
+        VkSemaphoreCreateInfo semaphoreCreateInfo{};
+        semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+        return vkCreateSemaphore(_handle, &semaphoreCreateInfo, nullptr, semaphore);
+    }
+
+    void Device::DestroySemaphore(VkSemaphore semaphore)
+    {
+        vkDestroySemaphore(_handle, semaphore, nullptr);
+    }
+
 }

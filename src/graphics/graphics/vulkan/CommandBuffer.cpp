@@ -18,7 +18,7 @@ namespace gfx::vk
 {
     CommandBuffer::CommandBuffer(CommandPool* pool, VkCommandBuffer handle, VkCommandBufferLevel level) : _pool(pool), _handle(handle), _level(level)
     {
-
+        _InitializeLabelPointers();
     }
 
     CommandBuffer::~CommandBuffer()

@@ -7,7 +7,9 @@
 #include <graphics/vulkan/RenderPass.hpp>
 #include <graphics/vulkan/Shader.hpp>
 #include <graphics/vulkan/CommandBuffer.hpp>
+#include <graphics/vulkan/Framebuffer.hpp>
 #include <graphics/vulkan/CommandPool.hpp>
+#include <graphics/vulkan/Queue.hpp>
 
 #include <graphics/vulkan/Helpers.hpp>
 
@@ -15,6 +17,11 @@
 #include <shared/log/log.hpp>
 
 #include <sstream>
+
+// Fucking hell, windows.
+#if PLATFORM == PLATFORM_WINDOWS
+#undef CreateSemaphore
+#endif
 
 namespace wowgm
 {
@@ -52,8 +59,6 @@ namespace wowgm
         LOG_GRAPHICS("{}", pCallbackData->pMessage);
 
         if (pCallbackData->objectCount > 0) {
-            char tmp_message[500];
-
             LOG_GRAPHICS("\tObjects - {}", pCallbackData->objectCount);
 
             for (uint32_t object = 0; object < pCallbackData->objectCount; ++object) {
@@ -173,10 +178,48 @@ namespace wowgm
         swapchainCreateInfo.preferredFormat.format = VK_FORMAT_B8G8R8A8_UNORM;
         swapchainCreateInfo.preferredFormat.colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
 
-        result = Swapchain::Create(_device, &swapchainCreateInfo, &_swapchain);
+        result = Swapchain::Create(GetDevice(), &swapchainCreateInfo, &_swapchain);
         BOOST_ASSERT_MSG(result == VK_SUCCESS, "Unable to create a swapchain");
 
+        // Prepare the render pass
+        _renderPass = new RenderPass(GetDevice());
+
+        // Create the renderers
         _interfaceRenderer = new InterfaceRenderer(_swapchain);
+
+        // Let all the renderers add their subpass to the render pass.
+        _interfaceRenderer->InitializeRenderPass(_renderPass);
+
+        // Then create the pipeline of each renderer
+        _interfaceRenderer->Initialize();
+
+        // Create the semaphores.
+        _frames.resize(GetSwapchain()->GetImageCount());
+        uint32_t frameIndex = 0;
+        for (auto& frame : _frames)
+        {
+            VkResult result;
+
+            result = GetDevice()->CreateSemaphore(&frame.acquireSemaphore);
+            BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to create a semaphore");
+
+            result = GetDevice()->CreateSemaphore(&frame.presentSemaphore);
+            BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to create a semaphore");
+
+            frame.frameBuffer = GetSwapchain()->CreateFrameBuffer(frameIndex++, _renderPass);
+            BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to create a framebuffer");
+
+            result = GetDevice()->CreateFence(&frame.inflightFence, VK_FENCE_CREATE_SIGNALED_BIT);
+            BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to create a fence");
+
+            Queue* graphicsQueue = GetDevice()->GetQueueByFlags(VK_QUEUE_GRAPHICS_BIT, 0);
+
+            result = GetDevice()->AllocateCommandBuffers(graphicsQueue, nullptr, VK_COMMAND_BUFFER_LEVEL_PRIMARY, 1, &frame.commandBuffer);
+            BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to allocate a primary command buffer");
+            frame.commandBuffer->SetName("Primary command buffer");
+        }
+
+        _currentFrame = extstd::containers::make_ring_iterator(_frames.begin(), _frames.end());
     }
 
     Window::~Window()
@@ -192,13 +235,27 @@ namespace wowgm
         // surface
         // instance
 
-        // pipeline, pipelineLayout, renderPass
+        GetDevice()->WaitIdle();
+
+        for (auto&& itr : _frames)
+        {
+            GetDevice()->DestroySemaphore(itr.acquireSemaphore);
+            GetDevice()->DestroySemaphore(itr.presentSemaphore);
+
+            delete itr.frameBuffer;
+            delete itr.commandBuffer;
+
+            GetDevice()->DestroyFence(itr.inflightFence);
+        }
+
+        // pipeline, pipelineLayout
         delete _interfaceRenderer;
+        delete _renderPass;
 
         // swapchain imageViews, swapchain
         delete _swapchain;
 
-        // device, descriptor set layout cache, pipeline cache
+        // device, descriptor set layout cache, pipeline cache, staging buffer
         delete _device;
 
         vkDestroySurfaceKHR(_instance->GetHandle(), _surface, nullptr);
@@ -208,6 +265,68 @@ namespace wowgm
 #if _DEBUG && PLATFORM == PLATFORM_WINDOWS
         DebugBreak();
 #endif
+    }
+
+    void Window::onFrame()
+    {
+        VkResult result;
+
+        gfx::vk::Queue* graphicsQueue = GetDevice()->GetQueueByFlags(VK_QUEUE_GRAPHICS_BIT, 0);
+
+        uint32_t imageIndex; // The index of the image that has become available
+        result = graphicsQueue->AcquireNextImage(GetSwapchain(), imageIndex, &_currentFrame->acquireSemaphore, &_currentFrame->inflightFence);
+        BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to acquire the next image");
+
+        BOOST_ASSERT_MSG(_currentFrame->commandBuffer != nullptr, "The command buffer of the current frame must be initialized");
+
+        // Recording commands now!
+        result = _currentFrame->commandBuffer->Begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT, nullptr);
+        BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to start recording");
+
+        // Begin a render pass
+        gfx::vk::RenderPassBeginInfo renderPassBeginInfo{};
+        renderPassBeginInfo.pRenderPass = _renderPass;
+        renderPassBeginInfo.clearValues.push_back({ 1.0f, 1.0f, 1.0f, 0.0f });
+        renderPassBeginInfo.renderArea.extent = GetSwapchain()->GetExtent();
+        renderPassBeginInfo.renderArea.offset = { 0, 0 };
+        renderPassBeginInfo.pFramebuffer = _currentFrame->frameBuffer;
+        _currentFrame->commandBuffer->BeginRenderPass(&renderPassBeginInfo);
+
+        // Begin the first subpass.
+        _interfaceRenderer->onFrame(_currentFrame->commandBuffer);
+
+        // Finish this render pass.
+        _currentFrame->commandBuffer->EndRenderPass();
+
+        // Done recording
+        _currentFrame->commandBuffer->End();
+
+        // Submit the command buffer.
+        gfx::vk::SubmitInfo submitInfo{};
+        submitInfo.commandBuffers.emplace_back(_currentFrame->commandBuffer);
+        submitInfo.waitSemaphores.push_back({
+            _currentFrame->acquireSemaphore,
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+        });
+        submitInfo.signalSemaphores.push_back(_currentFrame->presentSemaphore);
+
+        result = graphicsQueue->Submit(1, &submitInfo, &_currentFrame->inflightFence);
+        BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to submit to the queue");
+
+        // And present the available image.
+        gfx::vk::PresentInfo presentInfo{};
+        presentInfo.swapchains.push_back({
+            GetSwapchain(),
+            GetSwapchain()->GetImage(imageIndex),
+            VK_SUCCESS
+            });
+        presentInfo.waitSemaphores.push_back(_currentFrame->presentSemaphore);
+
+        result = graphicsQueue->Present(&presentInfo);
+        BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to present to screen");
+
+        // Move to next frame
+        ++_currentFrame;
     }
 
     void Window::onWindowResized(const glm::uvec2& newSize)

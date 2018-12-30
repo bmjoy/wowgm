@@ -10,6 +10,7 @@ namespace gfx::vk
     class Pipeline;
     class RenderPass;
     class Framebuffer;
+    class CommandBuffer;
 }
 
 namespace wowgm
@@ -21,6 +22,8 @@ namespace wowgm
         virtual ~Renderer();
 
         virtual void Render() = 0;
+
+        virtual void onFrame(gfx::vk::CommandBuffer* buffer) = 0;
 
         Renderer(Renderer&&) = delete;
         Renderer(Renderer const&) = delete;

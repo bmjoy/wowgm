@@ -55,6 +55,7 @@ namespace gfx
         {
             glfwPollEvents();
 
+            onFrame();
             frameHandler();
         }
     }

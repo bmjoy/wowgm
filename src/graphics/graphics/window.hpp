@@ -43,6 +43,8 @@ namespace gfx
             //> Blocks forever until the window is getting closed, invoking the callback provided.
             void runWindowLoop(std::function<void()> frameHandler);
 
+            virtual void onFrame() = 0;
+
         private:
             void onMouseButtonEvent(int button, int action, int mods);
             void onKeyEvent(int key, int scancode, int action, int mods);

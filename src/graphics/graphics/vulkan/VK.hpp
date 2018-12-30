@@ -385,7 +385,6 @@ namespace gfx::vk
     {
         const void*                                      pNext = nullptr;
         std::vector<std::pair<VkSemaphore, VkPipelineStageFlags>> waitSemaphores;
-        const VkPipelineStageFlags*                      pWaitDstStageMask;
         std::vector<CommandBuffer*>                      commandBuffers;
         std::vector<VkSemaphore>                         signalSemaphores;
     };

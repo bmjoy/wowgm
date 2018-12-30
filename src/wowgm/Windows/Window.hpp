@@ -1,6 +1,9 @@
 #pragma once
 
 #include <graphics/window.hpp>
+#include <extstd/containers/iterators/ring_iterator.hpp>
+
+#include <vector>
 
 #include "InterfaceRenderer.hpp"
 
@@ -9,6 +12,8 @@ namespace gfx::vk {
     class Device;
     class Swapchain;
     class Pipeline;
+    class CommandBuffer;
+    class Framebuffer;
 }
 
 namespace wowgm
@@ -32,6 +37,8 @@ namespace wowgm
         void onMouseScrolled(float delta) override;
 
     public:
+        void onFrame() override;
+
         gfx::vk::Device* GetDevice() const { return _device; }
         gfx::vk::Swapchain* GetSwapchain() const { return _swapchain; }
 
@@ -39,7 +46,21 @@ namespace wowgm
         gfx::vk::Instance* _instance;
         gfx::vk::Device* _device;
         gfx::vk::Swapchain* _swapchain;
+        gfx::vk::RenderPass* _renderPass;
         VkSurfaceKHR _surface;
+
+    public:
+        struct Frame {
+            gfx::vk::CommandBuffer* commandBuffer;
+            gfx::vk::Framebuffer* frameBuffer;
+            VkSemaphore acquireSemaphore;
+            VkSemaphore presentSemaphore;
+            VkFence inflightFence;
+        };
+    private:
+
+        std::vector<Frame> _frames;
+        extstd::containers::ring_iterator<decltype(_frames)::iterator> _currentFrame;
 
         InterfaceRenderer* _interfaceRenderer;
     };

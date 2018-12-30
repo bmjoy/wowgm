@@ -1,5 +1,6 @@
 #pragma once
 
+#include <extstd/containers/iterators/ring_iterator.hpp>
 #include <extstd/containers/concatenate.hpp>
 #include <extstd/containers/extract.hpp>
 #include <extstd/containers/flatten.hpp>

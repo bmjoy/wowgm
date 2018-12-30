@@ -3,6 +3,9 @@
 #include <vulkan/vulkan.h>
 #include <cstdint>
 
+#include <graphics/vulkan/Buffer.hpp>
+#include <graphics/vulkan/NamedObject.hpp>
+
 #include <graphics/vulkan/VK.hpp>
 
 namespace gfx::vk
@@ -11,19 +14,18 @@ namespace gfx::vk
      * A thin wrapper around a VkBuffer handle.
      * Lifetime management of this object should be handled through Device::DestroyBuffer.
      */
-    class Buffer final
+    class Buffer final : public NamedObject<Buffer>
     {
         friend class Device;
-        Buffer() { }
 
-        // Mapping needs to be handled by Device::MapBuffer and Device::UnmapBuffer
+        // Mapping needs to be handled by Device::MapBuffer and Device::UnmapBuffer,
+        // but we have to be made aware that we are mapped.
         void SetMapped(bool mapped);
 
     public:
 
         Device* GetDevice() const { return _device; }
         VkBuffer GetHandle() const { return _handle; }
-
         Instance* GetInstance() const;
 
         template <typename T>

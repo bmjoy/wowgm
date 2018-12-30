@@ -33,10 +33,9 @@ namespace gfx::vk
 
         VkSurfaceKHR GetSurface() const { return _surface; }
 
-        VkResult AcquireNextImage(uint32_t* pImageIndex, VkSemaphore* pImageAcquiredSemaphore);
-
         Image* GetImage(uint32_t index);
         uint32_t GetImageIndex(Image* image);
+        uint32_t GetImageCount() const { return _images.size(); }
 
         ImageView* GetImageView(uint32_t index);
 

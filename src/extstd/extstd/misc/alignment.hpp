@@ -22,6 +22,15 @@ namespace extstd::misc
         return align_up(from, alignment) - alignment;
     }
 
+    /**
+     * Alignes the provided value to a multiple of sizeof(T).
+     */
+    template <typename T>
+    constexpr inline static size_t align_to(size_t from) {
+        return ((from + (sizeof(T) - 1)) / sizeof(T)) * sizeof(T);
+    }
+
+    static_assert(align_to<int>(5) == 8);
     static_assert(align_up(26u, 4u) == 28); // 7 * 4 = 28
     static_assert(align_down(26u, 4u) == 24); // 6 * 4 = 24
 }

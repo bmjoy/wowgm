@@ -1,5 +1,6 @@
 #include <graphics/vulkan/Queue.hpp>
 #include <graphics/vulkan/Device.hpp>
+#include <graphics/vulkan/CommandBuffer.hpp>
 #include <graphics/vulkan/PhysicalDevice.hpp>
 #include <graphics/vulkan/Instance.hpp>
 #include <graphics/vulkan/Swapchain.hpp>
@@ -23,6 +24,8 @@ namespace gfx::vk
         _familyIndex = familyIndex;
         _index = index;
         _properties = properties;
+
+        _InitializeLabelPointers();
     }
 
     VkResult Queue::WaitIdle()
@@ -30,32 +33,62 @@ namespace gfx::vk
         return vkQueueWaitIdle(GetHandle());
     }
 
-    VkResult Queue::AcquireImageIndex(Swapchain* swapchain, uint32_t& imageIndex, VkSemaphore* semaphore /* = nullptr */)
+    VkResult Queue::AcquireNextImage(Swapchain* swapchain, uint32_t& imageIndex, VkSemaphore* pSemaphore /* = nullptr */, VkFence* pFence /* = nullptr */)
     {
-        // TODO: Semaphore or fence
-        return vkAcquireNextImageKHR(_device->GetHandle(), swapchain->GetHandle(), std::numeric_limits<uint64_t>::max(), VK_NULL_HANDLE, VK_NULL_HANDLE, &imageIndex);
+        if (pFence != nullptr)
+        {
+            vkWaitForFences(GetDevice()->GetHandle(), 1, pFence, VK_TRUE, std::numeric_limits<uint64_t>::max());
+            vkResetFences(GetDevice()->GetHandle(), 1, pFence);
+        }
+
+        return vkAcquireNextImageKHR(_device->GetHandle(),
+            swapchain->GetHandle(),
+            std::numeric_limits<uint64_t>::max(),
+            pSemaphore == nullptr ? VK_NULL_HANDLE : *pSemaphore,
+            pFence == nullptr ? VK_NULL_HANDLE : *pFence,
+            &imageIndex);
     }
 
     VkResult Queue::Submit(uint32_t submitCount, const SubmitInfo* pSubmits, VkFence* pFence)
     {
         std::vector<VkSubmitInfo> submitInfos(submitCount);
+
+        std::vector<std::vector<VkCommandBuffer>> commandBuffers(submitCount);
+        std::vector<std::vector<VkSemaphore>> waitSemaphores(submitCount);
+        std::vector<std::vector<uint32_t>> waitDstStageMask(submitCount);
+
         for (uint32_t i = 0; i < submitCount; ++i)
         {
             auto& submitInfo = submitInfos[i];
             submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
             submitInfo.commandBufferCount = pSubmits[i].commandBuffers.size();
-            // submitInfo.pCommandBuffers
+            for (auto&& itr : pSubmits[i].commandBuffers)
+            {
+                BOOST_ASSERT_MSG(itr != nullptr, "A command buffer is being submitted as nullptr!");
+                commandBuffers[i].push_back(itr->GetHandle());
+            }
+
+            submitInfo.pCommandBuffers = commandBuffers[i].data();
 
             submitInfo.signalSemaphoreCount = pSubmits[i].signalSemaphores.size();
-            // submitInfo.pSignalSemaphores
+            submitInfo.pSignalSemaphores = pSubmits[i].signalSemaphores.data();
 
             submitInfo.waitSemaphoreCount = pSubmits[i].waitSemaphores.size();
-            // submitInfo.pWaitSemaphores
-            // submitInfo.pWaitDstStageMask
+            for (auto&& itr : pSubmits[i].waitSemaphores) {
+                waitSemaphores[i].push_back(itr.first);
+                waitDstStageMask[i].push_back(itr.second);
+            }
+
+            submitInfo.waitSemaphoreCount = pSubmits[i].waitSemaphores.size();
+            submitInfo.pWaitSemaphores = waitSemaphores[i].data();
+            submitInfo.pWaitDstStageMask = waitDstStageMask[i].data();
         }
 
-        return vkQueueSubmit(GetHandle(), submitCount, submitInfos.data(), *pFence);
+        return vkQueueSubmit(GetHandle(),
+            submitCount,
+            submitInfos.data(),
+            pFence == nullptr ? VK_NULL_HANDLE : *pFence);
     }
 
     VkResult Queue::Present(const PresentInfo* pPresentInfo)
@@ -64,15 +97,19 @@ namespace gfx::vk
         presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
         presentInfo.waitSemaphoreCount = pPresentInfo->waitSemaphores.size();
+        presentInfo.pWaitSemaphores = pPresentInfo->waitSemaphores.data();
 
         std::vector<VkSwapchainKHR> swapchains(pPresentInfo->swapchains.size());
         std::vector<uint32_t> imageIndices(pPresentInfo->swapchains.size());
         std::vector<VkResult> results(pPresentInfo->swapchains.size());
 
+        uint32_t i = 0;
         for (auto&& itr : pPresentInfo->swapchains)
         {
-            swapchains.push_back(itr.swapchain->GetHandle());
-            imageIndices.push_back(itr.swapchain->GetImageIndex(itr.image));
+            swapchains[i] = itr.swapchain->GetHandle();
+            imageIndices[i] = itr.swapchain->GetImageIndex(itr.image);
+
+            ++i;
         }
 
         presentInfo.pSwapchains = swapchains.data();

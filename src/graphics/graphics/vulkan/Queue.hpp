@@ -19,10 +19,10 @@ namespace gfx::vk
 
         VkResult WaitIdle();
 
-        VkResult AcquireImageIndex(Swapchain* swapchain, uint32_t& imageIndex, VkSemaphore* semaphore = nullptr);
+        VkResult AcquireNextImage(Swapchain* swapchain, uint32_t& imageIndex, VkSemaphore* semaphore = nullptr, VkFence* pFence = nullptr);
 
         VkResult Present(const PresentInfo* pPresentInfo);
-        VkResult Submit(uint32_t submitCount, const SubmitInfo* pSubmits, VkFence* pFence);
+        VkResult Submit(uint32_t submitCount, const SubmitInfo* pSubmits, VkFence* pFence = nullptr);
 
         VkResult BeginLabel(std::string_view label, float (&color)[4]);
         VkResult EndLabel();

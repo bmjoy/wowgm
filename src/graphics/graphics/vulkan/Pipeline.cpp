@@ -25,7 +25,6 @@ namespace gfx::vk
     {
         vkDestroyPipeline(_device->GetHandle(), GetHandle(), nullptr);
         vkDestroyPipelineLayout(_device->GetHandle(), GetLayout(), nullptr);
-        vkDestroyRenderPass(_device->GetHandle(), _renderPass->GetHandle(), nullptr);
     }
 
     void MergeShaderResources(std::unordered_map<std::string, PipelineResource>& pipelineResources, const Shader* const* pShaders, uint32_t stageCount)
@@ -297,7 +296,6 @@ namespace gfx::vk
 #endif
 
         *ppPipeline = pPipeline;
-        pPipeline->_renderPass = pCreateInfo->renderPass;
 
         return VK_SUCCESS;
     }

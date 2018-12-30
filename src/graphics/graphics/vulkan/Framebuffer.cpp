@@ -11,9 +11,8 @@ namespace gfx::vk
     {
         std::vector<VkImageView> attachments(pCreateInfo->attachments.size());
         for (uint32_t i = 0; i < pCreateInfo->attachments.size(); ++i)
-        {
-            attachments.push_back(pCreateInfo->attachments[i]->GetHandle());
-        }
+            attachments[i] = pCreateInfo->attachments[i]->GetHandle();
+
         // Create a Framebuffer class instance.
         Framebuffer* framebuffer = new Framebuffer;
         framebuffer->_device = pDevice;
@@ -33,11 +32,7 @@ namespace gfx::vk
         createInfo.layers = framebuffer->_layers;
 
         VkResult result = vkCreateFramebuffer(pDevice->GetHandle(), &createInfo, nullptr, &framebuffer->_handle);
-        if (result != VK_SUCCESS)
-        {
-            delete framebuffer;
-            return result;
-        }
+        BOOST_ASSERT_MSG(result == VK_SUCCESS, "Error creating a framebuffer");
 
         *ppFramebuffer = framebuffer;
         return VK_SUCCESS;

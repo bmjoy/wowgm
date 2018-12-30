@@ -33,7 +33,7 @@ namespace gfx::vk
         Instance(Instance&&) = delete;
 
         template <typename T>
-        VkResult SetObjectName(Device* device, T objectHandleValue, std::string_view objectName)
+        VkResult SetObjectName(Device* device, uint64_t objectHandleValue, std::string_view objectName)
         {
 #if _DEBUG
             if (vkSetDebugUtilsObjectNameEXT != nullptr)
@@ -41,7 +41,7 @@ namespace gfx::vk
                 VkDebugUtilsObjectNameInfoEXT nameInfo{};
                 nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
                 nameInfo.pObjectName = objectName.data();
-                nameInfo.objectHandle = uint64_t(objectHandleValue);
+                nameInfo.objectHandle = objectHandleValue;
                 nameInfo.objectType = gfx::vk::traits<T>::object_type;
 
                 return vkSetDebugUtilsObjectNameEXT(device->GetHandle(), &nameInfo);

@@ -5,6 +5,8 @@
 #include <graphics/vulkan/RenderPass.hpp>
 #include <graphics/vulkan/Shader.hpp>
 #include <graphics/vulkan/Pipeline.hpp>
+#include <graphics/vulkan/CommandBuffer.hpp>
+#include <graphics/vulkan/Queue.hpp>
 
 namespace wowgm
 {
@@ -12,7 +14,11 @@ namespace wowgm
 
     InterfaceRenderer::InterfaceRenderer(Swapchain* swapchain) : Renderer(swapchain)
     {
-        _renderPass = new RenderPass(GetDevice());
+    }
+
+    void InterfaceRenderer::InitializeRenderPass(RenderPass* renderPass)
+    {
+        _renderPass = renderPass;
 
         uint32_t attachmentIndex = _renderPass->AddAttachment(AttachmentType::Color, VkAttachmentDescription{
             0,                                          // flags
@@ -29,7 +35,10 @@ namespace wowgm
         _renderPass->BeginSubpass();
         _renderPass->AddAttachmentReference(gfx::vk::AttachmentType::Color, attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
         _renderPass->FinalizeSubpass();
+    }
 
+    void InterfaceRenderer::Initialize()
+    {
         Shader* fragmentShader = Shader::FromDisk(GetDevice(), "./resources/shaders/frag.spv", "main", VK_SHADER_STAGE_FRAGMENT_BIT);
         Shader* vertexShader = Shader::FromDisk(GetDevice(), "./resources/shaders/vert.spv", "main", VK_SHADER_STAGE_VERTEX_BIT);
 
@@ -82,12 +91,26 @@ namespace wowgm
 
         delete fragmentShader;
         delete vertexShader;
+
     }
 
     InterfaceRenderer::~InterfaceRenderer()
     {
-        // Deletes the pipeline, its layout, and the render pass.
+        // Deletes the pipeline, its layout.
         delete _pipeline;
+    }
+
+    void InterfaceRenderer::onFrame(CommandBuffer* commandBuffer)
+    {
+        commandBuffer->BeginLabel("InterfaceRenderer::onFrame", {1.0f, 0.0f, 0.0f, 0.0f});
+
+        // There's no other subpass
+        // commandBuffer->NextSubpass(VK_SUBPASS_CONTENTS_INLINE);
+
+        commandBuffer->BindPipeline(GetPipeline());
+        commandBuffer->Draw(3);
+
+        commandBuffer->EndLabel();
     }
 
     void InterfaceRenderer::Render()

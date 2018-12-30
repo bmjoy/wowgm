@@ -1,26 +1,24 @@
 #pragma once
 
+#include <graphics/vulkan/NamedObject.hpp>
 #include <graphics/vulkan/VK.hpp>
-
 
 namespace gfx::vk
 {
-    class Image // : public NamedObject<Image>
+    class Image final : public NamedObject<Image>
     {
     public:
         static Image* CreateFromHandle(Device* device, const ImageCreateInfo* pImageCreateInfo, VkImageLayout imageLayout, VkImage image, VmaAllocation allocation);
 
         VkImage GetHandle() const { return _handle; }
+        Instance* GetInstance() const;
+        Device* GetDevice() const;
 
         VmaAllocation GetAllocation() const { return _allocation; }
 
         const ImageCreateInfo& GetCreateInfo() const { return _createInfo; }
 
         VkImageLayout GetLayout() { return _imageLayout; }
-
-        Instance* GetInstance() const;
-
-        Device* GetDevice() const;
 
         VkResult TransitionToLayout(VkImageLayout targetLayout, VkPipelineStageFlagBits startStage, VkPipelineStageFlagBits endStage, VkDependencyFlags dependencyFlag);
 

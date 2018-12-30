@@ -1,6 +1,7 @@
 #pragma once
 
 #include <graphics/vulkan/VK.hpp>
+#include <graphics/vulkan/NamedObject.hpp>
 
 #include <unordered_map>
 #include <vector>
@@ -13,7 +14,7 @@ namespace gfx::vk
     class ImageBlit; // TODO
     class ImageResolve; // TODO
 
-    class CommandBuffer
+    class CommandBuffer final : public NamedObject<CommandBuffer>
     {
     private:
         friend class CommandPool;
@@ -232,9 +233,9 @@ namespace gfx::vk
     private:
         friend class CommandPool;
 
-        CommandPool* _pool;
+        CommandPool* _pool = nullptr;
         VkCommandBuffer _handle = VK_NULL_HANDLE;
-        Pipeline* _boundPipeline;
+        Pipeline* _boundPipeline = nullptr;
         bool _isRecording = false;
         bool _submittedToQueue = false;
 
@@ -299,9 +300,9 @@ namespace gfx::vk
         bool _stencilReference = false;
 
 #endif
-        PFN_vkCmdEndDebugUtilsLabelEXT    _vkCmdEndDebugUtilsLabelEXT;
-        PFN_vkCmdBeginDebugUtilsLabelEXT  _vkCmdBeginDebugUtilsLabelEXT;
-        PFN_vkCmdInsertDebugUtilsLabelEXT _vkCmdInsertDebugUtilsLabelEXT;
+        PFN_vkCmdEndDebugUtilsLabelEXT    _vkCmdEndDebugUtilsLabelEXT = nullptr;
+        PFN_vkCmdBeginDebugUtilsLabelEXT  _vkCmdBeginDebugUtilsLabelEXT = nullptr;
+        PFN_vkCmdInsertDebugUtilsLabelEXT _vkCmdInsertDebugUtilsLabelEXT = nullptr;
 
         VkCommandBufferLevel _level;
 

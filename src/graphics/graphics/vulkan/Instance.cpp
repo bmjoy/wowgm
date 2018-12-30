@@ -161,15 +161,17 @@ namespace gfx::vk
             }
         }
 
-#define CONTAINS_EXTENSION(c, x) std::find((c).begin(), (c).end(), (x)) != (c).end()
+        auto contains_extension = [](std::vector<const char*> const& extensions, const char* needle) -> bool {
+            return std::find_if(std::begin(extensions), std::end(extensions), [&needle](auto itr) -> bool {
+                return strcmp(needle, itr) == 0;
+            }) != std::end(extensions);
+        };
 
-        if (CONTAINS_EXTENSION(pCreateInfo->enabledExtensionNames, VK_EXT_DEBUG_UTILS_EXTENSION_NAME))
+        if (contains_extension(pCreateInfo->enabledExtensionNames, VK_EXT_DEBUG_UTILS_EXTENSION_NAME))
             instance->vkSetDebugUtilsObjectNameEXT = PFN_vkSetDebugUtilsObjectNameEXT(vkGetInstanceProcAddr(instanceHandle, "vkSetDebugUtilsObjectNameEXT"));
 
-        if (instance->vkSetDebugUtilsObjectNameEXT == nullptr && CONTAINS_EXTENSION(pCreateInfo->enabledExtensionNames, VK_EXT_DEBUG_REPORT_EXTENSION_NAME))
+        if (instance->vkSetDebugUtilsObjectNameEXT == nullptr && contains_extension(pCreateInfo->enabledExtensionNames, VK_EXT_DEBUG_REPORT_EXTENSION_NAME))
             instance->vkDebugMarkerSetObjectNameEXT = PFN_vkDebugMarkerSetObjectNameEXT(vkGetInstanceProcAddr(instanceHandle, "vkDebugMarkerSetObjectNameEXT"));
-
-#undef CONTAINS_EXTENSION
 
 #endif
 
