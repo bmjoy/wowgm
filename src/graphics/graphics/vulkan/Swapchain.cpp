@@ -147,7 +147,7 @@ namespace gfx::vk
 
         // Select the best color format and present mode based on what's available.
         auto surfaceFormat = ChooseSwapSurfaceFormat(_swapchainSupport.formats, _createInfo.preferredFormat.format, _createInfo.preferredFormat.colorSpace);
-        auto presentMode = ChooseSwapPresentMode(_swapchainSupport.presentModes, true /* m_vsyncEnabled */);
+        auto presentMode = ChooseSwapPresentMode(_swapchainSupport.presentModes, false /* m_vsyncEnabled */);
 
         // Determine the total number of images required.
         uint32_t imageCount = _createInfo.tripleBuffer ? 3 : _swapchainSupport.capabilities.minImageCount + 1;

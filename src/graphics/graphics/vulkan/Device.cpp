@@ -130,6 +130,12 @@ namespace gfx::vk
     {
         vkDeviceWaitIdle(_handle);
 
+        for (auto&& itr : _commandPools)
+            for (auto&& kv : itr.second)
+                delete kv.second;
+
+        _commandPools.clear();
+
         DestroyBuffer(_stagingBuffer);
 
         delete _descriptorSetLayoutCache;

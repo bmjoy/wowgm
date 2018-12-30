@@ -33,14 +33,24 @@ namespace gfx::vk
         return vkQueueWaitIdle(GetHandle());
     }
 
-    VkResult Queue::AcquireNextImage(Swapchain* swapchain, uint32_t& imageIndex, VkSemaphore* pSemaphore /* = nullptr */, VkFence* pFence /* = nullptr */)
+    VkResult Queue::WaitForFences(uint32_t fenceCount, VkFence* pFence, uint64_t timeout)
     {
         if (pFence != nullptr)
-        {
-            vkWaitForFences(GetDevice()->GetHandle(), 1, pFence, VK_TRUE, std::numeric_limits<uint64_t>::max());
-            vkResetFences(GetDevice()->GetHandle(), 1, pFence);
-        }
+            return vkWaitForFences(GetDevice()->GetHandle(), fenceCount, pFence, VK_TRUE, timeout);
 
+        return VK_SUCCESS;
+    }
+
+    VkResult Queue::ResetFences(uint32_t fenceCount, VkFence* pFence)
+    {
+        if (pFence != nullptr)
+            return vkResetFences(GetDevice()->GetHandle(), fenceCount, pFence);
+
+        return VK_SUCCESS;
+    }
+
+    VkResult Queue::AcquireNextImage(Swapchain* swapchain, uint32_t& imageIndex, VkSemaphore* pSemaphore /* = nullptr */, VkFence* pFence /* = nullptr */)
+    {
         return vkAcquireNextImageKHR(_device->GetHandle(),
             swapchain->GetHandle(),
             std::numeric_limits<uint64_t>::max(),

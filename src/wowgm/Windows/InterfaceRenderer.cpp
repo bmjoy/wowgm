@@ -16,7 +16,7 @@ namespace wowgm
     {
     }
 
-    void InterfaceRenderer::InitializeRenderPass(RenderPass* renderPass)
+    void InterfaceRenderer::initializeRenderPass(RenderPass* renderPass)
     {
         _renderPass = renderPass;
 
@@ -37,7 +37,7 @@ namespace wowgm
         _renderPass->FinalizeSubpass();
     }
 
-    void InterfaceRenderer::Initialize()
+    void InterfaceRenderer::initializePipeline()
     {
         Shader* fragmentShader = Shader::FromDisk(GetDevice(), "./resources/shaders/frag.spv", "main", VK_SHADER_STAGE_FRAGMENT_BIT);
         Shader* vertexShader = Shader::FromDisk(GetDevice(), "./resources/shaders/vert.spv", "main", VK_SHADER_STAGE_VERTEX_BIT);
@@ -68,6 +68,10 @@ namespace wowgm
         pipelineCreateInfo.rasterizationState.polygonMode = VK_POLYGON_MODE_FILL;
         pipelineCreateInfo.rasterizationState.lineWidth = 1.0f;
         pipelineCreateInfo.rasterizationState.depthClampEnable = VK_FALSE;
+
+        /// Topology
+        pipelineCreateInfo.inputAssemblyState.primitiveRestartEnable = VK_FALSE;
+        pipelineCreateInfo.inputAssemblyState.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 
         /// Multisampling
         pipelineCreateInfo.multisampleState.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
@@ -100,7 +104,7 @@ namespace wowgm
         delete _pipeline;
     }
 
-    void InterfaceRenderer::onFrame(CommandBuffer* commandBuffer)
+    void InterfaceRenderer::onRenderQuery(CommandBuffer* commandBuffer)
     {
         commandBuffer->BeginLabel("InterfaceRenderer::onFrame", {1.0f, 0.0f, 0.0f, 0.0f});
 
@@ -111,11 +115,6 @@ namespace wowgm
         commandBuffer->Draw(3);
 
         commandBuffer->EndLabel();
-    }
-
-    void InterfaceRenderer::Render()
-    {
-
     }
 
     Pipeline* InterfaceRenderer::GetPipeline() const

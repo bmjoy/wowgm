@@ -5,8 +5,6 @@
 
 #include <vector>
 
-#include "InterfaceRenderer.hpp"
-
 namespace gfx::vk {
     class Instance;
     class Device;
@@ -14,10 +12,13 @@ namespace gfx::vk {
     class Pipeline;
     class CommandBuffer;
     class Framebuffer;
+    class RenderPass;
 }
 
 namespace wowgm
 {
+    class Renderer;
+
     class Window final : public gfx::Window
     {
     public:
@@ -62,6 +63,6 @@ namespace wowgm
         std::vector<Frame> _frames;
         extstd::containers::ring_iterator<decltype(_frames)::iterator> _currentFrame;
 
-        InterfaceRenderer* _interfaceRenderer;
+        std::vector<Renderer*> _renderers;
     };
 }

@@ -28,6 +28,10 @@ namespace gfx::vk
         VkResult EndLabel();
         VkResult InsertLabel(std::string_view label, float (&color)[4]);
 
+    public: // Fence
+        VkResult WaitForFences(uint32_t fenceCount, VkFence* pFence, uint64_t timeout);
+        VkResult ResetFences(uint32_t fenceCount, VkFence* pFence);
+
     private:
         VkResult _InitializeLabelPointers();
     private:

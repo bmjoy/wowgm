@@ -190,10 +190,10 @@ namespace gfx::vk
 
         if (_currentRenderPass == nullptr)
             return;
-#endif
 
         ++_subpassIndex;
         _subpassContents = contents;
+#endif
 
         vkCmdNextSubpass(_handle, contents);
     }

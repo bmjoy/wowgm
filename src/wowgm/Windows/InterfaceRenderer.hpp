@@ -16,18 +16,19 @@ namespace gfx::vk {
 
 namespace wowgm
 {
-    class InterfaceRenderer final : public Renderer
+    class InterfaceRenderer : public Renderer
     {
     public:
         InterfaceRenderer(gfx::vk::Swapchain* device);
         ~InterfaceRenderer();
 
-        void Render() override;
+        void initializePipeline() override;
+        void initializeRenderPass(gfx::vk::RenderPass* renderPass) override;
 
-        void Initialize();
-        void InitializeRenderPass(gfx::vk::RenderPass* renderPass);
+        void onRenderQuery(gfx::vk::CommandBuffer* commandBuffer) override;
 
-        void onFrame(gfx::vk::CommandBuffer* commandBuffer) override;
+        void beforeRenderQuery(gfx::vk::CommandBuffer* buffer) { }
+        void afterRenderQuery(gfx::vk::CommandBuffer* buffer) { }
 
         gfx::vk::Pipeline* GetPipeline() const override;
 

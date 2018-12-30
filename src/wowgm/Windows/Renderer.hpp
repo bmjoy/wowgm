@@ -21,12 +21,27 @@ namespace wowgm
         Renderer(gfx::vk::Swapchain* swapchain);
         virtual ~Renderer();
 
-        virtual void Render() = 0;
+        /// Implement this method if you need to add a subpass to the provided renderpass. This is typically always the case.
+        virtual void initializeRenderPass(gfx::vk::RenderPass* renderPass) = 0;
 
-        virtual void onFrame(gfx::vk::CommandBuffer* buffer) = 0;
+        /// Implement this method when you need to create your rendering pipeline.
+        virtual void initializePipeline() = 0;
+
+        /// This method is called before the render pass begins.
+        virtual void beforeRenderQuery(gfx::vk::CommandBuffer* buffer) = 0;
+
+        /// This method is called when the render pass has started.
+        virtual void onRenderQuery(gfx::vk::CommandBuffer* buffer) = 0;
+
+        /// This method is called after the render pass has stopped recording render queries.
+        virtual void afterRenderQuery(gfx::vk::CommandBuffer* buffer) = 0;
 
         Renderer(Renderer&&) = delete;
         Renderer(Renderer const&) = delete;
+
+        Renderer& operator = (Renderer const&) = delete;
+        Renderer& operator = (Renderer&&) = delete;
+
     protected:
         gfx::vk::Instance*  GetInstance() const;
         gfx::vk::Device*    GetDevice() const;

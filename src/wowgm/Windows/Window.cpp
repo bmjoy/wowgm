@@ -18,9 +18,14 @@
 
 #include <sstream>
 
+#include "InterfaceRenderer.hpp"
+#include "MetricsRenderer.hpp"
+
 // Fucking hell, windows.
 #if PLATFORM == PLATFORM_WINDOWS
 #undef CreateSemaphore
+#undef max
+#undef min
 #endif
 
 namespace wowgm
@@ -184,14 +189,17 @@ namespace wowgm
         // Prepare the render pass
         _renderPass = new RenderPass(GetDevice());
 
-        // Create the renderers
-        _interfaceRenderer = new InterfaceRenderer(_swapchain);
+        // Register every renderer here
+        auto metricsRenderer = new MetricsRenderer<InterfaceRenderer>(_swapchain);
+        _renderers.push_back(metricsRenderer);
 
-        // Let all the renderers add their subpass to the render pass.
-        _interfaceRenderer->InitializeRenderPass(_renderPass);
+        // Give a chance for every renderer to add a subpass
+        for (auto&& itr : _renderers)
+            itr->initializeRenderPass(_renderPass);
 
-        // Then create the pipeline of each renderer
-        _interfaceRenderer->Initialize();
+        // Then let them create their pipelines
+        for (auto&& itr : _renderers)
+            itr->initializePipeline();
 
         // Create the semaphores.
         _frames.resize(GetSwapchain()->GetImageCount());
@@ -248,8 +256,11 @@ namespace wowgm
             GetDevice()->DestroyFence(itr.inflightFence);
         }
 
-        // pipeline, pipelineLayout
-        delete _interfaceRenderer;
+        for (auto&& itr : _renderers)
+            delete itr;
+
+        _renderers.clear();
+
         delete _renderPass;
 
         // swapchain imageViews, swapchain
@@ -273,8 +284,11 @@ namespace wowgm
 
         gfx::vk::Queue* graphicsQueue = GetDevice()->GetQueueByFlags(VK_QUEUE_GRAPHICS_BIT, 0);
 
+        graphicsQueue->WaitForFences(1, &_currentFrame->inflightFence, std::numeric_limits<uint64_t>::max());
+        graphicsQueue->ResetFences(1, &_currentFrame->inflightFence);
+
         uint32_t imageIndex; // The index of the image that has become available
-        result = graphicsQueue->AcquireNextImage(GetSwapchain(), imageIndex, &_currentFrame->acquireSemaphore, &_currentFrame->inflightFence);
+        result = graphicsQueue->AcquireNextImage(GetSwapchain(), imageIndex, &_currentFrame->acquireSemaphore, nullptr);
         BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to acquire the next image");
 
         BOOST_ASSERT_MSG(_currentFrame->commandBuffer != nullptr, "The command buffer of the current frame must be initialized");
@@ -283,20 +297,26 @@ namespace wowgm
         result = _currentFrame->commandBuffer->Begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT, nullptr);
         BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to start recording");
 
+        for (auto&& itr : _renderers)
+            itr->beforeRenderQuery(_currentFrame->commandBuffer);
+
         // Begin a render pass
         gfx::vk::RenderPassBeginInfo renderPassBeginInfo{};
         renderPassBeginInfo.pRenderPass = _renderPass;
-        renderPassBeginInfo.clearValues.push_back({ 1.0f, 1.0f, 1.0f, 0.0f });
+        renderPassBeginInfo.clearValues.push_back({ 0.0f, 0.0f, 0.0f, 1.0f });
         renderPassBeginInfo.renderArea.extent = GetSwapchain()->GetExtent();
         renderPassBeginInfo.renderArea.offset = { 0, 0 };
         renderPassBeginInfo.pFramebuffer = _currentFrame->frameBuffer;
         _currentFrame->commandBuffer->BeginRenderPass(&renderPassBeginInfo);
 
-        // Begin the first subpass.
-        _interfaceRenderer->onFrame(_currentFrame->commandBuffer);
+        for (auto&& itr : _renderers)
+            itr->onRenderQuery(_currentFrame->commandBuffer);
 
         // Finish this render pass.
         _currentFrame->commandBuffer->EndRenderPass();
+
+        for (auto&& itr : _renderers)
+            itr->afterRenderQuery(_currentFrame->commandBuffer);
 
         // Done recording
         _currentFrame->commandBuffer->End();
