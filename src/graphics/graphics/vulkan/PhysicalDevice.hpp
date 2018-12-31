@@ -18,7 +18,7 @@ namespace gfx::vk
 
         Instance* GetInstance() const { return _instance; }
         VkPhysicalDevice GetHandle() const { return _handle; }
-        VkPhysicalDeviceProperties const& GetPhysicalDeviceProperties() const { return _properties; }
+        VkPhysicalDeviceProperties const& GetProperties() const { return _properties; }
 
     private:
         VkPhysicalDevice _handle = VK_NULL_HANDLE;

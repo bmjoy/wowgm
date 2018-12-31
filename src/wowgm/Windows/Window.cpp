@@ -153,7 +153,7 @@ namespace wowgm
         PhysicalDevice* physicalDevice = nullptr;
         for (PhysicalDevice* itr : _instance->GetPhysicalDevices())
         {
-            if (itr->GetPhysicalDeviceProperties().deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
+            if (itr->GetProperties().deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
                 physicalDevice = itr;
 
             if (physicalDevice != nullptr)

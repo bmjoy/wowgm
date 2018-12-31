@@ -54,7 +54,7 @@ namespace wowgm
 
             // Before doing anything, we check if the device supports timestamps on all graphics and compute queues.
             bool supported = false;
-            if (GetDevice()->GetPhysicalDevice()->GetPhysicalDeviceProperties().limits.timestampComputeAndGraphics == VK_TRUE)
+            if (GetDevice()->GetPhysicalDevice()->GetProperties().limits.timestampComputeAndGraphics == VK_TRUE)
                 supported = true;
 
             if (!supported)
@@ -80,10 +80,10 @@ namespace wowgm
 
         void beforeRenderQuery(gfx::vk::CommandBuffer* commandBuffer) override
         {
-            if (_queryPool == VK_NULL_HANDLE)
-                return;
+            if (_queryPool != VK_NULL_HANDLE)
+                vkCmdResetQueryPool(commandBuffer->GetHandle(), _queryPool, 0, 2);
 
-            vkCmdResetQueryPool(commandBuffer->GetHandle(), _queryPool, 0, 2);
+            base_t::beforeRenderQuery(commandBuffer);
         }
 
         void onRenderQuery(gfx::vk::CommandBuffer* commandBuffer) override
@@ -99,6 +99,8 @@ namespace wowgm
 
         void afterRenderQuery(gfx::vk::CommandBuffer* commandBuffer) override
         {
+            base_t::afterRenderQuery(commandBuffer);
+
             if (_queryPool == VK_NULL_HANDLE)
                 return;
 
@@ -113,7 +115,7 @@ namespace wowgm
             constexpr const char ns[] = "class wowgm::";
 
             uint64_t interval = timers[1] - timers[0];
-            double executionTime = interval * GetDevice()->GetPhysicalDevice()->GetPhysicalDeviceProperties().limits.timestampPeriod / 1000000.0f;
+            double executionTime = interval * GetDevice()->GetPhysicalDevice()->GetProperties().limits.timestampPeriod / 1000000.0f;
             LOG_GRAPHICS("{} - {} ms", boost::core::demangle(typeid(T).name()).substr(sizeof(ns) - 1), executionTime);
         }
 

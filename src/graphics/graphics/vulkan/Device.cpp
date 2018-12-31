@@ -349,7 +349,7 @@ namespace gfx::vk
             cmdBuffer = GetOneTimeSubmitCommandBuffer();
 
         Queue* queue = _queues[cmdBuffer->GetPool()->GetQueueFamilyIndex()][0];
-        auto alignedFlushSize = _physicalDevice->GetPhysicalDeviceProperties().limits.nonCoherentAtomSize;
+        auto alignedFlushSize = _physicalDevice->GetProperties().limits.nonCoherentAtomSize;
 
         auto pixelSize = GetUncompressedImageFormatSize(pImage->GetCreateInfo().format);
 
@@ -484,7 +484,7 @@ namespace gfx::vk
 
         // Get required alignment flush size for selected physical device.
         VkPhysicalDeviceProperties properties = {};
-        vkGetPhysicalDeviceProperties(_physicalDevice->GetHandle(), &properties);
+        vkGetProperties(_physicalDevice->GetHandle(), &properties);
         auto alignedFlushSize = properties.limits.nonCoherentAtomSize;
 
         // Determine the size of each compressed block.
