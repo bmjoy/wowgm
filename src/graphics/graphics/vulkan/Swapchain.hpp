@@ -22,7 +22,7 @@ namespace gfx::vk
     public:
         ~Swapchain();
 
-        static VkResult Create(Device* pDevice, const SwapchainCreateInfo* pCreateInfo, Swapchain** ppSwapchain);
+        Swapchain(Device* pDevice, const SwapchainCreateInfo* pCreateInfo);
 
         Device* GetDevice() { return _device; }
         VkSwapchainKHR GetHandle() { return _handle; }

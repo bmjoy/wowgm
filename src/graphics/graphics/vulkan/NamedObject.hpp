@@ -2,6 +2,7 @@
 
 #include <graphics/vulkan/Traits.hpp>
 #include <graphics/vulkan/VK.hpp>
+#include <graphics/vulkan/Instance.hpp>
 
 #include <string>
 

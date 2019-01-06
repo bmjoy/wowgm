@@ -86,24 +86,24 @@ namespace gfx::vk
         vertexInputState.pNext = pCreateInfo->vertexInputState.pNext;
         vertexInputState.flags = pCreateInfo->vertexInputState.flags;
 
-        if (pCreateInfo->vertexInputState.vertexAttributeDescriptionCount != 0)
+        if (pCreateInfo->vertexInputState.vertexAttributeDescriptions.size() != 0)
         {
-            vertexInputState.vertexAttributeDescriptionCount = pCreateInfo->vertexInputState.vertexAttributeDescriptionCount;
-            vertexInputState.pVertexAttributeDescriptions = pCreateInfo->vertexInputState.pVertexAttributeDescriptions;
+            vertexInputState.vertexAttributeDescriptionCount = pCreateInfo->vertexInputState.vertexAttributeDescriptions.size();
+            vertexInputState.pVertexAttributeDescriptions = pCreateInfo->vertexInputState.vertexAttributeDescriptions.data();
         }
         else
         {
-
+            // TODO: Shader reflection
         }
 
-        if (pCreateInfo->vertexInputState.vertexBindingDescriptionCount != 0)
+        if (pCreateInfo->vertexInputState.vertexBindingDescriptions.size() != 0)
         {
-            vertexInputState.vertexBindingDescriptionCount = pCreateInfo->vertexInputState.vertexBindingDescriptionCount;
-            vertexInputState.pVertexBindingDescriptions = pCreateInfo->vertexInputState.pVertexBindingDescriptions;
+            vertexInputState.vertexBindingDescriptionCount = pCreateInfo->vertexInputState.vertexBindingDescriptions.size();
+            vertexInputState.pVertexBindingDescriptions = pCreateInfo->vertexInputState.vertexBindingDescriptions.data();
         }
         else
         {
-
+            // TODO: Shader reflection
         }
 
         VkPipelineInputAssemblyStateCreateInfo inputAssemblyState{};
@@ -185,13 +185,14 @@ namespace gfx::vk
         colorBlendState.logicOpEnable = pCreateInfo->colorBlendState.logicOpEnable;
         colorBlendState.pAttachments = pCreateInfo->colorBlendState.attachments.data();
 
+        // Scoped here so that it lives longer than the if branch
+        std::vector<VkDynamicState> dynamicStates;
         if (pCreateInfo->dynamicState)
         {
             VkPipelineDynamicStateCreateInfo dynamicStateCreateInfo{};
             pipelineCreateInfo.pDynamicState = &dynamicStateCreateInfo;
             dynamicStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
 
-            std::vector<VkDynamicState> dynamicStates;
             if (pCreateInfo->dynamicState.viewport)
                 dynamicStates.push_back(VK_DYNAMIC_STATE_VIEWPORT);
             if (pCreateInfo->dynamicState.scissors)

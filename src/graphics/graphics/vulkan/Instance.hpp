@@ -20,7 +20,7 @@ namespace gfx::vk
     class Instance
     {
     public:
-        static VkResult Create(const InstanceCreateInfo* pCreateInfo, Instance** ppInstance);
+        Instance(const InstanceCreateInfo* pCreateInfo);
 
         VkInstance GetHandle() const { return _handle; }
         std::vector<PhysicalDevice*> const& GetPhysicalDevices() const { return _physicalDevices; }

@@ -5,6 +5,18 @@
 
 #include <mutex>
 
+#include <imgui/imgui.h>
+
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+
+#ifdef _WIN32
+#undef WINAPI
+#endif
+
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
+
 namespace gfx
 {
     Window::Window(int32_t width, int32_t height, std::string const& title)
@@ -42,6 +54,11 @@ namespace gfx
         std::call_once(glfwCleaner, []() -> void {
             glfwTerminate();
         });
+    }
+
+    HWND Window::getHandle()
+    {
+        return glfwGetWin32Window(window);
     }
 
     void Window::setSizeLimits(const glm::uvec2& minSize, const glm::uvec2& maxSize)
@@ -137,16 +154,21 @@ namespace gfx
 
     void Window::onKeyEvent(int key, int scancode, int action, int mods)
     {
+        ImGuiIO& io = ImGui::GetIO();
+
         switch (action) {
-        case GLFW_PRESS:
-            onKeyPressed(key, mods);
-            break;
-        case GLFW_RELEASE:
-            onKeyReleased(key, mods);
-            break;
-        default:
-            break;
+            case GLFW_PRESS:
+                onKeyPressed(key, mods);
+                io.KeysDown[key] = true;
+                break;
+            case GLFW_RELEASE:
+                onKeyReleased(key, mods);
+                io.KeysDown[key] = false;
+                break;
+            default:
+                break;
         }
+
     }
 
     void Window::showWindow(bool show)

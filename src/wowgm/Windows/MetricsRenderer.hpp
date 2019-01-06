@@ -13,6 +13,7 @@
 #include <boost/core/demangle.hpp>
 
 #include <type_traits>
+#include <chrono>
 
 namespace gfx::vk
 {
@@ -23,18 +24,17 @@ namespace wowgm
 {
     // Quick hack to circumvent MetricsRenderer<MetricsRenderer<T>>
     template <typename T>
-    struct metrics_traits
-    {
+    struct metrics_traits {
         using base_type = T;
-        using type = T;
+        using type      = T;
     };
 
     template <typename T> class MetricsRenderer;
 
     template <typename T>
     struct metrics_traits<MetricsRenderer<T>> {
-        using base_type = T;
-        using type = MetricsRenderer<T>;
+        using base_type = typename metrics_traits<T>::base_type;
+        using type      = MetricsRenderer<T>;
     };
 
     /**
@@ -47,6 +47,8 @@ namespace wowgm
         static_assert(std::is_base_of<Renderer, T>::value, "yikes");
 
         using base_t = typename metrics_traits<T>::base_type;
+
+        using hrc = std::chrono::high_resolution_clock;
 
         MetricsRenderer(gfx::vk::Swapchain* swapchain) : base_t(swapchain)
         {
@@ -81,7 +83,9 @@ namespace wowgm
         void beforeRenderQuery(gfx::vk::CommandBuffer* commandBuffer) override
         {
             if (_queryPool != VK_NULL_HANDLE)
+            {
                 vkCmdResetQueryPool(commandBuffer->GetHandle(), _queryPool, 0, 2);
+            }
 
             base_t::beforeRenderQuery(commandBuffer);
         }
@@ -91,15 +95,17 @@ namespace wowgm
             if (_queryPool != VK_NULL_HANDLE)
                 vkCmdWriteTimestamp(commandBuffer->GetHandle(), VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, _queryPool, 0);
 
+            auto startTime = hrc::now();
             base_t::onRenderQuery(commandBuffer);
+            _cpuTime = hrc::now() - startTime;
 
             if (_queryPool != VK_NULL_HANDLE)
                 vkCmdWriteTimestamp(commandBuffer->GetHandle(), VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, _queryPool, 1);
         }
 
-        void afterRenderQuery(gfx::vk::CommandBuffer* commandBuffer) override
+        void afterRenderQuery(gfx::vk::CommandBuffer* commandBuffer, std::vector<std::pair<VkSemaphore, VkPipelineStageFlags>>& waitSemaphores) override
         {
-            base_t::afterRenderQuery(commandBuffer);
+            base_t::afterRenderQuery(commandBuffer, waitSemaphores);
 
             if (_queryPool == VK_NULL_HANDLE)
                 return;
@@ -116,11 +122,15 @@ namespace wowgm
 
             uint64_t interval = timers[1] - timers[0];
             double executionTime = interval * GetDevice()->GetPhysicalDevice()->GetProperties().limits.timestampPeriod / 1000000.0f;
-            LOG_GRAPHICS("{} - {} ms", boost::core::demangle(typeid(T).name()).substr(sizeof(ns) - 1), executionTime);
+            LOG_GRAPHICS("{} - CPU: {:01.3f} ms, GPU: {:01.3f} ms",
+                boost::core::demangle(typeid(T).name()).substr(sizeof(ns) - 1),
+                std::chrono::duration_cast<std::chrono::microseconds>(_cpuTime).count() / 1000.0f,
+                executionTime);
         }
 
     private:
         VkQueryPool _queryPool;
+        hrc::duration _cpuTime;
     };
 
 }

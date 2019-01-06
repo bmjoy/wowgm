@@ -33,34 +33,6 @@ namespace gfx::vk
         return _device;
     }
 
-    VkResult Image::TransitionToLayout(VkImageLayout targetLayout, VkPipelineStageFlagBits startStage, VkPipelineStageFlagBits endStage, VkDependencyFlags dependencyFlag)
-    {
-        CommandBuffer* currentCommandBuffer = _device->GetCurrentCommandBuffer();
-        if (currentCommandBuffer == nullptr)
-            currentCommandBuffer = _device->GetOneTimeSubmitCommandBuffer();
-
-        VkImageMemoryBarrier memoryBarrier{};
-        memoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-        memoryBarrier.srcAccessMask = 0;
-        memoryBarrier.dstAccessMask = 0;
-        memoryBarrier.oldLayout = GetLayout();
-        memoryBarrier.newLayout = targetLayout;
-        memoryBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-        memoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-        memoryBarrier.image = GetHandle();
-
-        // All mip levels and array layers will be transitioned.
-        const auto& imageCreateInfo = GetCreateInfo();
-        memoryBarrier.subresourceRange.aspectMask = GetImageAspectFlags();
-        memoryBarrier.subresourceRange.baseMipLevel = 0;
-        memoryBarrier.subresourceRange.levelCount = imageCreateInfo.mipLevels;
-        memoryBarrier.subresourceRange.baseArrayLayer = 0;
-        memoryBarrier.subresourceRange.layerCount = imageCreateInfo.arrayLayers;
-
-        currentCommandBuffer->PipelineBarrier(startStage, endStage, dependencyFlag, 0, nullptr, 0, nullptr, 1, &memoryBarrier);
-        return VK_SUCCESS;
-    }
-
     VkImageAspectFlags Image::GetImageAspectFlags() const
     {
         switch (GetCreateInfo().format)

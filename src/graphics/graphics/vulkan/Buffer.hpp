@@ -5,6 +5,7 @@
 
 #include <graphics/vulkan/Buffer.hpp>
 #include <graphics/vulkan/NamedObject.hpp>
+#include <graphics/vulkan/ExpirableObject.hpp>
 
 #include <graphics/vulkan/VK.hpp>
 
@@ -14,7 +15,7 @@ namespace gfx::vk
      * A thin wrapper around a VkBuffer handle.
      * Lifetime management of this object should be handled through Device::DestroyBuffer.
      */
-    class Buffer final : public NamedObject<Buffer>
+    class Buffer final : public NamedObject<Buffer>, public ExpirableObject<Buffer>
     {
         friend class Device;
 
@@ -27,6 +28,8 @@ namespace gfx::vk
         Device* GetDevice() const { return _device; }
         VkBuffer GetHandle() const { return _handle; }
         Instance* GetInstance() const;
+
+        uint32_t GetSize() const;
 
         template <typename T>
         inline VkResult WriteMemory(VkDeviceSize offset, const T* data, VkDeviceSize dataSize) {

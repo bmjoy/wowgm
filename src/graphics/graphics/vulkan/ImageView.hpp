@@ -4,17 +4,21 @@
 
 namespace gfx::vk
 {
+    class Device;
+
     class ImageView
     {
     public:
-        static VkResult Create(Device* pDevice, const ImageViewCreateInfo* pCreateInfo, ImageView** ppImageView);
-
         ~ImageView();
 
         Device* GetDevice() const { return _device; }
         VkImageView GetHandle() const { return _handle; }
 
     private:
+        ImageView() { }
+
+        friend class Device;
+
         VkImageView _handle = VK_NULL_HANDLE;
         Device* _device = nullptr;
         Image* _image = nullptr;

@@ -59,13 +59,13 @@ namespace shared::filesystem
         _archiveHandles.clear();
     }
 
-    std::shared_ptr<mpq_file> mpq_file_system::OpenFile(const std::string& filePath, LoadStrategy loadStrategy)
+    std::shared_ptr<mpq_file> mpq_file_system::OpenFile(const std::string& filePath)
     {
         for (HANDLE archiveHandle : _archiveHandles)
         {
             HANDLE fileHandle;
             if (SFileOpenFileEx(archiveHandle, filePath.c_str(), SFILE_OPEN_PATCHED_FILE, &fileHandle))
-                return std::shared_ptr<mpq_file>(new mpq_file(fileHandle, loadStrategy));
+                return std::shared_ptr<mpq_file>(new mpq_file(fileHandle));
         }
 
         return { };
@@ -86,18 +86,9 @@ namespace shared::filesystem
         return false;
     }
 
-    bool mpq_file_system::FileExists(const std::string& relFilePath, const std::string& root) const
-    {
-        return false;
-    }
-
-    mpq_file::mpq_file(HANDLE fileHandle, LoadStrategy loadStrategy) : _loadStrategy(loadStrategy)
+    mpq_file::mpq_file(HANDLE fileHandle)
     {
         _fileHandle = fileHandle;
-
-        // Don't load to memory if the file is loaded as memory-mapped
-        if (loadStrategy == LoadStrategy::Mapped)
-            return;
 
         _fileData.resize(GetFileSize());
         if (!SFileReadFile(_fileHandle, _fileData.data(), GetFileSize()))
@@ -129,26 +120,8 @@ namespace shared::filesystem
         return SFileGetFileSize(_fileHandle);
     }
 
-    LoadStrategy mpq_file::GetLoadStrategy() const
-    {
-        return _loadStrategy;
-    }
-
     uint8_t const* mpq_file::GetData()
     {
-        if (GetLoadStrategy() == LoadStrategy::Memory)
-            return _fileData.data();
-
-        // This is lame, but we need this
-        _loadStrategy = LoadStrategy::Memory;
-
-        _fileData.resize(GetFileSize());
-
-        SFileSetFilePointer(_fileHandle, 0, nullptr, FILE_BEGIN);
-        SFileReadFile(_fileHandle, _fileData.data(), GetFileSize());
-        SFileCloseFile(_fileHandle);
-        _fileHandle = nullptr;
-
         return _fileData.data();
     }
 
@@ -158,15 +131,7 @@ namespace shared::filesystem
         if (bufferSize < availableDataLength)
             availableDataLength = bufferSize;
 
-        if (GetLoadStrategy() == LoadStrategy::Memory)
-        {
-            memcpy(buffer, _fileData.data() + offset, availableDataLength);
-        }
-        else
-        {
-            SFileSetFilePointer(_fileHandle, offset, nullptr, FILE_BEGIN);
-            SFileReadFile(_fileHandle, buffer, availableDataLength);
-        }
+        memcpy(buffer, _fileData.data() + offset, availableDataLength);
 
         return availableDataLength;
     }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vulkan/vulkan.h>
 #include <mutex>
 
 namespace gfx::vk
@@ -15,6 +16,8 @@ namespace gfx::vk
 
 namespace wowgm
 {
+    class Window;
+
     class Renderer
     {
     public:
@@ -25,7 +28,7 @@ namespace wowgm
         virtual void initializeRenderPass(gfx::vk::RenderPass* renderPass) = 0;
 
         /// Implement this method when you need to create your rendering pipeline.
-        virtual void initializePipeline() = 0;
+        virtual void initializePipeline(wowgm::Window* window) = 0;
 
         /// This method is called before the render pass begins.
         virtual void beforeRenderQuery(gfx::vk::CommandBuffer* buffer) = 0;
@@ -34,7 +37,9 @@ namespace wowgm
         virtual void onRenderQuery(gfx::vk::CommandBuffer* buffer) = 0;
 
         /// This method is called after the render pass has stopped recording render queries.
-        virtual void afterRenderQuery(gfx::vk::CommandBuffer* buffer) = 0;
+        /// @param buffer The primary command buffer recording.
+        /// @param waitSemaphores semaphores that have to be waited on. This collection is modifiable.
+        virtual void afterRenderQuery(gfx::vk::CommandBuffer* buffer, std::vector<std::pair<VkSemaphore, VkPipelineStageFlags>>& waitSemaphores) = 0;
 
         Renderer(Renderer&&) = delete;
         Renderer(Renderer const&) = delete;

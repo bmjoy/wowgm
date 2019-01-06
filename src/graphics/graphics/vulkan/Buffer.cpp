@@ -2,6 +2,8 @@
 #include <graphics/vulkan/Device.hpp>
 #include <graphics/vulkan/Instance.hpp>
 
+#include <vk_mem_alloc.h>
+
 namespace gfx::vk
 {
     void Buffer::SetMapped(bool mapped)
@@ -12,6 +14,16 @@ namespace gfx::vk
     Instance* Buffer::GetInstance() const
     {
         return _device->GetInstance();
+    }
+
+    uint32_t Buffer::GetSize() const
+    {
+        if (_allocation == VK_NULL_HANDLE)
+            return 0;
+
+        VmaAllocationInfo allocInfo;
+        vmaGetAllocationInfo(GetDevice()->GetAllocator(), _allocation, &allocInfo);
+        return allocInfo.size;
     }
 
     VkResult Buffer::WriteBytes(VkDeviceSize offset, const uint8_t* data, VkDeviceSize dataSize)

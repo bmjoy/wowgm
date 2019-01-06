@@ -25,24 +25,18 @@ namespace shared::filesystem
     {
         friend class disk_file_system;
 
-        disk_file(const std::string& fileName, LoadStrategy loadStrategy);
+        disk_file(const std::string& fileName, bool writable);
 
     public:
         ~disk_file();
 
         void Close() override;
         size_t GetFileSize() const override;
-        LoadStrategy GetLoadStrategy() const override;
         uint8_t const* GetData() override;
         size_t ReadBytes(size_t offset, size_t length, uint8_t* buffer, size_t bufferSize) override;
 
     private:
-        void _LoadToMemory(const std::string& fileName);
-
-    private:
         size_t _fileSize = 0;
-        LoadStrategy _loadStrategy;
-        std::vector<uint8_t> _fileData;
 
 #if PLATFORM == PLATFORM_WINDOWS
         HANDLE _fileHandle = INVALID_HANDLE_VALUE;
@@ -67,9 +61,7 @@ namespace shared::filesystem
         ~disk_file_system();
 
         void Initialize(const std::string& rootFolder) override;
-        std::shared_ptr<disk_file> OpenFile(const std::string& relFilePath, LoadStrategy loadStrategy) override;
-        std::shared_ptr<disk_file> OpenDirectFile(const std::string& filePath, LoadStrategy loadStrategy = LoadStrategy::Mapped) override;
-        bool FileExists(const std::string& relFilePath, const std::string& root) const override;
+        std::shared_ptr<disk_file> OpenFile(const std::string& relFilePath) override;
         bool FileExists(const std::string& relFilePath) const override;
 
     private:

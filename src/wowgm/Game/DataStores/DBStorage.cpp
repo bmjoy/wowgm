@@ -19,7 +19,7 @@ namespace wowgm::game::datastores
         std::string completeFilePath = "DBFilesClient\\";
         completeFilePath += meta_t::name();
 
-        auto fileHandle = mpq_file_system::Instance()->OpenFile(completeFilePath, LoadStrategy::Memory);
+        auto fileHandle = mpq_file_system::Instance()->OpenFile(completeFilePath);
         if (fileHandle == nullptr)
             return;
 

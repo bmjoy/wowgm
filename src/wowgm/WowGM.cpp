@@ -15,6 +15,10 @@
 #include <graphics/vulkan/Swapchain.hpp>
 #include <graphics/vulkan/Device.hpp>
 
+#include <shared/defines.hpp>
+
+#include "Presence.hpp"
+
 #include "Window.hpp"
 
 namespace po = boost::program_options;
@@ -73,15 +77,7 @@ int main(int argc, char* argv[])
 
         wowgm::Window window(800, 600, "WowGM");
         window.runWindowLoop([&window]() {
-
         });
-
-        // sUpdater->Start();
-
-        // Needs to be inherited etc
-        // gfx::Window window;
-
-        // sUpdater->Stop();
     }
     catch (const boost::system::system_error& se)
     {

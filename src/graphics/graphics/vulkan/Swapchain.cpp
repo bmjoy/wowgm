@@ -101,38 +101,25 @@ namespace gfx::vk
         return VK_PRESENT_MODE_FIFO_KHR;
     }
 
-    VkResult Swapchain::Create(Device* pDevice, const SwapchainCreateInfo* pCreateInfo, Swapchain** ppSwapchain)
+    Swapchain::Swapchain(Device* pDevice, const SwapchainCreateInfo* pCreateInfo)
     {
         // Determine WSI support.
         VkBool32 supported = VK_FALSE;
         VkResult result = vkGetPhysicalDeviceSurfaceSupportKHR(pDevice->GetPhysicalDevice()->GetHandle(), 0, pCreateInfo->surface, &supported);
-        if (result != VK_SUCCESS)
-            return result;
-
-        if (!supported)
-            return VK_ERROR_INCOMPATIBLE_DISPLAY_KHR;
+        BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to retrieve device surface support");
+        BOOST_ASSERT_MSG(supported, "Display incompatible with KHR surface");
 
         // Query swapchain support on specified device and newly created surface.
         auto swapchainSupport = QuerySwapchainSupport(pDevice->GetPhysicalDevice()->GetHandle(), pCreateInfo->surface);
         if (swapchainSupport.formats.empty() || swapchainSupport.presentModes.empty())
-            return VK_ERROR_INCOMPATIBLE_DISPLAY_KHR;
+            BOOST_ASSERT_MSG(false, "No format or present modes supported");
 
-        // Initialize Swapchain class.
-        auto swapchain = new Swapchain();
-        swapchain->_device = pDevice;
-        memcpy(&swapchain->_createInfo, pCreateInfo, sizeof(SwapchainCreateInfo));
-        swapchain->_surface = pCreateInfo->surface;
-        swapchain->_swapchainSupport = swapchainSupport;
-        result = swapchain->Allocate();
-        if (result != VK_SUCCESS)
-        {
-            delete swapchain;
-            return result;
-        }
-
-        // Return success.
-        *ppSwapchain = swapchain;
-        return VK_SUCCESS;
+        _device = pDevice;
+        memcpy(&_createInfo, pCreateInfo, sizeof(SwapchainCreateInfo));
+        _surface = pCreateInfo->surface;
+        _swapchainSupport = swapchainSupport;
+        result = Allocate();
+        BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to allocate a swapchain");
     }
 
     VkExtent2D const& Swapchain::GetExtent() const
@@ -227,8 +214,6 @@ namespace gfx::vk
 
             auto image = Image::CreateFromHandle(_device, &imageCreateInfo, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, handle, nullptr);
 
-            // image->TransitionToLayout(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR); // Is this needed?
-
             ImageViewCreateInfo imageViewCreateInfo{};
             imageViewCreateInfo.image = image;
             imageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
@@ -241,9 +226,8 @@ namespace gfx::vk
             imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
             imageViewCreateInfo.subresourceRange.layerCount = 1;
 
-            ImageView* imageView = nullptr;
-            VkResult result = ImageView::Create(_device, &imageViewCreateInfo, &imageView);
-            if (result != VK_SUCCESS)
+            ImageView* imageView = GetDevice()->CreateImageView(&imageViewCreateInfo);
+            if (imageView == nullptr)
                 shared::assert::throw_with_trace("Unable to create a view into one of the images of the swapchain");
 
             _images.push_back(image);

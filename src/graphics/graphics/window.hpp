@@ -4,11 +4,12 @@
 #include <cstring>
 #include <functional>
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
+#include <windows.h>
 
 #include <glm/glm.hpp>
 #include <vulkan/vulkan.h>
+
+struct GLFWwindow;
 
 namespace gfx
 {
@@ -22,6 +23,8 @@ namespace gfx
         public:
             Window(int32_t width, int32_t height, std::string const& title);
             virtual ~Window();
+
+            HWND getHandle();
 
         protected:
 #if defined(VK_NULL_HANDLE)

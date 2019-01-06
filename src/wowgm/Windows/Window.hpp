@@ -3,6 +3,8 @@
 #include <graphics/window.hpp>
 #include <extstd/containers/iterators/ring_iterator.hpp>
 
+#include <windows.h>
+
 #include <vector>
 
 namespace gfx::vk {

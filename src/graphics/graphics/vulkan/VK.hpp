@@ -105,10 +105,9 @@ namespace gfx::vk
         const char*                                   pBufferName = nullptr;
 
         const void*                                   pNext = nullptr;
-        const uint32_t*                               pQueueFamilyIndices = nullptr;
+        std::vector<uint32_t>                         queueFamilyIndices;
         VkDeviceSize                                  size = 0;
         VkBufferUsageFlags                            usage = 0;
-        uint32_t                                      queueFamilyIndexCount = 0;
     };
 
     struct ImageCreateInfo
@@ -116,7 +115,7 @@ namespace gfx::vk
         const char*                                   pImageName = nullptr;
 
         const void*                                   pNext = nullptr;
-        const uint32_t*                               pQueueFamilyIndices;
+        std::vector<uint32_t>                         queueFamilyIndices;
         VkImageType                                   imageType;
         VkFormat                                      format;
         VkExtent3D                                    extent;
@@ -125,7 +124,6 @@ namespace gfx::vk
         VkSampleCountFlagBits                         samples;
         VkImageTiling                                 tiling;
         VkImageUsageFlags                             usage;
-        uint32_t                                      queueFamilyIndexCount;
     };
 
     struct PipelineShaderStageCreateInfo
@@ -142,11 +140,9 @@ namespace gfx::vk
     struct PipelineVertexInputStateCreateInfo
     {
         const void*                                   pNext = nullptr;
-        const VkVertexInputBindingDescription*        pVertexBindingDescriptions;
-        const VkVertexInputAttributeDescription*      pVertexAttributeDescriptions;
+        std::vector<VkVertexInputBindingDescription>  vertexBindingDescriptions;
+        std::vector<VkVertexInputAttributeDescription> vertexAttributeDescriptions;
         VkPipelineVertexInputStateCreateFlags         flags;
-        uint32_t                                      vertexBindingDescriptionCount;
-        uint32_t                                      vertexAttributeDescriptionCount;
     };
 
     struct PipelineInputAssemblyStateCreateInfo
@@ -227,7 +223,7 @@ namespace gfx::vk
 
     struct PipelineDynamicStateCreateInfo
     {
-        const void*                                   pNext;
+        const void*                                   pNext = nullptr;
         VkPipelineDynamicStateCreateFlags             flags;
         uint32_t                                      dynamicStateCount;
         const VkDynamicState*                         pDynamicStates;
@@ -324,7 +320,7 @@ namespace gfx::vk
 
     struct ImageViewCreateInfo
     {
-        const void*                                      pNext;
+        const void*                                      pNext = nullptr;
         Image*                                           image;
         VkImageViewType                                  viewType;
         VkComponentMapping                               components;
@@ -347,6 +343,18 @@ namespace gfx::vk
         VkExtent3D                                       imageExtent;
     };
 
+    struct ImageMemoryBarrier
+    {
+        VkAccessFlags                                    srcAccessMask;
+        VkAccessFlags                                    dstAccessMask;
+        VkImageLayout                                    oldLayout;
+        VkImageLayout                                    newLayout;
+        uint32_t                                         srcQueueFamilyIndex;
+        uint32_t                                         dstQueueFamilyIndex;
+        Image*                                           image;
+        ImageSubresourceRange                            subresourceRange;
+    };
+
     struct BufferImageCopy
     {
         VkDeviceSize                                     bufferOffset;
@@ -362,9 +370,9 @@ namespace gfx::vk
     {
         struct PresentChain {
             //< A given swapchain must not appear in this list more than once.
-            Swapchain* swapchain;
+            Swapchain* swapchain = nullptr;
             //< Each entry in this array identifies the image to present on the corresponding entry in the pSwapchains array.
-            Image*     image;
+            Image*     image = nullptr;
             //<  Applications that do not need per-swapchain results can use NULL for pResults.
             //< If non-NULL, each entry in pResults will be set to the VkResult for presenting
             //< the swapchain corresponding to the same index in pSwapchains.
@@ -378,7 +386,6 @@ namespace gfx::vk
         // waitSemaphores, if not VK_NULL_HANDLE, is an array of VkSemaphore objects,
         // and specifies the semaphores to wait for before issuing the present request.
         std::vector<VkSemaphore>                         waitSemaphores;
-
     };
 
     struct SubmitInfo
@@ -398,7 +405,7 @@ namespace gfx::vk
 
     struct RenderPassBeginInfo
     {
-        const void*                                      pNext;
+        const void*                                      pNext = nullptr;
         Framebuffer*                                     pFramebuffer;
         RenderPass*                                      pRenderPass;
         VkRect2D                                         renderArea;
@@ -407,7 +414,7 @@ namespace gfx::vk
 
     struct SamplerCreateInfo
     {
-        const void*                                      pNext;
+        const void*                                      pNext = nullptr;
         VkFilter                                         magFilter;
         VkFilter                                         minFilter;
         VkSamplerMipmapMode                              mipmapMode;
@@ -427,7 +434,7 @@ namespace gfx::vk
 
     struct FramebufferCreateInfo
     {
-        const void*                                      pNext;
+        const void*                                      pNext = nullptr;
         std::vector<ImageView*>                          attachments;
         uint32_t                                         width;
         uint32_t                                         height;

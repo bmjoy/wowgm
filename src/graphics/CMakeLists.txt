@@ -26,8 +26,6 @@ target_include_directories(graphics
     ${SHARED_INCLUDE_DIRS} # src/extstd
     ${EXTSTD_INCLUDE_DIRS} # src/shared
 
-    ${IMGUI_INCLUDE_DIR}
-
     # Shader reflection
     ${CMAKE_SOURCE_DIR}/dep/spirv-compiler/glslang
     ${CMAKE_SOURCE_DIR}/dep/spirv-compiler/SPIRV-cross
@@ -47,6 +45,7 @@ target_link_libraries(graphics
     SPVRemapper
     spirv-cross-core
     spirv-cross-glsl
+    imgui
 )
 
 add_dependencies(graphics shared extstd)

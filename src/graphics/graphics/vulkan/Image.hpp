@@ -20,8 +20,6 @@ namespace gfx::vk
 
         VkImageLayout GetLayout() { return _imageLayout; }
 
-        VkResult TransitionToLayout(VkImageLayout targetLayout, VkPipelineStageFlagBits startStage, VkPipelineStageFlagBits endStage, VkDependencyFlags dependencyFlag);
-
         VkImageAspectFlags GetImageAspectFlags() const;
 
     private:

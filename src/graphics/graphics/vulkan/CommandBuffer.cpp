@@ -448,7 +448,7 @@ namespace gfx::vk
     }
 
     // https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdCopyBufferToImage.html
-    void CommandBuffer::CopyBufferToImage(Buffer* pSrcBuffer, Image* pDstImage, uint32_t regionCount, const BufferImageCopy* pRegions)
+    void CommandBuffer::CopyBufferToImage(Buffer* pSrcBuffer, Image* pDstImage, VkImageLayout dstLayout, uint32_t regionCount, const BufferImageCopy* pRegions)
     {
 #if _DEBUG
         if (_currentRenderPass != nullptr)
@@ -470,7 +470,7 @@ namespace gfx::vk
             imageCopy.bufferRowLength = pRegions[i].bufferRowLength;
         }
 
-        vkCmdCopyBufferToImage(_handle, pSrcBuffer->GetHandle(), pDstImage->GetHandle(), pDstImage->GetLayout(), regionCount, bufferRegions.data());
+        vkCmdCopyBufferToImage(_handle, pSrcBuffer->GetHandle(), pDstImage->GetHandle(), dstLayout, regionCount, bufferRegions.data());
     }
 
     void CommandBuffer::CopyImageToBuffer(Image* pSrcImage, Buffer* pDstBuffer, uint32_t regionCount, const BufferImageCopy* pRegions)
@@ -579,18 +579,29 @@ namespace gfx::vk
         vkCmdResetEvent(_handle, event, stageMask);
     }
 
-    void CommandBuffer::PipelineBarrier(
-        VkPipelineStageFlags         srcStageMask,
-        VkPipelineStageFlags         dstStageMask,
-        VkDependencyFlags            dependencyFlags,
-        uint32_t                    memoryBarrierCount,
-        const VkMemoryBarrier*       pMemoryBarriers,
-        uint32_t                     bufferMemoryBarrierCount,
-        const VkBufferMemoryBarrier* pBufferMemoryBarriers,
-        uint32_t                     imageMemoryBarrierCount,
-        const VkImageMemoryBarrier*  pImageMemoryBarriers)
+    void CommandBuffer::PipelineBarrier(gfx::vk::ImageMemoryBarrier const* memoryBarrier,
+        VkPipelineStageFlags srcStageMask,
+        VkPipelineStageFlags dstStageMask,
+        VkDependencyFlags dependencyFlags)
     {
-        vkCmdPipelineBarrier(_handle, srcStageMask, dstStageMask, dependencyFlags, memoryBarrierCount, pMemoryBarriers, bufferMemoryBarrierCount, pBufferMemoryBarriers, imageMemoryBarrierCount, pImageMemoryBarriers);
+        VkImageMemoryBarrier vmImageMemoryBarrier{};
+        vmImageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+        vmImageMemoryBarrier.dstAccessMask = memoryBarrier->dstAccessMask;
+        vmImageMemoryBarrier.srcAccessMask = memoryBarrier->srcAccessMask;
+        vmImageMemoryBarrier.image = memoryBarrier->image->GetHandle();
+        vmImageMemoryBarrier.newLayout = memoryBarrier->newLayout;
+        vmImageMemoryBarrier.oldLayout = memoryBarrier->oldLayout;
+        vmImageMemoryBarrier.subresourceRange.aspectMask = memoryBarrier->image->GetImageAspectFlags();
+
+        vmImageMemoryBarrier.subresourceRange.layerCount = memoryBarrier->subresourceRange.layerCount;
+        vmImageMemoryBarrier.subresourceRange.levelCount = memoryBarrier->subresourceRange.levelCount;
+        vmImageMemoryBarrier.subresourceRange.baseMipLevel = memoryBarrier->subresourceRange.baseMipLevel;
+        vmImageMemoryBarrier.subresourceRange.baseArrayLayer = memoryBarrier->subresourceRange.baseArrayLayer;
+
+        vmImageMemoryBarrier.dstQueueFamilyIndex = memoryBarrier->dstQueueFamilyIndex;
+        vmImageMemoryBarrier.srcQueueFamilyIndex = memoryBarrier->srcQueueFamilyIndex;
+
+        vkCmdPipelineBarrier(_handle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, 0, nullptr, 1, &vmImageMemoryBarrier);
     }
 
     void CommandBuffer::_ValidateDynamicStates()

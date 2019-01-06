@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <vector>
 #include <string_view>
+#include <type_traits>
 
 namespace gfx::vk
 {
@@ -43,6 +44,20 @@ namespace gfx::vk
         VkResult Begin(VkCommandBufferUsageFlags flags, const VkCommandBufferInheritanceInfo* pInheritanceInfo = nullptr);
         VkResult End();
         VkResult Reset(VkCommandBufferResetFlags resetFlags = VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT);
+
+        template <typename T>
+        inline void PushConstants(uint32_t offset, T value) {
+            static_assert(std::is_standard_layout<T>::value, "must be standard layout");
+
+            PushConstants(offset, sizeof(T), reinterpret_cast<void*>(value));
+        }
+
+        template <typename T, size_t N>
+        inline void PushConstants(uint32_t offset, T (&value)[N]) {
+            static_assert(std::is_standard_layout<T>::value, "must be standard layout");
+
+            PushConstants(offset, sizeof(T), reinterpret_cast<void*>(value));
+        }
 
         void BeginRenderPass(const RenderPassBeginInfo* pBeginInfo,
             VkSubpassContents               contents = VK_SUBPASS_CONTENTS_INLINE);
@@ -162,6 +177,7 @@ namespace gfx::vk
         void CopyBufferToImage(
             Buffer*                         pSrcBuffer,
             Image*                          pDstImage,
+            VkImageLayout                   dstLayout,
             uint32_t                        regionCount,
             const BufferImageCopy*          pRegions);
         void CopyImageToBuffer(
@@ -191,30 +207,26 @@ namespace gfx::vk
             const ImageSubresourceRange* pRanges);
         void ClearAttachments(
             uint32_t                        attachmentCount,
-            const ClearAttachment*       pAttachments,
+            const ClearAttachment*          pAttachments,
             uint32_t                        rectCount,
             const VkClearRect*              pRects);
         void ResolveImage(
             Image*                          pSrcImage,
             Image*                          pDstImage,
             uint32_t                        regionCount,
-            const ImageResolve*          pRegions);
+            const ImageResolve*             pRegions);
         void SetEvent(
             VkEvent                         event,
             VkPipelineStageFlags            stageMask);
         void ResetEvent(
             VkEvent                         event,
             VkPipelineStageFlags            stageMask);
+
         void PipelineBarrier(
-            VkPipelineStageFlags         srcStageMask,
-            VkPipelineStageFlags         dstStageMask,
-            VkDependencyFlags            dependencyFlags,
-            uint32_t                     memoryBarrierCount,
-            const VkMemoryBarrier*       pMemoryBarriers,
-            uint32_t                     bufferMemoryBarrierCount,
-            const VkBufferMemoryBarrier* pBufferMemoryBarriers,
-            uint32_t                     imageMemoryBarrierCount,
-            const VkImageMemoryBarrier*  pImageMemoryBarriers);
+            ImageMemoryBarrier const* memoryBarrier,
+            VkPipelineStageFlags           srcStageMask,
+            VkPipelineStageFlags           dstStageMask,
+            VkDependencyFlags              dependencyFlags);
 
         // void _EnqueueImageLayoutTransition(
         //     VkPipelineStageFlags        srcStageMask,

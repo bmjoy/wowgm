@@ -9,7 +9,7 @@
 
 namespace gfx::vk
 {
-    VkResult Instance::Create(const InstanceCreateInfo* pCreateInfo, Instance** ppInstance)
+    Instance::Instance(const InstanceCreateInfo* pCreateInfo)
     {
         InstanceCreateInfo* mutableCreateInfo = const_cast<InstanceCreateInfo*>(pCreateInfo);
 
@@ -82,9 +82,9 @@ namespace gfx::vk
         createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
         createInfo.flags = pCreateInfo->flags;
         createInfo.ppEnabledExtensionNames = pCreateInfo->enabledExtensionNames.data();
-        createInfo.enabledExtensionCount = pCreateInfo->enabledExtensionNames.size();
-        createInfo.ppEnabledLayerNames = pCreateInfo->enabledLayerNames.data();
-        createInfo.enabledLayerCount = pCreateInfo->enabledLayerNames.size();
+        createInfo.enabledExtensionCount   = pCreateInfo->enabledExtensionNames.size();
+        createInfo.ppEnabledLayerNames     = pCreateInfo->enabledLayerNames.data();
+        createInfo.enabledLayerCount       = pCreateInfo->enabledLayerNames.size();
 
         VkApplicationInfo applicationInfo { };
         applicationInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -96,40 +96,28 @@ namespace gfx::vk
 
         createInfo.pApplicationInfo = &applicationInfo;
 
-        VkInstance instanceHandle = VK_NULL_HANDLE;
-        VkResult result = vkCreateInstance(&createInfo, nullptr, &instanceHandle);
-        if (result != VK_SUCCESS)
-            return result;
-
-        Instance* instance = new Instance();
-        instance->_handle = instanceHandle;
+        VkResult result = vkCreateInstance(&createInfo, nullptr, &_handle);
+        BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to create a vkInstance");
 
         // Get all the physical devices
         uint32_t physicalDeviceCount = 0;
-        result = vkEnumeratePhysicalDevices(instanceHandle, &physicalDeviceCount, nullptr);
-        if (result != VK_SUCCESS)
-            return result;
-
-        if (physicalDeviceCount < 0)
-            return VK_SUCCESS;
+        result = vkEnumeratePhysicalDevices(_handle, &physicalDeviceCount, nullptr);
 
         std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
-        result = vkEnumeratePhysicalDevices(instanceHandle, &physicalDeviceCount, physicalDevices.data());
-        if (result != VK_SUCCESS)
-            return result;
+        result = vkEnumeratePhysicalDevices(_handle, &physicalDeviceCount, physicalDevices.data());
 
-        instance->_physicalDevices.resize(physicalDeviceCount);
+        _physicalDevices.resize(physicalDeviceCount);
         for (uint32_t i = 0; i < physicalDeviceCount; ++i)
-            instance->_physicalDevices[i] = new PhysicalDevice(instance, physicalDevices[i]);
+            _physicalDevices[i] = new PhysicalDevice(this, physicalDevices[i]);
 
         // Create a thread pool with an unique worker thread for now.
-        instance->_threadPool = new thread_pool(1);
+        _threadPool = new thread_pool(1);
 
 #if _DEBUG
         // Install debug callbacks if needed
         if (pCreateInfo->debugUtils.messengerCallback != nullptr)
         {
-            auto debugUtilsCallbackInstaller = PFN_vkCreateDebugUtilsMessengerEXT(vkGetInstanceProcAddr(instanceHandle, "vkCreateDebugUtilsMessengerEXT"));
+            auto debugUtilsCallbackInstaller = PFN_vkCreateDebugUtilsMessengerEXT(vkGetInstanceProcAddr(_handle, "vkCreateDebugUtilsMessengerEXT"));
             if (debugUtilsCallbackInstaller != nullptr)
             {
                 VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
@@ -139,14 +127,13 @@ namespace gfx::vk
                 debugCreateInfo.pfnUserCallback = pCreateInfo->debugUtils.messengerCallback;
                 debugCreateInfo.pUserData = pCreateInfo->debugUtils.pUserData; // Optional
 
-                result = debugUtilsCallbackInstaller(instanceHandle, &debugCreateInfo, nullptr, &instance->_debugUtilsUserCallback);
-                if (result != VK_SUCCESS)
-                    return result;
+                result = debugUtilsCallbackInstaller(_handle, &debugCreateInfo, nullptr, &_debugUtilsUserCallback);
+                BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to install a VK_EXT_debug_utils callback handler");
             }
         }
         else if (pCreateInfo->debugReport.callback != nullptr)
         {
-            auto debugReportCallbackInstaller = PFN_vkCreateDebugReportCallbackEXT(vkGetInstanceProcAddr(instanceHandle, "vkCreateDebugReportCallbackEXT"));
+            auto debugReportCallbackInstaller = PFN_vkCreateDebugReportCallbackEXT(vkGetInstanceProcAddr(_handle, "vkCreateDebugReportCallbackEXT"));
             if (debugReportCallbackInstaller != nullptr)
             {
                 VkDebugReportCallbackCreateInfoEXT debugCreateInfo{};
@@ -155,9 +142,8 @@ namespace gfx::vk
                 debugCreateInfo.pfnCallback = pCreateInfo->debugReport.callback;
                 debugCreateInfo.pUserData = pCreateInfo->debugReport.pUserData;
 
-                result = debugReportCallbackInstaller(instanceHandle, &debugCreateInfo, nullptr, &instance->_debugReportCallback);
-                if (result != VK_SUCCESS)
-                    return result;
+                result = debugReportCallbackInstaller(_handle, &debugCreateInfo, nullptr, &_debugReportCallback);
+                BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to install a VK_EXT_debug_report callback handler");
             }
         }
 
@@ -168,15 +154,12 @@ namespace gfx::vk
         };
 
         if (contains_extension(pCreateInfo->enabledExtensionNames, VK_EXT_DEBUG_UTILS_EXTENSION_NAME))
-            instance->vkSetDebugUtilsObjectNameEXT = PFN_vkSetDebugUtilsObjectNameEXT(vkGetInstanceProcAddr(instanceHandle, "vkSetDebugUtilsObjectNameEXT"));
+            vkSetDebugUtilsObjectNameEXT = PFN_vkSetDebugUtilsObjectNameEXT(vkGetInstanceProcAddr(_handle, "vkSetDebugUtilsObjectNameEXT"));
 
-        if (instance->vkSetDebugUtilsObjectNameEXT == nullptr && contains_extension(pCreateInfo->enabledExtensionNames, VK_EXT_DEBUG_REPORT_EXTENSION_NAME))
-            instance->vkDebugMarkerSetObjectNameEXT = PFN_vkDebugMarkerSetObjectNameEXT(vkGetInstanceProcAddr(instanceHandle, "vkDebugMarkerSetObjectNameEXT"));
+        if (vkSetDebugUtilsObjectNameEXT == nullptr && contains_extension(pCreateInfo->enabledExtensionNames, VK_EXT_DEBUG_REPORT_EXTENSION_NAME))
+            vkDebugMarkerSetObjectNameEXT = PFN_vkDebugMarkerSetObjectNameEXT(vkGetInstanceProcAddr(_handle, "vkDebugMarkerSetObjectNameEXT"));
 
 #endif
-
-        *ppInstance = instance;
-        return VK_SUCCESS;
     }
 
     Instance::~Instance()

@@ -38,9 +38,9 @@ namespace wowgm::game::geometry
         // Marker for validity, set as long as we don't find vertices
         _boundingBox.Minimum.Z = std::numeric_limits<float>::min();
 
-        std::shared_ptr<mpq_file> rootFile = manager->OpenFile(filePath.str() + ".adt", LoadStrategy::Mapped);
-        std::shared_ptr<mpq_file> objFile = manager->OpenFile(filePath.str() + "_obj0.adt", LoadStrategy::Mapped);
-        std::shared_ptr<mpq_file> texFile = manager->OpenFile(filePath.str() + "_tex0.adt", LoadStrategy::Mapped);
+        std::shared_ptr<mpq_file> rootFile = manager->OpenFile(filePath.str() + ".adt");
+        std::shared_ptr<mpq_file> objFile = manager->OpenFile(filePath.str() + "_obj0.adt");
+        std::shared_ptr<mpq_file> texFile = manager->OpenFile(filePath.str() + "_tex0.adt");
 
         if (!rootFile || !objFile || !texFile)
             return;

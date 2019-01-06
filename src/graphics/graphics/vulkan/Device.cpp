@@ -4,11 +4,13 @@
 #include <graphics/vulkan/Queue.hpp>
 #include <graphics/vulkan/Buffer.hpp>
 #include <graphics/vulkan/Image.hpp>
+#include <graphics/vulkan/ImageView.hpp>
 #include <graphics/vulkan/CommandPool.hpp>
 #include <graphics/vulkan/CommandBuffer.hpp>
 #include <graphics/vulkan/Spinlock.hpp>
 #include <graphics/vulkan/DescriptorSetLayoutCache.hpp>
 #include <graphics/vulkan/Framebuffer.hpp>
+#include <graphics/vulkan/ResourceTracker.hpp>
 #include <graphics/vulkan/Helpers.hpp>
 
 #include <extstd/literals/memory.hpp>
@@ -17,7 +19,7 @@
 
 namespace gfx::vk
 {
-    VkResult Device::Create(Instance* instance, const DeviceCreateInfo* pCreateInfo, Device** ppDevice)
+    Device::Device(Instance* instance, const DeviceCreateInfo* pCreateInfo)
     {
         PhysicalDevice* pPhysicalDevice = pCreateInfo->physicalDevice;
 
@@ -58,72 +60,39 @@ namespace gfx::vk
         deviceCreateInfo.queueCreateInfoCount = uint32_t(queueCreateInfos.size());
         deviceCreateInfo.pEnabledFeatures = &enabledFeatures;
 
-        VkDevice handle = VK_NULL_HANDLE;
-        VkResult result = vkCreateDevice(pPhysicalDevice->GetHandle(), &deviceCreateInfo, nullptr, &handle);
-        if (result != VK_SUCCESS)
-            return result;
+        VkResult result = vkCreateDevice(pPhysicalDevice->GetHandle(), &deviceCreateInfo, nullptr, &_handle);
+        BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to create a VkDevice");
 
-        Device* device = new Device();
-        device->_physicalDevice = pPhysicalDevice;
-        device->_handle = handle;
-        device->_instance = instance;
-        device->_descriptorSetLayoutCache = new DescriptorSetLayoutCache(device);
+        _physicalDevice = pPhysicalDevice;
+        _instance = instance;
+        _descriptorSetLayoutCache = new DescriptorSetLayoutCache(this);
 
         // Create a pipeline cache
-        result = PipelineCache::Create(device, &device->_pipelineCache);
-        if (result != VK_SUCCESS)
-        {
-            delete device;
-            return result;
-        }
+        result = PipelineCache::Create(this, &_pipelineCache);
+        BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to create a pipeline cache");
 
         // Acquire all the device's queue families for layer use.
-        device->_queues.resize(queueFamilyCount);
+        _queues.resize(queueFamilyCount);
         for (uint32_t i = 0; i < queueFamilyCount; ++i)
         {
             QueueFamily qf;
             for (uint32_t j = 0U; j < queueCreateInfos[i].queueCount; ++j)
             {
                 VkQueue queue = VK_NULL_HANDLE;
-                vkGetDeviceQueue(handle, i, j, &queue);
+                vkGetDeviceQueue(_handle, i, j, &queue);
                 if (queue)
-                    device->_queues[i].push_back(new Queue(device, queue, i, j, queueFamilyProperties[i]));
+                    _queues[i].push_back(new Queue(this, queue, i, j, queueFamilyProperties[i]));
             }
         }
 
         // Create our allocator
         VmaAllocatorCreateInfo allocatorCreateInfo{};
         allocatorCreateInfo.physicalDevice = pPhysicalDevice->GetHandle();
-        allocatorCreateInfo.device = handle;
-        result = vmaCreateAllocator(&allocatorCreateInfo, &device->_allocator);
-        if (result != VK_SUCCESS)
-        {
-            delete device;
-            return result;
-        }
+        allocatorCreateInfo.device = _handle;
+        result = vmaCreateAllocator(&allocatorCreateInfo, &_allocator);
+        BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to create a vma allocator for the device");
 
-        // Create a permanently pinned 8 MB data buffer for buffer copies with the GPU on targets that are not CPU visible
-        BufferCreateInfo bufferCreateInfo = {};
-        bufferCreateInfo.size = 8_MB;
-        bufferCreateInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
-        bufferCreateInfo.pBufferName = "Staging buffer";
-        result = device->CreateBuffer(VMA_MEMORY_USAGE_CPU_ONLY, VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT, &bufferCreateInfo, &device->_stagingBuffer);
-        if (result != VK_SUCCESS)
-        {
-            delete device;
-            return result;
-        }
-
-        // Pin it.
-        result = device->MapBuffer(device->_stagingBuffer, &device->_stagingBufferPinnedDataPtr);
-        if (result != VK_SUCCESS)
-        {
-            delete device;
-            return result;
-        }
-
-        *ppDevice = device;
-        return VK_SUCCESS;
+        _tracker = new ResourceTracker(this);
     }
 
     Device::~Device()
@@ -135,8 +104,6 @@ namespace gfx::vk
                 delete kv.second;
 
         _commandPools.clear();
-
-        DestroyBuffer(_stagingBuffer);
 
         delete _descriptorSetLayoutCache;
         delete _pipelineCache;
@@ -157,9 +124,10 @@ namespace gfx::vk
             return;
 
         vmaUnmapMemory(_allocator, pBuffer->_allocation);
+        pBuffer->SetMapped(false);
     }
 
-    VkResult Device::CreateBuffer(VmaMemoryUsage memoryUsage, VmaAllocationCreateFlagBits allocationFlags, const BufferCreateInfo* pCreateInfo, Buffer** ppBuffer)
+    Buffer* Device::CreateBuffer(VmaMemoryUsage memoryUsage, VmaAllocationCreateFlags allocationFlags, const BufferCreateInfo* pCreateInfo)
     {
         VkBufferCreateInfo bufferCreateInfo{};
         bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -169,24 +137,18 @@ namespace gfx::vk
 
         // If no queue family indices are passed in with pCreateInfo, then assume Buffer will be used
         // by all available queues and hence require VK_SHARING_MODE_CONCURRENT.
-        std::vector<uint32_t> queueFamilyIndices;
-        if (pCreateInfo->queueFamilyIndexCount == 0)
+        if (pCreateInfo->queueFamilyIndices.size() > 0)
         {
-            // Generate a vector of the queue family indices.
-            queueFamilyIndices.resize(_queues.size());
-            for (auto i = 0U; i < queueFamilyIndices.size(); ++i)
-                queueFamilyIndices[i] = i;
-
             // Set sharing mode to concurrent since Buffer is accessible across all queues.
-            bufferCreateInfo.sharingMode = (queueFamilyIndices.size() > 1) ? VK_SHARING_MODE_CONCURRENT : VK_SHARING_MODE_EXCLUSIVE;
-            bufferCreateInfo.queueFamilyIndexCount = static_cast<uint32_t>(queueFamilyIndices.size());
-            bufferCreateInfo.pQueueFamilyIndices = queueFamilyIndices.data();
+            bufferCreateInfo.sharingMode = (pCreateInfo->queueFamilyIndices.size() > 1) ? VK_SHARING_MODE_CONCURRENT : VK_SHARING_MODE_EXCLUSIVE;
+            bufferCreateInfo.queueFamilyIndexCount = pCreateInfo->queueFamilyIndices.size();
+            bufferCreateInfo.pQueueFamilyIndices = pCreateInfo->queueFamilyIndices.data();
         }
         else
         {
-            bufferCreateInfo.sharingMode = (pCreateInfo->queueFamilyIndexCount == 1) ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT;
-            bufferCreateInfo.queueFamilyIndexCount = pCreateInfo->queueFamilyIndexCount;
-            bufferCreateInfo.pQueueFamilyIndices = pCreateInfo->pQueueFamilyIndices;
+            bufferCreateInfo.sharingMode = (pCreateInfo->queueFamilyIndices.size() == 1) ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT;
+            bufferCreateInfo.queueFamilyIndexCount = pCreateInfo->queueFamilyIndices.size();
+            bufferCreateInfo.pQueueFamilyIndices = pCreateInfo->queueFamilyIndices.data();
         }
 
         // Allocate memory from the Vulkan Memory Allocator.
@@ -194,7 +156,7 @@ namespace gfx::vk
         VkBuffer buffer = VK_NULL_HANDLE;
         VkResult result = VK_SUCCESS;
 
-        if (allocationFlags != 0)
+        if (allocationFlags != 0 || memoryUsage != 0)
         {
             // Determine appropriate memory usage flags.
             VmaAllocationCreateInfo allocCreateInfo = {};
@@ -209,20 +171,20 @@ namespace gfx::vk
         }
 
         if (result != VK_SUCCESS)
-            return result;
+            return nullptr;
 
-        *ppBuffer = new Buffer();
-        (*ppBuffer)->_handle = buffer;
-        (*ppBuffer)->_device = this;
-        (*ppBuffer)->_allocation = allocation;
-        (*ppBuffer)->_size = pCreateInfo->size;
+        Buffer* pBuffer = new Buffer();
+        pBuffer->_handle = buffer;
+        pBuffer->_device = this;
+        pBuffer->_allocation = allocation;
+        pBuffer->_size = pCreateInfo->size;
 
 #if _DEBUG
         if (pCreateInfo->pBufferName != nullptr)
-            (*ppBuffer)->SetName(pCreateInfo->pBufferName);
+            pBuffer->SetName(pCreateInfo->pBufferName);
 #endif
 
-        return VK_SUCCESS;
+        return pBuffer;
     }
 
     void Device::DestroyBuffer(Buffer* pBuffer)
@@ -237,7 +199,41 @@ namespace gfx::vk
         delete pBuffer;
     }
 
-    VkResult Device::CreateImage(VmaMemoryUsage memoryUsage, VmaAllocationCreateFlagBits allocationFlags, const ImageCreateInfo* pCreateInfo, Image** ppImage)
+    ImageView* Device::CreateImageView(const ImageViewCreateInfo* pCreateInfo)
+    {
+        VkImageViewCreateInfo createInfo = {};
+        createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        createInfo.pNext = pCreateInfo->pNext;
+        createInfo.image = pCreateInfo->image->GetHandle();
+        createInfo.viewType = pCreateInfo->viewType;
+        createInfo.format = pCreateInfo->image->GetCreateInfo().format;
+        memcpy(&createInfo.components, &pCreateInfo->components, sizeof(VkComponentMapping));
+        createInfo.subresourceRange.aspectMask = pCreateInfo->image->GetImageAspectFlags();
+        createInfo.subresourceRange.baseMipLevel = pCreateInfo->subresourceRange.baseMipLevel;
+        createInfo.subresourceRange.levelCount = pCreateInfo->subresourceRange.levelCount;
+        createInfo.subresourceRange.baseArrayLayer = pCreateInfo->subresourceRange.baseArrayLayer;
+        createInfo.subresourceRange.layerCount = pCreateInfo->subresourceRange.layerCount;
+
+
+        VkImageView handle = VK_NULL_HANDLE;
+        VkResult result = vkCreateImageView(GetHandle(), &createInfo, nullptr, &handle);
+        if (result != VK_SUCCESS)
+            return nullptr;
+
+        ImageView* pImageView = new ImageView();
+        pImageView->_handle = handle;
+        pImageView->_device = this;
+        pImageView->_image = pCreateInfo->image;
+        pImageView->_viewType = pCreateInfo->viewType;
+        pImageView->_format = pCreateInfo->image->GetCreateInfo().format;
+
+        memcpy(&pImageView->_components, &pCreateInfo->components, sizeof(VkComponentMapping));
+        memcpy(&pImageView->_subresourceRange, &pCreateInfo->subresourceRange, sizeof(VkImageSubresourceRange));
+
+        return pImageView;
+    }
+
+    Image* Device::CreateImage(VmaMemoryUsage memoryUsage, VmaAllocationCreateFlags allocationFlags, const ImageCreateInfo* pCreateInfo)
     {
         // Create Vulkan image handle.
         VkImageCreateInfo imageCreateInfo = {};
@@ -251,12 +247,11 @@ namespace gfx::vk
         imageCreateInfo.samples = pCreateInfo->samples;
         imageCreateInfo.tiling = pCreateInfo->tiling;
         imageCreateInfo.usage = pCreateInfo->usage;
-        imageCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
         // Try to guess the initial layout based on image usage
         auto usage = pCreateInfo->usage;
         VkImageLayout initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        if (usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT)
+        /*if (usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT)
             initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         else if (usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT)
             initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
@@ -269,40 +264,23 @@ namespace gfx::vk
         else if (usage & VK_IMAGE_USAGE_TRANSFER_DST_BIT)
             initialLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
         else if (usage & VK_IMAGE_USAGE_TRANSFER_SRC_BIT)
-            initialLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+            initialLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;*/
 
         imageCreateInfo.initialLayout = initialLayout;
 
-        // If no queue family indices are passed in with pCreateInfo, then assume Image will be used
-        // by all available queues and hence require VK_SHARING_MODE_CONCURRENT.
-        std::vector<uint32_t> queueFamilyIndices;
-        if (pCreateInfo->queueFamilyIndexCount == 0)
-        {
-            // Generate a vector of the queue family indices.
-            queueFamilyIndices.resize(_queues.size());
-            for (auto i = 0U; i < queueFamilyIndices.size(); ++i)
-                queueFamilyIndices[i] = i;
 
-            // Set sharing mode to concurrent since Image is accessible across all queues.
-            imageCreateInfo.sharingMode = (queueFamilyIndices.size() == 1) ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT;
-            imageCreateInfo.queueFamilyIndexCount = static_cast<uint32_t>(queueFamilyIndices.size());
-            imageCreateInfo.pQueueFamilyIndices = queueFamilyIndices.data();
-        }
-        else
-        {
-            // If only a single queue can access the Image then sharing is exclusive.
-            // Else if more than one queue will access the Image then sharing is concurrent.
-            imageCreateInfo.sharingMode = (pCreateInfo->queueFamilyIndexCount == 1) ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT;
-            imageCreateInfo.queueFamilyIndexCount = pCreateInfo->queueFamilyIndexCount;
-            imageCreateInfo.pQueueFamilyIndices = pCreateInfo->pQueueFamilyIndices;
-        }
+        // If only a single queue can access the Image then sharing is exclusive.
+        // Else if more than one queue will access the Image then sharing is concurrent.
+        imageCreateInfo.sharingMode = (pCreateInfo->queueFamilyIndices.size() == 1) ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT;
+        imageCreateInfo.queueFamilyIndexCount = pCreateInfo->queueFamilyIndices.size();
+        imageCreateInfo.pQueueFamilyIndices = pCreateInfo->queueFamilyIndices.data();
 
         // Allocate memory using the Vulkan Memory Allocator (unless memFlags has the NO_ALLOCATION bit set).
         VmaAllocation allocation = VK_NULL_HANDLE;
         VkImage handle = VK_NULL_HANDLE;
 
         VkResult result = VK_SUCCESS;
-        if (allocationFlags != 0)
+        if (allocationFlags != 0 || memoryUsage != 0)
         {
             // Determine appropriate memory usage flags.
             VmaAllocationCreateInfo allocCreateInfo = {};
@@ -316,11 +294,14 @@ namespace gfx::vk
             result = vkCreateImage(_handle, &imageCreateInfo, nullptr, &handle);
         }
 
+        if (result != VK_SUCCESS)
+            return nullptr;
+
         // Create an Image class instance from handle.
-        *ppImage = Image::CreateFromHandle(this, pCreateInfo, initialLayout, handle, allocation);
+        Image* vkImage = Image::CreateFromHandle(this, pCreateInfo, initialLayout, handle, allocation);
 
         // Return success.
-        return VK_SUCCESS;
+        return vkImage;
     }
 
     void Device::DestroyImage(Image* pImage)
@@ -333,286 +314,15 @@ namespace gfx::vk
         delete pImage;
     }
 
-
-    VkResult Device::ImageSubData(Image* pImage, const ImageSubDataInfo* pSubdataInfo, void* pData)
+    void Device::DestroyImageView(ImageView* pImageView)
     {
-        if (!IsCompressedImageFormat(pImage->GetCreateInfo().format))
-            return UncompressedImageSubData(pImage, pSubdataInfo, pData);
-        else
-            return CompressedImageSubData(pImage, pSubdataInfo, pData);
+        delete pImageView;
     }
 
-    VkResult Device::UncompressedImageSubData(Image* pImage, const ImageSubDataInfo* pSubDataInfo, void* pData)
+    void Device::FlushBuffer(Buffer* pBuffer, uint32_t offset, uint32_t size /* = -1 */)
     {
-        CommandBuffer* cmdBuffer = GetCurrentCommandBuffer();
-        if (cmdBuffer == nullptr)
-            cmdBuffer = GetOneTimeSubmitCommandBuffer();
-
-        Queue* queue = _queues[cmdBuffer->GetPool()->GetQueueFamilyIndex()][0];
-        auto alignedFlushSize = _physicalDevice->GetProperties().limits.nonCoherentAtomSize;
-
-        auto pixelSize = GetUncompressedImageFormatSize(pImage->GetCreateInfo().format);
-
-        uint32_t pinnedMemoryBufferSize = 8 * 1024 * 1024u; // _stagingBuffer->GetSize();
-        uint32_t numSlices = std::min(pSubDataInfo->imageExtent.depth, pinnedMemoryBufferSize / (pixelSize * pSubDataInfo->imageExtent.width * pSubDataInfo->imageExtent.height));
-        uint32_t numRows = std::min(pSubDataInfo->imageExtent.height, pinnedMemoryBufferSize / (pixelSize * pSubDataInfo->imageExtent.width));
-        uint32_t numCols = std::min(pSubDataInfo->imageExtent.width, pinnedMemoryBufferSize / pixelSize);
-        VkExtent3D maxExtent { numCols, std::max(1U, numRows), std::max(1U, numSlices) };
-
-        const uint8_t* srcPtr = reinterpret_cast<const uint8_t*>(pData);
-
-        VkOffset3D curOffset = pSubDataInfo->imageOffset;
-        for (uint32_t arrayLayer = pSubDataInfo->imageSubresource.baseArrayLayer; arrayLayer < pSubDataInfo->imageSubresource.layerCount; ++arrayLayer)
-        {
-            // Each depth layer in a 3D texture is copied separately.
-            for (auto z = 0U; z < pSubDataInfo->imageExtent.depth; z += maxExtent.depth)
-            {
-                // Set current destination image z offset.
-                curOffset.z = z;
-
-                // Handle end of image depth case.
-                auto slicesToCopy = std::min(maxExtent.depth, pSubDataInfo->imageExtent.depth - z);
-
-                // Copy pixel data with scrolling extents window moving across 2D image layer.
-                for (auto row = 0U; row < pSubDataInfo->imageExtent.height; row += maxExtent.height)
-                {
-                    // Handle end of image height case.
-                    auto rowsToCopy = std::min(maxExtent.height, pSubDataInfo->imageExtent.height - row);
-
-                    for (auto col = 0U; col < pSubDataInfo->imageExtent.width; col += maxExtent.width)
-                    {
-                        // Handle end of image width case.
-                        auto colsToCopy = std::min(maxExtent.width, pSubDataInfo->imageExtent.width - col);
-                        auto bytesCopied = 0;
-
-                        // Copy the host memory to the pinned memory buffer.
-                        if (pSubDataInfo->dataRowLength == 0)
-                        {
-                            auto bytesToCopy = colsToCopy * rowsToCopy * slicesToCopy * pixelSize;
-                            memcpy(_stagingBufferPinnedDataPtr, srcPtr, bytesToCopy);
-                            srcPtr += bytesToCopy;
-                            bytesCopied = bytesToCopy;
-                        }
-                        else
-                        {
-                            for (auto y = 0U; y < rowsToCopy; ++y)
-                            {
-                                memcpy(&reinterpret_cast<uint8_t*>(_stagingBufferPinnedDataPtr)[y * maxExtent.width * pixelSize], srcPtr, colsToCopy * pixelSize);
-                                srcPtr += pSubDataInfo->dataRowLength * pixelSize;
-                                bytesCopied = colsToCopy * pixelSize;
-                            }
-                        }
-
-                        // Flush must be aligned according to physical device's limits.
-                        auto alignedBytesToCopy = static_cast<VkDeviceSize>(std::ceil(bytesCopied / static_cast<float>(alignedFlushSize))) * alignedFlushSize;
-
-                        // Flush the memory write.
-                        VmaAllocationInfo allocInfo = {};
-                        vmaGetAllocationInfo(_allocator, _stagingBuffer->_allocation, &allocInfo);
-
-                        VkMappedMemoryRange memoryRange = {};
-                        memoryRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-                        memoryRange.memory = allocInfo.deviceMemory;
-                        memoryRange.offset = 0;
-                        memoryRange.size = alignedBytesToCopy;
-                        vkFlushMappedMemoryRanges(_handle, 1, &memoryRange);
-
-                        // Copy the pinned memory buffer to the destination image.
-                        BufferImageCopy region {};
-                        // region.bufferRowLength = std::max(0U, std::min(pSubDataInfo->dataRowLength, pSubDataInfo->dataRowLength - col * pixelSize));
-                        // region.bufferImageHeight = std::max(0U, std::min(pSubDataInfo->dataImageHeight, pSubDataInfo->dataImageHeight - row));
-                        region.imageSubresource.baseArrayLayer = arrayLayer;
-                        region.imageSubresource.mipLevel = pSubDataInfo->imageSubresource.mipLevel;
-                        region.imageSubresource.layerCount = 1;
-                        region.imageOffset = curOffset;
-                        region.imageExtent = VkExtent3D{ colsToCopy, rowsToCopy, slicesToCopy };
-                        cmdBuffer->Begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
-                        cmdBuffer->CopyBufferToImage(_stagingBuffer, pImage, 1, &region);
-                        cmdBuffer->End();
-
-                        // Submit to the queue.
-                        {
-                            SubmitInfo submitInfo = {};
-                            submitInfo.commandBuffers.emplace_back(cmdBuffer);
-                            VkResult result = queue->Submit(1, &submitInfo, nullptr);
-                            if (result != VK_SUCCESS)
-                                return result;
-                        }
-
-                        // Wait for all operations to complete.
-                        queue->WaitIdle();
-
-                        // Update current destination image x offset.
-                        curOffset.x += colsToCopy;
-                        if (curOffset.x >= int32_t(pSubDataInfo->imageExtent.width))
-                            curOffset.x = int32_t(pSubDataInfo->imageOffset.x);
-                    }
-
-                    // Update current destination image y offset.
-                    curOffset.y += rowsToCopy;
-                    if (curOffset.y >= int32_t(pSubDataInfo->imageExtent.height))
-                        curOffset.y = int32_t(pSubDataInfo->imageOffset.y);
-                }
-
-                // Update destination image z offset.
-                curOffset.z += slicesToCopy;
-                if (curOffset.z >= int32_t(pSubDataInfo->imageExtent.depth))
-                    curOffset.z = int32_t(pSubDataInfo->imageOffset.z);
-            }
-
-            // Increment source pointer address.
-            if (pSubDataInfo->dataImageHeight != 0)
-            {
-                if (pSubDataInfo->dataRowLength != 0)
-                    srcPtr += pSubDataInfo->dataRowLength * pixelSize * (pSubDataInfo->dataImageHeight - pSubDataInfo->imageExtent.height);
-                else
-                    srcPtr += pSubDataInfo->imageExtent.width * pixelSize * (pSubDataInfo->dataImageHeight - pSubDataInfo->imageExtent.height);
-            }
-        }
-
-        return VK_SUCCESS;
+        // NYI (needed? VMA doesnt return a VkDeviceMemory afaik)
     }
-
-    VkResult Device::CompressedImageSubData(Image* pImage, const ImageSubDataInfo* pSubDataInfo, const void* pData)
-    {
-        CommandBuffer* cmdBuffer = GetCurrentCommandBuffer();
-        if (cmdBuffer == nullptr)
-            cmdBuffer = GetOneTimeSubmitCommandBuffer();
-
-        // Get the queue family index the command buffer was created for.
-        auto queue = _queues[cmdBuffer->GetPool()->GetQueueFamilyIndex()][0];
-
-        // Get required alignment flush size for selected physical device.
-        VkPhysicalDeviceProperties properties = {};
-        vkGetProperties(_physicalDevice->GetHandle(), &properties);
-        auto alignedFlushSize = properties.limits.nonCoherentAtomSize;
-
-        // Determine the size of each compressed block.
-        uint32_t blockSize = 0U, blockWidth = 0U, blockHeight = 0U;
-        GetCompressedImageFormatInfo(pImage->GetCreateInfo().format, blockSize, blockWidth, blockHeight);
-
-        // Compute number of compressed blocks making up image data.
-        uint32_t numBlocksX = pSubDataInfo->imageExtent.width / blockWidth;
-        uint32_t numBlocksY = pSubDataInfo->imageExtent.height / blockHeight;
-
-        // Determine total number of compressed blocks that can be transferred at once.
-        uint32_t pinnedMemoryBufferSize = 8 * 1024 * 1024; // _stagingBuffer->GetCreateInfo().size;
-        uint32_t maxTransferBlocksY = std::min(numBlocksY, uint32_t(pinnedMemoryBufferSize / (blockSize * numBlocksX)));
-        uint32_t maxTransferBlocksX = std::min(numBlocksX, uint32_t(pinnedMemoryBufferSize / blockSize));
-        VkExtent2D maxExtent{ maxTransferBlocksX, std::max(1U, maxTransferBlocksX) };
-
-        // Get 8-bit starting address of pixel data.
-        const uint8_t* srcPtr = reinterpret_cast<const uint8_t*>(pData);
-
-        // Moving offset and extents during copy.
-        auto curOffset = pSubDataInfo->imageOffset;
-
-        // Each layer's data is copied separately.
-        for (auto layer = pSubDataInfo->imageSubresource.baseArrayLayer; layer < pSubDataInfo->imageSubresource.layerCount; ++layer)
-        {
-            // Each depth layer in a 3D texture is copied separately.
-            for (auto z = 0U; z < pSubDataInfo->imageExtent.depth; ++z)
-            {
-                // Set current destination image z offset.
-                curOffset.z = z;
-
-                // Copy compressed block data with scrolling extents window moving across 2D image layer.
-                for (auto row = 0U; row < numBlocksY; row += maxExtent.height)
-                {
-                    // Handle end of image height case.
-                    auto rowsToCopy = std::min(maxExtent.height, numBlocksY - row);
-
-                    for (auto col = 0U; col < numBlocksX; col += maxExtent.width)
-                    {
-                        // Handle end of image width case.
-                        auto colsToCopy = std::min(maxExtent.width, numBlocksX - col);
-                        auto bytesCopied = 0;
-
-                        // Copy the host memory to the pinned memory buffer.
-                        if (pSubDataInfo->dataRowLength == 0)
-                        {
-                            auto bytesToCopy = colsToCopy * rowsToCopy * blockSize;
-                            memcpy(_stagingBufferPinnedDataPtr, srcPtr, bytesToCopy);
-                            srcPtr += bytesToCopy;
-                            bytesCopied = bytesToCopy;
-                        }
-                        else
-                        {
-                            for (auto y = 0U; y < rowsToCopy; ++y)
-                            {
-                                memcpy(&reinterpret_cast<uint8_t*>(_stagingBufferPinnedDataPtr)[y * maxExtent.width * blockSize], srcPtr, colsToCopy * blockSize);
-                                srcPtr += pSubDataInfo->dataRowLength * blockSize;
-                                bytesCopied = colsToCopy * blockSize;
-                            }
-                        }
-
-                        // Flush must be aligned according to physical device's limits.
-                        auto alignedBytesToCopy = static_cast<VkDeviceSize>(std::ceil(bytesCopied / static_cast<float>(alignedFlushSize))) * alignedFlushSize;
-
-                        // Flush the memory write.
-                        VmaAllocationInfo allocInfo = {};
-                        vmaGetAllocationInfo(_allocator, _stagingBuffer->_allocation, &allocInfo);
-
-                        VkMappedMemoryRange memoryRange = {};
-                        memoryRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-                        memoryRange.memory = allocInfo.deviceMemory;
-                        memoryRange.offset = 0;
-                        memoryRange.size = alignedBytesToCopy;
-                        vkFlushMappedMemoryRanges(_handle, 1, &memoryRange);
-
-                        // Copy the pinned memory buffer to the destination image.
-                        BufferImageCopy region = {};
-                        //region.bufferRowLength = std::max(0U, std::min(pSubDataInfo->dataRowLength, pSubDataInfo->dataRowLength - col * pixelSize));
-                        //region.bufferImageHeight = std::max(0U, std::min(pSubDataInfo->dataImageHeight, pSubDataInfo->dataImageHeight - row));
-                        region.imageSubresource.baseArrayLayer = layer;
-                        region.imageSubresource.mipLevel = pSubDataInfo->imageSubresource.mipLevel;
-                        region.imageSubresource.layerCount = 1;
-                        region.imageOffset = curOffset;
-                        region.imageExtent = VkExtent3D{ colsToCopy * blockWidth, rowsToCopy * blockHeight, 1U };
-                        cmdBuffer->Begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
-                        cmdBuffer->CopyBufferToImage(_stagingBuffer, pImage, 1, &region);
-                        cmdBuffer->End();
-
-                        // Submit to the queue.
-
-                        {
-                            SubmitInfo submitInfo = {};
-                            submitInfo.commandBuffers.emplace_back(cmdBuffer);
-                            VkResult result = queue->Submit(1, &submitInfo, nullptr);
-                            if (result != VK_SUCCESS)
-                                return result;
-                        }
-
-                        // Wait for all operations to complete.
-                        queue->WaitIdle();
-
-                        // Update current destination image x offset.
-                        curOffset.x += colsToCopy * blockWidth;
-                        if (curOffset.x >= int32_t(pSubDataInfo->imageExtent.width))
-                            curOffset.x = int32_t(pSubDataInfo->imageOffset.x);
-                    }
-
-                    // Update current destination image y offset.
-                    curOffset.y += rowsToCopy * blockHeight;
-                    if (curOffset.y >= int32_t(pSubDataInfo->imageExtent.height))
-                        curOffset.y = int32_t(pSubDataInfo->imageOffset.y);
-                }
-            }
-
-            // Increment source pointer address.
-            if (pSubDataInfo->dataImageHeight != 0)
-            {
-                if (pSubDataInfo->dataRowLength != 0)
-                    srcPtr += pSubDataInfo->dataRowLength * blockSize * ((pSubDataInfo->dataImageHeight - pSubDataInfo->imageExtent.height) / blockHeight);
-                else
-                    srcPtr += (pSubDataInfo->imageExtent.width / blockWidth) * blockSize * ((pSubDataInfo->dataImageHeight - pSubDataInfo->imageExtent.height) / blockHeight);
-            }
-        }
-
-        // Return success.
-        return VK_SUCCESS;
-    }
-
 
     VkResult Device::AllocateCommandBuffers(Queue* pQueue, const void* pNext, VkCommandBufferLevel level, uint32_t commandBufferCount, CommandBuffer** ppCommandBuffers)
     {
@@ -707,13 +417,18 @@ namespace gfx::vk
         vkDeviceWaitIdle(_handle);
     }
 
-    VkResult Device::CreateFence(VkFence* pFence, VkFenceCreateFlagBits createFlags)
+    VkFence Device::CreateFence(VkFenceCreateFlags createFlags)
     {
         VkFenceCreateInfo fenceInfo = {};
         fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
         fenceInfo.flags = createFlags;
 
-        return vkCreateFence(_handle, &fenceInfo, nullptr, pFence);
+        VkFence pFence;
+        VkResult result = vkCreateFence(_handle, &fenceInfo, nullptr, &pFence);
+        if (result != VK_SUCCESS)
+            return VK_NULL_HANDLE;
+
+        return pFence;
     }
 
     void Device::DestroyFence(VkFence fence)
@@ -737,12 +452,17 @@ namespace gfx::vk
         return VK_SUCCESS;
     }
 
-    VkResult Device::CreateSemaphore(VkSemaphore* semaphore)
+    VkSemaphore Device::CreateSemaphore()
     {
         VkSemaphoreCreateInfo semaphoreCreateInfo{};
         semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
-        return vkCreateSemaphore(_handle, &semaphoreCreateInfo, nullptr, semaphore);
+        VkSemaphore semaphore;
+        VkResult result = vkCreateSemaphore(_handle, &semaphoreCreateInfo, nullptr, &semaphore);
+        if (result != VK_SUCCESS)
+            return VK_NULL_HANDLE;
+
+        return semaphore;
     }
 
     void Device::DestroySemaphore(VkSemaphore semaphore)

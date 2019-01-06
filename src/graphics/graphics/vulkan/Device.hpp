@@ -6,8 +6,12 @@
 #include <unordered_map>
 #include <thread>
 
+#undef CreateSemaphore // FUCKING HELL
+
 namespace gfx::vk
 {
+    class ResourceTracker;
+
     typedef std::vector<Queue*> QueueFamily;
     typedef std::unordered_map<Queue*, CommandPool*> QueueCommandPools;
 
@@ -16,13 +20,17 @@ namespace gfx::vk
     class Device
     {
     public:
-        static VkResult Create(Instance* instance, const DeviceCreateInfo* pCreateInfo, Device** ppDevice);
+        Device(Instance* instance, const DeviceCreateInfo* pCreateInfo);
 
         ~Device();
 
+        VmaAllocator const& GetAllocator() const { return _allocator; }
+
+        ResourceTracker* GetResourceManager() const { return _tracker; }
+
     public: /* Buffer */
 
-        VkResult CreateBuffer(VmaMemoryUsage memoryUsage, VmaAllocationCreateFlagBits allocationFlags, const BufferCreateInfo* pCreateInfo, Buffer** ppBuffer);
+        Buffer* CreateBuffer(VmaMemoryUsage memoryUsage, VmaAllocationCreateFlags allocationFlags, const BufferCreateInfo* pCreateInfo);
 
         void DestroyBuffer(Buffer* pBuffer);
 
@@ -30,15 +38,19 @@ namespace gfx::vk
 
         void UnmapBuffer(Buffer* pBuffer);
 
+        void FlushBuffer(Buffer* pBuffer, uint32_t offset = 0, uint32_t size = -1);
+
     public: /* Images */
 
-        VkResult CreateImage(VmaMemoryUsage memoryUsage, VmaAllocationCreateFlagBits allocationFlags, const ImageCreateInfo* pCreateInfo, Image** ppImage);
+        Image* CreateImage(VmaMemoryUsage memoryUsage, VmaAllocationCreateFlags allocationFlags, const ImageCreateInfo* pCreateInfo);
 
         void DestroyImage(Image* pImage);
 
-        VkResult ImageSubData(Image* pImage, const ImageSubDataInfo* pSubdataInfo, void* pData);
+    public: /* Image Views */
 
-    public:
+        ImageView* CreateImageView(const ImageViewCreateInfo* pCreateInfo);
+
+        void DestroyImageView(ImageView* pImageView);
 
     public: /* Sampler */
 
@@ -78,35 +90,30 @@ namespace gfx::vk
         VkResult DestroyFramebuffer(Framebuffer* pFramebuffer);
 
     public: /* Fence */
-        VkResult CreateFence(VkFence* pFence, VkFenceCreateFlagBits createFlags);
+        VkFence CreateFence(VkFenceCreateFlags createFlags);
         VkResult GetFenceStatus(VkFence fence);
         void DestroyFence(VkFence fence);
 
     public: /* Semaphore */
-        VkResult CreateSemaphore(VkSemaphore* pSemaphore);
+        VkSemaphore CreateSemaphore();
         void DestroySemaphore(VkSemaphore semaphore);
 
     private:
 
-        VkResult UncompressedImageSubData(Image* pImage, const ImageSubDataInfo* pSubdataInfo, void* pData);
-        VkResult CompressedImageSubData(Image* pImage, const ImageSubDataInfo* pSubDataInfo, const void* pData);
-
-    private:
-
         PhysicalDevice* _physicalDevice = nullptr;
-        VkDevice _handle = VK_NULL_HANDLE;
-        VmaAllocator _allocator = VK_NULL_HANDLE;
 
-        std::vector<QueueFamily> _queues;
-
-        std::unordered_map<std::thread::id, QueueCommandPools> _commandPools;
+        Instance* _instance = nullptr;
 
         DescriptorSetLayoutCache* _descriptorSetLayoutCache = nullptr;
         PipelineCache* _pipelineCache = nullptr;
 
-        Instance* _instance = nullptr;
+        ResourceTracker* _tracker;
 
-        Buffer* _stagingBuffer = nullptr;
-        void* _stagingBufferPinnedDataPtr = nullptr;
+        VkDevice _handle = VK_NULL_HANDLE;
+        VmaAllocator _allocator = VK_NULL_HANDLE;
+
+        std::vector<QueueFamily> _queues;
+        std::unordered_map<std::thread::id, QueueCommandPools> _commandPools;
+
     };
 }

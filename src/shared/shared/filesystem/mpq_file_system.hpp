@@ -20,20 +20,18 @@ namespace shared::filesystem
 
         using Basefile_handle = file_handle<mpq_file>;
 
-        mpq_file(HANDLE fileHandle, LoadStrategy loadStrategy);
+        mpq_file(HANDLE fileHandle);
 
     public:
         ~mpq_file();
 
         void Close() override;
         size_t GetFileSize() const override;
-        LoadStrategy GetLoadStrategy() const override;
         uint8_t const* GetData() override;
         size_t ReadBytes(size_t offset, size_t length, uint8_t* buffer, size_t bufferSize) override;
 
     private:
         HANDLE _fileHandle;
-        LoadStrategy _loadStrategy;
 
         std::vector<uint8_t> _fileData;
     };
@@ -51,13 +49,8 @@ namespace shared::filesystem
         ~mpq_file_system();
 
         void Initialize(const std::string& rootFolder) override;
-        std::shared_ptr<mpq_file> OpenFile(const std::string& filePath, LoadStrategy loadStrategy) override;
-        std::shared_ptr<mpq_file> OpenDirectFile(const std::string& filePath, LoadStrategy loadStrategy = LoadStrategy::Mapped) override
-        {
-            return { };
-        }
+        std::shared_ptr<mpq_file> OpenFile(const std::string& filePath) override;
 
-        bool FileExists(const std::string& relFilePath, const std::string& root) const override;
         bool FileExists(const std::string& relFilePath) const override;
 
     private:
