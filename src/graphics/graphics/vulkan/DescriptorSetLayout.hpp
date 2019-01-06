@@ -7,6 +7,8 @@ namespace gfx::vk
 {
     class Device;
     class DescriptorPool;
+    class Sampler;
+    class ImageView;
 
     struct PipelineResource;
 
@@ -21,11 +23,15 @@ namespace gfx::vk
         VkDescriptorSetLayout GetHandle() const { return _handle; }
         std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding> const& GetBindings() const { return _bindings; }
 
-        bool GetLayoutBinding(uint32_t bindingIndex, VkDescriptorSetLayoutBinding** pBinding);
+        VkDescriptorSetLayoutBinding const& GetBinding(uint32_t bindingIndex);
 
         VkDescriptorSet AllocateDescriptorSet();
 
         VkResult FreeDescriptorSet(VkDescriptorSet descriptorSet);
+
+        VkDescriptorSet const& GetDescriptorSet(uint32_t bindingIndex);
+
+        void UpdateBinding(uint32_t bindingIndex, Sampler* sampler, ImageView* imageView, VkImageLayout layout);
 
     private:
         Device * _device = nullptr;
@@ -33,5 +39,6 @@ namespace gfx::vk
 
         VkDescriptorSetLayout _handle = VK_NULL_HANDLE;
         std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding> _bindings;
+        std::unordered_map<uint32_t, VkDescriptorSet> _descriptorSets;
     };
 }

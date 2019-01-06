@@ -42,10 +42,9 @@ namespace gfx::vk
 
         PipelineDynamicState const& GetDynamicStates() const { return _dynamicState; }
 
-        VkShaderStageFlags GetPushConstantsRangeStages(uint32_t offset, uint32_t size)
-        {
-            return VK_SHADER_STAGE_ALL;
-        }
+        VkShaderStageFlags GetPushConstantsRangeStages(uint32_t offset, uint32_t size);
+
+        DescriptorSetLayout* GetDescriptorSetLayout(uint32_t setIndex);
 
     private:
         void CreateSetBindings(std::unordered_map<std::string, PipelineResource> const& resources);
@@ -59,6 +58,8 @@ namespace gfx::vk
 
         VkPipelineBindPoint _bindPoint;
         PipelineDynamicState _dynamicState;
+
+        std::vector<VkPushConstantRange> _pushConstants;
 
         std::unordered_map<uint32_t, std::vector<PipelineResource>> _bindings;
         std::unordered_map<uint32_t, DescriptorSetLayout*> _descriptorSetLayouts;

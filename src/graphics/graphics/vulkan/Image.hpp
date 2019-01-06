@@ -16,7 +16,7 @@ namespace gfx::vk
 
         VmaAllocation GetAllocation() const { return _allocation; }
 
-        const ImageCreateInfo& GetCreateInfo() const { return _createInfo; }
+        const VkFormat& GetCreateFormat() const { return _createFormat; }
 
         VkImageLayout GetLayout() { return _imageLayout; }
 
@@ -27,6 +27,7 @@ namespace gfx::vk
         Device* _device = nullptr;
         VmaAllocation _allocation;
         VkImageLayout _imageLayout = VK_IMAGE_LAYOUT_GENERAL;
-        ImageCreateInfo _createInfo;
+
+        VkFormat _createFormat;
     };
 }

@@ -235,6 +235,11 @@ namespace gfx::vk
         vkCmdPushConstants(_handle, _boundPipeline->GetLayout(), _boundPipeline->GetPushConstantsRangeStages(offset, size), offset, size, pValues);
     }
 
+    void CommandBuffer::BindDescriptorSet(uint32_t firstSet, uint32_t descriptorSetCount, const VkDescriptorSet* pDescriptorSets, uint32_t dynamicOffsetCount, const uint32_t* pDynamicOffsets)
+    {
+        vkCmdBindDescriptorSets(_handle, _boundPipeline->GetBindPoint(), _boundPipeline->GetLayout(), firstSet, descriptorSetCount, pDescriptorSets, dynamicOffsetCount, pDynamicOffsets);
+    }
+
     void CommandBuffer::BindBuffer(Buffer* pBuffer, VkDeviceSize offset, VkDeviceSize range, uint32_t set, uint32_t binding, uint32_t arrayElement)
     {
     }
@@ -606,6 +611,8 @@ namespace gfx::vk
 
     void CommandBuffer::_ValidateDynamicStates()
     {
+        return; // temporary kill
+
 #if _DEBUG
         if (_boundPipeline == nullptr)
             return;

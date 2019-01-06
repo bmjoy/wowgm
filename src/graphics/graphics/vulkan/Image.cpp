@@ -13,7 +13,7 @@ namespace gfx::vk
         imageObject->_handle = image;
         imageObject->_allocation = allocation;
         imageObject->_imageLayout = imageLayout;
-        memcpy(&imageObject->_createInfo, pImageCreateInfo, sizeof(ImageCreateInfo));
+        imageObject->_createFormat = pImageCreateInfo->format;
 
 #if _DEBUG
         if (pImageCreateInfo->pImageName != nullptr)
@@ -35,7 +35,7 @@ namespace gfx::vk
 
     VkImageAspectFlags Image::GetImageAspectFlags() const
     {
-        switch (GetCreateInfo().format)
+        switch (GetCreateFormat())
         {
             case VK_FORMAT_D16_UNORM:
             case VK_FORMAT_D32_SFLOAT:

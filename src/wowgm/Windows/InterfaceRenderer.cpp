@@ -7,6 +7,8 @@
 #include <graphics/vulkan/Shader.hpp>
 #include <graphics/vulkan/Pipeline.hpp>
 #include <graphics/vulkan/CommandBuffer.hpp>
+#include <graphics/vulkan/DescriptorSetLayout.hpp>
+#include <graphics/vulkan/DescriptorSetLayoutCache.hpp>
 #include <graphics/vulkan/Queue.hpp>
 #include <graphics/vulkan/Buffer.hpp>
 #include <graphics/vulkan/Image.hpp>
@@ -104,11 +106,11 @@ namespace wowgm
         pipelineCreateInfo.colorBlendState.logicOpEnable = VK_FALSE;
         pipelineCreateInfo.colorBlendState.logicOp = VK_LOGIC_OP_COPY;
         pipelineCreateInfo.colorBlendState.attachments.push_back(VkPipelineColorBlendAttachmentState{
-            VK_FALSE,                                                                                                   // VkBool32                 blendEnable;
-            VK_BLEND_FACTOR_ZERO,                                                                                       // VkBlendFactor            srcColorBlendFactor;
-            VK_BLEND_FACTOR_ZERO,                                                                                       // VkBlendFactor            dstColorBlendFactor;
+            VK_TRUE,                                                                                                    // VkBool32                 blendEnable;
+            VK_BLEND_FACTOR_SRC_ALPHA,                                                                                  // VkBlendFactor            srcColorBlendFactor;
+            VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,                                                                        // VkBlendFactor            dstColorBlendFactor;
             VK_BLEND_OP_ADD,                                                                                            // VkBlendOp                colorBlendOp;
-            VK_BLEND_FACTOR_ZERO,                                                                                       // VkBlendFactor            srcAlphaBlendFactor;
+            VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,                                                                        // VkBlendFactor            srcAlphaBlendFactor;
             VK_BLEND_FACTOR_ZERO,                                                                                       // VkBlendFactor            dstAlphaBlendFactor;
             VK_BLEND_OP_ADD,                                                                                            // VkBlendOp                alphaBlendOp;
             VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT,  // VkColorComponentFlags    colorWriteMask;
@@ -204,6 +206,27 @@ namespace wowgm
 
             _fontTextureView = GetDevice()->CreateImageView(&imageViewCreateInfo);
             BOOST_ASSERT_MSG(_fontTextureView != nullptr, "Failed to create font texture view for interface");
+
+            SamplerCreateInfo samplerCreateInfo;
+            samplerCreateInfo.magFilter = VK_FILTER_LINEAR;
+            samplerCreateInfo.minFilter = VK_FILTER_LINEAR;
+            samplerCreateInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+            samplerCreateInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+            samplerCreateInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+            samplerCreateInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+            samplerCreateInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
+            samplerCreateInfo.mipLodBias = 0.0f;
+            samplerCreateInfo.anisotropyEnable = VK_FALSE;
+            samplerCreateInfo.maxAnisotropy = 1.0f;
+            samplerCreateInfo.compareEnable = VK_FALSE;
+            samplerCreateInfo.compareOp = VK_COMPARE_OP_NEVER;
+            samplerCreateInfo.minLod = -1000.0f;
+            samplerCreateInfo.maxLod = 10000.0f;
+            samplerCreateInfo.unnormalizedCoordinates = VK_FALSE;
+            _fontSampler = GetDevice()->CreateSampler(&samplerCreateInfo);
+            // BOOST_ASSERT_MSG(_fontSampler != nullptr, "Failed to create interface font sampler");
+
+            GetPipeline()->GetDescriptorSetLayout(0)->UpdateBinding(0, _fontSampler, _fontTextureView, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
             // Create an upload buffer
             BufferCreateInfo bufferCreateInfo;
@@ -301,13 +324,27 @@ namespace wowgm
     void InterfaceRenderer::onRenderQuery(CommandBuffer* commandBuffer)
     {
         ImDrawData* imDrawData = ImGui::GetDrawData();
-        if (imDrawData == nullptr)
-            return;
+        if (imDrawData == nullptr || imDrawData->CmdListsCount == 0)
+        {
+            VkRect2D scissor;
+            scissor.offset.x = 0;
+            scissor.offset.y = 0;
+            scissor.extent.width = GetSwapchain()->GetExtent().width;
+            scissor.extent.height = GetSwapchain()->GetExtent().height;
 
+            commandBuffer->SetScissor(0, 1, &scissor);
+            return;
+        }
 
         commandBuffer->BeginLabel("InterfaceRenderer::onFrame", {1.0f, 0.0f, 0.0f, 0.0f});
 
         commandBuffer->BindPipeline(GetPipeline());
+        commandBuffer->BindIndexBuffer(_indexBuffer, 0, VK_INDEX_TYPE_UINT16);
+        {
+            VkDeviceSize offset = 0;
+            commandBuffer->BindVertexBuffers(0, 1, &_vertexBuffer, &offset);
+        }
+        commandBuffer->BindDescriptorSet(0, 1, &GetPipeline()->GetDescriptorSetLayout(0)->GetDescriptorSet(0), 0, nullptr);
 
         uint32_t idxOffset = 0, vtxOffset = 0;
 
@@ -346,7 +383,9 @@ namespace wowgm
 
     void InterfaceRenderer::_RenderInterface()
     {
-
+        ImGui::Begin("Test frame");
+        ImGui::Text("Hello world");
+        ImGui::End();
     }
 
     void InterfaceRenderer::beforeRenderQuery(gfx::vk::CommandBuffer* buffer)
@@ -358,10 +397,13 @@ namespace wowgm
 
         ImGui::NewFrame();
         _RenderInterface();
-        ImGui::EndFrame();
+        ImGui::Render();
 
         ImDrawData* imDrawData = ImGui::GetDrawData();
-        if (imDrawData == nullptr)
+        if (imDrawData == nullptr
+            || imDrawData->CmdListsCount == 0
+            || _vertexCount == imDrawData->TotalVtxCount
+            || _indexCount == imDrawData->TotalIdxCount)
             return;
 
         VkDeviceSize vertexBufferSize = imDrawData->TotalVtxCount * sizeof(ImDrawVert);
@@ -375,8 +417,8 @@ namespace wowgm
 
         _waitNeeded = graphicsQueue->GetHandle() != transferQueue->GetHandle();
 
-        std::vector<ImDrawVert> vertices(_vertexCount);
-        std::vector<ImDrawIdx> indices(_indexCount);
+        std::vector<ImDrawVert> vertices;
+        std::vector<ImDrawIdx> indices;
 
         for (int32_t i = 0; i < imDrawData->CmdListsCount; ++i)
         {
@@ -459,26 +501,27 @@ namespace wowgm
                 BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to allocate a command buffer for data tansfer");
                 _transferCommandBuffer->SetName("Interface upload command buffer");
 
-                result = _transferCommandBuffer->Begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT, nullptr);
-                BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to start recording");
             }
 
             uploadCommandBuffer = _transferCommandBuffer;
+
+            result = uploadCommandBuffer->Begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT, nullptr);
+            BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to start recording");
         }
         else
             uploadCommandBuffer = frameCommandBuffer;
 
-        // Copy indices first
+        // Copy vertices first
         VkBufferCopy copyOp;
         copyOp.srcOffset = 0;
-        copyOp.size = _indexCount * sizeof(ImDrawVert);
+        copyOp.size = vertices.size() * sizeof(ImDrawVert);
         copyOp.dstOffset = 0;
 
-        uploadCommandBuffer->CopyBuffer(_stagingBuffer, _indexBuffer, 1, &copyOp);
+        uploadCommandBuffer->CopyBuffer(_stagingBuffer, _vertexBuffer, 1, &copyOp);
 
         copyOp.srcOffset = copyOp.size;
-        copyOp.size = _vertexCount * sizeof(ImDrawVert);
-        uploadCommandBuffer->CopyBuffer(_stagingBuffer, _vertexBuffer, 1, &copyOp);
+        copyOp.size = indices.size() * sizeof(ImDrawIdx);
+        uploadCommandBuffer->CopyBuffer(_stagingBuffer, _indexBuffer, 1, &copyOp);
 
         // We don't need to start and begin recording if the transfer queue and the graphics queue are identical
         // Because within this hook we are already in a recording state.

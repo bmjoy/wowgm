@@ -12,6 +12,7 @@
 #include <graphics/vulkan/Framebuffer.hpp>
 #include <graphics/vulkan/ResourceTracker.hpp>
 #include <graphics/vulkan/Helpers.hpp>
+#include <graphics/vulkan/Sampler.h>
 
 #include <extstd/literals/memory.hpp>
 
@@ -206,7 +207,7 @@ namespace gfx::vk
         createInfo.pNext = pCreateInfo->pNext;
         createInfo.image = pCreateInfo->image->GetHandle();
         createInfo.viewType = pCreateInfo->viewType;
-        createInfo.format = pCreateInfo->image->GetCreateInfo().format;
+        createInfo.format = pCreateInfo->image->GetCreateFormat();
         memcpy(&createInfo.components, &pCreateInfo->components, sizeof(VkComponentMapping));
         createInfo.subresourceRange.aspectMask = pCreateInfo->image->GetImageAspectFlags();
         createInfo.subresourceRange.baseMipLevel = pCreateInfo->subresourceRange.baseMipLevel;
@@ -225,7 +226,7 @@ namespace gfx::vk
         pImageView->_device = this;
         pImageView->_image = pCreateInfo->image;
         pImageView->_viewType = pCreateInfo->viewType;
-        pImageView->_format = pCreateInfo->image->GetCreateInfo().format;
+        pImageView->_format = pCreateInfo->image->GetCreateFormat();
 
         memcpy(&pImageView->_components, &pCreateInfo->components, sizeof(VkComponentMapping));
         memcpy(&pImageView->_subresourceRange, &pCreateInfo->subresourceRange, sizeof(VkImageSubresourceRange));
@@ -470,4 +471,33 @@ namespace gfx::vk
         vkDestroySemaphore(_handle, semaphore, nullptr);
     }
 
+    Sampler* Device::CreateSampler(const SamplerCreateInfo* pCreateInfo)
+    {
+        VkSamplerCreateInfo samplerCreateInfo;
+        samplerCreateInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+        samplerCreateInfo.pNext = nullptr;
+        samplerCreateInfo.flags = 0;
+        samplerCreateInfo.magFilter = pCreateInfo->magFilter;
+        samplerCreateInfo.minFilter = pCreateInfo->minFilter;
+        samplerCreateInfo.mipmapMode = pCreateInfo->mipmapMode;
+        samplerCreateInfo.addressModeU = pCreateInfo->addressModeU;
+        samplerCreateInfo.addressModeV = pCreateInfo->addressModeV;
+        samplerCreateInfo.addressModeW = pCreateInfo->addressModeW;
+        samplerCreateInfo.mipLodBias = pCreateInfo->mipLodBias;
+        samplerCreateInfo.anisotropyEnable = pCreateInfo->anisotropyEnable;
+        samplerCreateInfo.maxAnisotropy = pCreateInfo->maxAnisotropy;
+        samplerCreateInfo.compareEnable = pCreateInfo->compareEnable;
+        samplerCreateInfo.compareOp = pCreateInfo->compareOp;
+        samplerCreateInfo.minLod = pCreateInfo->minLod;
+        samplerCreateInfo.maxLod = pCreateInfo->maxLod;
+        samplerCreateInfo.borderColor = pCreateInfo->borderColor;
+        samplerCreateInfo.unnormalizedCoordinates = pCreateInfo->unnormalizedCoordinates;
+
+        VkSampler samplerHandle;
+        VkResult result = vkCreateSampler(_handle, &samplerCreateInfo, nullptr, &samplerHandle);
+        if (result != VK_SUCCESS)
+            return nullptr;
+
+        return new Sampler(this, samplerHandle);
+    }
 }

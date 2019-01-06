@@ -56,10 +56,17 @@ namespace gfx::vk
         inline void PushConstants(uint32_t offset, T (&value)[N]) {
             static_assert(std::is_standard_layout<T>::value, "must be standard layout");
 
-            PushConstants(offset, sizeof(T), reinterpret_cast<void*>(value));
+            PushConstants(offset, sizeof(T) * N, reinterpret_cast<void*>(value));
         }
 
-        void BeginRenderPass(const RenderPassBeginInfo* pBeginInfo,
+        void BindDescriptorSet(
+            uint32_t                        firstSep,
+            uint32_t                        descriptorSetCount,
+            const VkDescriptorSet*          pDescriptorSets,
+            uint32_t                        dynamicOffsetCount,
+            const uint32_t*                 pDynamicOffsets);
+        void BeginRenderPass(
+            const RenderPassBeginInfo*      pBeginInfo,
             VkSubpassContents               contents = VK_SUBPASS_CONTENTS_INLINE);
         void NextSubpass(
             VkSubpassContents               contents = VK_SUBPASS_CONTENTS_INLINE);

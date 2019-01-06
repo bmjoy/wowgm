@@ -50,8 +50,90 @@ namespace gfx::vk
         }
     }
 
+    VkFormat getResourceFormat(PipelineResource const& resource)
+    {
+        VkFormat resourceFormat;
+
+        if (resource.baseType == PIPELINE_RESOURCE_BASE_TYPE_FLOAT)
+        {
+            switch (resource.vecSize)
+            {
+            case 1:
+                resourceFormat = VK_FORMAT_R32_SFLOAT;
+                break;
+            case 2:
+                resourceFormat = VK_FORMAT_R32G32_SFLOAT;
+                break;
+            case 3:
+                resourceFormat = VK_FORMAT_R32G32B32_SFLOAT;
+                break;
+            case 4:
+                resourceFormat = VK_FORMAT_R32G32B32A32_SFLOAT;
+                break;
+            }
+        }
+        else if (resource.baseType == PIPELINE_RESOURCE_BASE_TYPE_DOUBLE)
+        {
+            switch (resource.vecSize)
+            {
+            case 1:
+                resourceFormat = VK_FORMAT_R64_SFLOAT;
+                break;
+            case 2:
+                resourceFormat = VK_FORMAT_R64G64_SFLOAT;
+                break;
+            case 3:
+                resourceFormat = VK_FORMAT_R64G64B64_SFLOAT;
+                break;
+            case 4:
+                resourceFormat = VK_FORMAT_R64G64B64A64_SFLOAT;
+                break;
+            }
+        }
+        else if (resource.baseType == PIPELINE_RESOURCE_BASE_TYPE_INT)
+        {
+            switch (resource.vecSize)
+            {
+            case 1:
+                resourceFormat = VK_FORMAT_R32_SINT;
+                break;
+            case 2:
+                resourceFormat = VK_FORMAT_R32G32_SINT;
+                break;
+            case 3:
+                resourceFormat = VK_FORMAT_R32G32B32_SINT;
+                break;
+            case 4:
+                resourceFormat = VK_FORMAT_R32G32B32A32_SINT;
+                break;
+            }
+        }
+        else if (resource.baseType == PIPELINE_RESOURCE_BASE_TYPE_UINT)
+        {
+            switch (resource.vecSize)
+            {
+            case 1:
+                resourceFormat = VK_FORMAT_R32_UINT;
+                break;
+            case 2:
+                resourceFormat = VK_FORMAT_R32G32_UINT;
+                break;
+            case 3:
+                resourceFormat = VK_FORMAT_R32G32B32_UINT;
+                break;
+            case 4:
+                resourceFormat = VK_FORMAT_R32G32B32A32_UINT;
+                break;
+            }
+        }
+
+        return resourceFormat;
+    }
+
     VkResult Pipeline::Create(Device* pDevice, const GraphicsPipelineCreateInfo* pCreateInfo, Pipeline** ppPipeline)
     {
+        std::vector<VkPushConstantRange> pushConstants;
+
         Pipeline* pPipeline = new Pipeline;
         pPipeline->_device = pDevice;
         pPipeline->_bindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -64,6 +146,7 @@ namespace gfx::vk
         if (pipelineCreateInfo.stageCount == 0)
             shared::assert::throw_with_trace("No shader stages provided. Did you forget to add shaders, you spoon?");
 
+        Shader* vertexShader = nullptr;
         std::vector<VkPipelineShaderStageCreateInfo> shaderStages(pCreateInfo->shaders.size());
         for (uint32_t i = 0; i < pCreateInfo->shaders.size(); ++i)
         {
@@ -75,6 +158,9 @@ namespace gfx::vk
             stageInfo.module = pCreateInfo->shaders[i]->GetHandle();
             stageInfo.pName = pCreateInfo->shaders[i]->GetEntryPoint().data();
             stageInfo.pSpecializationInfo = nullptr; // TODO: Specialization constants
+
+            if (stageInfo.stage == VK_SHADER_STAGE_VERTEX_BIT)
+                vertexShader = pCreateInfo->shaders[i];
         }
 
         pipelineCreateInfo.pStages = shaderStages.data();
@@ -86,25 +172,38 @@ namespace gfx::vk
         vertexInputState.pNext = pCreateInfo->vertexInputState.pNext;
         vertexInputState.flags = pCreateInfo->vertexInputState.flags;
 
-        if (pCreateInfo->vertexInputState.vertexAttributeDescriptions.size() != 0)
+        // Create attribute descriptions from reflection if there was none provided
+        if (pCreateInfo->vertexInputState.vertexAttributeDescriptions.size() == 0 && vertexShader != nullptr)
         {
-            vertexInputState.vertexAttributeDescriptionCount = pCreateInfo->vertexInputState.vertexAttributeDescriptions.size();
-            vertexInputState.pVertexAttributeDescriptions = pCreateInfo->vertexInputState.vertexAttributeDescriptions.data();
-        }
-        else
-        {
-            // TODO: Shader reflection
+            GraphicsPipelineCreateInfo* mutableCreateInfo = const_cast<GraphicsPipelineCreateInfo*>(pCreateInfo);
+
+            auto resources = vertexShader->GetResources();
+
+            for (auto&& resource : resources)
+            {
+                if (resource.resourceType != PIPELINE_RESOURCE_TYPE_INPUT)
+                    continue;
+
+                VkVertexInputAttributeDescription attrDescription;
+                attrDescription.binding = resource.binding;
+                attrDescription.location = resource.location;
+                attrDescription.offset = resource.offset;
+                attrDescription.format = getResourceFormat(resource);
+
+                mutableCreateInfo->vertexInputState.vertexAttributeDescriptions.push_back(attrDescription);
+            }
         }
 
-        if (pCreateInfo->vertexInputState.vertexBindingDescriptions.size() != 0)
+        vertexInputState.vertexAttributeDescriptionCount = pCreateInfo->vertexInputState.vertexAttributeDescriptions.size();
+        vertexInputState.pVertexAttributeDescriptions = pCreateInfo->vertexInputState.vertexAttributeDescriptions.data();
+
+        if (pCreateInfo->vertexInputState.vertexBindingDescriptions.size() == 0 && vertexShader != nullptr)
         {
-            vertexInputState.vertexBindingDescriptionCount = pCreateInfo->vertexInputState.vertexBindingDescriptions.size();
-            vertexInputState.pVertexBindingDescriptions = pCreateInfo->vertexInputState.vertexBindingDescriptions.data();
+            BOOST_ASSERT_MSG(false, "Reflection on vertex bindings is not implemented. Please fill vertexBindingDescriptions in your pipeline.");
         }
-        else
-        {
-            // TODO: Shader reflection
-        }
+
+        vertexInputState.vertexBindingDescriptionCount = pCreateInfo->vertexInputState.vertexBindingDescriptions.size();
+        vertexInputState.pVertexBindingDescriptions = pCreateInfo->vertexInputState.vertexBindingDescriptions.data();
 
         VkPipelineInputAssemblyStateCreateInfo inputAssemblyState{};
         pipelineCreateInfo.pInputAssemblyState = &inputAssemblyState;
@@ -245,7 +344,6 @@ namespace gfx::vk
             VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo{};
             pipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 
-            std::vector<VkPushConstantRange> pushConstants;
             for (auto&& kv : pipelineResources)
             {
                 auto& resource = kv.second;
@@ -297,8 +395,22 @@ namespace gfx::vk
 #endif
 
         *ppPipeline = pPipeline;
+        pushConstants.swap((*ppPipeline)->_pushConstants);
 
         return VK_SUCCESS;
+    }
+
+    VkShaderStageFlags Pipeline::GetPushConstantsRangeStages(uint32_t offset, uint32_t size)
+    {
+        VkShaderStageFlags flags = VK_SHADER_STAGE_ALL;
+
+        for (auto&& itr : _pushConstants)
+        {
+            if (itr.offset <= offset && offset + size <= itr.offset + itr.size)
+                return itr.stageFlags;
+        }
+
+        return flags;
     }
 
     void Pipeline::CreateSetBindings(std::unordered_map<std::string, PipelineResource> const& resources)
@@ -326,6 +438,11 @@ namespace gfx::vk
                 }
             }
         }
+    }
+
+    DescriptorSetLayout* Pipeline::GetDescriptorSetLayout(uint32_t setIndex)
+    {
+        return _descriptorSetLayouts[setIndex];
     }
 
     VkResult Pipeline::CreateDescriptorSetLayouts()

@@ -3,6 +3,8 @@
 #include <graphics/vulkan/DescriptorPool.hpp>
 #include <graphics/vulkan/VK.hpp>
 #include <graphics/vulkan/Helpers.hpp>
+#include <graphics/vulkan/Sampler.h>
+#include <graphics/vulkan/ImageView.hpp>
 
 #include <extstd/containers/extract.hpp>
 
@@ -77,14 +79,42 @@ namespace gfx::vk
         vkDestroyDescriptorSetLayout(_device->GetHandle(), _handle, nullptr);
     }
 
-    bool DescriptorSetLayout::GetLayoutBinding(uint32_t bindingIndex, VkDescriptorSetLayoutBinding** pBinding)
+    VkDescriptorSetLayoutBinding const& DescriptorSetLayout::GetBinding(uint32_t bindingIndex)
     {
-        auto it = _bindings.find(bindingIndex);
-        if (it == _bindings.end())
-            return false;
+        return _bindings[bindingIndex];
+    }
 
-        *pBinding = &it->second;
-        return true;
+    VkDescriptorSet const& DescriptorSetLayout::GetDescriptorSet(uint32_t bindingIndex)
+    {
+        return _descriptorSets[bindingIndex];
+    }
+
+    void DescriptorSetLayout::UpdateBinding(uint32_t bindingIndex, Sampler* sampler, ImageView* imageView, VkImageLayout layout)
+    {
+        VkDescriptorSetLayoutBinding const& binding = GetBinding(bindingIndex);
+
+        VkDescriptorImageInfo imageInfo;
+        imageInfo.imageLayout = layout;
+        imageInfo.imageView = imageView->GetHandle();
+        imageInfo.sampler = sampler->GetHandle();
+
+        VkWriteDescriptorSet writeSet;
+        writeSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        writeSet.pNext = nullptr;
+
+        writeSet.descriptorCount = 1;
+        writeSet.descriptorType = binding.descriptorType;
+        writeSet.dstBinding = binding.binding;
+        writeSet.dstArrayElement = 0; // TODO: ?
+
+        _descriptorSets[bindingIndex] = AllocateDescriptorSet();
+        writeSet.dstSet = _descriptorSets[bindingIndex];
+
+        writeSet.pImageInfo = &imageInfo;
+        writeSet.pBufferInfo = nullptr;
+        writeSet.pTexelBufferView = nullptr;
+
+        vkUpdateDescriptorSets(GetDevice()->GetHandle(), 1, &writeSet, 0, nullptr);
     }
 
     VkDescriptorSet DescriptorSetLayout::AllocateDescriptorSet()

@@ -54,8 +54,10 @@ namespace gfx::vk
 
     public: /* Sampler */
 
-        VkResult CreateSampler(const SamplerCreateInfo* pCreateInfo, Sampler** pSampler);
+        Sampler* CreateSampler(const SamplerCreateInfo* pCreateInfo);
         VkResult DestroySampler(Sampler* pSampler);
+
+        void BindSampler(Sampler* sampler, ImageView* imageView);
 
     public: /* Command Pool */
 

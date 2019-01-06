@@ -17,6 +17,7 @@ namespace gfx::vk {
     class Buffer;
     class Image;
     class ImageView;
+    class Sampler;
 }
 
 namespace wowgm
@@ -54,6 +55,7 @@ namespace wowgm
 
         gfx::vk::Image* _fontTexture = nullptr;
         gfx::vk::ImageView* _fontTextureView = nullptr;
+        gfx::vk::Sampler* _fontSampler = nullptr;
 
         // This boolean controls if we need to wait for the transfer semaphore
         // at the top of the pipe. This is needed because we would be waiting
