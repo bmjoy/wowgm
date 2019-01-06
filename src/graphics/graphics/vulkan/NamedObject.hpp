@@ -34,12 +34,12 @@ namespace gfx::vk
 
     public:
 
-        inline void SetName(std::string const& name) {
+        virtual void SetName(std::string const& name) {
             _name = std::move(name);
 
             T& derived = underlying();
 
-            derived.GetInstance()->SetObjectName<T>(derived.GetDevice(), uint64_t(derived.GetHandle()), std::string_view(_name.data()));
+            derived.GetInstance()->SetObjectName<typename traits<T>::handle_type>(derived.GetDevice(), uint64_t(derived.GetHandle()), std::string_view(_name.data()));
         }
 
         std::string const& GetName() const {

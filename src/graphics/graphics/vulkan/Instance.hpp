@@ -42,7 +42,7 @@ namespace gfx::vk
                 nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
                 nameInfo.pObjectName = objectName.data();
                 nameInfo.objectHandle = objectHandleValue;
-                nameInfo.objectType = gfx::vk::traits<T>::object_type;
+                nameInfo.objectType = gfx::vk::object_type<T>::value;
 
                 return vkSetDebugUtilsObjectNameEXT(device->GetHandle(), &nameInfo);
             }
@@ -51,7 +51,7 @@ namespace gfx::vk
                 VkDebugMarkerObjectNameInfoEXT nameInfo{};
                 nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT;
                 nameInfo.pObjectName = objectName.data();
-                nameInfo.objectType = gfx::vk::traits<T>::object_type_ext;
+                nameInfo.objectType = gfx::vk::object_type_ext<T>::value;
                 nameInfo.object = uint64_t(objectHandleValue);
 
                 return vkDebugMarkerSetObjectNameEXT(device->GetHandle(), &nameInfo);

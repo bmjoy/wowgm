@@ -25,6 +25,8 @@ namespace gfx::vk
 
     public:
 
+        void SetName(std::string const& name) override;
+
         Device* GetDevice() const { return _device; }
         VkBuffer GetHandle() const { return _handle; }
         Instance* GetInstance() const;

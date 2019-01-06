@@ -45,40 +45,53 @@ namespace wowgm::protocol::world
         for (uint32_t i = 0; i < packet.Seeds.size(); ++i)
             context.UpdateData(reinterpret_cast<uint8_t*>(&packet.Seeds[i]), 4);
 
-        auto checkInt64 = [](shared::crypto::SHA1 const& sourceContext, uint32_t maxByte, uint64_t* output) -> bool {
-            uint64_t zero = 0;
+        auto checkInt64 = [](shared::crypto::SHA1 const& sourceContext, uint32_t maxBitIndex, uint64_t* output) -> bool {
+
+            uint32_t hiPart = 0;
+            uint32_t loPart = 0;
+
+#define __PAIR__(x, y) (int64_t)(((int64_t)(x)) << 32 | (y))
 
             while (true)
             {
                 shared::crypto::SHA1 context(sourceContext);
-                context.UpdateData(reinterpret_cast<uint8_t*>(&zero), 8);
+
+                int64_t combo = __PAIR__(hiPart, loPart);
+
+                context.UpdateData(reinterpret_cast<uint8_t*>(&combo), 8);
                 context.Finalize();
+
+                uint8_t* digest = context.GetDigest();
 
                 // Find the first non-zero bit in the digest
                 uint32_t bitIndex = 0;
-                uint32_t digestItr = 0;
-                while (!context.GetDigest()[digestItr])
+                uint32_t i = 0;
+                while (!digest[i])
                 {
-                    ++digestItr;
+                    ++i;
                     bitIndex += 8;
-                    if (digestItr >= SHA_DIGEST_LENGTH)
+                    if (i >= SHA_DIGEST_LENGTH)
                         break;
                 }
-                if (digestItr < SHA_DIGEST_LENGTH)
+
+                if (i < SHA_DIGEST_LENGTH)
                 {
-                    for (uint8_t currentDigestByte = context.GetDigest()[digestItr]; !(currentDigestByte & 1); ++bitIndex)
+                    for (uint8_t currentDigestByte = digest[i]; !(currentDigestByte & 1); ++bitIndex)
                         currentDigestByte >>= 1;
                 }
-                if (bitIndex >= maxByte)
+
+                if (bitIndex >= maxBitIndex)
                     break;
 
-                zero = (zero + 1);
-                if (!zero)
+                hiPart = (__PAIR__(hiPart, loPart++) + 1) >> 32;
+                if (!__PAIR__(hiPart, loPart))
                     return false;
             }
 
-            *output = zero;
+            *output = __PAIR__(hiPart, loPart);
             return true;
+
+#undef __PAIR__
         };
 
         uint64_t dosResponse = 0;

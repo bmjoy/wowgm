@@ -2,6 +2,7 @@
 #include <graphics/vulkan/Device.hpp>
 #include <graphics/vulkan/Instance.hpp>
 
+#include <string_view>
 #include <vk_mem_alloc.h>
 
 namespace gfx::vk
@@ -24,6 +25,19 @@ namespace gfx::vk
         VmaAllocationInfo allocInfo;
         vmaGetAllocationInfo(GetDevice()->GetAllocator(), _allocation, &allocInfo);
         return allocInfo.size;
+    }
+
+    void Buffer::SetName(std::string const& name)
+    {
+        NamedObject<Buffer>::SetName(name);
+
+        std::string memoryName = name;
+        memoryName += " (Memory)";
+
+        VmaAllocationInfo allocInfo;
+        vmaGetAllocationInfo(GetDevice()->GetAllocator(), _allocation, &allocInfo);
+
+        GetInstance()->SetObjectName<VkDeviceMemory>(GetDevice(), uint64_t(allocInfo.deviceMemory), std::string_view(memoryName.data()));
     }
 
     VkResult Buffer::WriteBytes(VkDeviceSize offset, const uint8_t* data, VkDeviceSize dataSize)

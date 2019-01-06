@@ -6,7 +6,7 @@ namespace gfx::vk
 {
     class Device;
 
-    class Sampler final : NamedObject<Sampler>
+    class Sampler
     {
         friend class Device;
 

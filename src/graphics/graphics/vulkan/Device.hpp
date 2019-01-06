@@ -43,21 +43,17 @@ namespace gfx::vk
     public: /* Images */
 
         Image* CreateImage(VmaMemoryUsage memoryUsage, VmaAllocationCreateFlags allocationFlags, const ImageCreateInfo* pCreateInfo);
-
         void DestroyImage(Image* pImage);
 
     public: /* Image Views */
 
         ImageView* CreateImageView(const ImageViewCreateInfo* pCreateInfo);
-
         void DestroyImageView(ImageView* pImageView);
 
     public: /* Sampler */
 
         Sampler* CreateSampler(const SamplerCreateInfo* pCreateInfo);
-        VkResult DestroySampler(Sampler* pSampler);
-
-        void BindSampler(Sampler* sampler, ImageView* imageView);
+        void DestroySampler(Sampler* pSampler);
 
     public: /* Command Pool */
 

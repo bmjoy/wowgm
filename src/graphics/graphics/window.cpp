@@ -37,6 +37,9 @@ namespace gfx
         // if (position != glm::ivec2{ -1, -1 })
         //     glfwSetWindowPos(window, position.x, position.y);
 
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+
         glfwSetWindowUserPointer(window, this);
         glfwSetKeyCallback(window, KeyboardHandler);
         glfwSetMouseButtonCallback(window, MouseButtonHandler);
@@ -44,6 +47,9 @@ namespace gfx
         glfwSetWindowCloseCallback(window, CloseHandler);
         glfwSetFramebufferSizeCallback(window, FramebufferSizeHandler);
         glfwSetScrollCallback(window, MouseScrollHandler);
+
+        // Manual event call
+        FramebufferSizeHandler(window, width, height);
     }
 
     Window::~Window()
@@ -117,7 +123,12 @@ namespace gfx
     void Window::MouseMoveHandler(GLFWwindow* window, double posx, double posy)
     {
         Window* example = (Window*)glfwGetWindowUserPointer(window);
-        example->onMouseMoved(glm::vec2(posx, posy));
+
+        ImGuiIO& io = ImGui::GetIO();
+        if (!io.WantCaptureMouse)
+            example->onMouseMoved(glm::vec2(posx, posy));
+
+        io.MousePos = ImVec2(posx, posy);
     }
 
     void Window::MouseScrollHandler(GLFWwindow* window, double xoffset, double yoffset)
@@ -140,15 +151,21 @@ namespace gfx
 
     void Window::onMouseButtonEvent(int button, int action, int mods)
     {
+        ImGuiIO& io = ImGui::GetIO();
+
         switch (action) {
-        case GLFW_PRESS:
-            onMousePressed(button, mods);
-            break;
-        case GLFW_RELEASE:
-            onMouseReleased(button, mods);
-            break;
-        default:
-            break;
+            case GLFW_PRESS:
+                io.MouseDown[button] = true;
+
+                onMousePressed(button, mods);
+                break;
+            case GLFW_RELEASE:
+                io.MouseDown[button] = false;
+
+                onMouseReleased(button, mods);
+                break;
+            default:
+                break;
         }
     }
 
@@ -158,8 +175,9 @@ namespace gfx
 
         switch (action) {
             case GLFW_PRESS:
-                onKeyPressed(key, mods);
                 io.KeysDown[key] = true;
+
+                onKeyPressed(key, mods);
                 break;
             case GLFW_RELEASE:
                 onKeyReleased(key, mods);
@@ -169,6 +187,12 @@ namespace gfx
                 break;
         }
 
+    }
+
+    void Window::onWindowResized(const glm::uvec2& newSize)
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        io.DisplaySize = ImVec2(newSize.x, newSize.y);
     }
 
     void Window::showWindow(bool show)

@@ -33,9 +33,6 @@ namespace wowgm
     {
         _transferSemaphore = GetDevice()->CreateSemaphore();
 
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-
         ImGuiStyle * style = &ImGui::GetStyle();
 
         style->WindowPadding = ImVec2(15, 15);
@@ -291,6 +288,7 @@ namespace wowgm
             bufferCreateInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
             bufferCreateInfo.queueFamilyIndices.push_back(transferQueue->GetFamilyIndex());
             bufferCreateInfo.size = dataSize;
+            bufferCreateInfo.pBufferName = "Texture upload buffer";
 
             Buffer* uploadBuffer = GetDevice()->CreateBuffer(VMA_MEMORY_USAGE_CPU_TO_GPU, 0, &bufferCreateInfo);
             BOOST_ASSERT_MSG(uploadBuffer != nullptr, "Failed to create the texture upload buffer");
@@ -370,6 +368,8 @@ namespace wowgm
         GetDevice()->DestroyBuffer(_indexBuffer);
         GetDevice()->DestroyBuffer(_stagingBuffer);
 
+        GetDevice()->DestroySampler(_fontSampler);
+
         GetDevice()->DestroyImage(_fontTexture);
         GetDevice()->DestroyImageView(_fontTextureView);
 
@@ -441,9 +441,14 @@ namespace wowgm
 
     void InterfaceRenderer::_RenderInterface()
     {
+        static char data[1200];
+
         ImGui::Begin("Test frame");
         ImGui::Text("Hello world");
+        ImGui::InputText("bla", data, sizeof(data));
         ImGui::End();
+
+        ImGui::ShowDemoWindow();
     }
 
     void InterfaceRenderer::beforeRenderQuery(gfx::vk::CommandBuffer* buffer)
@@ -501,6 +506,7 @@ namespace wowgm
         {
             createInfo.size = extstd::misc::align_up(uint32_t(indexBufferSize * 1.2f), 4u);
             createInfo.usage = VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
+            createInfo.pBufferName = "Interface Index Buffer";
             _indexBuffer = GetDevice()->CreateBuffer(VMA_MEMORY_USAGE_GPU_ONLY, 0u, &createInfo);
             BOOST_ASSERT_MSG(_indexBuffer != nullptr, "Unable to allocate a buffer for the interface index buffer");
         }
@@ -516,6 +522,7 @@ namespace wowgm
         {
             createInfo.size = extstd::misc::align_up(uint32_t(vertexBufferSize * 1.2f), 4u);
             createInfo.usage = VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+            createInfo.pBufferName = "Interface Vertex Buffer";
             _vertexBuffer = GetDevice()->CreateBuffer(VMA_MEMORY_USAGE_GPU_ONLY, 0u, &createInfo);
             BOOST_ASSERT_MSG(_vertexBuffer != nullptr, "Unable to allocate a buffer for the interface vertex buffer");
         }
@@ -534,6 +541,7 @@ namespace wowgm
             bufferCreateInfo.size = _vertexCount * sizeof(ImDrawVert) + _indexCount * sizeof(ImDrawIdx);
             bufferCreateInfo.queueFamilyIndices.push_back(transferQueue->GetFamilyIndex());
             bufferCreateInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+            bufferCreateInfo.pBufferName = "Interface staging buffer";
             _stagingBuffer = GetDevice()->CreateBuffer(VMA_MEMORY_USAGE_CPU_TO_GPU, 0, &bufferCreateInfo);
             BOOST_ASSERT_MSG(_stagingBuffer != nullptr, "Failed to create a staging buffer");
         }

@@ -76,6 +76,8 @@ namespace gfx::vk
 
     DescriptorSetLayout::~DescriptorSetLayout()
     {
+        delete _descriptorPool;
+
         vkDestroyDescriptorSetLayout(_device->GetHandle(), _handle, nullptr);
     }
 

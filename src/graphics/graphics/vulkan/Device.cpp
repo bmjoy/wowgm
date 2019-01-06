@@ -500,4 +500,9 @@ namespace gfx::vk
 
         return new Sampler(this, samplerHandle);
     }
+
+    void Device::DestroySampler(Sampler* pSampler)
+    {
+        vkDestroySampler(_handle, pSampler->GetHandle(), nullptr);
+    }
 }

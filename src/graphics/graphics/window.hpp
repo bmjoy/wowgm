@@ -54,7 +54,7 @@ namespace gfx
 
         protected:
             //> Called when the window is resized
-            virtual void onWindowResized(const glm::uvec2& newSize) = 0;
+            virtual void onWindowResized(const glm::uvec2& newSize);
             //> Called when the window is closing.
             virtual void onWindowClosed() = 0;
 

@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
 
         auto authserver = mapped_values["server"].as<std::string>();
 
-        wowgm::Window window(800, 600, "WowGM");
+        wowgm::Window window(1800, 768, "WowGM");
         window.runWindowLoop([&window]() {
         });
     }
