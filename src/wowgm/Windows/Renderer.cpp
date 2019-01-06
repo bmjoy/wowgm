@@ -14,6 +14,12 @@ namespace wowgm
 
     }
 
+    void Renderer::SetSwapchain(Swapchain* swapchain)
+    {
+        // Update the swapchain
+        _swapchain = swapchain;
+    }
+
     Renderer::~Renderer()
     {
     }

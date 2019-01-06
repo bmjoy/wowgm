@@ -337,10 +337,37 @@ namespace wowgm
             GetSwapchain(),
             GetSwapchain()->GetImage(imageIndex),
             VK_SUCCESS
-            });
+        });
         presentInfo.waitSemaphores.push_back(_currentFrame->presentSemaphore);
 
         result = graphicsQueue->Present(&presentInfo);
+
+        if (result == VK_ERROR_OUT_OF_DATE_KHR)
+        {
+            // Recreate the swapchain
+            gfx::vk::SwapchainCreateInfo swapchainCreateInfo;
+            swapchainCreateInfo.surface = _surface;
+            swapchainCreateInfo.tripleBuffer = true;
+            swapchainCreateInfo.preferredFormat.format = VK_FORMAT_B8G8R8A8_UNORM;
+            swapchainCreateInfo.preferredFormat.colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+
+            delete _swapchain;
+            _swapchain = new gfx::vk::Swapchain(GetDevice(), &swapchainCreateInfo);
+            result = VK_SUCCESS; // Faking the following assert
+
+            uint32_t index = 0;
+            for (auto&& itr : _frames)
+            {
+                delete itr.frameBuffer;
+
+                itr.frameBuffer = GetSwapchain()->CreateFrameBuffer(index++, _renderPass);
+            }
+
+            // Update cached swapchains
+            for (auto&& itr : _renderers)
+                itr->SetSwapchain(_swapchain);
+        }
+
         BOOST_ASSERT_MSG(result == VK_SUCCESS, "Failed to present to screen");
 
         // Move to next frame

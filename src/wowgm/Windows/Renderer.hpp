@@ -47,6 +47,8 @@ namespace wowgm
         Renderer& operator = (Renderer const&) = delete;
         Renderer& operator = (Renderer&&) = delete;
 
+        void SetSwapchain(gfx::vk::Swapchain* swapchain);
+
     protected:
         gfx::vk::Instance*  GetInstance() const;
         gfx::vk::Device*    GetDevice() const;
